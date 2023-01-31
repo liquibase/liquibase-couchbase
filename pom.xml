@@ -49,6 +49,11 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.scm.provider>git</sonar.scm.provider>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+
+        <!-- dependency versions -->
+        <junit.version>5.9.2</junit.version>
+        <mockito.version>5.0.0</mockito.version>
+        <assertj.version>3.24.1</assertj.version>
     </properties>
 
     <dependencies>
@@ -67,6 +72,31 @@
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
             <version>3.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
