@@ -31,6 +31,24 @@
             <organization>Weigandt Consulting</organization>
             <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
         </developer>
+        <developer>
+            <name>Roman Oborin</name>
+            <email>roman.oborin@weigandt-consulting.com</email>
+            <organization>Weigandt Consulting</organization>
+            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Dmitry Dashko</name>
+            <email>dmitry.dashko@weigandt-consulting.com</email>
+            <organization>Weigandt Consulting</organization>
+            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Evgenii Anishchenko</name>
+            <email>evgenii.anishchenko@weigandt-consulting.com</email>
+            <organization>Weigandt Consulting</organization>
+            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+        </developer>
     </developers>
 
     <scm>
