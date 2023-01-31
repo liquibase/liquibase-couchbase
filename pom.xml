@@ -20,33 +20,39 @@
 
     <developers>
         <developer>
+            <name>Andrey Zakharov</name>
+            <email>andrey.zakharov@weigandt-consulting.com</email>
+            <organization>Weigandt Consulting GmbH</organization>
+            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+        </developer>
+        <developer>
             <name>Viktor Ignatev</name>
             <email>viktor.ignatev@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting</organization>
+            <organization>Weigandt Consulting GmbH</organization>
             <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
         </developer>
         <developer>
             <name>Konstantin Umanets</name>
             <email>konstantin.umanets@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting</organization>
+            <organization>Weigandt Consulting GmbH</organization>
             <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
         </developer>
         <developer>
             <name>Roman Oborin</name>
             <email>roman.oborin@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting</organization>
+            <organization>Weigandt Consulting GmbH</organization>
             <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
         </developer>
         <developer>
             <name>Dmitry Dashko</name>
             <email>dmitry.dashko@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting</organization>
+            <organization>Weigandt Consulting GmbH</organization>
             <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
         </developer>
         <developer>
             <name>Evgenii Anishchenko</name>
             <email>evgenii.anishchenko@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting</organization>
+            <organization>Weigandt Consulting GmbH</organization>
             <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
         </developer>
     </developers>
