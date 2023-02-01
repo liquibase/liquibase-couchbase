@@ -28,9 +28,8 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.util.StringUtil;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,11 +44,9 @@ import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
 import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class CouchbaseConnection implements DatabaseConnection {
-
 
     private ConnectionString connectionString;
     protected Cluster cluster;
