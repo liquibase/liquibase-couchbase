@@ -40,7 +40,10 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
-import static liquibase.ext.database.Constants.*;
+import static liquibase.ext.database.Constants.BUCKET_PARAM;
+import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 @Getter
 @Setter
@@ -56,7 +59,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     public boolean supports(String url) {
         return Optional.ofNullable(url)
                 .map(String::toLowerCase)
-                .map(x -> x.startsWith(COUCHBASE_PRODUCT_NAME.toLowerCase()))
+                .map(x -> x.startsWith(COUCHBASE_PRODUCT_SHORT_NAME))
                 .orElse(false);
     }
 

@@ -5,18 +5,19 @@ import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
 import lombok.NoArgsConstructor;
 
-import static liquibase.ext.database.Constants.*;
+import static liquibase.ext.database.Constants.COUCHBASE_PREFIX;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_SSL_PREFIX;
+import static liquibase.ext.database.Constants.DEFAULT_PORT;
 
 @NoArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
-
-
 
     @Override
     public int getPriority() {
         return PRIORITY_DATABASE;
     }
-
 
     @Override
     protected String getDefaultDatabaseProductName() {
