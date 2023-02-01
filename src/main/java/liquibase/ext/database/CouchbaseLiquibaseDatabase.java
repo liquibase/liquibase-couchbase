@@ -5,8 +5,6 @@ import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
 import lombok.NoArgsConstructor;
 
-import static liquibase.ext.database.Constants.*;
-
 @NoArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
@@ -20,7 +18,7 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
     @Override
     protected String getDefaultDatabaseProductName() {
-        return COUCHBASE_PRODUCT_NAME;
+        return Constants.COUCHBASE_PRODUCT_NAME;
     }
 
     @Override
@@ -30,8 +28,8 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
     @Override
     public String getDefaultDriver(String url) {
-        if (url.startsWith(COUCHBASE_PREFIX) ||
-                url.startsWith(COUCHBASE_SSL_PREFIX)) {
+        if (url.startsWith(Constants.COUCHBASE_PREFIX) ||
+                url.startsWith(Constants.COUCHBASE_SSL_PREFIX)) {
             return CouchbaseClientDriver.class.getName();
         }
         return null;
@@ -39,12 +37,12 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
     @Override
     public String getShortName() {
-        return COUCHBASE_PRODUCT_SHORT_NAME;
+        return Constants.COUCHBASE_PRODUCT_SHORT_NAME;
     }
 
     @Override
     public Integer getDefaultPort() {
-        return DEFAULT_PORT;
+        return Constants.DEFAULT_PORT;
     }
 
     @Override

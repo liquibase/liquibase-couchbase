@@ -11,11 +11,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/**
- * Todo
- */
-class ConnectionTest extends CouchbaseContainerizedTest {
+class CouchbaseConnectionTest extends CouchbaseContainerizedTest {
 
+    private static final String TEST_BUCKET = "travels";
     protected Cluster cluster;
 
     @BeforeEach
@@ -33,12 +31,13 @@ class ConnectionTest extends CouchbaseContainerizedTest {
     }
 
     @Test
-    void connect_couchbase_successfully() {
-        cluster.buckets().createBucket(BucketSettings.create("travels"));
-        Bucket travels = cluster.bucket("travels");
+    void connect_couchbase_sucessfully() {
+        cluster.buckets().createBucket(BucketSettings.create(TEST_BUCKET));
+        Bucket travels = cluster.bucket(TEST_BUCKET);
 
         PingResult ping = travels.ping();
 
         assertThat(ping.id()).isNotEmpty();
+        cluster.buckets().dropBucket(TEST_BUCKET);
     }
 }

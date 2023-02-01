@@ -23,6 +23,7 @@ public abstract class CouchbaseContainerizedTest {
         BucketDefinition bucketDefinition = new BucketDefinition(TEST_BUCKET);
         container = new CouchbaseContainer(IMAGE_NAME.withTag(COUCHBASE_VERSION))
                 .withBucket(bucketDefinition)
+                .withReuse(true)
                 .withStartupTimeout(Duration.ofMinutes(2L))
                 .waitingFor(Wait.forHealthcheck());
         container.start();
