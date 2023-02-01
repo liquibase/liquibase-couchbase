@@ -1,4 +1,4 @@
-package org.liquibase.ext.statement;
+package liquibase.ext.statement;
 
 import liquibase.statement.SqlStatement;
 

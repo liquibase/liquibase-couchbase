@@ -1,9 +1,9 @@
-package org.liquibase.ext.change;
+package liquibase.ext.change;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import liquibase.ext.statement.CreateCollectionStatement;
 import org.junit.jupiter.api.Test;
-import org.liquibase.ext.statement.CreateCollectionStatement;
 
 import liquibase.statement.SqlStatement;
 

@@ -1,6 +1,6 @@
-package org.liquibase.ext.change;
+package liquibase.ext.change;
 
-import org.liquibase.ext.statement.CreateCollectionStatement;
+import liquibase.ext.statement.CreateCollectionStatement;
 
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;

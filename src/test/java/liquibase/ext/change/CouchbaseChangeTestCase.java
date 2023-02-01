@@ -1,7 +1,7 @@
-package org.liquibase.ext.change;
+package liquibase.ext.change;
 
+import liquibase.ext.database.CouchbaseLiquibaseDatabase;
 import org.junit.jupiter.api.BeforeEach;
-import org.liquibase.ext.database.CouchbaseLiquibaseDatabase;
 
 public abstract class CouchbaseChangeTestCase {
 

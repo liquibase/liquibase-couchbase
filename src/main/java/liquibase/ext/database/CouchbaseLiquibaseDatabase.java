@@ -1,4 +1,4 @@
-package org.liquibase.ext.database;
+package liquibase.ext.database;
 
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;

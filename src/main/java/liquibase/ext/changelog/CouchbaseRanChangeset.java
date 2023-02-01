@@ -1,4 +1,4 @@
-package org.liquibase.ext.changelog;
+package liquibase.ext.changelog;
 
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;

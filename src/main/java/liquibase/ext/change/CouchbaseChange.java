@@ -1,6 +1,6 @@
-package org.liquibase.ext.change;
+package liquibase.ext.change;
 
-import org.liquibase.ext.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.database.CouchbaseLiquibaseDatabase;
 
 import liquibase.change.AbstractChange;
 import liquibase.database.Database;
