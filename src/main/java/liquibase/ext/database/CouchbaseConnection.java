@@ -4,7 +4,7 @@ package liquibase.ext.database;
  * #%L
  * Liquibase Couchbase Extension
  * %%
- * Copyright (C) 2023 Weigandt
+ * Copyright (C) 2023 Weigandt Consulting GmbH
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.

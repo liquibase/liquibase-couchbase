@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 public class ConnectionTest extends CouchbaseContainerizedTest {
 
     @Test
-    void connect_couchbase_sucessfully() {
+    void connect_couchbase_successfully() {
         cluster.buckets().createBucket(BucketSettings.create("travels"));
         Bucket travels = cluster.bucket("travels");
 
