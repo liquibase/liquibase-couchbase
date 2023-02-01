@@ -38,6 +38,10 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
         return null;
     }
 
+    public CouchbaseConnection getCouchbaseConnection() {
+        return (CouchbaseConnection) getConnection();
+    }
+
     @Override
     public String getShortName() {
         return COUCHBASE_PRODUCT_SHORT_NAME;

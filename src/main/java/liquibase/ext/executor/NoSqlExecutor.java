@@ -108,7 +108,7 @@ public class NoSqlExecutor extends AbstractExecutor {
     public void execute(final SqlStatement sql, final List<SqlVisitor> sqlVisitors) throws DatabaseException {
         if (sql instanceof CouchbaseStatement) {
             try {
-                ((CouchbaseStatement) sql).execute(getDatabase());
+                ((CouchbaseStatement) sql).execute(getDatabase().getCouchbaseConnection());
             } catch (final Exception e) {
                 throw new DatabaseException("Could not execute", e);
             }
