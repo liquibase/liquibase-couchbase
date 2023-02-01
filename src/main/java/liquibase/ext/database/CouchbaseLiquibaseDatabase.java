@@ -3,33 +3,47 @@ package liquibase.ext.database;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
+
+    public static final String COUCHBASE_PRODUCT_NAME = "Couchbase";
+    public static final String COUCHBASE_PRODUCT_SHORT_NAME = "couchbase";
+
+    @Override
+    public int getPriority() {
+        return PRIORITY_DATABASE;
+    }
 
 
     @Override
     protected String getDefaultDatabaseProductName() {
-        return null;
+        return COUCHBASE_PRODUCT_NAME;
     }
 
     @Override
     public boolean isCorrectDatabaseImplementation(DatabaseConnection conn) throws DatabaseException {
-        return false;
+        return getDatabaseProductName().equals(conn.getDatabaseProductName());
     }
 
     @Override
     public String getDefaultDriver(String url) {
+        if (url.startsWith(CouchbaseConnection.COUCHBASE_PREFIX) ||
+                url.startsWith(CouchbaseConnection.COUCHBASE_SSL_PREFIX)) {
+            return CouchbaseClientDriver.class.getName();
+        }
         return null;
     }
 
     @Override
     public String getShortName() {
-        return null;
+        return COUCHBASE_PRODUCT_SHORT_NAME;
     }
 
     @Override
     public Integer getDefaultPort() {
-        return null;
+        return CouchbaseConnection.DEFAULT_PORT;
     }
 
     @Override
@@ -40,10 +54,5 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
     @Override
     public boolean supportsTablespaces() {
         return false;
-    }
-
-    @Override
-    public int getPriority() {
-        return 0;
     }
 }

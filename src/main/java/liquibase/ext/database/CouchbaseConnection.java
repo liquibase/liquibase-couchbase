@@ -1,4 +1,4 @@
-package liquibase.ext.couchbase.database;
+package liquibase.ext.database;
 
 /*-
  * #%L
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
-import static liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.CouchbaseLiquibaseDatabase.COUCHBASE_PRODUCT_NAME;
 
 @Getter
 @Setter

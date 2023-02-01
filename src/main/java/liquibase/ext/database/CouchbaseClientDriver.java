@@ -1,4 +1,4 @@
-package liquibase.ext.couchbase.database;
+package liquibase.ext.database;
 
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
