@@ -40,6 +40,10 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
+import static liquibase.ext.database.Constants.BUCKET_PARAM;
+import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 @Getter
 @Setter
@@ -55,7 +59,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     public boolean supports(String url) {
         return Optional.ofNullable(url)
                 .map(String::toLowerCase)
-                .map(x -> x.startsWith(Constants.COUCHBASE_PRODUCT_NAME.toLowerCase()))
+                .map(x -> x.startsWith(COUCHBASE_PRODUCT_SHORT_NAME))
                 .orElse(false);
     }
 
@@ -84,7 +88,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
     public String getDatabaseProductName() {
-        return Constants.COUCHBASE_PRODUCT_NAME;
+        return COUCHBASE_PRODUCT_NAME;
     }
 
     @Override
@@ -139,9 +143,9 @@ public class CouchbaseConnection implements DatabaseConnection {
 
             Map<String, String> params = new HashMap<>();
             Optional.ofNullable(driverProperties)
-                    .map(x -> x.get(Constants.BUCKET_PARAM))
+                    .map(x -> x.get(BUCKET_PARAM))
                     .map(String.class::cast)
-                    .ifPresent(val -> params.put(Constants.BUCKET_PARAM, val));
+                    .ifPresent(val -> params.put(BUCKET_PARAM, val));
 
             this.connectionString.withParams(params);
             final String user = getAndTrimProperty(driverProperties, "user")
@@ -151,8 +155,8 @@ public class CouchbaseConnection implements DatabaseConnection {
             this.cluster = ((CouchbaseClientDriver) driverObject)
                     .connect(connectionString.original(), ClusterOptions.clusterOptions(user, password));
 
-            if (this.connectionString.params().containsKey(Constants.BUCKET_PARAM)) {
-                final String dbName = this.connectionString.params().get(Constants.BUCKET_PARAM);
+            if (this.connectionString.params().containsKey(BUCKET_PARAM)) {
+                final String dbName = this.connectionString.params().get(BUCKET_PARAM);
                 this.database = this.cluster.bucket(dbName);
             }
         } catch (final Exception e) {
@@ -167,7 +171,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     private String getBucketName(String url) {
         return ofNullable(connectionString)
                 .map(ConnectionString::params)
-                .map(x -> x.get(Constants.BUCKET_PARAM))
+                .map(x -> x.get(BUCKET_PARAM))
                 .map(String.class::cast)
                 .orElse(url);
     }
@@ -197,6 +201,6 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public int getPriority() {
-        return PRIORITY_DEFAULT + Constants.COUCHBASE_PRIORITY;
+        return PRIORITY_DEFAULT + COUCHBASE_PRIORITY;
     }
 }
