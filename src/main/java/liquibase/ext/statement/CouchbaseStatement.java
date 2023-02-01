@@ -1,6 +1,6 @@
 package liquibase.ext.statement;
 
-import liquibase.ext.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.database.CouchbaseConnection;
 import liquibase.statement.SqlStatement;
 
 public abstract class CouchbaseStatement implements SqlStatement {
@@ -14,5 +14,5 @@ public abstract class CouchbaseStatement implements SqlStatement {
         return false;
     }
 
-    public abstract void execute(CouchbaseLiquibaseDatabase database);
+    public abstract void execute(CouchbaseConnection connection);
 }
