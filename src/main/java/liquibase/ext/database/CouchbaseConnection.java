@@ -31,6 +31,7 @@ import liquibase.util.StringUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Driver;
@@ -39,18 +40,13 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
-import static liquibase.ext.database.CouchbaseLiquibaseDatabase.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class CouchbaseConnection implements DatabaseConnection {
 
-    public static final int DEFAULT_PORT = 8091;
-    public static final String COUCHBASE_PREFIX = COUCHBASE_PRODUCT_NAME + "://";
-    public static final String COUCHBASE_SSL_PREFIX = COUCHBASE_PRODUCT_NAME + "s://";
-    public static final String BUCKET_PARAM = "bucket";
-    public static final int COUCHBASE_PRIORITY = 500;
 
     private ConnectionString connectionString;
     protected Cluster cluster;
@@ -58,10 +54,10 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public boolean supports(String url) {
-        if (url == null) {
-            return false;
-        }
-        return url.toLowerCase().startsWith("couchbase");
+        return Optional.ofNullable(url)
+                .map(String::toLowerCase)
+                .map(x -> x.startsWith(COUCHBASE_PRODUCT_NAME.toLowerCase()))
+                .orElse(false);
     }
 
     @Override
@@ -74,36 +70,36 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
     @Override
-    public String nativeSQL(String s) throws DatabaseException {
+    public String nativeSQL(String s) {
         return null;
     }
 
     @Override
-    public void rollback() throws DatabaseException {
-
+    public void rollback() {
+        throw new NotImplementedException();
     }
 
     @Override
-    public void setAutoCommit(boolean b) throws DatabaseException {
-
+    public void setAutoCommit(boolean b) {
+        throw new NotImplementedException();
     }
 
-    public String getDatabaseProductName() throws DatabaseException {
+    public String getDatabaseProductName() {
         return COUCHBASE_PRODUCT_NAME;
     }
 
     @Override
-    public String getDatabaseProductVersion() throws DatabaseException {
-        return null;
+    public String getDatabaseProductVersion() {
+        return "0";
     }
 
     @Override
-    public int getDatabaseMajorVersion() throws DatabaseException {
+    public int getDatabaseMajorVersion() {
         return 0;
     }
 
     @Override
-    public int getDatabaseMinorVersion() throws DatabaseException {
+    public int getDatabaseMinorVersion() {
         return 0;
     }
 
@@ -126,13 +122,13 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
     @Override
-    public boolean isClosed() throws DatabaseException {
+    public boolean isClosed() {
         return isNull(cluster);
     }
 
     @Override
     public void attached(Database database) {
-
+        throw new NotImplementedException();
     }
 
     @Override
@@ -143,15 +139,18 @@ public class CouchbaseConnection implements DatabaseConnection {
             this.connectionString = ConnectionString.create(StringUtils.trimToEmpty(url));
 
             Map<String, String> params = new HashMap<>();
-            Optional.ofNullable(driverProperties).map(x -> x.get(BUCKET_PARAM))
+            Optional.ofNullable(driverProperties)
+                    .map(x -> x.get(BUCKET_PARAM))
                     .map(String.class::cast)
                     .ifPresent(val -> params.put(BUCKET_PARAM, val));
 
             this.connectionString.withParams(params);
-            final String user = Optional.ofNullable(driverProperties).map(props -> StringUtil.trimToNull(props.getProperty("user"))).orElseThrow(() -> new IllegalArgumentException("Username not specified in parameters"));
-            final String password = Optional.of(driverProperties).map(props -> StringUtil.trimToNull(props.getProperty("password"))).orElse(null);
+            final String user = getAndTrimProperty(driverProperties, "user")
+                    .orElseThrow(() -> new IllegalArgumentException("Username not specified in parameters"));
+            final String password = getAndTrimProperty(driverProperties, "password").orElse(null);
 
-            this.cluster = ((CouchbaseClientDriver) driverObject).connect(connectionString.original(), ClusterOptions.clusterOptions(user, password));
+            this.cluster = ((CouchbaseClientDriver) driverObject)
+                    .connect(connectionString.original(), ClusterOptions.clusterOptions(user, password));
 
             if (this.connectionString.params().containsKey(BUCKET_PARAM)) {
                 final String dbName = this.connectionString.params().get(BUCKET_PARAM);
@@ -160,6 +159,10 @@ public class CouchbaseConnection implements DatabaseConnection {
         } catch (final Exception e) {
             throw new DatabaseException("Could not open connection to database: " + getBucketName(url), e);
         }
+    }
+
+    private static Optional<String> getAndTrimProperty(Properties driverProperties, String user) {
+        return Optional.ofNullable(driverProperties).map(props -> StringUtil.trimToNull(props.getProperty(user)));
     }
 
     private String getBucketName(String url) {
@@ -183,12 +186,12 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
     @Override
-    public void commit() throws DatabaseException {
-
+    public void commit() {
+        throw new NotImplementedException();
     }
 
     @Override
-    public boolean getAutoCommit() throws DatabaseException {
+    public boolean getAutoCommit() {
         return false;
     }
 

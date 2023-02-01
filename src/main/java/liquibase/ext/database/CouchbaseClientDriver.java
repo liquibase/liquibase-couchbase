@@ -12,6 +12,9 @@ import java.sql.DriverPropertyInfo;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import static liquibase.ext.database.Constants.COUCHBASE_PREFIX;
+import static liquibase.ext.database.Constants.COUCHBASE_SSL_PREFIX;
+
 public class CouchbaseClientDriver implements Driver {
 
     @Override
@@ -33,8 +36,8 @@ public class CouchbaseClientDriver implements Driver {
     @Override
     public boolean acceptsURL(final String url) {
         final String trimmedUrl = StringUtils.trimToEmpty(url);
-        return trimmedUrl.startsWith(CouchbaseConnection.COUCHBASE_PREFIX) ||
-                trimmedUrl.startsWith(CouchbaseConnection.COUCHBASE_SSL_PREFIX);
+        return trimmedUrl.startsWith(COUCHBASE_PREFIX) ||
+                trimmedUrl.startsWith(COUCHBASE_SSL_PREFIX);
     }
 
     @Override
