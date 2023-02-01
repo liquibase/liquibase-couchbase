@@ -16,16 +16,16 @@ import liquibase.ext.statement.CreateCollectionStatement;
 import liquibase.integration.CouchbaseContainerizedTest;
 
 /**
- * E2E test checking flow from reading xml to applying migration
+ * Integration test for create collection statement
  */
-public class CreateCollectionIntegrationTest extends CouchbaseContainerizedTest {
+public class CreateCollectionStatementIntegrationTest extends CouchbaseContainerizedTest {
 
     private static final String collectionName = "travels";
 
-    protected CouchbaseLiquibaseDatabase database;
-    protected ChangeLogProvider changeLogProvider;
     private Cluster cluster;
     private Bucket bucket;
+    protected CouchbaseLiquibaseDatabase database;
+    protected ChangeLogProvider changeLogProvider;
 
     @BeforeEach
     void setUp() {
