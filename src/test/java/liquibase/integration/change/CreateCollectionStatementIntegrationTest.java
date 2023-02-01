@@ -44,7 +44,7 @@ public class CreateCollectionStatementIntegrationTest extends CouchbaseContainer
     void createCollectionStatementExecute() {
         CreateCollectionStatement createCollectionStatement = new CreateCollectionStatement(collectionName);
 
-        createCollectionStatement.execute(database);
+        createCollectionStatement.execute(database.getCouchbaseConnection());
 
         assertThat(bucket).hasCollectionInDefaultScope(collectionName);
     }
