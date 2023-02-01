@@ -79,26 +79,32 @@
         <mockito.version>5.0.0</mockito.version>
         <assertj.version>3.24.1</assertj.version>
         <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
+        <slf4j.version>2.0.6</slf4j.version>
+        <liquibase.core.version>4.19.0</liquibase.core.version>
+        <lombok.version>1.18.24</lombok.version>
+        <couchbase.java.client.version>3.4.2</couchbase.java.client.version>
     </properties>
 
     <dependencies>
+        <!-- compile dependencies -->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.19.0</version>
+            <version>${liquibase.core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>${lombok.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.4.2</version>
+            <version>${couchbase.java.client.version}</version>
         </dependency>
 
+        <!-- test dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -128,6 +134,18 @@
             <artifactId>couchbase</artifactId>
             <version>${testcontainers.couchbase.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
