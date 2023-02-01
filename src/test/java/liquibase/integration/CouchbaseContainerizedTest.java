@@ -1,8 +1,5 @@
 package liquibase.integration;
 
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
@@ -10,16 +7,18 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
 
+/**
+ * Basic tests with roll up Couchbase in container
+ * Data will not be cleared automatically, it's your care to clean that
+ */
 public abstract class CouchbaseContainerizedTest {
     protected static final String TEST_BUCKET = "test";
     protected static final String COUCHBASE_VERSION = "7.1.3";
     protected static final DockerImageName IMAGE_NAME = DockerImageName.parse("couchbase/server");
 
-    protected static CouchbaseContainer container;
+    protected CouchbaseContainer container;
 
-    @SneakyThrows
-    @BeforeAll
-    static void setUp() {
+    public CouchbaseContainerizedTest() {
         BucketDefinition bucketDefinition = new BucketDefinition(TEST_BUCKET);
         container = new CouchbaseContainer(IMAGE_NAME.withTag(COUCHBASE_VERSION))
                 .withBucket(bucketDefinition)
@@ -29,7 +28,4 @@ public abstract class CouchbaseContainerizedTest {
         container.start();
     }
 
-    @AfterAll
-    static void tearDown() {
-    }
 }
