@@ -20,29 +20,36 @@ package liquibase.ext.database;
  * #L%
  */
 
-import com.couchbase.client.core.util.ConnectionString;
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.ClusterOptions;
-import liquibase.database.Database;
-import liquibase.database.DatabaseConnection;
-import liquibase.exception.DatabaseException;
-import liquibase.util.StringUtil;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.StringUtils;
-
-import java.sql.Driver;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static liquibase.ext.database.Constants.BUCKET_PARAM;
 import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
 import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
+
+import com.couchbase.client.core.util.ConnectionString;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.ClusterOptions;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
+
+import java.sql.Driver;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
+import liquibase.database.Database;
+import liquibase.database.DatabaseConnection;
+import liquibase.exception.DatabaseException;
+import liquibase.util.StringUtil;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -126,9 +133,11 @@ public class CouchbaseConnection implements DatabaseConnection {
         return isNull(cluster);
     }
 
+    /**
+     * Is not used in Couchbase
+     */
     @Override
     public void attached(Database database) {
-        throw new NotImplementedException();
     }
 
     @Override

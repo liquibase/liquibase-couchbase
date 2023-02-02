@@ -1,15 +1,15 @@
 package liquibase.ext.database;
 
-import liquibase.database.AbstractJdbcDatabase;
-import liquibase.database.DatabaseConnection;
-import liquibase.exception.DatabaseException;
-import lombok.NoArgsConstructor;
-
 import static liquibase.ext.database.Constants.COUCHBASE_PREFIX;
 import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 import static liquibase.ext.database.Constants.COUCHBASE_SSL_PREFIX;
 import static liquibase.ext.database.Constants.DEFAULT_PORT;
+
+import liquibase.database.AbstractJdbcDatabase;
+import liquibase.database.DatabaseConnection;
+import liquibase.exception.DatabaseException;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
@@ -38,8 +38,9 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
         return null;
     }
 
-    public CouchbaseConnection getCouchbaseConnection() {
-        return (CouchbaseConnection) getConnection();
+    @Override
+    public CouchbaseConnection getConnection() {
+        return (CouchbaseConnection) super.getConnection();
     }
 
     @Override
