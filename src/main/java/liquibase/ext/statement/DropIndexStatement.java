@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class DropIndexStatement extends CouchbaseStatement {
                 .filter(StringUtils::isNotBlank)
                 .orElseGet(() -> connection.getDatabase().name());
 
-        if (StringUtils.isNotBlank(collectionName) || StringUtils.isNotBlank(scopeName)) {
+        if (isNotBlank(collectionName) && isNotBlank(scopeName)) {
             DropQueryIndexOptions options = DropQueryIndexOptions.dropQueryIndexOptions()
                     .collectionName(collectionName)
                     .scopeName(scopeName);

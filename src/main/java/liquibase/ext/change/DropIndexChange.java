@@ -31,7 +31,8 @@ public class DropIndexChange extends CouchbaseChange {
 
     @Override
     public String getConfirmationMessage() {
-        return "Index dropped for collection " + getCollectionName();
+        return (isPrimary() ? "Primary index" : "Index " + getIndexName()) +
+                " dropped for bucket " + getBucketName();
     }
 
     @Override
