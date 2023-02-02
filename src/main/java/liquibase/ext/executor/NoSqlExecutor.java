@@ -1,5 +1,10 @@
 package liquibase.ext.executor;
 
+import static java.util.Collections.emptyList;
+
+import java.util.List;
+import java.util.Map;
+
 import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
@@ -11,11 +16,6 @@ import liquibase.servicelocator.LiquibaseService;
 import liquibase.sql.visitor.SqlVisitor;
 import liquibase.statement.SqlStatement;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Collections.emptyList;
 
 @LiquibaseService
 @NoArgsConstructor
@@ -107,13 +107,17 @@ public class NoSqlExecutor extends AbstractExecutor {
     @Override
     public void execute(final SqlStatement sql, final List<SqlVisitor> sqlVisitors) throws DatabaseException {
         if (sql instanceof CouchbaseStatement) {
-            try {
-                ((CouchbaseStatement) sql).execute(getDatabase().getCouchbaseConnection());
-            } catch (final Exception e) {
-                throw new DatabaseException("Could not execute", e);
-            }
-        } else {
-            throw new IllegalArgumentException("Couchbase cannot execute " + sql.getClass().getName() + " statements");
+            doExecute((CouchbaseStatement) sql);
+        }
+
+        throw new IllegalArgumentException("Couchbase cannot execute " + sql.getClass().getName() + " statements");
+    }
+
+    private void doExecute(CouchbaseStatement sql) throws DatabaseException {
+        try {
+            sql.execute(getDatabase().getConnection());
+        } catch (final Exception e) {
+            throw new DatabaseException("Could not execute", e);
         }
     }
 

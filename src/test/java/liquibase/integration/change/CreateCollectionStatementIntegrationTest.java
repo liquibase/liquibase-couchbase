@@ -9,11 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Driver;
+import java.util.Properties;
+
 import liquibase.common.TestChangeLogProvider;
 import liquibase.ext.changelog.ChangeLogProvider;
+import liquibase.ext.database.CouchbaseClientDriver;
+import liquibase.ext.database.CouchbaseConnection;
 import liquibase.ext.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.statement.CreateCollectionStatement;
 import liquibase.integration.CouchbaseContainerizedTest;
+import lombok.SneakyThrows;
 
 /**
  * Integration test for create collection statement
@@ -30,6 +36,7 @@ public class CreateCollectionStatementIntegrationTest extends CouchbaseContainer
     @BeforeEach
     void setUp() {
         database = new CouchbaseLiquibaseDatabase();
+        database.setConnection(createCouchbaseConnection());
         changeLogProvider = new TestChangeLogProvider(database);
         cluster = Cluster.connect(
                 container.getConnectionString(),
@@ -44,7 +51,7 @@ public class CreateCollectionStatementIntegrationTest extends CouchbaseContainer
     void createCollectionStatementExecute() {
         CreateCollectionStatement createCollectionStatement = new CreateCollectionStatement(collectionName);
 
-        createCollectionStatement.execute(database.getCouchbaseConnection());
+        createCollectionStatement.execute(database.getConnection());
 
         assertThat(bucket).hasCollectionInDefaultScope(collectionName);
     }
