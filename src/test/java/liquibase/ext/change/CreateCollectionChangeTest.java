@@ -1,5 +1,6 @@
 package liquibase.ext.change;
 
+import static liquibase.common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 
@@ -14,7 +15,6 @@ import liquibase.statement.SqlStatement;
 public class CreateCollectionChangeTest extends CouchbaseChangeTestCase {
 
     private static final String collectionName = "travels";
-    private static final String createCollection = "liquibase.ext/changelog.create-collection.test.xml";
 
     private DatabaseChangeLog changeLog;
     private CreateCollectionChange createCollectionChange;
@@ -23,7 +23,7 @@ public class CreateCollectionChangeTest extends CouchbaseChangeTestCase {
     @BeforeEach
     void setUp() {
         super.setUp();
-        changeLog = changeLogProvider.load(createCollection);
+        changeLog = changeLogProvider.load(CREATE_COLLECTION_TEST_XML);
     }
 
     @Test

@@ -1,6 +1,8 @@
 package liquibase.ext.change;
 
 import org.junit.jupiter.api.BeforeEach;
+
+import liquibase.common.TestChangeLogProvider;
 import liquibase.ext.changelog.ChangeLogProvider;
 import liquibase.ext.database.CouchbaseLiquibaseDatabase;
 

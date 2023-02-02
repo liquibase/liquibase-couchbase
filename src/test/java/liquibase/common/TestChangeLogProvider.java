@@ -1,4 +1,4 @@
-package liquibase.ext.change;
+package liquibase.common;
 
 import liquibase.ext.changelog.ChangeLogProvider;
 import liquibase.ext.database.CouchbaseLiquibaseDatabase;
