@@ -20,20 +20,15 @@ package liquibase.ext.database;
  * #L%
  */
 
-import static java.util.Collections.emptyList;
-import static java.util.Objects.isNull;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
-import static liquibase.ext.database.Constants.BUCKET_PARAM;
-import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
-import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
-import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
-
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.ClusterOptions;
-
+import liquibase.database.Database;
+import liquibase.database.DatabaseConnection;
+import liquibase.exception.DatabaseException;
+import liquibase.util.StringUtil;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,12 +39,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import liquibase.database.Database;
-import liquibase.database.DatabaseConnection;
-import liquibase.exception.DatabaseException;
-import liquibase.util.StringUtil;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static com.couchbase.client.core.util.Validators.notNull;
+import static com.couchbase.client.core.util.Validators.notNullOrEmpty;
+import static com.couchbase.client.java.ClusterOptions.clusterOptions;
+import static java.util.Objects.isNull;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
+import static java.util.Collections.emptyList;
+import static liquibase.ext.database.Constants.BUCKET_PARAM;
+import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 @Data
 @NoArgsConstructor
@@ -61,7 +61,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public boolean supports(String url) {
-        return Optional.ofNullable(url)
+        return ofNullable(url)
                 .map(String::toLowerCase)
                 .map(x -> x.startsWith(COUCHBASE_PRODUCT_SHORT_NAME))
                 .orElse(false);
@@ -70,7 +70,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     @Override
     public String getCatalog() throws DatabaseException {
         try {
-            return Optional.ofNullable(database).map(Bucket::name).orElse(StringUtils.EMPTY);
+            return ofNullable(database).map(Bucket::name).orElse(StringUtils.EMPTY);
         } catch (final Exception e) {
             throw new DatabaseException(e);
         }
@@ -118,14 +118,17 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     //TODO Still questionable , should we allow null connection string?
     private List<String> getHosts() {
-        return ofNullable(connectionString)
+        notNull(connectionString, "Connection string");
+        return Optional.of(connectionString)
                 .map(this::extractHosts)
                 .orElse(emptyList());
     }
 
     @Override
     public String getConnectionUserName() {
-        return ofNullable(connectionString).map(ConnectionString::username).orElse("");
+        notNull(connectionString, "Connection string");
+        notNullOrEmpty(connectionString.username(), "Username");
+        return connectionString.username();
     }
 
     @Override
@@ -154,22 +157,21 @@ public class CouchbaseConnection implements DatabaseConnection {
                 String[] parts = processedUrl.split("://");
                 processedUrl = parts[0] + "://" + user + '@' + parts[1];
             }
-            this.connectionString = ConnectionString.create(processedUrl);
             Map<String, String> params = new HashMap<>();
-            Optional.ofNullable(driverProperties)
+            ofNullable(driverProperties)
                     .map(x -> x.get(BUCKET_PARAM))
                     .map(String.class::cast)
                     .ifPresent(val -> params.put(BUCKET_PARAM, val));
-            this.connectionString.withParams(params);
+            connectionString = ConnectionString.create(processedUrl).withParams(params);
 
             final String password = getAndTrimProperty(driverProperties, "password").orElse(null);
 
-            this.cluster = ((CouchbaseClientDriver) driverObject)
-                    .connect(connectionString.original(), ClusterOptions.clusterOptions(connectionString.username(), password));
+            cluster = ((CouchbaseClientDriver) driverObject)
+                    .connect(connectionString.original(), clusterOptions(connectionString.username(), password));
 
-            if (this.connectionString.params().containsKey(BUCKET_PARAM)) {
-                final String dbName = this.connectionString.params().get(BUCKET_PARAM);
-                this.database = this.cluster.bucket(dbName);
+            if (connectionString.params().containsKey(BUCKET_PARAM)) {
+                final String dbName = connectionString.params().get(BUCKET_PARAM);
+                database = cluster.bucket(dbName);
             }
         } catch (final Exception e) {
             throw new DatabaseException("Could not open connection to database: " + getBucketName(url), e);
