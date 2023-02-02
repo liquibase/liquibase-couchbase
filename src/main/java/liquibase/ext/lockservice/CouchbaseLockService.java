@@ -1,15 +1,19 @@
 package liquibase.ext.lockservice;
 
+import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LockException;
 import liquibase.ext.database.CouchbaseLiquibaseDatabase;
 import liquibase.lockservice.DatabaseChangeLogLock;
 import liquibase.lockservice.LockService;
+import liquibase.logging.Logger;
 
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 public class CouchbaseLockService implements LockService {
+
+	private final Logger logger = Scope.getCurrentScope().getLog(getClass());
 
 	private Database database;
 
@@ -34,9 +38,7 @@ public class CouchbaseLockService implements LockService {
 	}
 
 	@Override
-	public void waitForLock() throws LockException {
-
-	}
+	public void waitForLock() throws LockException {}
 
 	@Override
 	public boolean acquireLock() throws LockException {
@@ -44,14 +46,10 @@ public class CouchbaseLockService implements LockService {
 	}
 
 	@Override
-	public void releaseLock() throws LockException {
-
-	}
+	public void releaseLock() throws LockException { }
 
 	@Override
-	public void forceReleaseLock() throws LockException {
-
-	}
+	public void forceReleaseLock() throws LockException { }
 
 	@Override
 	public DatabaseChangeLogLock[] listLocks() {
@@ -60,27 +58,23 @@ public class CouchbaseLockService implements LockService {
 
 	@Override
 	public void init() throws DatabaseException {
-
+		logger.info("Initializing CouchbaseLockService");
 	}
 
 	@Override
 	public void destroy() throws DatabaseException {
-
+		logger.info("Destroying CouchbaseLockService");
 	}
 
 	@Override
 	public void reset() {
-
+		logger.info("Resetting CouchbaseLockService");
 	}
 
 	@Override
-	public void setChangeLogLockWaitTime(long changeLogLockWaitTime) {
-
-	}
+	public void setChangeLogLockWaitTime(long changeLogLockWaitTime) {}
 
 	@Override
-	public void setChangeLogLockRecheckTime(long changeLogLockRecheckTime) {
-
-	}
+	public void setChangeLogLockRecheckTime(long changeLogLockRecheckTime) {}
 
 }
