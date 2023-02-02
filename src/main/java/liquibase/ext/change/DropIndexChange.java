@@ -12,8 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @DatabaseChange(
-        name = "dropIndex",
-        description = "Drop index with validation " +
+        name = "dropQueryIndex",
+        description = "Drop query index with validation " +
                 "https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/dropindex.html",
         priority = PrioritizedService.PRIORITY_DATABASE,
         appliesTo = {"collection", "database"}
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class DropIndexChange extends CouchbaseChange {
-    private boolean isPrimary;
+    private boolean isPrimary = true;
     private String indexName;
     private String bucketName;
     private String collectionName;

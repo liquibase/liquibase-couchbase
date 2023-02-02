@@ -25,7 +25,7 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
                 .filter(StringUtils::isNotBlank)
                 .orElseGet(() -> connection.getDatabase().name());
 
-        if (StringUtils.isNotBlank(collectionName) || StringUtils.isNotBlank(scopeName)) {
+        if (StringUtils.isNotBlank(collectionName) && StringUtils.isNotBlank(scopeName)) {
             DropPrimaryQueryIndexOptions options = DropPrimaryQueryIndexOptions
                     .dropPrimaryQueryIndexOptions()
                     .collectionName(collectionName)
