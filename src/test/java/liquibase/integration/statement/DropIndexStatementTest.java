@@ -11,11 +11,7 @@ import liquibase.ext.database.CouchbaseConnection;
 import liquibase.ext.statement.DropIndexStatement;
 import liquibase.integration.CouchbaseContainerizedTest;
 import org.apache.commons.collections4.CollectionUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 import java.util.Collections;
