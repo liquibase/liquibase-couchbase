@@ -20,18 +20,16 @@ package liquibase.ext.database;
  * #L%
  */
 
-import static java.util.Objects.isNull;
-import static java.util.Optional.ofNullable;
-import static liquibase.ext.database.Constants.BUCKET_PARAM;
-import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
-import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
-import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
-
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
-
+import liquibase.database.Database;
+import liquibase.database.DatabaseConnection;
+import liquibase.exception.DatabaseException;
+import liquibase.util.StringUtil;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,12 +42,12 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import liquibase.database.Database;
-import liquibase.database.DatabaseConnection;
-import liquibase.exception.DatabaseException;
-import liquibase.util.StringUtil;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static java.util.Objects.isNull;
+import static java.util.Optional.ofNullable;
+import static liquibase.ext.database.Constants.BUCKET_PARAM;
+import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 @Data
 @NoArgsConstructor
@@ -70,7 +68,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     @Override
     public String getCatalog() throws DatabaseException {
         try {
-            return database.name();
+            return Optional.ofNullable(database).map(Bucket::name).orElse(StringUtils.EMPTY);
         } catch (final Exception e) {
             throw new DatabaseException(e);
         }
@@ -145,21 +143,27 @@ public class CouchbaseConnection implements DatabaseConnection {
             throws DatabaseException {
 
         try {
-            this.connectionString = ConnectionString.create(StringUtils.trimToEmpty(url));
+            String processedUrl = StringUtils.trimToEmpty(url);
 
+            if (StringUtils.containsNone(processedUrl, '@')) {
+                final String user = getAndTrimProperty(driverProperties, "user")
+                        .orElseThrow(() -> new IllegalArgumentException("Username not specified neither in parameters " +
+                                "nor in connection string"));
+                String[] parts = processedUrl.split("://");
+                processedUrl = parts[0] + "://" + user + '@' + parts[1];
+            }
+            this.connectionString = ConnectionString.create(processedUrl);
             Map<String, String> params = new HashMap<>();
             Optional.ofNullable(driverProperties)
                     .map(x -> x.get(BUCKET_PARAM))
                     .map(String.class::cast)
                     .ifPresent(val -> params.put(BUCKET_PARAM, val));
-
             this.connectionString.withParams(params);
-            final String user = getAndTrimProperty(driverProperties, "user")
-                    .orElseThrow(() -> new IllegalArgumentException("Username not specified in parameters"));
+
             final String password = getAndTrimProperty(driverProperties, "password").orElse(null);
 
             this.cluster = ((CouchbaseClientDriver) driverObject)
-                    .connect(connectionString.original(), ClusterOptions.clusterOptions(user, password));
+                    .connect(connectionString.original(), ClusterOptions.clusterOptions(connectionString.username(), password));
 
             if (this.connectionString.params().containsKey(BUCKET_PARAM)) {
                 final String dbName = this.connectionString.params().get(BUCKET_PARAM);

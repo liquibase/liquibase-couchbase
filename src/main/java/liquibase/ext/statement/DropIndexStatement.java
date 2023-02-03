@@ -3,8 +3,8 @@ package liquibase.ext.statement;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.query.DropQueryIndexOptions;
 import liquibase.ext.database.CouchbaseConnection;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class DropIndexStatement extends CouchbaseStatement {

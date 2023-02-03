@@ -3,14 +3,14 @@ package liquibase.ext.statement;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 import liquibase.ext.database.CouchbaseConnection;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class DropPrimaryIndexStatement extends CouchbaseStatement {
@@ -25,7 +25,7 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
                 .filter(StringUtils::isNotBlank)
                 .orElseGet(() -> connection.getDatabase().name());
 
-        if (StringUtils.isNotBlank(collectionName) || StringUtils.isNotBlank(scopeName)) {
+        if (StringUtils.isNotBlank(collectionName) && StringUtils.isNotBlank(scopeName)) {
             DropPrimaryQueryIndexOptions options = DropPrimaryQueryIndexOptions
                     .dropPrimaryQueryIndexOptions()
                     .collectionName(collectionName)

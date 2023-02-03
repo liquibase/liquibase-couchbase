@@ -6,33 +6,31 @@ import liquibase.ext.statement.DropIndexStatement;
 import liquibase.ext.statement.DropPrimaryIndexStatement;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @DatabaseChange(
-        name = "dropIndex",
-        description = "Drop index with validation " +
+        name = "dropQueryIndex",
+        description = "Drop query index with validation " +
                 "https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/dropindex.html",
         priority = PrioritizedService.PRIORITY_DATABASE,
-        appliesTo = {"collection", "database"}
+        appliesTo = {"database", "keyspace"}
 )
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 @EqualsAndHashCode(callSuper = true)
+@RequiredArgsConstructor
 public class DropIndexChange extends CouchbaseChange {
-    private boolean isPrimary;
-    private String indexName;
-    private String bucketName;
-    private String collectionName;
-    private String scopeName;
+    private final boolean isPrimary;
+    private final String indexName;
+    private final String bucketName;
+    private final String collectionName;
+    private final String scopeName;
 
     @Override
     public String getConfirmationMessage() {
-        return (isPrimary() ? "Primary index" : "Index " + getIndexName()) +
-                " dropped for bucket " + getBucketName();
+        return String.format("%s dropped for bucket %s",
+                isPrimary() ? "Primary index" : "Index " + getIndexName(), getBucketName());
     }
 
     @Override
