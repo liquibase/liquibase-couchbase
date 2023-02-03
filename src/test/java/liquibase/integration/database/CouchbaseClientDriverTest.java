@@ -24,9 +24,11 @@ class CouchbaseClientDriverTest extends CouchbaseContainerizedTest {
     }
 
     @Test
-    void shouldConnect() throws DatabaseException {
+    void Should_connect_to_cluster_using_driver() throws DatabaseException {
         ClusterOptions credentials = clusterOptions(container.getUsername(), container.getPassword());
-        Cluster clusterByDriver = driver.connect(container.getConnectionString(), credentials);
-        assertNotNull(clusterByDriver);
+
+        Cluster cluster = driver.connect(container.getConnectionString(), credentials);
+
+        assertNotNull(cluster);
     }
 }
