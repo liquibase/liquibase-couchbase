@@ -27,7 +27,7 @@ public class CreateCollectionChange extends CouchbaseChange {
 
     @Override
     public String getConfirmationMessage() {
-        return String.format("%s has successfully created", collectionName);
+        return String.format("%s has been successfully created", collectionName);
     }
 
     @Override

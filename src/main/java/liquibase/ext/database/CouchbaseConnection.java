@@ -20,34 +20,36 @@ package liquibase.ext.database;
  * #L%
  */
 
+import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
+import static liquibase.ext.database.Constants.BUCKET_PARAM;
+import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
+
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
+
+import java.sql.Driver;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.util.StringUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.StringUtils;
-
-import java.sql.Driver;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
-import static java.util.Optional.ofNullable;
-import static liquibase.ext.database.Constants.BUCKET_PARAM;
-import static liquibase.ext.database.Constants.COUCHBASE_PRIORITY;
-import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_NAME;
-import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 @Data
 @NoArgsConstructor
@@ -113,17 +115,17 @@ public class CouchbaseConnection implements DatabaseConnection {
         return String.join(",", getHosts());
     }
 
+
+    //TODO Still questionable , should we allow null connection string?
     private List<String> getHosts() {
-        return ofNullable(this.connectionString)
-                .map(x -> x.hosts().stream()
-                        .map(ConnectionString.UnresolvedSocket::host)
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+        return ofNullable(connectionString)
+                .map(this::extractHosts)
+                .orElse(emptyList());
     }
 
     @Override
     public String getConnectionUserName() {
-        return ofNullable(this.connectionString).map(ConnectionString::username).orElse("");
+        return ofNullable(connectionString).map(ConnectionString::username).orElse("");
     }
 
     @Override
@@ -174,18 +176,6 @@ public class CouchbaseConnection implements DatabaseConnection {
         }
     }
 
-    private static Optional<String> getAndTrimProperty(Properties driverProperties, String user) {
-        return Optional.ofNullable(driverProperties).map(props -> StringUtil.trimToNull(props.getProperty(user)));
-    }
-
-    private String getBucketName(String url) {
-        return ofNullable(connectionString)
-                .map(ConnectionString::params)
-                .map(x -> x.get(BUCKET_PARAM))
-                .map(String.class::cast)
-                .orElse(url);
-    }
-
     @Override
     public void close() throws DatabaseException {
         try {
@@ -212,5 +202,23 @@ public class CouchbaseConnection implements DatabaseConnection {
     @Override
     public int getPriority() {
         return PRIORITY_DEFAULT + COUCHBASE_PRIORITY;
+    }
+
+    private List<String> extractHosts(ConnectionString s) {
+        return s.hosts().stream()
+                .map(ConnectionString.UnresolvedSocket::host)
+                .collect(toList());
+    }
+
+    private static Optional<String> getAndTrimProperty(Properties driverProperties, String user) {
+        return Optional.ofNullable(driverProperties).map(props -> StringUtil.trimToNull(props.getProperty(user)));
+    }
+
+    private String getBucketName(String url) {
+        return ofNullable(connectionString)
+                .map(ConnectionString::params)
+                .map(x -> x.get(BUCKET_PARAM))
+                .map(String.class::cast)
+                .orElse(url);
     }
 }

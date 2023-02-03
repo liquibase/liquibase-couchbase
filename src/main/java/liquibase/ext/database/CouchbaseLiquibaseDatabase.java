@@ -6,13 +6,22 @@ import static liquibase.ext.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 import static liquibase.ext.database.Constants.COUCHBASE_SSL_PREFIX;
 import static liquibase.ext.database.Constants.DEFAULT_PORT;
 
+import java.sql.Driver;
+import java.util.Properties;
+
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
-@NoArgsConstructor
+/**
+ * Represent instance of {@link com.couchbase.client.java.Cluster}
+ */
+@RequiredArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
+
+    private final ConnectionData connectionData;
 
     @Override
     public int getPriority() {
@@ -35,12 +44,25 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
                 url.startsWith(COUCHBASE_SSL_PREFIX)) {
             return CouchbaseClientDriver.class.getName();
         }
-        return null;
+        throw new IllegalArgumentException(url + " driver is not supported");
     }
 
     @Override
-    public CouchbaseConnection getConnection() {
-        return (CouchbaseConnection) super.getConnection();
+    @SneakyThrows
+    public synchronized CouchbaseConnection getConnection() {
+        CouchbaseConnection connection = (CouchbaseConnection) super.getConnection();
+        if (connection != null) {
+            return connection;
+        }
+
+        CouchbaseConnection couchbaseConnection = new CouchbaseConnection();
+        Properties properties = new Properties();
+        properties.put("user", connectionData.getUser());
+        properties.put("password", connectionData.getPassword());
+        Driver driver = new CouchbaseClientDriver();
+        couchbaseConnection.open(connectionData.getConnectionString(), driver, properties);
+        setConnection(couchbaseConnection);
+        return couchbaseConnection;
     }
 
     @Override
