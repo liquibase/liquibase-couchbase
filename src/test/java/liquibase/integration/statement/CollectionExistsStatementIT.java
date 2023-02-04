@@ -1,60 +1,26 @@
 package liquibase.integration.statement;
 
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.manager.collection.CollectionSpec;
-import liquibase.common.connection.*;
-import liquibase.ext.database.CouchbaseConnection;
+import org.junit.jupiter.api.Test;
+
 import liquibase.ext.statement.CollectionExistsStatement;
-import liquibase.integration.CouchbaseContainerizedTest;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.*;
+import liquibase.integration.BucketTestCase;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class CollectionExistsStatementIT extends CouchbaseContainerizedTest {
-
-    private static Cluster cluster;
-    private static CouchbaseConnection connection;
-
-    private static final String scopeName = "testScope";
-
-    @BeforeEach
-    void setUpLocal() {
-        cluster = TestClusterInitializer.connect(container);
-        connection = new TestCouchbaseDatabase(container).getConnection();
-    }
-
-    @AfterAll
-    @SneakyThrows
-    static void tearDownLocal() {
-        connection.close();
-        cluster.close();
-    }
+class CollectionExistsStatementIT extends BucketTestCase {
 
     @Test
     void Should_return_true_when_collection_exists() {
-        String collectionName = "testCollection";
-        cluster.bucket(TEST_BUCKET).collections().createScope(scopeName);
-        cluster.bucket(TEST_BUCKET).collections().createCollection(CollectionSpec.create(collectionName, scopeName));
-        CollectionExistsStatement statement = new CollectionExistsStatement(TEST_BUCKET, scopeName, collectionName);
+        CollectionExistsStatement statement = new CollectionExistsStatement(TEST_BUCKET, TEST_SCOPE,
+                TEST_COLLECTION);
 
-        boolean returnedResult = statement.isCollectionExists(connection);
-
-        assertTrue(returnedResult);
-
-        cluster.bucket(TEST_BUCKET).collections().dropScope(scopeName);
+        assertThat(statement.isCollectionExists(database.getConnection())).isTrue();
     }
 
     @Test
     void Should_return_false_when_collection_doesnt_exists() {
-        cluster.bucket(TEST_BUCKET).collections().createScope(scopeName);
-        CollectionExistsStatement statement = new CollectionExistsStatement(TEST_BUCKET, scopeName, "notCreatedCollection");
+        CollectionExistsStatement statement = new CollectionExistsStatement(TEST_BUCKET, TEST_SCOPE,
+                "notCreatedCollection");
 
-        boolean returnedResult = statement.isCollectionExists(connection);
-
-        assertFalse(returnedResult);
-
-        cluster.bucket(TEST_BUCKET).collections().dropScope(scopeName);
+        assertThat(statement.isCollectionExists(database.getConnection())).isFalse();
     }
 }

@@ -10,12 +10,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Keyspace {
 
-	@NonNull private String bucket;
-	private String scope = "_default";
-	private String collection = "_default";
+    @NonNull
+    private String bucket;
+    private String scope = "_default";
+    private String collection = "_default";
 
-	public String getKeyspace() {
-		return String.format("`%s`.`%s`.`%s`", bucket, scope, collection);
-	}
+    public static Keyspace keyspace(String bucket, String scope, String collection) {
+        return new Keyspace(bucket, scope, collection);
+    }
+
+    public String getKeyspace() {
+        return String.format("`%s`.`%s`.`%s`", bucket, scope, collection);
+    }
 
 }

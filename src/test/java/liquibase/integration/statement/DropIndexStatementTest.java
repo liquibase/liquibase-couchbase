@@ -1,85 +1,69 @@
 package liquibase.integration.statement;
 
 import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.manager.bucket.BucketSettings;
-import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-import liquibase.exception.DatabaseException;
-import liquibase.ext.database.CouchbaseClientDriver;
-import liquibase.ext.database.CouchbaseConnection;
+import com.wdt.couchbase.Keyspace;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import liquibase.ext.statement.DropIndexStatement;
-import liquibase.integration.CouchbaseContainerizedTest;
-import org.apache.commons.collections4.CollectionUtils;
-import org.junit.jupiter.api.*;
-
-import java.time.Duration;
-import java.util.Collections;
-import java.util.Properties;
+import liquibase.integration.BucketTestCase;
+import static com.couchbase.client.java.manager.query.CreateQueryIndexOptions.createQueryIndexOptions;
+import static com.wdt.couchbase.Keyspace.keyspace;
+import static java.util.Collections.singletonList;
+import static liquibase.common.matchers.CouchBaseClusterAssert.assertThat;
 
 
-class DropIndexStatementTest extends CouchbaseContainerizedTest {
+class DropIndexStatementTest extends BucketTestCase {
     private static final String TEST_ID = "id1";
     private static final String TEST_CONTENT = "{ \"name\":\"user\", \"type\":\"customer\" }";
-    private static final String TEST_COLLECTION = "testCollection";
-    private static final String TEST_SCOPE = "testScope";
-    private final String bucketName = "testBucket";
     private final String indexName = "testIndex";
-    private Cluster cluster;
     private Bucket bucket;
-    private CouchbaseConnection connection;
 
     @BeforeEach
-    void localSetUp() throws DatabaseException {
-        CouchbaseClientDriver driver = new CouchbaseClientDriver();
-        connection = new CouchbaseConnection();
-        Properties properties = new Properties();
-        properties.put("user", container.getUsername());
-        properties.put("password", container.getPassword());
-        connection.open(container.getConnectionString(), driver, properties);
-        cluster = connection.getCluster();
-        cluster.waitUntilReady(Duration.ofSeconds(20));
-        cluster.buckets().createBucket(BucketSettings.create(bucketName));
-        cluster.waitUntilReady(Duration.ofSeconds(20));
-        bucket = cluster.bucket(bucketName);
-        bucket.waitUntilReady(Duration.ofSeconds(20));
+    void localSetUp() {
+        bucket = cluster.bucket(TEST_BUCKET);
         bucket.defaultCollection().insert(TEST_ID, TEST_CONTENT);
-        bucket.waitUntilReady(Duration.ofSeconds(20));
     }
 
     @AfterEach
-    void localTearDown() throws DatabaseException {
-        cluster.buckets().dropBucket(bucketName);
-        connection.close();
+    void cleanUp() {
+        bucket.defaultCollection().remove(TEST_ID);
     }
 
     @Test
-    @DisplayName("Should drop the index if exists")
-    void shouldDropIndex() {
-        cluster.queryIndexes().createIndex(bucketName, indexName, Collections.singletonList("name"));
-        cluster.waitUntilReady(Duration.ofSeconds(20));
-        Assertions.assertEquals(1, cluster.queryIndexes().getAllIndexes(bucketName).size());
+    void Should_drop_existing_index_in_default_scope() {
+        createIndexInDefaultScope(TEST_BUCKET, indexName);
 
-        DropIndexStatement statement = new DropIndexStatement(indexName, bucketName, null, null);
-        statement.execute(connection);
+        DropIndexStatement statement = new DropIndexStatement(this.indexName, TEST_BUCKET, null, null);
+        statement.execute(database.getConnection());
 
-        Assertions.assertTrue(CollectionUtils.isEmpty(cluster.queryIndexes().getAllIndexes(bucketName)));
+        assertThat(cluster).queryIndexes(TEST_BUCKET).doesNotHave(indexName);
     }
 
     @Test
-    @DisplayName("Should drop index for specific keyspace")
-    void shouldDropIndexForSpecificKeyspace() {
-        bucket.collections().createScope(TEST_SCOPE);
-        bucket.collections().createCollection(CollectionSpec.create(TEST_COLLECTION, TEST_SCOPE));
-        CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions().collectionName(TEST_COLLECTION).scopeName(TEST_SCOPE);
-        cluster.queryIndexes().createIndex(bucketName, indexName, Collections.singletonList("name"), options);
-        cluster.waitUntilReady(Duration.ofSeconds(20));
+    void Should_drop_index_for_specific_keyspace() {
+        Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
+        createIndex(keyspace, indexName);
 
-        Assertions.assertEquals(1, cluster.queryIndexes().getAllIndexes(bucketName).size());
-        DropIndexStatement statement = new DropIndexStatement(indexName, bucketName, TEST_COLLECTION, TEST_SCOPE);
-        statement.execute(connection);
+        DropIndexStatement statement = new DropIndexStatement(indexName, TEST_BUCKET, TEST_COLLECTION, TEST_SCOPE);
+        statement.execute(database.getConnection());
 
-        Assertions.assertTrue(CollectionUtils.isEmpty(cluster.queryIndexes().getAllIndexes(bucketName)));
+        assertThat(cluster).queryIndexes(TEST_BUCKET).doesNotHave(indexName);
+    }
+
+    private void createIndexInDefaultScope(String bucket, String indexName) {
+        cluster.queryIndexes().createIndex(bucket, indexName, singletonList("name"));
+    }
+
+    private void createIndex(Keyspace keyspace, String indexName) {
+        CreateQueryIndexOptions options = createQueryIndexOptions()
+                .collectionName(keyspace.getCollection())
+                .scopeName(keyspace.getScope());
+        cluster.queryIndexes()
+                .createIndex(keyspace.getBucket(), indexName, singletonList("name"), options);
     }
 
 }
