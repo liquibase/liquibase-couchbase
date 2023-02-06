@@ -36,8 +36,8 @@ public class CouchbaseBucketAssert extends AbstractAssert<CouchbaseBucketAssert,
         return this;
     }
 
-    public CouchbaseBucketAssert hasCollectionIntScope(@NonNull String collectionName,
-                                                       @NonNull String scopeName) {
+    public CouchbaseBucketAssert hasCollectionInScope(@NonNull String collectionName,
+                                                      @NonNull String scopeName) {
         if (!presentsInDefaultScope(collectionName)) {
             failWithMessage("Collection <%s> not exists in bucket <%s> in scope <%s>",
                     collectionName,
