@@ -23,6 +23,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateCollectionChange extends CouchbaseChange {
 
+    private String bucketName;
+    private String scopeName;
     private String collectionName;
 
     @Override
@@ -33,7 +35,7 @@ public class CreateCollectionChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements(Database database) {
         return new SqlStatement[]{
-                new CreateCollectionStatement(collectionName)
+                new CreateCollectionStatement(bucketName, scopeName, collectionName)
         };
     }
 }

@@ -36,6 +36,19 @@ public class CouchbaseBucketAssert extends AbstractAssert<CouchbaseBucketAssert,
         return this;
     }
 
+    public CouchbaseBucketAssert hasCollectionInScope(@NonNull String collectionName,
+                                                      @NonNull String scopeName) {
+        if (!presentsInDefaultScope(collectionName)) {
+            failWithMessage("Collection <%s> not exists in bucket <%s> in scope <%s>",
+                    collectionName,
+                    actual.name(),
+                    actual.defaultScope().name()
+            );
+        }
+
+        return this;
+    }
+
     private boolean presentsInDefaultScope(String collectionName) {
         return scopes.stream()
                 .map(ScopeSpec::collections)

@@ -13,7 +13,10 @@
                 <xsd:element name="options" type="xsd:string" minOccurs="0" maxOccurs="1"/>
             </xsd:sequence>
 
-            <xsd:attribute name="collectionName" type="xsd:string" use="required"/>
+            <xsd:attribute name="collectionName" type="xsd:string" use="required"
+                           default="_default"/>
+            <xsd:attribute name="bucketName" type="xsd:string" use="required"/>
+            <xsd:attribute name="scopeName" type="xsd:string" use="required" default="_default"/>
 
         </xsd:complexType>
 

@@ -1,10 +1,5 @@
 package liquibase.ext.change;
 
-import static liquibase.common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.internal.util.collections.Iterables.firstOf;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +10,12 @@ import liquibase.ext.changelog.ChangeLogProvider;
 import liquibase.ext.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.statement.CreateCollectionStatement;
 import liquibase.statement.SqlStatement;
+import static liquibase.common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
+import static liquibase.integration.CouchbaseContainerizedTest.TEST_BUCKET;
+import static liquibase.integration.CouchbaseContainerizedTest.TEST_SCOPE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.internal.util.collections.Iterables.firstOf;
 
 public class CreateCollectionChangeTest {
 
@@ -33,7 +34,8 @@ public class CreateCollectionChangeTest {
 
     @Test
     void Expects_confirmation_message_is_create_collection() {
-        CreateCollectionChange change = new CreateCollectionChange(collectionName);
+        CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
+                TEST_SCOPE, collectionName);
 
         String msg = change.getConfirmationMessage();
 
@@ -42,11 +44,13 @@ public class CreateCollectionChangeTest {
 
     @Test
     void Should_return_only_CreateCollectionStatement() {
-        CreateCollectionChange change = new CreateCollectionChange(collectionName);
+        CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
+                TEST_SCOPE, collectionName);
 
         SqlStatement[] sqlStatements = change.generateStatements(database);
 
-        assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(collectionName));
+        assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(TEST_BUCKET,
+                TEST_SCOPE, collectionName));
     }
 
 

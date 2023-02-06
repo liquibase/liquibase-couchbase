@@ -1,0 +1,61 @@
+package liquibase.common.matchers;
+
+import com.couchbase.client.java.manager.query.QueryIndex;
+import com.couchbase.client.java.manager.query.QueryIndexManager;
+
+import org.assertj.core.api.AbstractAssert;
+
+import java.util.List;
+
+public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryIndexManager> {
+
+    private String bucketName;
+
+    public QueryIndexAssert(QueryIndexManager actual) {
+        super(actual, QueryIndexAssert.class);
+    }
+
+    public QueryIndexAssert(QueryIndexManager queryIndexManager,
+                            List<QueryIndex> indexes,
+                            String bucketName) {
+        this(queryIndexManager);
+        this.bucketName = bucketName;
+    }
+
+    public QueryIndexAssert doesNotHave(String indexName) {
+        boolean contains = actual.getAllIndexes(bucketName)
+                .stream()
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+        if (contains) {
+            failWithMessage("Bucket <%s> has index named <%s>, but it shouldn't",
+                    bucketName,
+                    indexName);
+        }
+
+        return this;
+    }
+
+    public QueryIndexAssert has(String indexName) {
+        boolean contains = actual.getAllIndexes(bucketName).stream().map(QueryIndex::name).anyMatch(indexName::equals);
+        if (!contains) {
+            failWithMessage("Bucket <%s> doesn't have index named <%s> , but it shouldn't",
+                    bucketName,
+                    indexName);
+        }
+
+        return this;
+    }
+
+    public QueryIndexAssert doesNotHavePrimary() {
+        boolean hasPrimary = actual.getAllIndexes(bucketName)
+                .stream()
+                .filter(it -> bucketName.equals(it.bucketName()))
+                .anyMatch(QueryIndex::primary);
+        if (hasPrimary) {
+            failWithMessage("Bucket <%s> has primary index , but it shouldn't", bucketName);
+        }
+
+        return this;
+    }
+}
