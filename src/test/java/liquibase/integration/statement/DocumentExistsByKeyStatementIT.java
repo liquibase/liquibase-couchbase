@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import liquibase.ext.statement.DocumentExistsByKeyStatement;
 import liquibase.integration.BucketTestCase;
+import static liquibase.common.constants.TestConstants.TEST_BUCKET;
+import static liquibase.common.constants.TestConstants.TEST_SCOPE;
+import static liquibase.common.constants.TestConstants.TEST_COLLECTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DocumentExistsByKeyStatementIT extends BucketTestCase {

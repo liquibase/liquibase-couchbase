@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import liquibase.ext.statement.BucketExistsStatement;
 import liquibase.integration.BucketTestCase;
+import static liquibase.common.constants.TestConstants.TEST_BUCKET;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BucketExistsStatementIT extends BucketTestCase {

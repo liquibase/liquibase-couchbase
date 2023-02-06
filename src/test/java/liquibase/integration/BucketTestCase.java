@@ -2,6 +2,9 @@ package liquibase.integration;
 
 import lombok.extern.slf4j.Slf4j;
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
+import static liquibase.common.constants.TestConstants.TEST_BUCKET;
+import static liquibase.common.constants.TestConstants.TEST_COLLECTION;
+import static liquibase.common.constants.TestConstants.TEST_SCOPE;
 
 /**
  * Singleton
