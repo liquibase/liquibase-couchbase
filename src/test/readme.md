@@ -2,7 +2,7 @@
 
 ### General
 
-Tests consists three parts
+Tests consist three parts
 1. Given
 2. When
 3. Then
@@ -16,7 +16,7 @@ Mock or make stub classes in order to verify only current class logic.
 
 ### Integration Tests
 
-These tests might use containirezed Couchbase.<br />
+These tests might use containerized Couchbase.<br />
 They test specific functionality part including several classes.<br />
 **Important** - Every test class responsible to clean up resources of used container.
 
