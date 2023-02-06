@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import liquibase.ext.statement.CreateCollectionStatement;
 import liquibase.integration.BucketTestCase;
+import static liquibase.common.constants.TestConstants.TEST_BUCKET;
 import static liquibase.common.matchers.CouchbaseBucketAssert.assertThat;
 
 /**

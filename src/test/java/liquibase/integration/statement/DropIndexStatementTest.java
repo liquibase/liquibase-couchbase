@@ -13,6 +13,9 @@ import liquibase.integration.BucketTestCase;
 import static com.couchbase.client.java.manager.query.CreateQueryIndexOptions.createQueryIndexOptions;
 import static com.wdt.couchbase.Keyspace.keyspace;
 import static java.util.Collections.singletonList;
+import static liquibase.common.constants.TestConstants.TEST_BUCKET;
+import static liquibase.common.constants.TestConstants.TEST_COLLECTION;
+import static liquibase.common.constants.TestConstants.TEST_SCOPE;
 import static liquibase.common.matchers.CouchBaseClusterAssert.assertThat;
 
 

@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import liquibase.ext.precondition.DocumentExistsByKeyPrecondition;
 import liquibase.integration.BucketTestCase;
+import static liquibase.common.constants.TestConstants.TEST_BUCKET;
+import static liquibase.common.constants.TestConstants.TEST_COLLECTION;
+import static liquibase.common.constants.TestConstants.TEST_SCOPE;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
