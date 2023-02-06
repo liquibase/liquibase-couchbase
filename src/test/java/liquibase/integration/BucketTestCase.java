@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 
 /**
- * Creates and deletes "testBucket" before and after test
+ * Singleton
+ * Creates "testBucket","testScope" and "testCollection" before all tests
  */
 @Slf4j
 public class BucketTestCase extends CouchbaseContainerizedTest {

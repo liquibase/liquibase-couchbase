@@ -20,6 +20,6 @@ public class CreateCollectionStatement extends CouchbaseStatement {
     public void execute(CouchbaseConnection connection) {
         Cluster cluster = connection.getCluster();
         Bucket bucket = cluster.bucket(bucketName);
-        bucket.collections().createCollection(create(collectionName));
+        bucket.collections().createCollection(create(collectionName, scopeName));
     }
 }
