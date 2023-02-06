@@ -12,16 +12,18 @@ import java.util.Properties;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
  * Represent instance of {@link com.couchbase.client.java.Cluster}
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
-    private final ConnectionData connectionData;
+    private ConnectionData connectionData;
 
     @Override
     public int getPriority() {

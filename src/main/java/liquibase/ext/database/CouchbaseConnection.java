@@ -29,7 +29,6 @@ import liquibase.exception.DatabaseException;
 import liquibase.util.StringUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Driver;
@@ -83,12 +82,12 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void rollback() {
-        throw new NotImplementedException();
+        //TODO investigate
     }
 
     @Override
     public void setAutoCommit(boolean b) {
-        throw new NotImplementedException();
+        //TODO investigate
     }
 
     public String getDatabaseProductName() {
@@ -192,7 +191,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void commit() {
-        throw new NotImplementedException();
+        //TODO investigate
     }
 
     @Override
