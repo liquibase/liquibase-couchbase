@@ -1,1 +1,1 @@
-liquibase.ext.database.CouchbaseLiquibaseDatabase
+liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase

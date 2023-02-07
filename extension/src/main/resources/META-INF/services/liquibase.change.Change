@@ -1,3 +1,3 @@
-liquibase.ext.change.CreatePrimaryQueryIndexChange
-liquibase.ext.change.CreateCollectionChange
-liquibase.ext.change.CreateQueryIndexChange
+liquibase.ext.couchbase.change.CreatePrimaryQueryIndexChange
+liquibase.ext.couchbase.change.CreateCollectionChange
+liquibase.ext.couchbase.change.CreateQueryIndexChange

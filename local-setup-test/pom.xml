@@ -6,11 +6,11 @@
     <parent>
         <groupId>org.liquibase.ext</groupId>
         <artifactId>couchbase-parent</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>local-setup-test</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -23,27 +23,21 @@
         <dependency>
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-couchbase</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <!--start with basic information to get Liquibase plugin:
-                include <groupId>, <artifactID>, and <version> elements-->
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.19.0</version>
                 <configuration>
-                    <!--set values for Liquibase properties and settings
-                    for example, the location of a properties file to use-->
                     <propertyFile>src\main\resources\liquibase\liquibase.properties</propertyFile>
                     <changeLogFile>src\main\resources\liquibase\changelog.create-collection-test.xml</changeLogFile>
                 </configuration>
                 <dependencies>
-                    <!--set up any dependencies for Liquibase to function in your
-                    environment for example, a database-specific plugin-->
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-couchbase</artifactId>

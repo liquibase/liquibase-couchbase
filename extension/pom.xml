@@ -7,11 +7,11 @@
     <parent>
         <groupId>org.liquibase.ext</groupId>
         <artifactId>couchbase-parent</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>liquibase-couchbase</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -25,9 +25,11 @@
         <sonar.scm.provider>git</sonar.scm.provider>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
+        <skipIntegrationTests>true</skipIntegrationTests>
+
         <!-- dependency versions -->
         <junit.version>5.9.2</junit.version>
-        <mockito.version>5.0.0</mockito.version>
+        <mockito.version>4.11.0</mockito.version>
         <assertj.version>3.24.1</assertj.version>
         <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
         <slf4j.version>2.0.6</slf4j.version>
@@ -120,9 +122,28 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                        <include>**/*Test.java</include>
+                        <include>**/liquibase/ext/couchbase/**</include>
                     </includes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <skipITs>${skipIntegrationTests}</skipITs>
+                            <includes>
+                                <include>**/integration/**</include>
+                                <include>**/system/**</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
