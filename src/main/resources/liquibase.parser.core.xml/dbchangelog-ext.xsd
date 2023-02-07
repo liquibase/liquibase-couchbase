@@ -6,11 +6,9 @@
             elementFormDefault="qualified">
 
     <xsd:element name="createCollection">
-
         <xsd:complexType>
-
             <xsd:sequence>
-                <xsd:element name="options" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="options" type="xsd:string" minOccurs="0"/>
             </xsd:sequence>
 
             <xsd:attribute name="collectionName" type="xsd:string" use="required"
@@ -19,8 +17,8 @@
             <xsd:attribute name="scopeName" type="xsd:string" use="required" default="_default"/>
 
         </xsd:complexType>
-
     </xsd:element>
+
     <xsd:element name="dropQueryIndex">
         <xsd:complexType>
             <xsd:sequence>
@@ -34,5 +32,32 @@
         </xsd:complexType>
     </xsd:element>
 
-    
+    <xsd:element name="createPrimaryQueryIndex">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="0" name="bucketName" type="xsd:string"/>
+                <xsd:element minOccurs="0" name="collectionName" type="xsd:string"/>
+                <xsd:element name="deferred" type="xsd:boolean"/>
+                <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
+                <xsd:element name="numReplicas" type="xsd:int"/>
+                <xsd:element minOccurs="0" name="scopeName" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="createQueryIndex">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="0" name="bucketName" type="xsd:string"/>
+                <xsd:element minOccurs="0" name="collectionName" type="xsd:string"/>
+                <xsd:element name="deferred" type="xsd:boolean"/>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" name="fields" nillable="true" type="xsd:string"/>
+                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
+                <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
+                <xsd:element name="numReplicas" type="xsd:int"/>
+                <xsd:element minOccurs="0" name="scopeName" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>
