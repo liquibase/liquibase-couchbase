@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.liquibase.ext</groupId>
+        <artifactId>couchbase-parent</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>local-setup-test</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-couchbase</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!--start with basic information to get Liquibase plugin:
+                include <groupId>, <artifactID>, and <version> elements-->
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.19.0</version>
+                <configuration>
+                    <!--set values for Liquibase properties and settings
+                    for example, the location of a properties file to use-->
+                    <propertyFile>src\main\resources\liquibase\liquibase.properties</propertyFile>
+                    <changeLogFile>src\main\resources\liquibase\changelog.create-collection-test.xml</changeLogFile>
+                </configuration>
+                <dependencies>
+                    <!--set up any dependencies for Liquibase to function in your
+                    environment for example, a database-specific plugin-->
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-couchbase</artifactId>
+                        <version>0.0.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
