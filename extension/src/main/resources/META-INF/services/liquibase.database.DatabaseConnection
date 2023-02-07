@@ -1,1 +1,1 @@
-liquibase.ext.database.CouchbaseConnection
+liquibase.ext.couchbase.database.CouchbaseConnection

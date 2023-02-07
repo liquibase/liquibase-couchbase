@@ -1,1 +1,1 @@
-liquibase.ext.sqlgenerator.NoSqlGenerator
+liquibase.ext.couchbase.sqlgenerator.NoSqlGenerator

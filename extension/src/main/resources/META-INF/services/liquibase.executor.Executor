@@ -1,1 +1,1 @@
-liquibase.ext.executor.NoSqlExecutor
+liquibase.ext.couchbase.executor.NoSqlExecutor

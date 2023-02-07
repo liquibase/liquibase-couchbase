@@ -1,1 +1,1 @@
-liquibase.ext.changelog.CouchbaseHistoryService
+liquibase.ext.couchbase.changelog.CouchbaseHistoryService
