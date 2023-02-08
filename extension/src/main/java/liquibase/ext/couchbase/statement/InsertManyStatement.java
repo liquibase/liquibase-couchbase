@@ -2,10 +2,7 @@ package liquibase.ext.couchbase.statement;
 
 
 import com.couchbase.client.core.error.InvalidArgumentException;
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;
@@ -14,9 +11,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Getter
 @RequiredArgsConstructor
@@ -31,18 +25,14 @@ public class InsertManyStatement extends CouchbaseStatement {
     @Override
     public void execute(CouchbaseConnection connection) {
         Map<String, JsonObject> contentList = checkDocsAndTransformToJsons();
-        Cluster cluster = connection.getCluster();
-        Bucket bucket = cluster.bucket(bucketName);
-        final Collection collection;
-        if (isNotBlank(scopeName)) {
-            Scope scope = bucket.scope(scopeName);
-            collection = scope.collection(collectionName);
+        final Collection collection = getCollection(connection);
 
-        } else {
-            collection = isBlank(collectionName) ?
-                    bucket.defaultCollection() : bucket.collection(collectionName);
-        }
         contentList.forEach(collection::insert);
+    }
+
+    private Collection getCollection(CouchbaseConnection connection) {
+        return connection.getCluster().bucket(bucketName)
+                .scope(scopeName).collection(collectionName);
     }
 
     private Map<String, JsonObject> checkDocsAndTransformToJsons() {

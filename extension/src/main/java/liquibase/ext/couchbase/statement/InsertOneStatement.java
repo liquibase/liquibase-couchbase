@@ -21,7 +21,8 @@ public class InsertOneStatement extends CouchbaseStatement {
 
     @Override
     public void execute(CouchbaseConnection connection) {
-        InsertManyStatement statement = new InsertManyStatement(bucketName, Collections.singletonMap(id, document),scopeName,collectionName);
+        InsertManyStatement statement = new InsertManyStatement(bucketName,
+                Collections.singletonMap(id, document), scopeName, collectionName);
         statement.execute(connection);
     }
 }

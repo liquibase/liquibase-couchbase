@@ -9,6 +9,8 @@ import org.testcontainers.utility.DockerImageName;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestConstants {
+    public static final String DEFAULT_SCOPE = "_default";
+    public static final String DEFAULT_COLLECTION = "_default";
     public static final String TEST_SCOPE = "testScope";
     public static final String TEST_BUCKET = "testBucket";
     public static final String TEST_COLLECTION = "testCollection";

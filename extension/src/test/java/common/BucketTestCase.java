@@ -29,11 +29,11 @@ public class BucketTestCase extends CouchbaseContainerizedTest {
                 .createCollection(isBlank(scope) ? create(name) : create(name, TEST_SCOPE));
     }
 
-    protected static void createCollection(String name) {
+    protected static void createCollectionInDefaultScope(String name) {
         cluster.bucket(TEST_BUCKET).collections().createCollection(create(name));
     }
 
-    protected static void dropCollection(String name) {
+    protected static void dropCollectionInDefaultScope(String name) {
         cluster.bucket(TEST_BUCKET).collections().dropCollection(create(name));
     }
 

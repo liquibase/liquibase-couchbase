@@ -29,9 +29,9 @@ public class InsertManyChange extends CouchbaseChange {
 
     private String bucketName;
     private String id;
-    private Map<String, String> documents;
     private String scopeName;
     private String collectionName;
+    private Map<String, String> documents;
 
     @Override
     public String getConfirmationMessage() {
