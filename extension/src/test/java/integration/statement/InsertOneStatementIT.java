@@ -1,8 +1,6 @@
 package integration.statement;
 
-import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.kv.ExistsResult;
 import common.BucketTestCase;
 import liquibase.ext.couchbase.statement.InsertOneStatement;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,6 @@ import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InsertOneStatementIT extends BucketTestCase {
 
@@ -24,11 +21,11 @@ class InsertOneStatementIT extends BucketTestCase {
     void Should_insert_one_document() {
         InsertOneStatement statement =
                 new InsertOneStatement(TEST_BUCKET, TEST_ID, TEST_DOCUMENT, TEST_SCOPE, TEST_COLLECTION);
+
         statement.execute(database.getConnection());
-        Bucket bucket = cluster.bucket(TEST_BUCKET);
-        Collection collection = bucket.scope(TEST_SCOPE).collection(TEST_COLLECTION);
-        ExistsResult result = collection.exists(TEST_ID);
-        assertTrue(result.exists());
+
+        Collection collection = getCollection();
+        assertThat(collection).hasDocument(TEST_ID);
         collection.remove(TEST_ID);
     }
 
@@ -40,8 +37,7 @@ class InsertOneStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Bucket bucket = cluster.bucket(TEST_BUCKET);
-        Collection collection = bucket.collection(TEST_COLLECTION_2);
+        Collection collection = getCollectionFromDefaultScope(TEST_COLLECTION_2);
         assertThat(collection).hasDocument(TEST_ID);
         dropCollectionInDefaultScope(TEST_COLLECTION_2);
     }
@@ -53,7 +49,7 @@ class InsertOneStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Collection collection = cluster.bucket(TEST_BUCKET).defaultCollection();
+        Collection collection = getCollectionFromDefaultScope(DEFAULT_COLLECTION);
         assertThat(collection).hasDocument(TEST_ID);
         collection.remove(TEST_ID);
     }

@@ -1,6 +1,5 @@
 package integration.statement;
 
-import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import com.google.common.collect.ImmutableMap;
 import common.BucketTestCase;
@@ -35,8 +34,7 @@ class InsertManyStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Bucket bucket = cluster.bucket(TEST_BUCKET);
-        Collection collection = bucket.scope(TEST_SCOPE).collection(TEST_COLLECTION);
+        Collection collection = getCollection();
         assertThat(collection).hasDocuments(TEST_ID, TEST_ID_2);
     }
 
@@ -48,7 +46,7 @@ class InsertManyStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Collection collection = cluster.bucket(TEST_BUCKET).collection(TEST_COLLECTION_2);
+        Collection collection = getCollectionFromDefaultScope(TEST_COLLECTION_2);
         assertThat(collection).hasDocuments(TEST_ID, TEST_ID_2);
         dropCollectionInDefaultScope(TEST_COLLECTION_2);
     }
@@ -60,7 +58,7 @@ class InsertManyStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Collection collection = cluster.bucket(TEST_BUCKET).defaultCollection();
+        Collection collection = getCollectionFromDefaultScope(DEFAULT_COLLECTION);
         assertThat(collection).hasDocuments(TEST_ID, TEST_ID_2);
     }
 
