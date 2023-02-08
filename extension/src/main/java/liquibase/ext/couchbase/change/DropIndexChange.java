@@ -8,6 +8,7 @@ import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @DatabaseChange(
@@ -20,12 +21,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class DropIndexChange extends CouchbaseChange {
-    private final boolean isPrimary;
-    private final String indexName;
-    private final String bucketName;
-    private final String collectionName;
-    private final String scopeName;
+    private boolean isPrimary;
+    private String indexName;
+    private String bucketName;
+    private String collectionName;
+    private String scopeName;
 
     @Override
     public String getConfirmationMessage() {
