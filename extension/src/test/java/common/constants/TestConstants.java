@@ -19,8 +19,10 @@ public class TestConstants {
     public static final String TEST_ID_2 = "id2";
     public static final String TEST_DOCUMENT = "{ \"key\":\"value\"}";
     public static final String TEST_DOCUMENT_2 = "{ \"key2\":\"value2\"}";
-    public static final String TEST_DOCUMENT_3 = "{ \"key3\":\"value3\"}";
+    public static final String TEST_DOCUMENT_3 = "{ \"name\":\"user\", \"type\":\"customer\" }";
     public static final String PROPERTY_FILE_NAME = "src/test/resources/test.properties";
+    public static final String INDEX = "testIndex";
+    public static final String FIELD_1 = "name";
 
     public static final DockerImageName CB_IMAGE_NAME = DockerImageName.parse("couchbase/server");
 }
