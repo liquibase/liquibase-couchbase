@@ -45,7 +45,7 @@ class CreatePrimaryQueryIndexChangeTest {
 
     @Test
     void Changelog_should_contain_exact_number_of_changes() {
-        assertEquals(2, changeLog.getChangeSets().size(), "Changelog size is wrong");
+        assertEquals(1, changeLog.getChangeSets().size(), "Changelog size is wrong");
     }
 
 
