@@ -1,8 +1,9 @@
 package common.constants;
 
+import org.testcontainers.utility.DockerImageName;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.testcontainers.utility.DockerImageName;
 
 /**
  * Common constants for all tests
@@ -17,6 +18,7 @@ public class TestConstants {
     public static final String TEST_COLLECTION_2 = "testCollection2";
     public static final String TEST_ID = "id";
     public static final String TEST_ID_2 = "id2";
+    public static final String TEST_ID_3 = "id3";
     public static final String TEST_DOCUMENT = "{ \"key\":\"value\"}";
     public static final String TEST_DOCUMENT_2 = "{ \"key2\":\"value2\"}";
     public static final String TEST_DOCUMENT_3 = "{ \"name\":\"user\", \"type\":\"customer\" }";

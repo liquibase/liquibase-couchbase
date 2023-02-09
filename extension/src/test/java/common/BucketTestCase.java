@@ -47,8 +47,8 @@ public class BucketTestCase extends CouchbaseContainerizedTest {
         return cluster.bucket(TEST_BUCKET).collection(name);
     }
 
-    protected static void insertTestDocument(String content) {
-        getCollection().insert(TEST_ID, content);
+    protected static void insertTestDocument(String id, String content) {
+        getCollection().insert(id, content);
     }
 
     private static void createScope() {

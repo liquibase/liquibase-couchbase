@@ -1,11 +1,11 @@
 package liquibase.ext.couchbase.precondition;
 
-import liquibase.ext.couchbase.database.CouchbaseConnection;
-import liquibase.ext.couchbase.statement.CollectionExistsStatement;
-import liquibase.ext.couchbase.exception.CollectionsNotExistsPreconditionException;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.exception.PreconditionFailedException;
+import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.exception.CollectionsNotExistsPreconditionException;
+import liquibase.ext.couchbase.statement.CollectionExistsStatement;
 import lombok.Data;
 
 @Data

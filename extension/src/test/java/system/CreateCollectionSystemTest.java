@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;
-import static common.matchers.CouchbaseBucketAssert.assertThat;
+import static common.matchers.CouchBaseBucketAssert.assertThat;
 
 public class CreateCollectionSystemTest extends LiquiBaseSystemTest {
 

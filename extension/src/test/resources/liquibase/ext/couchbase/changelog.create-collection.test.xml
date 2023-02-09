@@ -27,6 +27,7 @@
     <changeSet id="1" author="roman">
 
         <ext:createCollection bucketName="testBucket" scopeName="testScope"
+                              skipIfExists="true"
                               collectionName="travels">
 
         </ext:createCollection>
