@@ -26,7 +26,7 @@
 
     <changeSet id="1" author="evgenii.anishchenko">
         <ext:createPrimaryQueryIndex>
-            <ext:bucketName>travel-sample</ext:bucketName>
+            <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>sample</ext:collectionName>
             <ext:deferred>true</ext:deferred>
             <ext:indexName>test</ext:indexName>
@@ -34,16 +34,4 @@
             <ext:scopeName>test</ext:scopeName>
         </ext:createPrimaryQueryIndex>
     </changeSet>
-
-    <changeSet id="2" author="evgenii.anishchenko">
-        <ext:createPrimaryQueryIndex>
-            <ext:bucketName></ext:bucketName>
-            <ext:collectionName></ext:collectionName>
-            <ext:deferred>true</ext:deferred>
-            <ext:indexName>test</ext:indexName>
-            <ext:numReplicas>1</ext:numReplicas>
-            <ext:scopeName>test</ext:scopeName>
-        </ext:createPrimaryQueryIndex>
-    </changeSet>
-
 </databaseChangeLog>

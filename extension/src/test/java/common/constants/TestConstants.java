@@ -24,7 +24,11 @@ public class TestConstants {
     public static final String TEST_DOCUMENT_3 = "{\"name\":\"user\", \"type\":\"customer\"}";
     public static final String PROPERTY_FILE_NAME = "src/test/resources/test.properties";
     public static final String INDEX = "testIndex";
+    public static final String COMPOUND_INDEX = "testCompoundIndex";
     public static final String FIELD_1 = "name";
+    public static final String FIELD_2 = "type";
+    public static final String MANUALLY_CREATED_INDEX = "manually_created_index";
+    public static final String TEST_CONTENT = "{ \"name\":\"user\", \"type\":\"customer\" }";
 
     public static final DockerImageName CB_IMAGE_NAME = DockerImageName.parse("couchbase/server");
 }

@@ -2,7 +2,6 @@ package common.matchers;
 
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
-
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
@@ -56,6 +55,24 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
             failWithMessage("Bucket <%s> has primary index , but it shouldn't", bucketName);
         }
 
+        return this;
+    }
+
+    public QueryIndexAssert hasPrimaryIndexForName(String indexName) {
+        long count = actual.getAllIndexes(bucketName).stream()
+                .filter(index -> index.name().equals(indexName) && index.primary()).count();
+        if (count != 1) {
+            failWithMessage("Primary index with the name <%s> is absent", indexName);
+        }
+        return this;
+    }
+
+    public QueryIndexAssert hasQueryIndexForName(String indexName) {
+        long count = actual.getAllIndexes(bucketName).stream().filter(index -> index.name().equals(indexName)
+                && !index.primary()).count();
+        if (count != 1) {
+            failWithMessage("Query index with name <%s> is absent in bucket <%s> or more than one", indexName, bucketName);
+        }
         return this;
     }
 }
