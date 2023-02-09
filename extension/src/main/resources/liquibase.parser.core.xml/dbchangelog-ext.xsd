@@ -60,4 +60,66 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="insertOne">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default" />
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default" />
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element name="document" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="insertMany">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element ref="documents"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="documents">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="document" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="document">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element name="content" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="upsertOne">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default" />
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default" />
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element name="document" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="upsertMany">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element ref="documents"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>
