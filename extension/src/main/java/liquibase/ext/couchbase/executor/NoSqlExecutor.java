@@ -115,6 +115,7 @@ public class NoSqlExecutor extends AbstractExecutor {
 
     private void doExecute(CouchbaseStatement sql) throws DatabaseException {
         try {
+            //TODO provide cluster operator
             sql.execute(getDatabase().getConnection());
         } catch (final Exception e) {
             throw new DatabaseException("Could not execute", e);

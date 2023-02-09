@@ -1,15 +1,18 @@
 package liquibase.ext.couchbase.change;
 
+import com.wdt.couchbase.Keyspace;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import common.TestChangeLogProvider;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
-import common.TestChangeLogProvider;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.statement.CreateCollectionStatement;
 import liquibase.statement.SqlStatement;
+import static com.wdt.couchbase.Keyspace.keyspace;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;
@@ -35,7 +38,7 @@ public class CreateCollectionChangeTest {
     @Test
     void Expects_confirmation_message_is_create_collection() {
         CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
-                TEST_SCOPE, collectionName);
+                TEST_SCOPE, collectionName, false);
 
         String msg = change.getConfirmationMessage();
 
@@ -45,12 +48,12 @@ public class CreateCollectionChangeTest {
     @Test
     void Should_return_only_CreateCollectionStatement() {
         CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
-                TEST_SCOPE, collectionName);
+                TEST_SCOPE, collectionName, false);
+        Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, collectionName);
 
         SqlStatement[] sqlStatements = change.generateStatements(database);
 
-        assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(TEST_BUCKET,
-                TEST_SCOPE, collectionName));
+        assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(keyspace, false));
     }
 
 
@@ -72,7 +75,7 @@ public class CreateCollectionChangeTest {
 
     @Test
     void Create_collection_change_generates_right_checksum() {
-        String checkSum = "8:86d32bba95c9dea97bd37fa172af47ff";
+        String checkSum = "8:e883f6f8fb99b3427644c6dfe2b610a2";
         assertThat(changeLog.getChangeSets()).first()
                 .returns(checkSum, it -> it.generateCheckSum().toString());
     }

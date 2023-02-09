@@ -1,23 +1,24 @@
 package com.wdt.couchbase;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Keyspace {
 
-    @NonNull
-    private String bucket;
-    private String scope = "_default";
-    private String collection = "_default";
+    private final String bucket;
+    private final String scope;
+    private final String collection;
 
-    public static Keyspace keyspace(String bucket, String scope, String collection) {
+    public static Keyspace keyspace(@NonNull String bucket,
+                                    @NonNull String scope,
+                                    @NonNull String collection) {
         return new Keyspace(bucket, scope, collection);
     }
+
 
     public String getKeyspace() {
         return String.format("`%s`.`%s`.`%s`", bucket, scope, collection);

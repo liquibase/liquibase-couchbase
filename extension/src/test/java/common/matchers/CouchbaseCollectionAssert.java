@@ -1,14 +1,14 @@
 package common.matchers;
 
 import com.couchbase.client.java.Collection;
-import lombok.NonNull;
+
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.Map;
-import java.util.Objects;
+
+import lombok.NonNull;
 
 public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectionAssert, Collection> {
-    private String id;
 
     private CouchbaseCollectionAssert(Collection collection) {
         super(collection, CouchbaseCollectionAssert.class);
@@ -26,7 +26,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
                     actual.scopeName()
             );
         }
-        this.id = id;
+
         return this;
     }
 
@@ -38,27 +38,23 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
     }
 
     public CouchbaseCollectionAssert hasDocuments(@NonNull Map<String, String> documents) {
-        for (Map.Entry<String, String> entry : documents.entrySet()) {
-            hasDocument(entry.getKey());
-            itsContentEquals(entry.getValue());
-        }
-        return this;
-    }
+        documents.keySet().forEach(this::hasDocument);
 
-    public CouchbaseCollectionAssert itsContentEquals(@NonNull String content) {
-        if (Objects.isNull(this.id)) {
-            failWithMessage("No document to check was provided");
-        }
-        String actualContent = actual.get(id).contentAs(String.class);
-        if (!content.equals(actualContent)) {
-            failWithMessage("Unexpected content for document <%s>, expected <%s>, actual <%s>",
-                    id,
-                    content,
-                    actualContent
-            );
-        }
         return this;
     }
 
 
+    public CouchBaseDocumentAssert extractingDocument(@NonNull String id) {
+        hasDocument(id);
+
+        return new CouchBaseDocumentAssert(actual.get(id).contentAsObject());
+    }
+
+
+    public CouchbaseCollectionAssert containDocuments(Map<String, String> testDocuments) {
+        testDocuments.entrySet()
+                .forEach((entry) -> extractingDocument(entry.getKey()).itsContentEquals(entry.getValue()));
+
+        return this;
+    }
 }

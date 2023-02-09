@@ -15,7 +15,7 @@
                            default="_default"/>
             <xsd:attribute name="bucketName" type="xsd:string" use="required"/>
             <xsd:attribute name="scopeName" type="xsd:string" use="required" default="_default"/>
-
+            <xsd:attribute name="skipIfExists" type="xsd:boolean" use="required" default="false"/>
         </xsd:complexType>
     </xsd:element>
 
