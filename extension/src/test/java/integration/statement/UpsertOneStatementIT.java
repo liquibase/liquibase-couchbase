@@ -36,7 +36,7 @@ class UpsertOneStatementIT extends BucketTestCase {
         statement.execute(database.getConnection());
 
         Collection collection = getTestCollection();
-        assertThat(collection).hasDocument(TEST_ID).itsContentEquals(TEST_DOCUMENT_2);
+        assertThat(collection).extractingDocument(TEST_ID).itsContentEquals(TEST_DOCUMENT_2);
         removeDocFromTestCollection(TEST_ID);
     }
 

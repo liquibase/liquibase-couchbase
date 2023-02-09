@@ -34,7 +34,7 @@ class UpsertManyStatementIT extends BucketTestCase {
         statement.execute(database.getConnection());
 
         Collection collection = getTestCollection();
-        assertThat(collection).hasDocuments(testDocuments);
+        assertThat(collection).containDocuments(testDocuments);
         removeDocsFromTestCollection(TEST_ID, TEST_ID_2);
     }
 

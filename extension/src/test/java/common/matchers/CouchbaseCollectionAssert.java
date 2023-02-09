@@ -39,12 +39,6 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchbaseCollectionAssert hasDocuments(@NonNull Map<String, String> documents) {
-        documents.keySet().forEach(this::hasDocument);
-
-        return this;
-    }
-
     public CouchBaseDocumentAssert extractingDocument(@NonNull String id) {
         hasDocument(id);
 
@@ -53,8 +47,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
 
     public CouchbaseCollectionAssert containDocuments(Map<String, String> testDocuments) {
-        testDocuments.entrySet()
-                .forEach((entry) -> extractingDocument(entry.getKey()).itsContentEquals(entry.getValue()));
+        testDocuments.forEach((key, value) -> extractingDocument(key).itsContentEquals(value));
 
         return this;
     }
