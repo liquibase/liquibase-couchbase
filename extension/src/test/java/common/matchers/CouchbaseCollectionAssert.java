@@ -2,6 +2,8 @@ package common.matchers;
 
 import com.couchbase.client.java.Collection;
 
+import com.couchbase.client.java.json.JsonObject;
+import lombok.NonNull;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.Map;
@@ -42,7 +44,6 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
         return this;
     }
-
 
     public CouchBaseDocumentAssert extractingDocument(@NonNull String id) {
         hasDocument(id);

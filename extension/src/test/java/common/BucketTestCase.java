@@ -1,14 +1,15 @@
 package common;
 
+import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
-import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_SCOPE;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Singleton
@@ -18,40 +19,63 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class BucketTestCase extends CouchbaseContainerizedTest {
 
     static {
-        createScope();
-        createCollection();
+        createTestScope();
+        createTestCollection();
     }
 
-    protected static void createCollection() {
-        createCollection(TEST_COLLECTION, TEST_SCOPE);
+    protected static Bucket getBucket() {
+        return cluster.bucket(TEST_BUCKET);
     }
 
-    protected static void createCollection(String name, String scope) {
-        cluster.bucket(TEST_BUCKET).collections()
-                .createCollection(isBlank(scope) ? create(name) : create(name, TEST_SCOPE));
+    private static void createTestScope() {
+        getBucket().collections().createScope(TEST_SCOPE);
+    }
+
+    protected static void createTestCollection() {
+        getBucket().collections().createCollection(create(TEST_COLLECTION, TEST_SCOPE));
     }
 
     protected static void createCollectionInDefaultScope(String name) {
-        cluster.bucket(TEST_BUCKET).collections().createCollection(create(name));
+        getBucket().collections().createCollection(create(name));
     }
 
     protected static void dropCollectionInDefaultScope(String name) {
-        cluster.bucket(TEST_BUCKET).collections().dropCollection(create(name));
+        getBucket().collections().dropCollection(create(name));
     }
 
-    protected static Collection getCollection() {
-        return cluster.bucket(TEST_BUCKET).scope(TEST_SCOPE).collection(TEST_COLLECTION);
+    protected static Collection getCollection(String name, String scope) {
+        return getBucket().scope(scope).collection(name);
+    }
+
+    protected static Collection getTestCollection() {
+        return getCollection(TEST_COLLECTION, TEST_SCOPE);
     }
 
     protected static Collection getCollectionFromDefaultScope(String name) {
-        return cluster.bucket(TEST_BUCKET).collection(name);
+        return getBucket().collection(name);
     }
 
-    protected static void insertTestDocument(String id, String content) {
-        getCollection().insert(id, content);
+    protected static void insertDocInDefaultScope(String collection, String id, String content) {
+        getCollectionFromDefaultScope(collection).insert(id, content);
     }
 
-    private static void createScope() {
-        cluster.bucket(TEST_BUCKET).collections().createScope(TEST_SCOPE);
+    protected static void insertDocInTestCollection(String id, String content) {
+        getTestCollection().insert(id, content);
+    }
+
+    protected static void removeDocFromDefaultScope(String collection, String id) {
+        getCollectionFromDefaultScope(collection).remove(id);
+    }
+
+    protected static void removeDocFromTestCollection(String id) {
+        getTestCollection().remove(id);
+    }
+
+    protected static void removeDocsFromDefaultScope(String collection, String... ids) {
+        Arrays.stream(ids).forEach(id -> removeDocFromDefaultScope(collection, id));
+    }
+
+    protected static void removeDocsFromTestCollection(String... ids) {
+        Arrays.stream(ids).forEach(getTestCollection()::remove);
     }
 }

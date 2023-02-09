@@ -34,8 +34,9 @@ class InsertManyStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Collection collection = getCollection();
+        Collection collection = getTestCollection();
         assertThat(collection).hasDocuments(TEST_ID, TEST_ID_2);
+        removeDocsFromTestCollection(TEST_ID, TEST_ID_2);
     }
 
     @Test
@@ -60,7 +61,6 @@ class InsertManyStatementIT extends BucketTestCase {
 
         Collection collection = getCollectionFromDefaultScope(DEFAULT_COLLECTION);
         assertThat(collection).hasDocuments(TEST_ID, TEST_ID_2);
+        removeDocsFromDefaultScope(DEFAULT_COLLECTION, TEST_ID, TEST_ID_2);
     }
-
-
 }

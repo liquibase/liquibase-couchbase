@@ -24,9 +24,9 @@ class InsertOneStatementIT extends BucketTestCase {
 
         statement.execute(database.getConnection());
 
-        Collection collection = getCollection();
+        Collection collection = getTestCollection();
         assertThat(collection).hasDocument(TEST_ID);
-        collection.remove(TEST_ID);
+        removeDocFromTestCollection(TEST_ID);
     }
 
     @Test
@@ -39,6 +39,7 @@ class InsertOneStatementIT extends BucketTestCase {
 
         Collection collection = getCollectionFromDefaultScope(TEST_COLLECTION_2);
         assertThat(collection).hasDocument(TEST_ID);
+        removeDocFromDefaultScope(TEST_COLLECTION_2, TEST_ID);
         dropCollectionInDefaultScope(TEST_COLLECTION_2);
     }
 
@@ -51,7 +52,7 @@ class InsertOneStatementIT extends BucketTestCase {
 
         Collection collection = getCollectionFromDefaultScope(DEFAULT_COLLECTION);
         assertThat(collection).hasDocument(TEST_ID);
-        collection.remove(TEST_ID);
+        removeDocFromDefaultScope(DEFAULT_COLLECTION, TEST_ID);
     }
 
 }
