@@ -25,14 +25,12 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="roman">
-
-        <ext:createCollection bucketName="testBucket" scopeName="testScope"
-                              skipIfExists="true"
-                              collectionName="travels">
-
+        <ext:createCollection>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:collectionName>travels</ext:collectionName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:skipIfExists>true</ext:skipIfExists>
         </ext:createCollection>
-
-
     </changeSet>
 
 </databaseChangeLog>
