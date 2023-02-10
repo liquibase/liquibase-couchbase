@@ -1,6 +1,7 @@
 package liquibase.ext.couchbase.change;
 
 
+import com.wdt.couchbase.Keyspace;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
@@ -11,6 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import static com.wdt.couchbase.Keyspace.keyspace;
 
 @Getter
 @Setter
@@ -38,8 +41,8 @@ public class InsertOneChange extends CouchbaseChange {
 
     @Override
     public SqlStatement[] generateStatements(Database database) {
-        return new SqlStatement[]{
-                new InsertOneStatement(bucketName, id, document, scopeName, collectionName)
+        Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
+        return new SqlStatement[]{new InsertOneStatement(keyspace, id, document)
         };
     }
 }

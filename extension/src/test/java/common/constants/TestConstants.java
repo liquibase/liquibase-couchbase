@@ -1,9 +1,12 @@
 package common.constants;
 
+import com.wdt.couchbase.Keyspace;
 import org.testcontainers.utility.DockerImageName;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import static com.wdt.couchbase.Keyspace.keyspace;
 
 /**
  * Common constants for all tests
@@ -30,5 +33,6 @@ public class TestConstants {
     public static final String MANUALLY_CREATED_INDEX = "manually_created_index";
     public static final String TEST_CONTENT = "{ \"name\":\"user\", \"type\":\"customer\" }";
 
+    public static final Keyspace TEST_KEYSPACE = keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     public static final DockerImageName CB_IMAGE_NAME = DockerImageName.parse("couchbase/server");
 }

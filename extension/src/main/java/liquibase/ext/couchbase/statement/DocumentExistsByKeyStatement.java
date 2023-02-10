@@ -1,11 +1,12 @@
 package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.core.error.BucketNotFoundException;
-import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.manager.bucket.BucketManager;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
 
+import com.wdt.couchbase.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -16,39 +17,53 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DocumentExistsByKeyStatement extends CouchbaseStatement {
 
-    private final String bucketName;
-    private final String scopeName;
-    private final String collectionName;
+    private final Keyspace keyspace;
     private final String key;
 
-    public boolean isCDocumentExists(CouchbaseConnection connection) {
+    public boolean isDocumentExists(CouchbaseConnection connection) {
         Cluster cluster = connection.getCluster();
-        try {
-            cluster.buckets().getBucket(bucketName);
-        } catch (BucketNotFoundException ex) {
-            return false;
-        }
-        Optional<ScopeSpec> scope = cluster.bucket(bucketName).collections().getAllScopes().stream().filter(scopeSpec ->
-                scopeSpec.name().equals(scopeName)).findFirst();
-        if (!scope.isPresent()) {
-            return false;
-        }
-        Optional<CollectionSpec> collection = scope.get().collections().stream()
-                .filter(collectionSpec -> collectionSpec.name().equals(collectionName)).findFirst();
-        if (!collection.isPresent()) {
-            return false;
-        }
 
-        return isDocumentExists(cluster);
+        return Optional.ofNullable(cluster)
+                .map(Cluster::buckets)
+                .filter(this::isBucketExist)
+                .map(x -> tryGetScope(cluster))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::tryGetCollection)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(x -> isDocumentExists(cluster))
+                .orElse(false);
     }
 
     private boolean isDocumentExists(Cluster cluster) {
+        return cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection())
+                .exists(key).exists();
+    }
+
+    private Optional<CollectionSpec> tryGetCollection(ScopeSpec scope) {
+        return scope.collections().stream()
+                .filter(collection -> collection.name().equals(keyspace.getCollection()))
+                .findFirst();
+    }
+
+    private boolean isBucketExist(BucketManager buckets) {
         try {
-            cluster.bucket(bucketName).scope(scopeName).collection(collectionName).get(key);
+            buckets.getBucket(keyspace.getBucket());
             return true;
-        } catch (DocumentNotFoundException ex) {
+        } catch (BucketNotFoundException ex) {
             return false;
         }
+    }
+
+    private Optional<ScopeSpec> tryGetScope(Cluster cluster) {
+        return cluster.bucket(keyspace.getBucket())
+                .collections()
+                .getAllScopes().stream()
+                .filter(sc -> sc.name().equals(keyspace.getScope()))
+                .findFirst();
     }
 
     @Override

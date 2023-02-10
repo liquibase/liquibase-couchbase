@@ -1,28 +1,26 @@
 package liquibase.ext.couchbase.statement;
 
 
+import com.wdt.couchbase.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collections;
+import static java.util.Collections.singletonMap;
 
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UpsertOneStatement extends CouchbaseStatement {
 
-    private final String bucketName;
+    private final Keyspace keyspace;
     private final String id;
     private final String document;
-    private final String scopeName;
-    private final String collectionName;
 
     @Override
     public void execute(CouchbaseConnection connection) {
-        UpsertManyStatement statement = new UpsertManyStatement(bucketName,
-                Collections.singletonMap(id, document), scopeName, collectionName);
+        UpsertManyStatement statement = new UpsertManyStatement(keyspace, singletonMap(id, document));
         statement.execute(connection);
     }
 }
