@@ -1,10 +1,10 @@
 package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
+import liquibase.ext.couchbase.types.Field;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Getter
@@ -30,7 +34,7 @@ public class CreateQueryIndexChange extends CouchbaseChange {
 
     private String bucketName;
     private String indexName;
-    private Fields fields;
+    private List<Field> fields = new ArrayList<>();
     private String collectionName;
     private String scopeName;
     private Boolean deferred;
@@ -46,9 +50,7 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     public SqlStatement[] generateStatements(Database database) {
         if (isNotBlank(getBucketName()) && isNotBlank(getIndexName())) {
             return new SqlStatement[]{
-                    new CreateQueryIndexStatement(getBucketName(), getIndexName(),
-                            fields.getFields(),
-                            createQueryIndexOptions())
+                    new CreateQueryIndexStatement(getBucketName(), getIndexName(), fields, createQueryIndexOptions())
             };
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;

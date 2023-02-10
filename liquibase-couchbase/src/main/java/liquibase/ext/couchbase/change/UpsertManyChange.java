@@ -2,16 +2,19 @@ package liquibase.ext.couchbase.change;
 
 
 import com.wdt.couchbase.Keyspace;
-
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.UpsertManyStatement;
+import liquibase.ext.couchbase.types.Document;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+
 import static com.wdt.couchbase.Keyspace.keyspace;
 
 @Getter
@@ -30,7 +33,7 @@ public class UpsertManyChange extends CouchbaseChange {
     private String id;
     private String scopeName;
     private String collectionName;
-//    private Documents documents;
+    private List<Document> documents;
 
     @Override
     public String getConfirmationMessage() {
@@ -40,10 +43,8 @@ public class UpsertManyChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements(Database database) {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[]{new UpsertManyStatement(keyspace,
-                null)
+        return new SqlStatement[]{new UpsertManyStatement(keyspace, documents)
         };
     }
-
 }
 

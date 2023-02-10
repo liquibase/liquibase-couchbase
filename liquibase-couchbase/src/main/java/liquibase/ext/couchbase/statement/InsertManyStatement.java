@@ -5,11 +5,13 @@ import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
 import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 public class InsertManyStatement extends CouchbaseStatement {
     private final Keyspace keyspace;
-    private final Map<String, String> documents;
+    private final List<Document> documents;
 
     @Override
     public void execute(CouchbaseConnection connection) {
@@ -35,8 +37,8 @@ public class InsertManyStatement extends CouchbaseStatement {
 
     private Map<String, JsonObject> checkDocsAndTransformToJsons() {
         try {
-            return documents.entrySet().stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, ee -> JsonObject.fromJson(ee.getValue())));
+            return documents.stream()
+                    .collect(Collectors.toMap(Document::getId, ee -> JsonObject.fromJson(ee.getContent())));
         } catch (InvalidArgumentException ex) {
             throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
         }
