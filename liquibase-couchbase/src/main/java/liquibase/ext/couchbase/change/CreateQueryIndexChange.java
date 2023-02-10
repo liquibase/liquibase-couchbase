@@ -2,8 +2,6 @@ package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 
-import java.util.List;
-
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
@@ -32,7 +30,7 @@ public class CreateQueryIndexChange extends CouchbaseChange {
 
     private String bucketName;
     private String indexName;
-    private List<String> fields;
+    private Fields fields;
     private String collectionName;
     private String scopeName;
     private Boolean deferred;
@@ -48,7 +46,9 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     public SqlStatement[] generateStatements(Database database) {
         if (isNotBlank(getBucketName()) && isNotBlank(getIndexName())) {
             return new SqlStatement[]{
-                    new CreateQueryIndexStatement(getBucketName(), getIndexName(), getFields(), createQueryIndexOptions())
+                    new CreateQueryIndexStatement(getBucketName(), getIndexName(),
+                            fields.getFields(),
+                            createQueryIndexOptions())
             };
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;

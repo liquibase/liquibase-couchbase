@@ -1,14 +1,13 @@
 package liquibase.ext.couchbase.change;
 
-import liquibase.changelog.ChangeSet;
-import liquibase.changelog.DatabaseChangeLog;
-import common.TestChangeLogProvider;
-import liquibase.ext.couchbase.changelog.ChangeLogProvider;
-import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import common.TestChangeLogProvider;
+import liquibase.changelog.ChangeSet;
+import liquibase.changelog.DatabaseChangeLog;
+import liquibase.ext.couchbase.changelog.ChangeLogProvider;
+import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_PRIMARY_QUERY_INDEX_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +58,7 @@ class CreatePrimaryQueryIndexChangeTest {
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:1986781cf7b9bf3f25da635e885e1a30";
+        String checkSum = "8:8d99cf9ececd676ad2307e303aa5bea5";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }

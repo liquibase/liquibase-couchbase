@@ -1,15 +1,14 @@
 package liquibase.ext.couchbase.change;
 
-import liquibase.changelog.ChangeSet;
-import liquibase.changelog.DatabaseChangeLog;
-import common.TestChangeLogProvider;
-import liquibase.ext.couchbase.changelog.ChangeLogProvider;
-import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import common.TestChangeLogProvider;
+import liquibase.changelog.ChangeSet;
+import liquibase.changelog.DatabaseChangeLog;
+import liquibase.ext.couchbase.changelog.ChangeLogProvider;
+import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_QUERY_INDEX_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -52,13 +51,15 @@ class CreateQueryIndexChangeTest {
     void Change_should_have_right_properties() {
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         CreateQueryIndexChange change = (CreateQueryIndexChange) firstOf(changeSet.getChanges());
+
         assertThat(change.getCollectionName()).isEqualTo("travel-sample");
         assertThat(change.getDeferred()).isTrue();
+        assertThat(change.getFields().getFields()).containsExactly("name");
     }
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:8dc095047756951c487d4c1266008912";
+        String checkSum = "8:5a66fa98d62947bda2e2fd091d5cd53a";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }

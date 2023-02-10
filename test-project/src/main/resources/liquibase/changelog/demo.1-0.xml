@@ -14,17 +14,17 @@
         </ext:createCollection>
     </changeSet>
 
-        <changeSet id="2" author="evgenii.anishchenko">
-            <ext:createPrimaryQueryIndex>
-                <ext:bucketName>demoBucket</ext:bucketName>
-                <ext:collectionName>demoCollection</ext:collectionName>
-                <ext:deferred>false</ext:deferred>
-                <ext:indexName>demoPrimaryIndex</ext:indexName>
-                <ext:numReplicas>0</ext:numReplicas>
-                <ext:scopeName>demoScope</ext:scopeName>
-                <ext:ignoreIfExists>true</ext:ignoreIfExists>
-            </ext:createPrimaryQueryIndex>
-        </changeSet>
+    <changeSet id="2" author="evgenii.anishchenko">
+        <ext:createPrimaryQueryIndex>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:deferred>false</ext:deferred>
+            <ext:indexName>demoPrimaryIndex</ext:indexName>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:ignoreIfExists>true</ext:ignoreIfExists>
+        </ext:createPrimaryQueryIndex>
+    </changeSet>
 
 
     <changeSet id="3" author="evgenii.anishchenko">
@@ -58,18 +58,18 @@
         </ext:insertOne>
     </changeSet>
 
-<!--    <changeSet id="4" author="evgenii.anishchenko">-->
-<!--        <ext:createQueryIndex>-->
-<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
-<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
-<!--            <ext:deferred>false</ext:deferred>-->
-<!--            <ext:fields>-->
-<!--                <ext:field>name</ext:field>-->
-<!--            </ext:fields>-->
-<!--            <ext:ignoreIfExists>true</ext:ignoreIfExists>-->
-<!--            <ext:indexName>namedIndex</ext:indexName>-->
-<!--            <ext:numReplicas>0</ext:numReplicas>-->
-<!--            <ext:scopeName>demoScope</ext:scopeName>-->
-<!--        </ext:createQueryIndex>-->
-<!--    </changeSet>-->
+    <changeSet id="4" author="evgenii.anishchenko">
+        <ext:createQueryIndex>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:deferred>false</ext:deferred>
+            <ext:fields>
+                <ext:field>name</ext:field>
+            </ext:fields>
+            <ext:ignoreIfExists>true</ext:ignoreIfExists>
+            <ext:indexName>namedIndex</ext:indexName>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:scopeName>demoScope</ext:scopeName>
+        </ext:createQueryIndex>
+    </changeSet>
 </databaseChangeLog>
