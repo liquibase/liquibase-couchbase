@@ -25,16 +25,24 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="konstantin.umanets">
-            <ext:dropQueryIndex bucketName="travels-bucket">
-            </ext:dropQueryIndex>
+        <ext:dropQueryIndex>
+            <ext:bucketName>travels-bucket</ext:bucketName>
+        </ext:dropQueryIndex>
     </changeSet>
     <changeSet id="2" author="konstantin.umanets">
-            <ext:dropQueryIndex bucketName="travels-bucket" indexName="secondaryQueryIndex" isPrimary="false">
-            </ext:dropQueryIndex>
+        <ext:dropQueryIndex>
+            <ext:isPrimary>false</ext:isPrimary>
+            <ext:indexName>secondaryQueryIndex</ext:indexName>
+            <ext:bucketName>travels-bucket</ext:bucketName>
+        </ext:dropQueryIndex>
     </changeSet>
     <changeSet id="3" author="konstantin.umanets">
-            <ext:dropQueryIndex bucketName="travels-bucket" indexName="secondaryForKeyspaceQueryIndex"
-                                isPrimary="false" collectionName="travels" scopeName="travelsScope">
-            </ext:dropQueryIndex>
+        <ext:dropQueryIndex>
+            <ext:isPrimary>false</ext:isPrimary>
+            <ext:indexName>secondaryForKeyspaceQueryIndex</ext:indexName>
+            <ext:bucketName>travels-bucket</ext:bucketName>
+            <ext:collectionName>travels</ext:collectionName>
+            <ext:scopeName>travelsScope</ext:scopeName>
+        </ext:dropQueryIndex>
     </changeSet>
 </databaseChangeLog>

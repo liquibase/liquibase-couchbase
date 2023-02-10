@@ -8,27 +8,23 @@
     <xsd:element name="createCollection">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="options" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="skipIfExists" type="xsd:boolean" minOccurs="0" default="false"/>
             </xsd:sequence>
-
-            <xsd:attribute name="collectionName" type="xsd:string" use="required"
-                           default="_default"/>
-            <xsd:attribute name="bucketName" type="xsd:string" use="required"/>
-            <xsd:attribute name="scopeName" type="xsd:string" use="required" default="_default"/>
-            <xsd:attribute name="skipIfExists" type="xsd:boolean" use="required" default="false"/>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:element name="dropQueryIndex">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="options" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="isPrimary" type="xsd:boolean" minOccurs="0" default="true"/>
+                <xsd:element name="indexName" type="xsd:string" minOccurs="0" default=""/>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
             </xsd:sequence>
-            <xsd:attribute name="isPrimary" type="xsd:boolean" default="true"/>
-            <xsd:attribute name="indexName" type="xsd:string" default=""/>
-            <xsd:attribute name="bucketName" type="xsd:string" use="required"/>
-            <xsd:attribute name="collectionName" type="xsd:string" default="_default"/>
-            <xsd:attribute name="scopeName" type="xsd:string" default="_default"/>
         </xsd:complexType>
     </xsd:element>
 
@@ -64,8 +60,8 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default" />
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default" />
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
                 <xsd:element name="id" type="xsd:string"/>
                 <xsd:element name="document" type="xsd:string"/>
             </xsd:sequence>
@@ -103,8 +99,8 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default" />
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default" />
+                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
                 <xsd:element name="id" type="xsd:string"/>
                 <xsd:element name="document" type="xsd:string"/>
             </xsd:sequence>

@@ -25,9 +25,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="dmitry">
-
-        <ext:createCollection bucketName="test" scopeName="testScope" collectionName="test1" />
-
+        <ext:createCollection>
+            <ext:bucketName>test</ext:bucketName>
+            <ext:collectionName>test1</ext:collectionName>
+            <ext:scopeName>testScope</ext:scopeName>
+        </ext:createCollection>
     </changeSet>
 
 </databaseChangeLog>
