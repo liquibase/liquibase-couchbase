@@ -8,9 +8,9 @@ import liquibase.ext.couchbase.statement.DropPrimaryIndexStatement;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import static com.wdt.couchbase.Keyspace.keyspace;
 
@@ -22,7 +22,7 @@ import static com.wdt.couchbase.Keyspace.keyspace;
         appliesTo = {"database", "keyspace"}
 )
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class DropIndexChange extends CouchbaseChange {

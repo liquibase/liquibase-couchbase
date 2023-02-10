@@ -26,21 +26,17 @@
 
     <changeSet id="1" author="konstantin.umanets">
         <ext:dropQueryIndex>
-            <ext:bucketName>travels-bucket</ext:bucketName>
+            <ext:bucketName>testBucket</ext:bucketName>
         </ext:dropQueryIndex>
-    </changeSet>
-    <changeSet id="2" author="konstantin.umanets">
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
             <ext:indexName>secondaryQueryIndex</ext:indexName>
-            <ext:bucketName>travels-bucket</ext:bucketName>
+            <ext:bucketName>testBucket</ext:bucketName>
         </ext:dropQueryIndex>
-    </changeSet>
-    <changeSet id="3" author="konstantin.umanets">
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
             <ext:indexName>secondaryForKeyspaceQueryIndex</ext:indexName>
-            <ext:bucketName>travels-bucket</ext:bucketName>
+            <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>travels</ext:collectionName>
             <ext:scopeName>travelsScope</ext:scopeName>
         </ext:dropQueryIndex>
