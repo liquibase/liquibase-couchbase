@@ -4,6 +4,7 @@ import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import com.couchbase.client.java.manager.query.DropQueryIndexOptions;
 import common.BucketTestCase;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
+import liquibase.ext.couchbase.types.Field;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ class CreateQueryIndexStatementIT extends BucketTestCase {
     void Should_create_index_in_the_custom_namespace() {
         CreateQueryIndexStatement statement = new CreateQueryIndexStatement(TEST_BUCKET
                 , INDEX
-                , Arrays.asList(FIELD_1, FIELD_2)
+                , Arrays.asList(new Field(FIELD_1), new Field(FIELD_2))
                 , customOptions()
         );
         statement.execute(database.getConnection());
@@ -79,7 +80,7 @@ class CreateQueryIndexStatementIT extends BucketTestCase {
         return new CreateQueryIndexStatement(
                 TEST_BUCKET,
                 INDEX,
-                Collections.singletonList(FIELD_1),
+                Collections.singletonList(new Field(FIELD_1)),
                 indexOptions()
         );
     }
@@ -88,7 +89,7 @@ class CreateQueryIndexStatementIT extends BucketTestCase {
         return new CreateQueryIndexStatement(
                 TEST_BUCKET,
                 COMPOUND_INDEX,
-                Arrays.asList(FIELD_1, FIELD_2),
+                Arrays.asList(new Field(FIELD_1), new Field(FIELD_2)),
                 indexOptions()
         );
     }

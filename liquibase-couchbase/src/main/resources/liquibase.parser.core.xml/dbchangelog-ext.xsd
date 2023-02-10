@@ -47,15 +47,15 @@
     <xsd:element name="createQueryIndex">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element minOccurs="1" name="bucketName" type="xsd:string"/>
-                <xsd:element minOccurs="1" name="collectionName" type="xsd:string"/>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="deferred" type="xsd:boolean"/>
 
-                <xsd:element ref="fields"></xsd:element>
+                <xsd:element ref="fields"/>
                 <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
-                <xsd:element minOccurs="1" name="indexName" type="xsd:string"/>
+                <xsd:element name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
-                <xsd:element minOccurs="1" name="scopeName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -100,6 +100,7 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+
     <xsd:element name="document">
         <xsd:complexType>
             <xsd:sequence>

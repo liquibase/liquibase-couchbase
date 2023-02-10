@@ -1,29 +1,33 @@
 package liquibase.ext.couchbase.statement;
 
 
+import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.json.JsonObject;
 import com.wdt.couchbase.Keyspace;
-
-import java.util.Map;
-
 import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.types.Document;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class UpsertManyStatement extends CouchbaseStatement {
     private final Keyspace keyspace;
-    private final Map<String, String> documents;
+    private final List<Document> documents;
 
     @Override
     public void execute(CouchbaseConnection connection) {
-//        Map<String, JsonObject> contentList = checkDocsAndTransformToJsons();
-//        final Collection collection = getCollection(connection);
+        Map<String, JsonObject> contentList = checkDocsAndTransformToJsons();
+        final Collection collection = getCollection(connection);
 
-//        contentList.forEach(collection::upsert);
+        contentList.forEach(collection::upsert);
     }
 
     private Collection getCollection(CouchbaseConnection connection) {
@@ -31,13 +35,13 @@ public class UpsertManyStatement extends CouchbaseStatement {
                 .scope(keyspace.getScope()).collection(keyspace.getCollection());
     }
 
-//    private Map<String, JsonObject> checkDocsAndTransformToJsons() {
-//        try {
-//            return documents.getDocuments().stream().
-//                    .collect(Collectors.toMap(Map.Entry::getKey, ee -> JsonObject.fromJson(ee.getValue())));
-//        } catch (InvalidArgumentException ex) {
-//            throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
-//        }
-//    }
+    private Map<String, JsonObject> checkDocsAndTransformToJsons() {
+        try {
+            return documents.stream()
+                    .collect(Collectors.toMap(Document::getId, ee -> JsonObject.fromJson(ee.getContent())));
+        } catch (InvalidArgumentException ex) {
+            throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
+        }
+    }
 }
 

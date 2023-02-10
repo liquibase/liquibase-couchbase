@@ -30,7 +30,10 @@
             <ext:collectionName>travel-sample</ext:collectionName>
             <ext:deferred>true</ext:deferred>
             <ext:fields>
-                <ext:field>name</ext:field>
+                <ext:field>country</ext:field>
+                <ext:field>id</ext:field>
+                <ext:field>time</ext:field>
+                <ext:field>value</ext:field>
             </ext:fields>
             <ext:ignoreIfExists>true</ext:ignoreIfExists>
             <ext:indexName>test</ext:indexName>
