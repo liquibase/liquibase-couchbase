@@ -26,9 +26,12 @@
 
     <changeSet id="1" author="evgenii.anishchenko">
         <ext:createQueryIndex>
+            <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>travel-sample</ext:collectionName>
             <ext:deferred>true</ext:deferred>
-            <ext:fields>country</ext:fields>
+            <ext:fields>
+                <ext:field>name</ext:field>
+            </ext:fields>
             <ext:ignoreIfExists>true</ext:ignoreIfExists>
             <ext:indexName>test</ext:indexName>
             <ext:numReplicas>1</ext:numReplicas>

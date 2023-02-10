@@ -14,7 +14,6 @@
             <ext:document>{"name": "Roman", "age": "6"}</ext:document>
         </ext:upsertOne>
 
-<!--        DOESNT WORK YET-->
 <!--        <ext:upsertMany>-->
 <!--            <ext:bucketName>demoBucket</ext:bucketName>-->
 <!--            <ext:scopeName>demoScope</ext:scopeName>-->
@@ -36,21 +35,21 @@
 <!--        </ext:upsertMany>-->
     </changeSet>
 
-<!--    <changeSet id="6" author="roman.oborin">-->
+    <changeSet id="6" author="roman.oborin">
 
-<!--        <ext:dropQueryIndex>-->
-<!--            <ext:isPrimary>false</ext:isPrimary>-->
-<!--            <ext:indexName>nameIndex</ext:indexName>-->
-<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
-<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
-<!--            <ext:scopeName>demoScope</ext:scopeName>-->
-<!--        </ext:dropQueryIndex>-->
+        <ext:dropQueryIndex>
+            <ext:isPrimary>false</ext:isPrimary>
+            <ext:indexName>namedIndex</ext:indexName>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:scopeName>demoScope</ext:scopeName>
+        </ext:dropQueryIndex>
 <!--        <ext:dropQueryIndex>-->
 <!--            <ext:indexName>namedIndex</ext:indexName>-->
 <!--            <ext:bucketName>demoBucket</ext:bucketName>-->
 <!--            <ext:collectionName>demoCollection</ext:collectionName>-->
 <!--            <ext:scopeName>demoScope</ext:scopeName>-->
 <!--        </ext:dropQueryIndex>-->
-<!--    </changeSet>-->
+    </changeSet>
 
 </databaseChangeLog>

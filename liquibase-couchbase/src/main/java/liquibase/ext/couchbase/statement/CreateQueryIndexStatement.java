@@ -2,12 +2,12 @@ package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 
+import java.util.Collection;
+
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,7 +15,7 @@ import java.util.List;
 public class CreateQueryIndexStatement extends CouchbaseStatement {
     private final String bucketName;
     private final String indexName;
-    private final List<String> fields;
+    private final Collection<String> fields;
     private final CreateQueryIndexOptions options;
 
     @Override
