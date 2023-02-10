@@ -8,7 +8,6 @@ import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.InsertOneStatement;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,6 @@ import static com.wdt.couchbase.Keyspace.keyspace;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @DatabaseChange(
         name = "insertOne",
         description = "Insert a single document into a collection https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html",
