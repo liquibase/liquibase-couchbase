@@ -9,7 +9,8 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
+                             default="_default"/>
                 <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
                 <xsd:element name="skipIfExists" type="xsd:boolean" minOccurs="0" default="false"/>
             </xsd:sequence>
@@ -22,7 +23,8 @@
                 <xsd:element name="isPrimary" type="xsd:boolean" minOccurs="0" default="true"/>
                 <xsd:element name="indexName" type="xsd:string" minOccurs="0" default=""/>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
+                             default="_default"/>
                 <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -37,6 +39,7 @@
                 <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element minOccurs="0" name="scopeName" type="xsd:string"/>
+                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -47,7 +50,13 @@
                 <xsd:element minOccurs="0" name="bucketName" type="xsd:string"/>
                 <xsd:element minOccurs="0" name="collectionName" type="xsd:string"/>
                 <xsd:element name="deferred" type="xsd:boolean"/>
-                <xsd:element maxOccurs="unbounded" minOccurs="0" name="fields" nillable="true" type="xsd:string"/>
+                <xsd:element name="fields">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="field" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
                 <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
                 <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
@@ -73,7 +82,8 @@
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
+                             default="_default"/>
                 <xsd:element ref="documents"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -100,7 +110,8 @@
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
+                             default="_default"/>
                 <xsd:element name="id" type="xsd:string"/>
                 <xsd:element name="document" type="xsd:string"/>
             </xsd:sequence>
@@ -112,7 +123,8 @@
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
+                             default="_default"/>
                 <xsd:element ref="documents"/>
             </xsd:sequence>
         </xsd:complexType>

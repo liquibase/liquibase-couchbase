@@ -33,6 +33,7 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     private String indexName;
     private Integer numReplicas;
     private String scopeName;
+    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -53,6 +54,7 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
                 .collectionName(getCollectionName())
                 .scopeName(getScopeName())
                 .deferred(getDeferred())
-                .numReplicas(getNumReplicas());
+                .numReplicas(getNumReplicas())
+                .ignoreIfExists(getIgnoreIfExists());
     }
 }

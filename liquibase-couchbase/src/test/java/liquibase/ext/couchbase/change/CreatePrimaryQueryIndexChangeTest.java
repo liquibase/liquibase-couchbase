@@ -59,7 +59,7 @@ class CreatePrimaryQueryIndexChangeTest {
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:d283129188e9edffbacd8f2569095f83";
+        String checkSum = "8:1986781cf7b9bf3f25da635e885e1a30";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }

@@ -1,0 +1,56 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="5" author="roman.oborin">
+        <ext:upsertOne>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:id>1</ext:id>
+            <ext:document>{"name": "Roman", "age": "6"}</ext:document>
+        </ext:upsertOne>
+
+<!--        DOESNT WORK YET-->
+<!--        <ext:upsertMany>-->
+<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
+<!--            <ext:scopeName>demoScope</ext:scopeName>-->
+<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
+<!--            <ext:documents>-->
+<!--                <ext:document>-->
+<!--                    <ext:id>3</ext:id>-->
+<!--                    <ext:content>{"name": "Konstantin", "age": "7"}</ext:content>-->
+<!--                </ext:document>-->
+<!--                <ext:document>-->
+<!--                    <ext:id>4</ext:id>-->
+<!--                    <ext:content>{"name": "Dmitry", "age": "8"}</ext:content>-->
+<!--                </ext:document>-->
+<!--                <ext:document>-->
+<!--                    <ext:id>6</ext:id>-->
+<!--                    <ext:content>{"name": "Andrey", "age": "9"}</ext:content>-->
+<!--                </ext:document>-->
+<!--            </ext:documents>-->
+<!--        </ext:upsertMany>-->
+    </changeSet>
+
+<!--    <changeSet id="6" author="roman.oborin">-->
+
+<!--        <ext:dropQueryIndex>-->
+<!--            <ext:isPrimary>false</ext:isPrimary>-->
+<!--            <ext:indexName>nameIndex</ext:indexName>-->
+<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
+<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
+<!--            <ext:scopeName>demoScope</ext:scopeName>-->
+<!--        </ext:dropQueryIndex>-->
+<!--        <ext:dropQueryIndex>-->
+<!--            <ext:indexName>namedIndex</ext:indexName>-->
+<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
+<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
+<!--            <ext:scopeName>demoScope</ext:scopeName>-->
+<!--        </ext:dropQueryIndex>-->
+<!--    </changeSet>-->
+
+</databaseChangeLog>
