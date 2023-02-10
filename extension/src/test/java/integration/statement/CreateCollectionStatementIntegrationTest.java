@@ -14,6 +14,7 @@ import static com.wdt.couchbase.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,10 +49,9 @@ public class CreateCollectionStatementIntegrationTest extends BucketTestCase {
 
     @Test
     void Collection_should_not_be_created_again_if_it_exists_and_skip_is_true() {
-        Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
         Collection existingCollection = bucket.collection(TEST_COLLECTION);
 
-        CreateCollectionStatement createCollectionStatement = new CreateCollectionStatement(keyspace, true);
+        CreateCollectionStatement createCollectionStatement = new CreateCollectionStatement(TEST_KEYSPACE, true);
         createCollectionStatement.execute(database.getConnection());
 
         //todo replace with collection assert
@@ -61,10 +61,8 @@ public class CreateCollectionStatementIntegrationTest extends BucketTestCase {
 
     @Test
     void Should_throw_exception_if_collection_exists_and_skip_is_false() {
-        Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
-
         CreateCollectionStatement createCollectionStatement =
-                new CreateCollectionStatement(keyspace, false);
+                new CreateCollectionStatement(TEST_KEYSPACE, false);
 
         assertThatExceptionOfType(CollectionExistsException.class)
                 .isThrownBy(() -> createCollectionStatement.execute(database.getConnection()));

@@ -4,6 +4,7 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
+import com.wdt.couchbase.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,11 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class InsertManyStatement extends CouchbaseStatement {
-
-    private final String bucketName;
+    private final Keyspace keyspace;
     private final Map<String, String> documents;
-    private final String scopeName;
-    private final String collectionName;
 
     @Override
     public void execute(CouchbaseConnection connection) {
@@ -31,8 +29,8 @@ public class InsertManyStatement extends CouchbaseStatement {
     }
 
     private Collection getCollection(CouchbaseConnection connection) {
-        return connection.getCluster().bucket(bucketName)
-                .scope(scopeName).collection(collectionName);
+        return connection.getCluster().bucket(keyspace.getBucket())
+                .scope(keyspace.getScope()).collection(keyspace.getCollection());
     }
 
     private Map<String, JsonObject> checkDocsAndTransformToJsons() {

@@ -3,6 +3,7 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 
+import com.wdt.couchbase.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,25 +16,24 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class DropPrimaryIndexStatement extends CouchbaseStatement {
-    private final String bucketName;
-    private final String collectionName;
-    private final String scopeName;
+    private final Keyspace keyspace;
 
     @Override
     public void execute(CouchbaseConnection connection) {
         Cluster cluster = connection.getCluster();
-        String bucket = Optional.ofNullable(bucketName)
+        cluster.queryIndexes().dropPrimaryIndex(bucket(connection, keyspace), options(keyspace));
+    }
+
+    private static String bucket(CouchbaseConnection connection, Keyspace keyspace) {
+        return Optional.ofNullable(keyspace.getBucket())
                 .filter(StringUtils::isNotBlank)
                 .orElseGet(() -> connection.getDatabase().name());
+    }
 
-        if (StringUtils.isNotBlank(collectionName) && StringUtils.isNotBlank(scopeName)) {
-            DropPrimaryQueryIndexOptions options = DropPrimaryQueryIndexOptions
-                    .dropPrimaryQueryIndexOptions()
-                    .collectionName(collectionName)
-                    .scopeName(scopeName);
-            cluster.queryIndexes().dropPrimaryIndex(bucket, options);
-        } else {
-            cluster.queryIndexes().dropPrimaryIndex(bucket);
-        }
+    private static DropPrimaryQueryIndexOptions options(Keyspace keyspace) {
+        return DropPrimaryQueryIndexOptions
+                .dropPrimaryQueryIndexOptions()
+                .collectionName(keyspace.getCollection())
+                .scopeName(keyspace.getScope());
     }
 }

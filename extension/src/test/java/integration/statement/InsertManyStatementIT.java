@@ -2,22 +2,23 @@ package integration.statement;
 
 import com.couchbase.client.java.Collection;
 import com.google.common.collect.ImmutableMap;
+import com.wdt.couchbase.Keyspace;
 import common.BucketTestCase;
 import liquibase.ext.couchbase.statement.InsertManyStatement;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.wdt.couchbase.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_COLLECTION_2;
 import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_DOCUMENT_2;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_ID_2;
-import static common.constants.TestConstants.TEST_SCOPE;
+import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 
 class InsertManyStatementIT extends BucketTestCase {
@@ -29,8 +30,7 @@ class InsertManyStatementIT extends BucketTestCase {
 
     @Test
     void Should_insert_many_documents() {
-        InsertManyStatement statement =
-                new InsertManyStatement(TEST_BUCKET, testDocuments, TEST_SCOPE, TEST_COLLECTION);
+        InsertManyStatement statement = new InsertManyStatement(TEST_KEYSPACE, testDocuments);
 
         statement.execute(database.getConnection());
 
@@ -42,8 +42,8 @@ class InsertManyStatementIT extends BucketTestCase {
     @Test
     void Should_insert_many_documents_to_default_scope() {
         createCollectionInDefaultScope(TEST_COLLECTION_2);
-        InsertManyStatement statement =
-                new InsertManyStatement(TEST_BUCKET, testDocuments, DEFAULT_SCOPE, TEST_COLLECTION_2);
+        Keyspace keyspace = keyspace(TEST_BUCKET, DEFAULT_SCOPE, TEST_COLLECTION_2);
+        InsertManyStatement statement = new InsertManyStatement(keyspace, testDocuments);
 
         statement.execute(database.getConnection());
 
@@ -54,8 +54,8 @@ class InsertManyStatementIT extends BucketTestCase {
 
     @Test
     void Should_insert_many_documents_to_default_scope_and_collection() {
-        InsertManyStatement statement =
-                new InsertManyStatement(TEST_BUCKET, testDocuments, DEFAULT_SCOPE, DEFAULT_COLLECTION);
+        Keyspace keyspace = keyspace(TEST_BUCKET, DEFAULT_SCOPE, DEFAULT_COLLECTION);
+        InsertManyStatement statement = new InsertManyStatement(keyspace, testDocuments);
 
         statement.execute(database.getConnection());
 

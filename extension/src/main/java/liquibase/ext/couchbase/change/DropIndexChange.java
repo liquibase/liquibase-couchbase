@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.change;
 
+import com.wdt.couchbase.Keyspace;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static com.wdt.couchbase.Keyspace.keyspace;
 
 @DatabaseChange(
         name = "dropQueryIndex",
@@ -37,9 +40,10 @@ public class DropIndexChange extends CouchbaseChange {
 
     @Override
     public SqlStatement[] generateStatements(Database database) {
+        Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
-                isPrimary ? new DropPrimaryIndexStatement(bucketName, collectionName, scopeName) :
-                        new DropIndexStatement(indexName, bucketName, collectionName, scopeName)
+                isPrimary ? new DropPrimaryIndexStatement(keyspace) :
+                        new DropIndexStatement(indexName, keyspace)
         };
     }
 }
