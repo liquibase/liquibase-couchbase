@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.liquibase.ext</groupId>
-        <artifactId>couchbase-parent</artifactId>
+        <artifactId>liquibase-couchbase-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>local-setup-test</artifactId>
+    <artifactId>test-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -35,13 +35,12 @@
                 <version>4.19.0</version>
                 <configuration>
                     <propertyFile>src\main\resources\liquibase\liquibase.properties</propertyFile>
-                    <changeLogFile>src\main\resources\liquibase\changelog.create-collection-test.xml</changeLogFile>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-couchbase</artifactId>
-                        <version>0.0.1</version>
+                        <version>0.0.1-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>

@@ -1,0 +1,75 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="evgenii.anishchenko">
+        <ext:createCollection>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:skipIfExists>true</ext:skipIfExists>
+        </ext:createCollection>
+    </changeSet>
+
+        <changeSet id="2" author="evgenii.anishchenko">
+            <ext:createPrimaryQueryIndex>
+                <ext:bucketName>demoBucket</ext:bucketName>
+                <ext:collectionName>demoCollection</ext:collectionName>
+                <ext:deferred>false</ext:deferred>
+                <ext:indexName>demoPrimaryIndex</ext:indexName>
+                <ext:numReplicas>0</ext:numReplicas>
+                <ext:scopeName>demoScope</ext:scopeName>
+                <ext:ignoreIfExists>true</ext:ignoreIfExists>
+            </ext:createPrimaryQueryIndex>
+        </changeSet>
+
+
+    <changeSet id="3" author="evgenii.anishchenko">
+        <ext:insertOne>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:id>1</ext:id>
+            <ext:document>{"name":"Roman", "age": 51}</ext:document>
+        </ext:insertOne>
+        <ext:insertOne>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:id>2</ext:id>
+            <ext:document>{"name":"Evgenii", "age": 52}</ext:document>
+        </ext:insertOne>
+        <ext:insertOne>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:id>3</ext:id>
+            <ext:document>{"name":"Konstantin", "age": 53}</ext:document>
+        </ext:insertOne>
+        <ext:insertOne>
+            <ext:bucketName>demoBucket</ext:bucketName>
+            <ext:scopeName>demoScope</ext:scopeName>
+            <ext:collectionName>demoCollection</ext:collectionName>
+            <ext:id>4</ext:id>
+            <ext:document>{"name":"Dmitry", "age": 54}</ext:document>
+        </ext:insertOne>
+    </changeSet>
+
+<!--    <changeSet id="4" author="evgenii.anishchenko">-->
+<!--        <ext:createQueryIndex>-->
+<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
+<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
+<!--            <ext:deferred>false</ext:deferred>-->
+<!--            <ext:fields>-->
+<!--                <ext:field>name</ext:field>-->
+<!--            </ext:fields>-->
+<!--            <ext:ignoreIfExists>true</ext:ignoreIfExists>-->
+<!--            <ext:indexName>namedIndex</ext:indexName>-->
+<!--            <ext:numReplicas>0</ext:numReplicas>-->
+<!--            <ext:scopeName>demoScope</ext:scopeName>-->
+<!--        </ext:createQueryIndex>-->
+<!--    </changeSet>-->
+</databaseChangeLog>

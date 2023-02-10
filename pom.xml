@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.liquibase.ext</groupId>
-    <artifactId>couchbase-parent</artifactId>
+    <artifactId>liquibase-couchbase-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -58,8 +58,8 @@
     </developers>
 
     <modules>
-        <module>local-setup-test</module>
-        <module>extension</module>
+        <module>test-project</module>
+        <module>liquibase-couchbase</module>
     </modules>
 
     <scm>

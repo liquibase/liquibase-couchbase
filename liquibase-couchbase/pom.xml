@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.liquibase.ext</groupId>
-        <artifactId>couchbase-parent</artifactId>
+        <artifactId>liquibase-couchbase-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
