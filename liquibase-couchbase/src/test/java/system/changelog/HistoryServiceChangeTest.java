@@ -3,25 +3,29 @@ package system.changelog;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import liquibase.Liquibase;
 import liquibase.changelog.ChangeSet;
 import liquibase.exception.ValidationFailedException;
 import liquibase.ext.couchbase.provider.ContextServiceProvider;
 import liquibase.ext.couchbase.provider.ServiceProvider;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import system.LiquiBaseSystemTest;
-
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-import static common.constants.ChangeLogSampleFilePaths.*;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_DUPLICATE_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_TEST_XML;
 import static common.matchers.ChangeLogAssert.assertThat;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
-import static liquibase.ext.couchbase.provider.ServiceProvider.*;
+import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
+import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class HistoryServiceChangeTest extends LiquiBaseSystemTest {
+    private static final String separator = System.lineSeparator();
 
     private final ServiceProvider serviceProvider = new ContextServiceProvider(database);
 
@@ -80,9 +84,10 @@ public class HistoryServiceChangeTest extends LiquiBaseSystemTest {
 
         assertThatExceptionOfType(ValidationFailedException.class)
                 .isThrownBy(liquibase::update)
-                .withMessage("Validation Failed:\r\n" +
-                        "     1 changesets had duplicate identifiers\r\n" +
-                        "          liquibase/ext/couchbase/changelog/changelog.changelog-duplicate-test.xml::3::dmitry\r\n");
+                .withMessage("Validation Failed:%s" +
+                        "     1 changesets had duplicate identifiers%s" +
+                        "          liquibase/ext/couchbase/changelog/changelog" +
+                        ".changelog-duplicate-test.xml::3::dmitry%s", separator, separator, separator);
 
         assertThat(cluster.bucket(serviceProvider.getServiceBucketName()))
                 .hasCollectionInScope(CHANGE_LOG_COLLECTION, scope.name());
