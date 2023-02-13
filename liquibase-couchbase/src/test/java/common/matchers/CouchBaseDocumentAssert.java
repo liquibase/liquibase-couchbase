@@ -12,11 +12,20 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
         super(collection, CouchBaseDocumentAssert.class);
     }
 
-    public CouchBaseDocumentAssert itsContentEquals(@NonNull String content) {
-        JsonObject expected = JsonObject.fromJson(content);
+    public CouchBaseDocumentAssert itsContentEquals(@NonNull JsonObject expected) {
         if (!actual.equals(expected)) {
             failWithMessage("Unexpected content for document , expected <%s>, actual <%s>",
-                    content,
+                    expected,
+                    actual
+            );
+        }
+        return this;
+    }
+
+    public CouchBaseDocumentAssert itsContentEquals(@NonNull String expected) {
+        if (!actual.toString().equals(expected)) {
+            failWithMessage("Unexpected content for document , expected <%s>, actual <%s>",
+                    expected,
                     actual
             );
         }

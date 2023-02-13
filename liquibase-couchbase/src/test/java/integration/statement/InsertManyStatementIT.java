@@ -3,13 +3,14 @@ package integration.statement;
 import com.couchbase.client.java.Collection;
 import com.google.common.collect.ImmutableList;
 import com.wdt.couchbase.Keyspace;
-import common.BucketTestCase;
-import liquibase.ext.couchbase.statement.InsertManyStatement;
-import liquibase.ext.couchbase.types.Document;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import common.BucketTestCase;
+import liquibase.ext.couchbase.statement.InsertManyStatement;
+import liquibase.ext.couchbase.types.Document;
 import static com.wdt.couchbase.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
@@ -25,8 +26,8 @@ import static common.matchers.CouchbaseCollectionAssert.assertThat;
 class InsertManyStatementIT extends BucketTestCase {
 
     private final List<Document> testDocuments = ImmutableList.of(
-            new Document(TEST_ID, TEST_DOCUMENT),
-            new Document(TEST_ID_2, TEST_DOCUMENT_2)
+            new Document(TEST_ID, TEST_DOCUMENT.toString()),
+            new Document(TEST_ID_2, TEST_DOCUMENT_2.toString())
     );
 
     @Test

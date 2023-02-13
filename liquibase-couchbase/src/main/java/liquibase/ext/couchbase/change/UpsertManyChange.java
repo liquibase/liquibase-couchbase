@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.wdt.couchbase.Keyspace.keyspace;
@@ -33,7 +34,7 @@ public class UpsertManyChange extends CouchbaseChange {
     private String id;
     private String scopeName;
     private String collectionName;
-    private List<Document> documents;
+    private List<Document> documents = new ArrayList<>();
 
     @Override
     public String getConfirmationMessage() {

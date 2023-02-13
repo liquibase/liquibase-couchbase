@@ -2,12 +2,11 @@ package common.matchers;
 
 import com.couchbase.client.java.Collection;
 
-import com.couchbase.client.java.json.JsonObject;
-import lombok.NonNull;
 import org.assertj.core.api.AbstractAssert;
 
-import java.util.Map;
+import java.util.List;
 
+import liquibase.ext.couchbase.types.Document;
 import lombok.NonNull;
 
 public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectionAssert, Collection> {
@@ -46,8 +45,8 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
     }
 
 
-    public CouchbaseCollectionAssert containDocuments(Map<String, String> testDocuments) {
-        testDocuments.forEach((key, value) -> extractingDocument(key).itsContentEquals(value));
+    public CouchbaseCollectionAssert containDocuments(List<Document> testDocuments) {
+        testDocuments.forEach((doc) -> extractingDocument(doc.getId()).itsContentEquals(doc.getContent()));
 
         return this;
     }
