@@ -2,10 +2,11 @@ package common;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
-import lombok.extern.slf4j.Slf4j;
+import com.couchbase.client.java.json.JsonObject;
 
 import java.util.Arrays;
 
+import lombok.extern.slf4j.Slf4j;
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
@@ -55,11 +56,11 @@ public class BucketTestCase extends CouchbaseContainerizedTest {
         return getBucket().collection(name);
     }
 
-    protected static void insertDocInDefaultScope(String collection, String id, String content) {
+    protected static void insertDocInDefaultScope(String collection, String id, JsonObject content) {
         getCollectionFromDefaultScope(collection).insert(id, content);
     }
 
-    protected static void insertDocInTestCollection(String id, String content) {
+    protected static void insertDocInTestCollection(String id, JsonObject content) {
         getTestCollection().insert(id, content);
     }
 

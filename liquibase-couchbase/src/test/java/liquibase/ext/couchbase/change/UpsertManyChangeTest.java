@@ -1,20 +1,22 @@
 package liquibase.ext.couchbase.change;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import common.TestChangeLogProvider;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.types.Document;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static common.constants.ChangeLogSampleFilePaths.UPSERT_MANY_TEST_XML;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.internal.util.collections.Iterables.firstOf;
 
-public class UpsertManyChangeTest {
-
+class UpsertManyChangeTest {
+    public final Document DOC_1 = new Document("id1", "{key:value}");
+    public final Document DOC_2 = new Document("id2", "{key2:value2}");
     private DatabaseChangeLog changeLog;
 
     @BeforeEach
@@ -25,9 +27,16 @@ public class UpsertManyChangeTest {
     }
 
     @Test
-    void nameTest() {
-        List<ChangeSet> changeSets = changeLog.getChangeSets();
-        System.out.println(changeSets);
+    void Should_contains_documents() {
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        UpsertManyChange change = (UpsertManyChange) firstOf(changeSet.getChanges());
+        assertThat(change.getDocuments()).hasSize(2);
+    }
 
+    @Test
+    void Should_contains_specific_document() {
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        UpsertManyChange change = (UpsertManyChange) firstOf(changeSet.getChanges());
+        assertThat(change.getDocuments()).containsExactly(DOC_1, DOC_2);
     }
 }

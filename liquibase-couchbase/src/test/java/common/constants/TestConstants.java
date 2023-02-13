@@ -1,11 +1,12 @@
 package common.constants;
 
+import com.couchbase.client.java.json.JsonObject;
 import com.wdt.couchbase.Keyspace;
+
 import org.testcontainers.utility.DockerImageName;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
 import static com.wdt.couchbase.Keyspace.keyspace;
 
 /**
@@ -22,9 +23,9 @@ public class TestConstants {
     public static final String TEST_ID = "id";
     public static final String TEST_ID_2 = "id2";
     public static final String TEST_ID_3 = "id3";
-    public static final String TEST_DOCUMENT = "{\"key\":\"value\"}";
-    public static final String TEST_DOCUMENT_2 = "{\"key2\":\"value2\"}";
-    public static final String TEST_DOCUMENT_3 = "{\"name\":\"user\", \"type\":\"customer\"}";
+    public static final JsonObject TEST_DOCUMENT = JsonObject.create().put("key", "value");
+    public static final JsonObject TEST_DOCUMENT_2 = JsonObject.create().put("key2", "value2");
+    public static final JsonObject TEST_DOCUMENT_3 = JsonObject.create().put("name", "user").put("type", "customer");
     public static final String PROPERTY_FILE_NAME = "src/test/resources/test.properties";
     public static final String INDEX = "testIndex";
     public static final String COMPOUND_INDEX = "testCompoundIndex";

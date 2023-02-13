@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.change;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +8,17 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.types.Field;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_QUERY_INDEX_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 
 class CreateQueryIndexChangeTest {
 
+    private final Field ID = new Field("id");
+    private final Field COUNTRY = new Field("country");
     private DatabaseChangeLog changeLog;
 
     @BeforeEach
@@ -30,7 +33,7 @@ class CreateQueryIndexChangeTest {
         CreateQueryIndexChange change = new CreateQueryIndexChange();
         String indexName = "test";
         change.setIndexName(indexName);
-        Assertions.assertEquals("Query index \"" + indexName + "\" has been created",
+        assertEquals("Query index \"" + indexName + "\" has been created",
                 change.getConfirmationMessage(), "confirmation message doesn't match");
     }
 
@@ -44,7 +47,7 @@ class CreateQueryIndexChangeTest {
 
     @Test
     void Changelog_should_contain_exact_number_of_changes() {
-        Assertions.assertEquals(1, changeLog.getChangeSets().size(), "Changelog size is wrong");
+        assertEquals(1, changeLog.getChangeSets().size(), "Changelog size is wrong");
     }
 
     @Test
@@ -54,12 +57,13 @@ class CreateQueryIndexChangeTest {
 
         assertThat(change.getCollectionName()).isEqualTo("travel-sample");
         assertThat(change.getDeferred()).isTrue();
-        assertThat(change.getFields().getFields()).containsExactly("name");
+        assertThat(change.getFields()).hasSize(2);
+        assertThat(change.getFields()).containsExactly(ID, COUNTRY);
     }
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:5a66fa98d62947bda2e2fd091d5cd53a";
+        String checkSum = "8:59f3245531d76f6a764837afd2a7871c";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }
