@@ -22,7 +22,7 @@ public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert,
     }
 
     public CouchBaseBucketAssert hasCollectionInDefaultScope(@NonNull String collectionName) {
-        if (!bucketOperator.hasCollectionDefaultInScope(collectionName)) {
+        if (!bucketOperator.hasCollectionInDefaultScope(collectionName)) {
             failWithMessage("Collection <%s> not exists in bucket <%s> in scope <%s>",
                     collectionName,
                     actual.name(),

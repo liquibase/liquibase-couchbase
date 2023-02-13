@@ -1,12 +1,14 @@
 package liquibase.ext.couchbase.operator;
 
 import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 
 /**
@@ -25,12 +27,32 @@ public class BucketOperator {
         return presentsInScope(collectionName, scopeName);
     }
 
-    public boolean hasCollectionDefaultInScope(@NonNull String collectionName) {
+    public boolean hasCollectionInDefaultScope(@NonNull String collectionName) {
         return presentsInScope(collectionName, bucket.defaultScope().name());
     }
 
     public void createCollection(String collectionName, String scopeName) {
         bucket.collections().createCollection(create(collectionName, scopeName));
+    }
+
+    public void createCollectionInDefaultScope(String name) {
+        createCollection(name, bucket.defaultScope().name());
+    }
+
+    public void dropCollection(String name, String scope) {
+        getBucket().collections().dropCollection(create(name, scope));
+    }
+
+    public void dropCollectionInDefaultScope(String name) {
+        dropCollection(name, bucket.defaultScope().name());
+    }
+
+    public Collection getCollection(String name, String scope) {
+        return getBucket().scope(scope).collection(name);
+    }
+
+    public Collection getCollectionFromDefaultScope(String name) {
+        return getCollection(name, bucket.defaultScope().name());
     }
 
     private boolean presentsInScope(String collectionName, String scopeName) {
