@@ -28,8 +28,12 @@ public class BucketTestCase extends CouchbaseContainerizedTest {
         return cluster.bucket(TEST_BUCKET);
     }
 
-    private static void createTestScope() {
+    protected static void createTestScope() {
         getBucket().collections().createScope(TEST_SCOPE);
+    }
+
+    protected static void dropTestScope() {
+        cluster.bucket(TEST_BUCKET).collections().dropScope(TEST_SCOPE);
     }
 
     protected static void createTestCollection() {
@@ -79,4 +83,5 @@ public class BucketTestCase extends CouchbaseContainerizedTest {
     protected static void removeDocsFromTestCollection(String... ids) {
         Arrays.stream(ids).forEach(getTestCollection()::remove);
     }
+
 }
