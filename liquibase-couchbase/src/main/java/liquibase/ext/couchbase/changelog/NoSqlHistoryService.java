@@ -6,127 +6,121 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.DatabaseHistoryException;
-import liquibase.executor.ExecutorService;
+import liquibase.ext.couchbase.provider.ContextServiceProvider;
+import liquibase.ext.couchbase.provider.ServiceProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
-import liquibase.ext.couchbase.executor.NoSqlExecutor;
+import liquibase.ext.couchbase.operator.ChangeLogOperator;
+import liquibase.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Clock;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import static java.lang.Boolean.FALSE;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.isNull;
+import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
+@Getter
+@Setter
 public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryService {
-    @Getter
+
+    private Integer lastChangeLogOrder;
     private List<RanChangeSet> ranChangeSetList;
-    private boolean serviceInitialized;
-    @Getter
-    private Boolean hasDatabaseChangeLogTable;
-    @Getter
-    private Boolean adjustedChangeLogTable = FALSE;
-    @Getter
-    @Setter
-    private Clock clock = Clock.systemDefaultZone();
+    private ChangeLogOperator changeLogOperator;
+    private ServiceProvider serviceProvider;
+    private final Logger log = Scope.getCurrentScope().getLog(getClass());
 
     public int getPriority() {
         return PRIORITY_SPECIALIZED;
     }
 
-    public String getDatabaseChangeLogTableName() {
-        return getDatabase().getDatabaseChangeLogTableName();
-    }
-
-    public boolean canCreateChangeLogTable() {
-        return true;
-    }
-
-    public boolean isServiceInitialized() {
-        return serviceInitialized;
-    }
-
-    @SuppressWarnings("unchecked")
-    public CouchbaseLiquibaseDatabase getNoSqlDatabase() {
-        return (CouchbaseLiquibaseDatabase) getDatabase();
-    }
-
-    public NoSqlExecutor getExecutor() {
-        return (NoSqlExecutor) Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor(NoSqlExecutor.EXECUTOR_NAME, getDatabase());
-    }
-
     @Override
-    public void reset() {
-        super.reset();
-        this.ranChangeSetList = null;
-        this.serviceInitialized = false;
-        this.hasDatabaseChangeLogTable = null;
-        this.adjustedChangeLogTable = FALSE;
+    public CouchbaseLiquibaseDatabase getDatabase() {
+        return (CouchbaseLiquibaseDatabase) super.getDatabase();
     }
 
     @Override
     public void init() throws DatabaseException {
-        //TODO implement
-    }
+        changeLogOperator = new ChangeLogOperator(getDatabase());
+        serviceProvider = new ContextServiceProvider(getDatabase());
+        if (!existsChangeLogCollection()) {
+            log.info("Create Change Log Collection");
 
-    public boolean hasDatabaseChangeLogTable() {
-        //TODO implement
-        return true;
-    }
-
-    @Override
-    public List<RanChangeSet> getRanChangeSets() throws DatabaseException {
-        //TODO implement
-        return Collections.emptyList();
-    }
-
-    @Override
-    public void replaceChecksum(final ChangeSet changeSet) throws DatabaseException {
-        //TODO implement
-    }
-
-    @Override
-    public RanChangeSet getRanChangeSet(final ChangeSet changeSet) throws DatabaseException, DatabaseHistoryException {
-        return super.getRanChangeSet(changeSet);
+            // If there is no table in the database for recording change history create one.
+            log.info("Creating history collection with name: "
+                    + getDatabase().getConnection().getCatalog() + "." + CHANGE_LOG_COLLECTION);
+            createRepository();
+            log.info("Created history collection : "
+                    + getDatabase().getConnection().getCatalog() + "." + CHANGE_LOG_COLLECTION);
+        }
     }
 
     @Override
     public void setExecType(final ChangeSet changeSet, final ChangeSet.ExecType execType) throws DatabaseException {
+        markChangeSetRun(changeSet, execType);
+        if (ranChangeSetList != null) {
+            ranChangeSetList.add(new RanChangeSet(changeSet, execType, null, null));
+        }
+    }
+
+    /**
+     * Returns the ChangeSets that have been run against the current getDatabase().
+     */
+    @Override
+    public List<RanChangeSet> getRanChangeSets() throws DatabaseException {
+        //liquibase invokes it several times, but we only need to get list 1 time.
+        if (isNull(ranChangeSetList)) {
+            ranChangeSetList = getAllChangeLogs();
+        }
+        return unmodifiableList(ranChangeSetList);
+    }
+
+    @Override
+    public RanChangeSet getRanChangeSet(final ChangeSet changeSet) throws DatabaseException, DatabaseHistoryException {
+        if (!existsChangeLogCollection()) {
+            return null;
+        }
+        return super.getRanChangeSet(changeSet);
+    }
+
+    @Override
+    public void tag(final String tagString) {
+        //TODO implement (liquibase tag --tag=sometag)
+    }
+
+    @Override
+    public void removeFromHistory(final ChangeSet changeSet) {
         //TODO implement
     }
 
     @Override
-    public void removeFromHistory(final ChangeSet changeSet) throws DatabaseException {
+    public void replaceChecksum(final ChangeSet changeSet) {
         //TODO implement
     }
 
     @Override
-    public int getNextSequenceValue() throws DatabaseException {
-        //TODO implement
-        return new Random().nextInt(100);
-    }
-
-    @Override
-    public void tag(final String tagString) throws DatabaseException {
+    public void clearAllCheckSums() {
         //TODO implement
     }
 
     @Override
-    public boolean tagExists(final String tag) throws DatabaseException {
+    public boolean tagExists(final String tag) {
         //TODO implement
         return true;
-    }
-
-    @Override
-    public void clearAllCheckSums() throws DatabaseException {
-        //TODO implement
     }
 
     @Override
     public void destroy() {
         //TODO implement
     }
+
+    protected abstract void createRepository();
+
+    protected abstract boolean existsChangeLogCollection();
+
+    protected abstract void markChangeSetRun(ChangeSet changeSet, ChangeSet.ExecType execType) throws DatabaseException;
+
+    protected abstract List<RanChangeSet> getAllChangeLogs() throws DatabaseException;
 
 }

@@ -1,8 +1,9 @@
-package liquibase.ext.couchbase.collection;
+package liquibase.ext.couchbase.provider;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.manager.bucket.BucketManager;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
@@ -16,12 +17,9 @@ import java.util.Optional;
 import static com.couchbase.client.java.manager.bucket.BucketSettings.create;
 
 @RequiredArgsConstructor
-public class ContextServiceCollectionProvider implements ServiceCollectionProvider {
+public class ContextServiceProvider implements ServiceProvider {
 
     private final CouchbaseLiquibaseDatabase database;
-
-    private static final String DEFAULT_SERVICE_SCOPE = "liquibaseServiceScope";
-    private static final String FALLBACK_BUCKET_NAME = "liquibaseServiceBucket";
     private static final Duration TIMEOUT = Duration.ofSeconds(10);
 
     @Override
@@ -49,12 +47,12 @@ public class ContextServiceCollectionProvider implements ServiceCollectionProvid
         boolean serviceBucketExists = manager.getAllBuckets()
             .values()
             .stream()
-            .anyMatch(bucketSettings -> bucketSettings.name().equals(FALLBACK_BUCKET_NAME));
+            .anyMatch(bucketSettings -> bucketSettings.name().equals(FALLBACK_SERVICE_BUCKET_NAME));
         if(!serviceBucketExists) {
-            manager.createBucket(create(FALLBACK_BUCKET_NAME));
+            manager.createBucket(create(FALLBACK_SERVICE_BUCKET_NAME));
             cluster.waitUntilReady(TIMEOUT);
         }
-        return cluster.bucket(FALLBACK_BUCKET_NAME);
+        return cluster.bucket(FALLBACK_SERVICE_BUCKET_NAME);
     }
 
     private boolean serviceScopeExistsIn(Bucket bucket) {
@@ -72,6 +70,20 @@ public class ContextServiceCollectionProvider implements ServiceCollectionProvid
             .flatMap(java.util.Collection::stream)
             .map(CollectionSpec::name)
             .anyMatch(collectionName::equals);
+    }
+
+    @Override
+    public Scope getScopeOfCollection(String collectionName) {
+        Collection serviceCollection = getServiceCollection(collectionName);
+        return database.getConnection().getCluster().bucket(serviceCollection.bucketName()).scope(serviceCollection.scopeName());
+    }
+
+    @Override
+    public String getServiceBucketName() {
+        Bucket serviceBucket = database.getConnection().getDatabase();
+        return Optional.ofNullable(serviceBucket)
+                .map(Bucket::name)
+                .orElse(FALLBACK_SERVICE_BUCKET_NAME);
     }
 
 }
