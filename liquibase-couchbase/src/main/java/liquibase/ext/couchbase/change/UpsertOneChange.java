@@ -1,24 +1,19 @@
 package liquibase.ext.couchbase.change;
 
 
-import com.wdt.couchbase.Keyspace;
-
-import java.util.Map;
-
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.UpsertOneStatement;
+import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import static com.wdt.couchbase.Keyspace.keyspace;
-import static liquibase.ext.couchbase.types.Document.document;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
-@Getter
-@Setter
+@Data
 @DatabaseChange(
         name = "upsertOne",
         description = "Upserts a document into a collection https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html",
@@ -30,11 +25,9 @@ import static liquibase.ext.couchbase.types.Document.document;
 public class UpsertOneChange extends CouchbaseChange {
 
     private String bucketName;
-    private String id;
-    private String document;
     private String scopeName;
     private String collectionName;
-    private Map<String, String> documents;
+    private Document document;
 
     @Override
     public String getConfirmationMessage() {
@@ -45,7 +38,7 @@ public class UpsertOneChange extends CouchbaseChange {
     public SqlStatement[] generateStatements(Database database) {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
-                new UpsertOneStatement(keyspace, document(id, document))
+                new UpsertOneStatement(keyspace, document)
         };
     }
 }

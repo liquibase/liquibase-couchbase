@@ -27,6 +27,8 @@
     <changeSet id="1" author="konstantin.umanets">
         <ext:insertMany>
             <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>_default</ext:scopeName>
+            <ext:collectionName>_default</ext:collectionName>
             <ext:documents>
                 <ext:document>
                     <ext:id>id1</ext:id>

@@ -1,5 +1,6 @@
-package com.wdt.couchbase;
+package liquibase.ext.couchbase.types;
 
+import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -7,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class Keyspace {
+public class Keyspace extends AbstractLiquibaseSerializable {
 
     private final String bucket;
     private final String scope;
@@ -24,4 +25,13 @@ public class Keyspace {
         return String.format("`%s`.`%s`.`%s`", bucket, scope, collection);
     }
 
+    @Override
+    public String getSerializedObjectName() {
+        return "keyspace";
+    }
+
+    @Override
+    public String getSerializedObjectNamespace() {
+        return STANDARD_CHANGELOG_NAMESPACE;
+    }
 }

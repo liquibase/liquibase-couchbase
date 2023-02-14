@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.statement;
 
 
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.types.Document;

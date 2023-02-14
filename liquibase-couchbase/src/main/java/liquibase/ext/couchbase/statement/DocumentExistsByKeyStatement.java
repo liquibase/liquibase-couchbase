@@ -6,12 +6,12 @@ import com.couchbase.client.java.manager.bucket.BucketManager;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
 
-import com.wdt.couchbase.Keyspace;
+import java.util.Optional;
+
 import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
 
 @Data
 @RequiredArgsConstructor

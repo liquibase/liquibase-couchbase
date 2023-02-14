@@ -2,17 +2,13 @@ package liquibase.ext.couchbase.types;
 
 import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Represents Couchbase document, contain it's key and json value
  */
-@Setter
-@Getter
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Document extends AbstractLiquibaseSerializable {
@@ -31,5 +27,10 @@ public class Document extends AbstractLiquibaseSerializable {
 
     public static Document document(String id, String content) {
         return new Document(id, content);
+    }
+
+    @Override
+    public SerializationType getSerializableFieldType(String field) {
+        return SerializationType.DIRECT_VALUE;
     }
 }

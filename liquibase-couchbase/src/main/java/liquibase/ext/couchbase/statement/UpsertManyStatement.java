@@ -4,16 +4,17 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
+
+import java.util.List;
+import java.util.Map;
+
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.types.Document;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toMap;
 
 @Getter
 @RequiredArgsConstructor
@@ -31,14 +32,16 @@ public class UpsertManyStatement extends CouchbaseStatement {
     }
 
     private Collection getCollection(CouchbaseConnection connection) {
-        return connection.getCluster().bucket(keyspace.getBucket())
-                .scope(keyspace.getScope()).collection(keyspace.getCollection());
+        return connection.getCluster()
+                .bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
     }
 
     private Map<String, JsonObject> checkDocsAndTransformToJsons() {
         try {
             return documents.stream()
-                    .collect(Collectors.toMap(Document::getId, ee -> JsonObject.fromJson(ee.getContent())));
+                    .collect(toMap(Document::getId, ee -> JsonObject.fromJson(ee.getContent())));
         } catch (InvalidArgumentException ex) {
             throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
         }

@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.manager.query.DropQueryIndexOptions;
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

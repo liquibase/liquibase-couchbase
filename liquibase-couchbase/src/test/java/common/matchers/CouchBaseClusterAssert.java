@@ -3,12 +3,12 @@ package common.matchers;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
-import com.wdt.couchbase.Keyspace;
 
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
 
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.NonNull;
 
 public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAssert, Cluster> {

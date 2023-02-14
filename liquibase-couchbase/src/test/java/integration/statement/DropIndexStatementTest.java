@@ -1,13 +1,13 @@
 package integration.statement;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 import common.BucketTestCase;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
 import org.junit.jupiter.api.Test;
 
 import static com.couchbase.client.java.manager.query.CreateQueryIndexOptions.createQueryIndexOptions;
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.FIELD_1;

@@ -27,21 +27,30 @@
     <changeSet id="1" author="konstantin.umanets">
         <ext:upsertOne>
             <ext:bucketName>travels-bucket</ext:bucketName>
-            <ext:id>id1</ext:id>
-            <ext:document>{key:value}</ext:document>
+            <ext:scopeName>_default</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:document>
+                <ext:id>id</ext:id>
+                <ext:content>{key:value}</ext:content>
+            </ext:document>
         </ext:upsertOne>
         <ext:upsertOne>
             <ext:bucketName>travels-bucket</ext:bucketName>
+            <ext:scopeName>_default</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:id>id1</ext:id>
-            <ext:document>{key:value}</ext:document>
+            <ext:document>
+                <ext:id>id</ext:id>
+                <ext:content>{key:value}</ext:content>
+            </ext:document>
         </ext:upsertOne>
         <ext:upsertOne>
             <ext:bucketName>travels-bucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:id>id1</ext:id>
-            <ext:document>{key:value}</ext:document>
+            <ext:document>
+                <ext:id>id</ext:id>
+                <ext:content>{key:value}</ext:content>
+            </ext:document>
         </ext:upsertOne>
     </changeSet>
 </databaseChangeLog>

@@ -3,14 +3,14 @@ package integration.statement;
 import com.couchbase.client.core.error.CollectionExistsException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import common.BucketTestCase;
 import liquibase.ext.couchbase.statement.CreateCollectionStatement;
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
