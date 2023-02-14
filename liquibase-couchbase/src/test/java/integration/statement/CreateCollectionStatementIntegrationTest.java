@@ -5,6 +5,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import liquibase.ext.couchbase.types.Keyspace;
 
+import liquibase.ext.couchbase.operator.BucketOperator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,10 +29,13 @@ public class CreateCollectionStatementIntegrationTest extends BucketTestCase {
     private static final String collectionName = "travels";
 
     private Bucket bucket;
+    private BucketOperator bucketOperator;
+
 
     @BeforeEach
     void setUp() {
         bucket = cluster.bucket(TEST_BUCKET);
+        bucketOperator = new BucketOperator(getBucket());
     }
 
     @Test
@@ -44,7 +48,7 @@ public class CreateCollectionStatementIntegrationTest extends BucketTestCase {
 
         assertThat(bucket).hasCollectionInScope(collectionName, DEFAULT_SCOPE);
 
-        dropCollectionInDefaultScope(collectionName);
+        bucketOperator.dropCollectionInDefaultScope(collectionName);
     }
 
     @Test
