@@ -1,7 +1,7 @@
 package integration.precondition;
 
 import common.BucketTestCase;
-import liquibase.ext.couchbase.exception.BucketNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.BucketNotExistsPreconditionException;
 
 import org.junit.jupiter.api.Test;
 

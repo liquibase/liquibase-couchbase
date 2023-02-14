@@ -2,7 +2,7 @@
   #%L
   Liquibase Couchbase Extension
   %%
-  Copyright (C) 2023 Weigandt Consulting GmbH
+  Copyright (C) 2013 Weigandt Consulting GmbH
   %%
   Licensed under the Apache License, Version 2.0 (the "License").
   You may not use this file except in compliance with the License.
@@ -25,25 +25,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="dmitry">
-
-        <ext:createCollection>
+        <ext:dropCollection>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:collectionName>historyTest1</ext:collectionName>
+            <ext:collectionName>dropExistingCollection</ext:collectionName>
             <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfExists>false</ext:skipIfExists>
-        </ext:createCollection>
-
-    </changeSet>
-
-    <changeSet id="2" author="dmitry">
-
-        <ext:createCollection>
-            <ext:bucketName>testBucket</ext:bucketName>
-            <ext:collectionName>historyTest2</ext:collectionName>
-            <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfExists>false</ext:skipIfExists>
-        </ext:createCollection>
-
+        </ext:dropCollection>
     </changeSet>
 
 </databaseChangeLog>

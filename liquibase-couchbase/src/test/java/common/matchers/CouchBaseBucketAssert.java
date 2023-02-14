@@ -46,4 +46,17 @@ public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert,
         return this;
     }
 
+    public CouchBaseBucketAssert hasNoCollectionInScope(@NonNull String collectionName,
+                                                        @NonNull String scopeName) {
+        if (bucketOperator.hasCollectionInScope(collectionName, scopeName)) {
+            failWithMessage("Collection <%s> exists in bucket <%s> in scope <%s>",
+                    collectionName,
+                    actual.name(),
+                    scopeName
+            );
+        }
+
+        return this;
+    }
+
 }

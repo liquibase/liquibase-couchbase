@@ -4,7 +4,7 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
-
+import liquibase.ext.couchbase.exception.CollectionNotExistsException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,14 @@ public class BucketOperator {
 
     public boolean hasCollectionInDefaultScope(@NonNull String collectionName) {
         return presentsInScope(collectionName, bucket.defaultScope().name());
+    }
+
+    public void requireScopeExists(@NonNull String collectionName, @NonNull String scopeName)
+            throws CollectionNotExistsException {
+        boolean isExists = hasCollectionInScope(collectionName, scopeName);
+        if (!isExists) {
+            throw new CollectionNotExistsException(collectionName, scopeName);
+        }
     }
 
     public void createCollection(String collectionName, String scopeName) {

@@ -16,6 +16,16 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="dropCollection">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
     <xsd:element name="dropQueryIndex">
         <xsd:complexType>
             <xsd:sequence>

@@ -2,7 +2,7 @@ package liquibase.ext.couchbase.precondition;
 
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.statement.BucketExistsStatement;
-import liquibase.ext.couchbase.exception.BucketNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.BucketNotExistsPreconditionException;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import lombok.Data;

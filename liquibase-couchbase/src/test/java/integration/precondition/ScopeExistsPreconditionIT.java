@@ -1,6 +1,6 @@
 package integration.precondition;
 
-import liquibase.ext.couchbase.exception.ScopeNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.ScopeNotExistsPreconditionException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

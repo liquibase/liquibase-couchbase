@@ -1,9 +1,11 @@
-package system;
+package system.change;
 
 import org.junit.jupiter.api.Test;
 
 import liquibase.Liquibase;
 import lombok.SneakyThrows;
+import system.LiquiBaseSystemTest;
+
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;

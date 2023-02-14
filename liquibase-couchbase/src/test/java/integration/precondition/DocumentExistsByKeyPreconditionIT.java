@@ -3,7 +3,7 @@ package integration.precondition;
 import com.couchbase.client.java.Bucket;
 
 import common.BucketTestCase;
-import liquibase.ext.couchbase.exception.DocumentNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.DocumentNotExistsPreconditionException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
