@@ -10,6 +10,13 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+/**
+ *
+ * @see liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
+ * @see CouchbaseStatement
+ *
+ */
+
 @Data
 @RequiredArgsConstructor
 public class CollectionExistsStatement extends CouchbaseStatement {

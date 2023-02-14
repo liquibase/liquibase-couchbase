@@ -15,6 +15,12 @@ import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLEC
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
+/**
+ *
+ * Concrete implementation of {@link NoSqlHistoryService} for Couchbase
+ *
+ */
+
 public class CouchbaseHistoryService extends NoSqlHistoryService {
 
     @Override

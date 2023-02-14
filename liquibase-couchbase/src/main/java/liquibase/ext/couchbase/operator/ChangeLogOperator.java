@@ -20,6 +20,13 @@ import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOpt
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 
+/**
+ *
+ * Will move to a separate module in the future. Right now it provides
+ * required functionality for the history service.
+ *
+ */
+
 public class ChangeLogOperator {
 
     private static final String SELECT_ALL_CHANGELOGS_N1QL = "SELECT DATABASECHANGELOG.* from DATABASECHANGELOG " +
@@ -38,7 +45,6 @@ public class ChangeLogOperator {
 
     public void createChangeLogCollection() {
         Scope scope = serviceProvider.getScopeOfCollection(CHANGE_LOG_COLLECTION);
-
         CreatePrimaryQueryIndexOptions indexOptions = createPrimaryQueryIndexOptions()
                 .scopeName(scope.name())
                 .collectionName(CHANGE_LOG_COLLECTION)

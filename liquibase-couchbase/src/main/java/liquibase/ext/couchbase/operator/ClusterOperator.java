@@ -12,6 +12,15 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ *
+ * A part of a facade package for Couchbase Java SDK.
+ * Provides access to {@link Cluster} common operations and state checks.
+ *
+ * @see BucketOperator
+ *
+ */
+
 @RequiredArgsConstructor
 public class ClusterOperator {
 

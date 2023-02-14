@@ -1,7 +1,7 @@
 package integration.precondition;
 
 import common.BucketTestCase;
-import liquibase.ext.couchbase.exception.precondition.CollectionsNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.CollectionNotExistsPreconditionException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class CollectionExistsPreconditionIT extends BucketTestCase {
         String notCreatedCollection = "notCreatedCollection";
         precondition.setCollectionName(notCreatedCollection);
 
-        assertThatExceptionOfType(CollectionsNotExistsPreconditionException.class)
+        assertThatExceptionOfType(CollectionNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
                 .withMessage("Collection %s does not exist in bucket %s in scope %s",
                         notCreatedCollection, TEST_BUCKET, TEST_SCOPE);

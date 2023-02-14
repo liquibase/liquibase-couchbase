@@ -21,6 +21,17 @@ import static java.util.Objects.isNull;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
+/**
+ *
+ * Abstract class for all NoSQL history services, extends {@link AbstractChangeLogHistoryService}<br><br>
+ *
+ * {@link CouchbaseHistoryService} is the default implementation for Couchbase
+ *
+ * @see ChangeLogOperator
+ * @see RanChangeSet
+ *
+ */
+
 @Getter
 @Setter
 public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryService {

@@ -6,12 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Represents Couchbase document, contain it's key and json value
+ *
+ * Represents a Couchbase document, contain it's key and JSON value
+ *
+ * @see AbstractLiquibaseSerializable
+ * @see liquibase.serializer.LiquibaseSerializable
+ *
  */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Document extends AbstractLiquibaseSerializable {
+
     private String id;
     private String content;
 

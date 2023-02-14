@@ -16,6 +16,18 @@ import liquibase.statement.SqlStatement;
 import lombok.NoArgsConstructor;
 import static java.util.Collections.emptyList;
 
+/**
+ *
+ * Low-level executor for {@link CouchbaseStatement}
+ * Currently, not supporting part of liquibase functionality cause of NoSQL nature of Couchbase.<br><br>
+ * Ensures that executed statements extend {@link CouchbaseStatement}.
+ *
+ * @see AbstractExecutor
+ * @see LiquibaseService
+ * @see CouchbaseStatement
+ *
+ */
+
 @LiquibaseService
 @NoArgsConstructor
 public class NoSqlExecutor extends AbstractExecutor {

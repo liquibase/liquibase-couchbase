@@ -17,6 +17,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ *
+ * Part of change set package. Responsible for creating query index with specified bucket name, scope name,
+ * collection name, index name and other relevant options.<br><br>
+ *
+ * @apiNote Compound index can be created by specifying multiple fields in the list of fields.
+ *
+ * @see CreateQueryIndexStatement
+ * @see CreateQueryIndexOptions
+ *
+ * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createindex.html">Reference
+ * documentation</a>
+ *
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

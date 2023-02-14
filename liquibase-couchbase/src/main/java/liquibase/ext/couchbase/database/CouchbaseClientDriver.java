@@ -16,6 +16,12 @@ import liquibase.exception.DatabaseException;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_SSL_PREFIX;
 
+/**
+ *
+ * Couchbase driver implementation. Connects to Couchbase cluster and provides URL validation.
+ *
+ */
+
 public class CouchbaseClientDriver implements Driver {
 
     @Override

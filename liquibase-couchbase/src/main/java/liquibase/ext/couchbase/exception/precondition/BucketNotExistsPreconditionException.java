@@ -7,6 +7,15 @@ import lombok.Getter;
 
 import static java.lang.String.format;
 
+/**
+ *
+ * Exception thrown when bucket does not exist.
+ * Thrown by {@link liquibase.ext.couchbase.precondition.BucketExistsPrecondition}
+ *
+ * @see PreconditionFailedException
+ *
+ */
+
 @Getter
 public class BucketNotExistsPreconditionException extends PreconditionFailedException {
 

@@ -17,6 +17,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
+/**
+ *
+ * Part of change set package. Responsible for inserting multiple documents into a collection.
+ *
+ * @see InsertManyStatement
+ * @see Keyspace
+ *
+ * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#insert">Reference documentation</a>
+ *
+ */
+
 @Getter
 @Setter
 @DatabaseChange(
@@ -47,5 +58,5 @@ public class InsertManyChange extends CouchbaseChange {
                 new InsertManyStatement(keyspace, documents)
         };
     }
-}
 
+}

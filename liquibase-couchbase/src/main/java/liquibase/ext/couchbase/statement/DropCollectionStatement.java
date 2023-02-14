@@ -2,15 +2,12 @@ package liquibase.ext.couchbase.statement;
 
 import liquibase.Scope;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
-import liquibase.ext.couchbase.exception.CollectionNotExistsException;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.logging.Logger;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
-import static java.lang.String.format;
 
 @Data
 @RequiredArgsConstructor

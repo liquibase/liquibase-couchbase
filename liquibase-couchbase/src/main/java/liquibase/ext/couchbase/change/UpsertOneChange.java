@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.change;
 
-
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
@@ -12,6 +11,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
+
+/**
+ *
+ * Part of change set package. Responsible for upserting a single document into a collection.
+ *
+ * @see UpsertOneStatement
+ * @see Keyspace
+ *
+ * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#upsert">Reference documentation</a>
+ *
+ */
 
 @Data
 @DatabaseChange(

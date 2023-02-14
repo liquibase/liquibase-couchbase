@@ -13,6 +13,15 @@ import liquibase.ext.couchbase.types.Keyspace;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * A statement that checks if a document exists by key.
+ *
+ * @see liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
+ * @see CouchbaseStatement
+ *
+ */
+
 @Data
 @RequiredArgsConstructor
 public class DocumentExistsByKeyStatement extends CouchbaseStatement {

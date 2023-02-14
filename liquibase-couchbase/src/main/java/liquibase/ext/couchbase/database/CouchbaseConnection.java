@@ -50,6 +50,16 @@ import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRIORITY;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
+/**
+ *
+ * Main access point to the Couchbase database from Liquibase.
+ * Provides access to the {@link Cluster} and {@link Bucket} instances. The latter is available only
+ * if the bucket name is specified in the connection URL.<br><br>
+ * Currently, doesn't support transactions and most of ths SQL-specific things like {@link #attached(Database)}
+ * and {@link #nativeSQL(String)}.
+ *
+ */
+
 @Data
 @NoArgsConstructor
 public class CouchbaseConnection implements DatabaseConnection {
