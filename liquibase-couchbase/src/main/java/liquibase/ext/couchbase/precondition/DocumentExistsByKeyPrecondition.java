@@ -2,7 +2,7 @@ package liquibase.ext.couchbase.precondition;
 
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
-import liquibase.ext.couchbase.exception.DocumentNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.DocumentNotExistsPreconditionException;
 import liquibase.ext.couchbase.statement.DocumentExistsByKeyStatement;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;

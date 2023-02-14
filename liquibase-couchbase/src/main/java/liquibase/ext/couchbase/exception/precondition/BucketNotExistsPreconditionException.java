@@ -1,4 +1,4 @@
-package liquibase.ext.couchbase.exception;
+package liquibase.ext.couchbase.exception.precondition;
 
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.PreconditionFailedException;

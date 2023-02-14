@@ -5,6 +5,7 @@ import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,12 +25,10 @@ import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLEC
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class HistoryServiceChangeTest extends LiquiBaseSystemTest {
+public class HistoryServiceSystemTest extends LiquiBaseSystemTest {
     private static final String separator = System.lineSeparator();
-
-    private final ServiceProvider serviceProvider = new ContextServiceProvider(database);
-
-    private final Scope scope = cluster.bucket(serviceProvider.getServiceBucketName()).scope(DEFAULT_SERVICE_SCOPE);
+    private static final ServiceProvider serviceProvider = new ContextServiceProvider(database);
+    private static final Scope scope = cluster.bucket(serviceProvider.getServiceBucketName()).scope(DEFAULT_SERVICE_SCOPE);
 
     @BeforeEach
     void initBeforeEach() {
@@ -38,8 +37,18 @@ public class HistoryServiceChangeTest extends LiquiBaseSystemTest {
         createTestCollection();
     }
 
+    @BeforeAll
+    static void cleanBeforeAllTests() {
+        cleanAllChangeLogs();
+    }
+
+
     @AfterEach
     void cleanChangeLogs() {
+        cleanAllChangeLogs();
+    }
+
+    private static void cleanAllChangeLogs() {
         QueryOptions queryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
         scope.query("DELETE FROM DATABASECHANGELOG", queryOptions);
     }

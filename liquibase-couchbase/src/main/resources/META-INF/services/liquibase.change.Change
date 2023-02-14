@@ -1,5 +1,6 @@
 liquibase.ext.couchbase.change.CreatePrimaryQueryIndexChange
 liquibase.ext.couchbase.change.CreateCollectionChange
+liquibase.ext.couchbase.change.DropCollectionChange
 liquibase.ext.couchbase.change.CreateQueryIndexChange
 liquibase.ext.couchbase.change.DropIndexChange
 liquibase.ext.couchbase.change.InsertOneChange

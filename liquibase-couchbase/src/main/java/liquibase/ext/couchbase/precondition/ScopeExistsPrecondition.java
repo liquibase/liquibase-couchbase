@@ -2,7 +2,7 @@ package liquibase.ext.couchbase.precondition;
 
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.statement.ScopeExistsStatement;
-import liquibase.ext.couchbase.exception.ScopeNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.ScopeNotExistsPreconditionException;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import lombok.Data;
