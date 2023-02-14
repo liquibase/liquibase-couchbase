@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.change;
 
-
 import liquibase.ext.couchbase.types.Keyspace;
 
 import liquibase.change.ChangeMetaData;
@@ -14,6 +13,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static liquibase.ext.couchbase.types.Document.document;
+
+/**
+ *
+ * Part of change set package. Responsible for inserting a single document into a collection.
+ *
+ * @see InsertOneStatement
+ * @see Keyspace
+ *
+ * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#insert">Reference documentation</a>
+ *
+ */
 
 @Getter
 @Setter

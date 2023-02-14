@@ -12,6 +12,17 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import static java.lang.String.format;
 
+/**
+ *
+ * A statement to create a collection
+ *
+ * @see liquibase.ext.couchbase.change.CreateCollectionChange
+ * @see liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
+ * @see CouchbaseStatement
+ * @see Keyspace
+ *
+ */
+
 @Data
 @RequiredArgsConstructor
 public class CreateCollectionStatement extends CouchbaseStatement {

@@ -7,6 +7,15 @@ import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * A statement that checks if a scope exists.
+ *
+ * @see liquibase.ext.couchbase.precondition.ScopeExistsPrecondition
+ * @see CouchbaseStatement
+ *
+ */
+
 @Data
 @RequiredArgsConstructor
 public class ScopeExistsStatement extends CouchbaseStatement {

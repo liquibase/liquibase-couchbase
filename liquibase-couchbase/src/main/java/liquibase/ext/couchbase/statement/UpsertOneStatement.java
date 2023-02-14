@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-
 import liquibase.ext.couchbase.types.Keyspace;
 
 import liquibase.ext.couchbase.database.CouchbaseConnection;
@@ -9,6 +8,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import static java.util.Collections.singletonList;
+
+/**
+ *
+ * A statement to upsert one {@link Document} into a keyspace
+ *
+ * @see Document
+ * @see CouchbaseStatement
+ * @see Keyspace
+ *
+ */
 
 @Getter
 @RequiredArgsConstructor

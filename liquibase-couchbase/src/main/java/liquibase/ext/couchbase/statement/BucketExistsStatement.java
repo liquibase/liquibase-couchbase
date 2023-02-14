@@ -7,6 +7,13 @@ import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @see liquibase.ext.couchbase.precondition.BucketExistsPrecondition
+ * @see CouchbaseStatement
+ *
+ */
+
 @Data
 @RequiredArgsConstructor
 public class BucketExistsStatement extends CouchbaseStatement {

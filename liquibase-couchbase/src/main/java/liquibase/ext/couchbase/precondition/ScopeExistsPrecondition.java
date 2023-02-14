@@ -7,6 +7,16 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import lombok.Data;
 
+/**
+ *
+ * A precondition that checks if a scope exists.
+ *
+ * @see AbstractCouchbasePrecondition
+ * @see liquibase.precondition.AbstractPrecondition
+ * @see ScopeNotExistsPreconditionException
+ *
+ */
+
 @Data
 public class ScopeExistsPrecondition extends AbstractCouchbasePrecondition {
 

@@ -11,6 +11,12 @@ import liquibase.logging.Logger;
 
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
+/**
+ *
+ * Dummy {@link LockService} for Couchbase database. Will be replaced with a more functional one in the future.
+ *
+ */
+
 public class CouchbaseLockService implements LockService {
 
 	private final Logger logger = Scope.getCurrentScope().getLog(getClass());

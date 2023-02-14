@@ -7,7 +7,15 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import lombok.Data;
 
-import static java.lang.String.format;
+/**
+ *
+ * A precondition that checks if a bucket exists.
+ *
+ * @see AbstractCouchbasePrecondition
+ * @see liquibase.precondition.AbstractPrecondition
+ * @see BucketNotExistsPreconditionException
+ *
+ */
 
 @Data
 public class BucketExistsPrecondition extends AbstractCouchbasePrecondition {

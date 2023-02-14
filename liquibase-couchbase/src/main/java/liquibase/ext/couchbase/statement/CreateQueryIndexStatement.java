@@ -10,6 +10,15 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+/**
+ *
+ * A statement to create secondary index for a keyspace
+ *
+ * @see CouchbaseStatement
+ * @see CreateQueryIndexOptions
+ *
+ */
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor

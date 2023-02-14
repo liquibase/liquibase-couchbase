@@ -16,6 +16,13 @@ import java.util.Optional;
 
 import static com.couchbase.client.java.manager.bucket.BucketSettings.create;
 
+/**
+ *
+ * A concrete implementation of {@link ServiceProvider} interface. Uses either default bucket from
+ * {@link CouchbaseLiquibaseDatabase} or creates a new one as a fallback option.<br><br>
+ *
+ */
+
 @RequiredArgsConstructor
 public class ContextServiceProvider implements ServiceProvider {
 

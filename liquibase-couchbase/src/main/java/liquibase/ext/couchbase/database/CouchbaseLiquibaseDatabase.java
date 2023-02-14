@@ -16,8 +16,12 @@ import static liquibase.ext.couchbase.database.Constants.COUCHBASE_SSL_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.DEFAULT_PORT;
 
 /**
- * Represent instance of {@link com.couchbase.client.java.Cluster}
+ *
+ *
+ * Represents instance of {@link com.couchbase.client.java.Cluster}.<br><br>
+ *
  */
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {

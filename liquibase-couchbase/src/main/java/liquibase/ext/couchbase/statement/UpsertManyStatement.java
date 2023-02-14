@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
@@ -15,6 +14,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import static java.util.stream.Collectors.toMap;
+
+/**
+ *
+ * A statement to upsert many instances of a {@link Document} into a keyspace
+ *
+ * @see Document
+ * @see CouchbaseStatement
+ * @see Keyspace
+ *
+ */
 
 @Getter
 @RequiredArgsConstructor

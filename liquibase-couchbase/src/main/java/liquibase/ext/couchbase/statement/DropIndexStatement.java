@@ -7,6 +7,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * A statement to drop secondary index for a keyspace
+ *
+ * @see CouchbaseStatement
+ * @see DropQueryIndexOptions
+ * @see Keyspace
+ *
+ */
+
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor

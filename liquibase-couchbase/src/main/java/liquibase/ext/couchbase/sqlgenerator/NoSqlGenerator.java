@@ -7,6 +7,12 @@ import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.AbstractSqlGenerator;
 
+/**
+ *
+ * Couchbase does not support SQL statements. This class is used to generate empty SQL statements.
+ *
+ */
+
 public class NoSqlGenerator extends AbstractSqlGenerator<CouchbaseStatement> {
 
     @Override
