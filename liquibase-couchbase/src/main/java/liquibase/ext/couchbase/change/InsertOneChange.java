@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.change;
 
 
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static liquibase.ext.couchbase.types.Document.document;
 
 @Getter

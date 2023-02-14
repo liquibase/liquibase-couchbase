@@ -1,13 +1,13 @@
 package common.constants;
 
 import com.couchbase.client.java.json.JsonObject;
-import com.wdt.couchbase.Keyspace;
 
 import org.testcontainers.utility.DockerImageName;
 
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
  * Common constants for all tests
@@ -16,6 +16,7 @@ import static com.wdt.couchbase.Keyspace.keyspace;
 public class TestConstants {
     public static final String DEFAULT_SCOPE = "_default";
     public static final String DEFAULT_COLLECTION = "_default";
+    public static final String TRAVELS_BUCKET = "travels-bucket";
     public static final String TEST_SCOPE = "testScope";
     public static final String TEST_BUCKET = "testBucket";
     public static final String TEST_COLLECTION = "testCollection";

@@ -1,6 +1,6 @@
 package liquibase.ext.couchbase.change;
 
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 @DatabaseChange(
         name = "dropQueryIndex",

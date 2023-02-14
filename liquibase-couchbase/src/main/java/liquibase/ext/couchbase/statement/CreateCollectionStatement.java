@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.core.error.CollectionExistsException;
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 
 import liquibase.Scope;
 import liquibase.ext.couchbase.database.CouchbaseConnection;

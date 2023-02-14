@@ -4,7 +4,7 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import lombok.EqualsAndHashCode;

@@ -1,22 +1,21 @@
 package liquibase.ext.couchbase.change;
 
 
-import com.wdt.couchbase.Keyspace;
+import java.util.ArrayList;
+import java.util.List;
+
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.UpsertManyStatement;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 @Getter
 @Setter

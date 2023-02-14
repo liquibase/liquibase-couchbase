@@ -1,6 +1,10 @@
 package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
@@ -12,11 +16,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Getter
 @Setter
@@ -48,12 +47,9 @@ public class CreateQueryIndexChange extends CouchbaseChange {
 
     @Override
     public SqlStatement[] generateStatements(Database database) {
-        if (isNotBlank(getBucketName()) && isNotBlank(getIndexName())) {
-            return new SqlStatement[]{
-                    new CreateQueryIndexStatement(getBucketName(), getIndexName(), fields, createQueryIndexOptions())
-            };
-        }
-        return SqlStatement.EMPTY_SQL_STATEMENT;
+        return new SqlStatement[]{
+                new CreateQueryIndexStatement(getBucketName(), getIndexName(), fields, createQueryIndexOptions())
+        };
     }
 
     private CreateQueryIndexOptions createQueryIndexOptions() {

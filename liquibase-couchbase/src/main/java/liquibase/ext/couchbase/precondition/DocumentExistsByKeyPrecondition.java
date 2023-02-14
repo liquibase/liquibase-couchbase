@@ -1,6 +1,6 @@
 package liquibase.ext.couchbase.precondition;
 
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.DocumentNotExistsPreconditionException;
 import liquibase.ext.couchbase.statement.DocumentExistsByKeyStatement;
@@ -9,7 +9,7 @@ import liquibase.database.Database;
 import liquibase.exception.PreconditionFailedException;
 import lombok.Data;
 
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 @Data
 public class DocumentExistsByKeyPrecondition extends AbstractCouchbasePrecondition {
