@@ -1,78 +1,70 @@
 package integration.statement;
 
-import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-import liquibase.ext.couchbase.types.Keyspace;
 import common.BucketTestCase;
-import liquibase.ext.couchbase.operator.BucketOperator;
+import common.operators.TestBucketOperator;
+import common.operators.TestClusterOperator;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
+import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.couchbase.client.java.manager.query.CreateQueryIndexOptions.createQueryIndexOptions;
-import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.FIELD_1;
 import static common.constants.TestConstants.INDEX;
-import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.STANDARD_TIMEOUT;
 import static common.constants.TestConstants.TEST_COLLECTION;
-import static common.constants.TestConstants.TEST_DOCUMENT;
+import static common.constants.TestConstants.TEST_DOCUMENT_3;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchBaseClusterAssert.assertThat;
 import static java.util.Collections.singletonList;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 
 class DropIndexStatementTest extends BucketTestCase {
 
+    private Keyspace defaultKeyspace;
+    private TestClusterOperator clusterOperator;
     private CollectionOperator testCollectionOperator;
     private CollectionOperator defaultCollectionOperator;
 
     @BeforeEach
     public void setUp() {
-        BucketOperator bucketOperator = new BucketOperator(getBucket());
-        testCollectionOperator = new CollectionOperator(bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
-        defaultCollectionOperator = new CollectionOperator(bucketOperator.getCollectionFromDefaultScope(DEFAULT_COLLECTION));
+        clusterOperator = new TestClusterOperator(cluster);
+        TestBucketOperator bucketOperator = clusterOperator.getBucketOperator(bucketName);
+        scopeName = bucketOperator.createTestScope(TEST_SCOPE);
+        collectionName = bucketOperator.createTestCollection(TEST_COLLECTION, scopeName);
+
+        testCollectionOperator = bucketOperator.getCollectionOperator(collectionName, scopeName);
+        defaultCollectionOperator = bucketOperator.getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE);
+        bucketOperator.getBucket().waitUntilReady(STANDARD_TIMEOUT);
+        defaultKeyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
     }
 
     @Test
     void Should_drop_existing_index_in_default_scope() {
-        defaultCollectionOperator.insertDoc(TEST_ID, TEST_DOCUMENT);
-        createIndexInDefaultScope(TEST_BUCKET, INDEX);
-        Keyspace keyspace = keyspace(TEST_BUCKET, DEFAULT_SCOPE, DEFAULT_COLLECTION);
+        defaultCollectionOperator.insertDoc(TEST_ID, TEST_DOCUMENT_3);
+        clusterOperator.createIndex(INDEX, bucketName, singletonList(FIELD_1));
 
-        DropIndexStatement statement = new DropIndexStatement(INDEX, keyspace);
+        DropIndexStatement statement = new DropIndexStatement(INDEX, false, defaultKeyspace);
         statement.execute(database.getConnection());
 
-        assertThat(cluster).queryIndexes(TEST_BUCKET).doesNotHave(INDEX);
+        assertThat(cluster).queryIndexes(bucketName).doesNotHave(INDEX);
         defaultCollectionOperator.removeDoc(TEST_ID);
     }
 
     @Test
     void Should_drop_index_for_specific_keyspace() {
-        testCollectionOperator.insertDoc(TEST_ID, TEST_DOCUMENT);
+        testCollectionOperator.insertDoc(TEST_ID, TEST_DOCUMENT_3);
+        clusterOperator.createIndex(INDEX, TEST_KEYSPACE, singletonList(FIELD_1));
 
-        createIndex(TEST_KEYSPACE, INDEX);
-
-        DropIndexStatement statement = new DropIndexStatement(INDEX, TEST_KEYSPACE);
+        DropIndexStatement statement = new DropIndexStatement(INDEX, false, TEST_KEYSPACE);
         statement.execute(database.getConnection());
 
-        assertThat(cluster).queryIndexes(TEST_BUCKET).doesNotHave(INDEX);
+        assertThat(cluster).queryIndexes(bucketName).doesNotHave(INDEX);
         testCollectionOperator.removeDoc(TEST_ID);
     }
-
-    private void createIndexInDefaultScope(String bucket, String indexName) {
-        cluster.queryIndexes().createIndex(bucket, indexName, singletonList(FIELD_1));
-    }
-
-    private void createIndex(Keyspace keyspace, String indexName) {
-        CreateQueryIndexOptions options = createQueryIndexOptions()
-                .collectionName(keyspace.getCollection())
-                .scopeName(keyspace.getScope());
-        cluster.queryIndexes()
-                .createIndex(keyspace.getBucket(), indexName, singletonList(FIELD_1), options);
-    }
-
 }

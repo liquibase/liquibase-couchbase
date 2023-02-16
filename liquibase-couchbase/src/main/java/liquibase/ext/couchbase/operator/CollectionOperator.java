@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Common facade on {@link Bucket} including all common operations <br >
@@ -16,10 +17,14 @@ import java.util.Arrays;
 public class CollectionOperator {
 
     @Getter
-    private final Collection collection;
+    protected final Collection collection;
 
     public void insertDoc(String id, JsonObject content) {
         collection.insert(id, content);
+    }
+
+    public boolean docExists(String id) {
+        return collection.exists(id).exists();
     }
 
     public void removeDoc(String id) {
@@ -30,4 +35,15 @@ public class CollectionOperator {
         Arrays.stream(ids).forEach(collection::remove);
     }
 
+    public void upsertDoc(String id, JsonObject content) {
+        collection.upsert(id, content);
+    }
+
+    public void upsertDocs(Map<String, JsonObject> docs) {
+        docs.forEach(this::upsertDoc);
+    }
+
+    public void insertDocs(Map<String, JsonObject> docs) {
+        docs.forEach(this::insertDoc);
+    }
 }

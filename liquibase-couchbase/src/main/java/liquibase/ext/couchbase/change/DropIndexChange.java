@@ -40,16 +40,17 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 @NoArgsConstructor
 public class DropIndexChange extends CouchbaseChange {
 
-    private boolean isPrimary;
+    private Boolean isPrimary;
     private String indexName;
     private String bucketName;
     private String collectionName;
     private String scopeName;
+    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
         return String.format("%s dropped for bucket %s",
-                isPrimary() ? "Primary index" : "Index " + getIndexName(), getBucketName());
+                isPrimary ? "Primary index" : "Index " + getIndexName(), getBucketName());
     }
 
     @Override
@@ -57,7 +58,7 @@ public class DropIndexChange extends CouchbaseChange {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
                 isPrimary ? new DropPrimaryIndexStatement(keyspace) :
-                        new DropIndexStatement(indexName, keyspace)
+                        new DropIndexStatement(indexName, ignoreIfExists, keyspace)
         };
     }
 

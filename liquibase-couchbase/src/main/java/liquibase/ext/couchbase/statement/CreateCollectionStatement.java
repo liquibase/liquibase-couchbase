@@ -10,17 +10,16 @@ import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.logging.Logger;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+
 import static java.lang.String.format;
 
 /**
- *
  * A statement to create a collection
  *
  * @see liquibase.ext.couchbase.change.CreateCollectionChange
  * @see liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
  * @see CouchbaseStatement
  * @see Keyspace
- *
  */
 
 @Data
@@ -31,7 +30,7 @@ public class CreateCollectionStatement extends CouchbaseStatement {
     private final Logger logger = Scope.getCurrentScope().getLog(CreateCollectionStatement.class);
 
     private final Keyspace keyspace;
-    private final Boolean skipIfExists;
+    private final boolean skipIfExists;
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
@@ -41,7 +40,6 @@ public class CreateCollectionStatement extends CouchbaseStatement {
             logger.info(format(existsMsg, keyspace.getCollection()));
             return;
         }
-
         if (isExists) {
             throw new CollectionExistsException(keyspace.getCollection());
         }

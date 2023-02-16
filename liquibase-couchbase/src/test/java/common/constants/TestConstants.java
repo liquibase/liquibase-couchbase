@@ -7,6 +7,9 @@ import org.testcontainers.utility.DockerImageName;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.time.Duration;
+
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
@@ -14,6 +17,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestConstants {
+    public static final Duration STANDARD_TIMEOUT = Duration.ofSeconds(10);
     public static final String DEFAULT_SCOPE = "_default";
     public static final String DEFAULT_COLLECTION = "_default";
     public static final String TRAVELS_BUCKET = "travels-bucket";

@@ -1,18 +1,17 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.core.error.InvalidArgumentException;
-import com.couchbase.client.java.Collection;
+
 import com.couchbase.client.java.json.JsonObject;
-import liquibase.ext.couchbase.types.Keyspace;
-import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.operator.ClusterOperator;
+import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -33,24 +32,13 @@ public class InsertManyStatement extends CouchbaseStatement {
 
     @Override
     public void execute(CouchbaseConnection connection) {
-        Map<String, JsonObject> contentList = checkDocsAndTransformToJsons();
-        final Collection collection = getCollection(connection);
+        ClusterOperator clusterOperator = new ClusterOperator(connection.getCluster());
+        Map<String, JsonObject> contentList = clusterOperator.checkDocsAndTransformToJsons(documents);
 
-        contentList.forEach(collection::insert);
-    }
-
-    private Collection getCollection(CouchbaseConnection connection) {
-        return connection.getCluster().bucket(keyspace.getBucket())
-                .scope(keyspace.getScope()).collection(keyspace.getCollection());
-    }
-
-    private Map<String, JsonObject> checkDocsAndTransformToJsons() {
-        try {
-            return documents.stream()
-                    .collect(Collectors.toMap(Document::getId, ee -> JsonObject.fromJson(ee.getContent())));
-        } catch (InvalidArgumentException ex) {
-            throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
-        }
+        new ClusterOperator(connection.getCluster())
+                .getBucketOperator(keyspace.getBucket())
+                .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
+                .insertDocs(contentList);
     }
 }
 

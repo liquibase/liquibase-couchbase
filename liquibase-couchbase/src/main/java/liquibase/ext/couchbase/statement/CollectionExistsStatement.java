@@ -1,20 +1,13 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.core.error.BucketNotFoundException;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.manager.collection.ScopeSpec;
-
 import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.operator.ClusterOperator;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
-
 /**
- *
  * @see liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
  * @see CouchbaseStatement
- *
  */
 
 @Data
@@ -26,28 +19,12 @@ public class CollectionExistsStatement extends CouchbaseStatement {
     private final String collectionName;
 
     public boolean isCollectionExists(CouchbaseConnection connection) {
-        Cluster cluster = connection.getCluster();
-        if (!isBucketExists(cluster)) {
+        ClusterOperator clusterOperator = new ClusterOperator(connection.getCluster());
+        if (!clusterOperator.isBucketExists(bucketName)) {
             return false;
         }
-        Optional<ScopeSpec> scope = findScope(cluster);
-        return scope.map(scopeSpec -> scopeSpec.collections().stream()
-                .anyMatch(collectionSpec -> collectionSpec.name().equals(collectionName)))
-                .orElse(false);
-    }
-
-    private boolean isBucketExists(Cluster cluster) {
-        try {
-            cluster.buckets().getBucket(bucketName);
-            return true;
-        } catch (BucketNotFoundException ex) {
-            return false;
-        }
-    }
-
-    private Optional<ScopeSpec> findScope(Cluster cluster) {
-        return cluster.bucket(bucketName).collections().getAllScopes().stream().filter(scopeSpec ->
-                scopeSpec.name().equals(scopeName)).findFirst();
+        return clusterOperator.getBucketOperator(bucketName)
+                .hasCollectionInScope(collectionName, scopeName);
     }
 
     @Override

@@ -44,12 +44,14 @@
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:collectionName>demoCollection</ext:collectionName>
             <ext:scopeName>demoScope</ext:scopeName>
+            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
         <ext:dropQueryIndex>
             <ext:indexName>demoPrimaryIndex</ext:indexName>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:collectionName>demoCollection</ext:collectionName>
             <ext:scopeName>demoScope</ext:scopeName>
+            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
     </changeSet>
 

@@ -9,6 +9,7 @@ import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
 import liquibase.ext.couchbase.types.Field;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -17,19 +18,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
+
 /**
- *
  * Part of change set package. Responsible for creating query index with specified bucket name, scope name,
  * collection name, index name and other relevant options.<br><br>
  *
  * @apiNote Compound index can be created by specifying multiple fields in the list of fields.
- *
- * @see CreateQueryIndexStatement
- * @see CreateQueryIndexOptions
- *
  * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createindex.html">Reference
  * documentation</a>
- *
+ * @see CreateQueryIndexStatement
+ * @see CreateQueryIndexOptions
  */
 
 @Getter
@@ -62,18 +61,9 @@ public class CreateQueryIndexChange extends CouchbaseChange {
 
     @Override
     public SqlStatement[] generateStatements(Database database) {
+        Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
-                new CreateQueryIndexStatement(getBucketName(), getIndexName(), fields, createQueryIndexOptions())
+                new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, ignoreIfExists, numReplicas, fields)
         };
-    }
-
-    private CreateQueryIndexOptions createQueryIndexOptions() {
-        return CreateQueryIndexOptions
-                .createQueryIndexOptions()
-                .collectionName(getCollectionName())
-                .scopeName(getScopeName())
-                .deferred(getDeferred())
-                .numReplicas(getNumReplicas())
-                .ignoreIfExists(getIgnoreIfExists());
     }
 }

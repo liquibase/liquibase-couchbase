@@ -1,8 +1,8 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
-import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.operator.ClusterOperator;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +25,6 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(CouchbaseConnection connection) {
-        connection.getCluster()
-                .queryIndexes()
-                .dropPrimaryIndex(keyspace.getBucket(), options(keyspace));
-    }
-
-    private static DropPrimaryQueryIndexOptions options(Keyspace keyspace) {
-        return DropPrimaryQueryIndexOptions
-                .dropPrimaryQueryIndexOptions()
-                .collectionName(keyspace.getCollection())
-                .scopeName(keyspace.getScope());
+        new ClusterOperator(connection.getCluster()).dropPrimaryIndex(keyspace);
     }
 }
