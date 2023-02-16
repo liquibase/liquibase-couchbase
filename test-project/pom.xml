@@ -35,7 +35,7 @@
                 <version>4.19.0</version>
                 <configuration>
                     <propertyFile>src\main\resources\liquibase\liquibase.properties</propertyFile>
-                    <changeLogFile>src/main/resources/liquibase/changelog/changelog.create-bucket.xml</changeLogFile>
+                    <changeLogFile>src/main/resources/liquibase/changelog/stress-test/stress-test-10k-insert-5k-upsert.xml</changeLogFile>
                 </configuration>
                 <dependencies>
                     <dependency>
