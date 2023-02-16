@@ -209,5 +209,41 @@
         </xsd:complexType>
     </xsd:element>
 
-</xsd:schema>
+    <xsd:element name="mutateIn">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
 
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element ref="mutateInSpecs"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="mutateInSpecs">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="mutateInSpec" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="mutateInSpec">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="path"></xsd:element>
+                <xsd:element name="value"></xsd:element>
+                <xsd:element name="mutateInType">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="INSERT"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
