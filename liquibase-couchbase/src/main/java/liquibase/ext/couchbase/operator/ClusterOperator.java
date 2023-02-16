@@ -3,6 +3,8 @@ package liquibase.ext.couchbase.operator;
 import com.couchbase.client.core.error.BucketNotFoundException;
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.manager.bucket.BucketSettings;
+import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
@@ -61,6 +63,9 @@ public class ClusterOperator {
         cluster.queryIndexes().createIndex(bucket, indexName, fieldList, options);
     }
 
+    public void createBucketWithOptionsAndSettings(BucketSettings settings, CreateBucketOptions options) {
+        cluster.buckets().createBucket(settings, options);
+    }
     public QueryIndexManager getQueryIndexes() {
         return cluster.queryIndexes();
     }

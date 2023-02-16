@@ -7,3 +7,4 @@ liquibase.ext.couchbase.change.InsertOneChange
 liquibase.ext.couchbase.change.InsertManyChange
 liquibase.ext.couchbase.change.UpsertOneChange
 liquibase.ext.couchbase.change.UpsertManyChange
+liquibase.ext.couchbase.change.CreateBucketChange
