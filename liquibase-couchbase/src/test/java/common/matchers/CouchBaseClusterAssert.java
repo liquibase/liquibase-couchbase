@@ -1,6 +1,7 @@
 package common.matchers;
 
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
 
@@ -37,6 +38,14 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
         QueryIndexManager queryIndexManager = actual.queryIndexes();
         List<QueryIndex> indexes = queryIndexManager.getAllIndexes(keyspace.getBucket());
         return new QueryIndexAssert(queryIndexManager, indexes, keyspace.getBucket());
+    }
+
+    public CouchBaseClusterAssert hasBucket(String bucketName) {
+        BucketSettings bucket = actual.buckets().getBucket(bucketName);
+        if (bucket == null) {
+            failWithMessage("Bucket with name <%s> does not exist", bucketName);
+        }
+        return this;
     }
 
 }
