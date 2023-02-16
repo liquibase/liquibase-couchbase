@@ -44,8 +44,8 @@ public class UpsertOneChangeTest {
                 );
     }
 
-    private UpsertOneChange upsertOneChange(String scope, String collection) {
-        return new UpsertOneChange(TRAVELS_BUCKET, scope, collection, doc);
+    private UpsertOneChange upsertOneChange(String scopeName, String collectionName) {
+        return new UpsertOneChange(TRAVELS_BUCKET, scopeName, collectionName, doc);
     }
 
 }

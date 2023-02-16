@@ -26,19 +26,28 @@
 
     <changeSet id="1" author="konstantin.umanets">
         <ext:dropQueryIndex>
+            <ext:isPrimary>true</ext:isPrimary>
+            <ext:indexName/>
             <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>_default</ext:scopeName>
+            <ext:collectionName>_default</ext:collectionName>
+            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
             <ext:indexName>secondaryQueryIndex</ext:indexName>
             <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>_default</ext:scopeName>
+            <ext:collectionName>_default</ext:collectionName>
+            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
             <ext:indexName>secondaryForKeyspaceQueryIndex</ext:indexName>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:collectionName>travels</ext:collectionName>
             <ext:scopeName>travelsScope</ext:scopeName>
+            <ext:collectionName>travels</ext:collectionName>
+            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
     </changeSet>
 </databaseChangeLog>

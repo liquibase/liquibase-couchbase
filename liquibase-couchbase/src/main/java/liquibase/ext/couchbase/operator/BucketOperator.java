@@ -4,7 +4,6 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
-import liquibase.ext.couchbase.exception.CollectionNotExistsException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +11,8 @@ import lombok.RequiredArgsConstructor;
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 
 /**
- *
  * A part of a facade package for Couchbase Java SDK.
  * Provides access to {@link Bucket} common operations and state checks.
- *
  */
 @RequiredArgsConstructor
 public class BucketOperator {
@@ -23,7 +20,21 @@ public class BucketOperator {
     //TODO split to BucketValidator and Bucket
 
     @Getter
-    private final Bucket bucket;
+    protected final Bucket bucket;
+
+    public CollectionOperator getCollectionOperator(String collectionName, String scopeName) {
+        return new CollectionOperator(
+                bucket.scope(scopeName).collection(collectionName)
+        );
+    }
+
+    public void dropScope(String scopeName) {
+        bucket.collections().dropScope(scopeName);
+    }
+
+    public boolean hasScope(String name) {
+        return bucket.collections().getAllScopes().stream().anyMatch(scopeSpec -> scopeSpec.name().equals(name));
+    }
 
     public boolean hasCollectionInScope(@NonNull String collectionName, @NonNull String scopeName) {
         return presentsInScope(collectionName, scopeName);
@@ -31,14 +42,6 @@ public class BucketOperator {
 
     public boolean hasCollectionInDefaultScope(@NonNull String collectionName) {
         return presentsInScope(collectionName, bucket.defaultScope().name());
-    }
-
-    public void requireScopeExists(@NonNull String collectionName, @NonNull String scopeName)
-            throws CollectionNotExistsException {
-        boolean isExists = hasCollectionInScope(collectionName, scopeName);
-        if (!isExists) {
-            throw new CollectionNotExistsException(collectionName, scopeName);
-        }
     }
 
     public void createCollection(String collectionName, String scopeName) {
@@ -49,16 +52,16 @@ public class BucketOperator {
         createCollection(name, bucket.defaultScope().name());
     }
 
-    public void dropCollection(String name, String scope) {
-        getBucket().collections().dropCollection(create(name, scope));
+    public void dropCollection(String collectionName, String scopeName) {
+        getBucket().collections().dropCollection(create(collectionName, scopeName));
     }
 
     public void dropCollectionInDefaultScope(String name) {
         dropCollection(name, bucket.defaultScope().name());
     }
 
-    public Collection getCollection(String name, String scope) {
-        return getBucket().scope(scope).collection(name);
+    public Collection getCollection(String collectionName, String scopeName) {
+        return getBucket().scope(scopeName).collection(collectionName);
     }
 
     public Collection getCollectionFromDefaultScope(String name) {

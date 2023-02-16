@@ -1,16 +1,17 @@
 package integration.statement;
 
 import com.couchbase.client.core.error.BucketNotFoundException;
-import com.couchbase.client.java.Bucket;
 import common.BucketTestCase;
+import common.operators.TestBucketOperator;
+import common.operators.TestClusterOperator;
 import liquibase.ext.couchbase.exception.CollectionNotExistsException;
-import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.statement.DropCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.Test;
 
-import static common.constants.TestConstants.*;
+import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -18,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 /**
  * Integration test for drop collection statement
  */
-public class DropCollectionStatementIT extends BucketTestCase {
+class DropCollectionStatementIT extends BucketTestCase {
 
-    private final Bucket bucket = cluster.bucket(TEST_BUCKET);
-    private final BucketOperator bucketOperator = new BucketOperator(getBucket());
+    private TestClusterOperator clusterOperator = new TestClusterOperator(cluster);
+    private final TestBucketOperator bucketOperator = clusterOperator.getBucketOperator(TEST_BUCKET);
 
     @Test
     void Collection_should_be_dropped_when_exists() {
@@ -29,18 +30,18 @@ public class DropCollectionStatementIT extends BucketTestCase {
         bucketOperator.createCollection(collectionName, TEST_SCOPE);
 
         Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, collectionName);
-        DropCollectionStatement statement = new DropCollectionStatement(keyspace);
+        DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
 
-        statement.execute(new ClusterOperator(database.getConnection().getCluster()));
+        statement.execute(clusterOperator);
 
-        assertThat(bucket).hasNoCollectionInScope(collectionName, TEST_SCOPE);
+        assertThat(bucketOperator.getBucket()).hasNoCollectionInScope(collectionName, TEST_SCOPE);
     }
 
     @Test
     void Should_throw_exception_if_bucket_not_exists() {
         String notCreatedBucket = "notCreatedBucket";
         Keyspace keyspace = keyspace(notCreatedBucket, TEST_SCOPE, "dropCollectionName");
-        DropCollectionStatement statement = new DropCollectionStatement(keyspace);
+        DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
 
         assertThatExceptionOfType(BucketNotFoundException.class)
                 .isThrownBy(() -> statement.execute(new ClusterOperator(database.getConnection().getCluster())))
@@ -52,9 +53,8 @@ public class DropCollectionStatementIT extends BucketTestCase {
         String notCreatedScope = "notCreatedScope";
         String collectionName = "dropCollectionName";
         Keyspace keyspace = keyspace(TEST_BUCKET, notCreatedScope, collectionName);
-        ClusterOperator clusterOperator = new ClusterOperator(database.getConnection().getCluster());
 
-        DropCollectionStatement statement = new DropCollectionStatement(keyspace);
+        DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
 
         assertThatExceptionOfType(CollectionNotExistsException.class)
                 .isThrownBy(() -> statement.execute(clusterOperator))

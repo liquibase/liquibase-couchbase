@@ -22,6 +22,7 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="skipIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -32,8 +33,9 @@
                 <xsd:element name="isPrimary" type="xsd:boolean"/>
                 <xsd:element name="indexName" type="xsd:string"/>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

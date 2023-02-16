@@ -14,6 +14,7 @@ import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.statement.InsertManyStatement;
 import liquibase.ext.couchbase.types.Document;
+
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
@@ -36,8 +37,8 @@ class InsertManyStatementIT extends BucketTestCase {
     @BeforeEach
     void setUp() {
         bucketOperator = new BucketOperator(getBucket());
-        testCollectionOperator = new CollectionOperator(getBucket().scope(TEST_SCOPE).collection(TEST_COLLECTION));
-        defaultCollectionOperator = new CollectionOperator(getBucket().collection(DEFAULT_COLLECTION));
+        testCollectionOperator = bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE);
+        defaultCollectionOperator = bucketOperator.getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE);
     }
 
     private final List<Document> testDocuments = ImmutableList.of(

@@ -39,6 +39,6 @@ public class DropCollectionChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements(Database database) {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[]{new DropCollectionStatement(keyspace)};
+        return new SqlStatement[]{new DropCollectionStatement(keyspace, false)};
     }
 }

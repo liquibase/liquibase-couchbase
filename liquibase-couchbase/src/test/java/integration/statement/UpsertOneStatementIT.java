@@ -26,7 +26,7 @@ class UpsertOneStatementIT extends BucketTestCase {
     @BeforeEach
     public void setUp() {
         bucketOperator = new BucketOperator(getBucket());
-        testCollectionOperator = new CollectionOperator(bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
+        testCollectionOperator = bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE);
     }
 
     @Test

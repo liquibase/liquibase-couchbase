@@ -4,6 +4,7 @@ import com.couchbase.client.java.Bucket;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
+import static common.constants.TestConstants.INDEX;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
@@ -14,6 +15,10 @@ import static common.constants.TestConstants.TEST_SCOPE;
  */
 @Slf4j
 public class BucketTestCase extends CouchbaseContainerizedTest {
+    protected String bucketName = TEST_BUCKET;
+    protected String scopeName = TEST_SCOPE;
+    protected String collectionName = TEST_COLLECTION;
+    protected String indexName = INDEX;
 
     static {
         createTestScope();
