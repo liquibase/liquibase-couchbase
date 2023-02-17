@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import common.TestChangeLogProvider;
+import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
@@ -42,6 +43,15 @@ public class MutateInChangeTest {
                 .containsExactly(
                         change(asList(spec("user.age", "29", MutateInType.INSERT)))
                 );
+    }
+
+    @Test
+    void Should_has_correct_confirm_msg() {
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        Change change = firstOf(changeSet.getChanges());
+
+        assertThat(change.getConfirmationMessage())
+                .isEqualTo("MutateIn %s operations has been successfully fulfilled", 1);
     }
 
     private LiquibaseMutateInSpec spec(String path, String value, MutateInType type) {

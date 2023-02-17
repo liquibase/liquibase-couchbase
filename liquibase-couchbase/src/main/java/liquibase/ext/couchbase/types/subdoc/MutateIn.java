@@ -5,6 +5,7 @@ import com.couchbase.client.java.kv.MutateInSpec;
 import java.util.List;
 
 import liquibase.ext.couchbase.types.Keyspace;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
  * @see MutateInSpec
  */
 @Data
+@Builder
 @RequiredArgsConstructor
 public class MutateIn {
 

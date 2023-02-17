@@ -31,4 +31,24 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
         }
         return this;
     }
+
+    public CouchBaseDocumentAssert hasNoField(@NonNull String name) {
+        if (actual.containsKey(name)) {
+            failWithMessage("JsonObject %s should not contain key %s ,but it does",
+                    actual,
+                    name
+            );
+        }
+        return this;
+    }
+
+    public CouchBaseDocumentAssert hasField(@NonNull String name) {
+        if (!actual.containsKey(name)) {
+            failWithMessage("JsonObject %s should contain key %s ,but it does not",
+                    actual,
+                    name
+            );
+        }
+        return this;
+    }
 }
