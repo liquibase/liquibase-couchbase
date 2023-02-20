@@ -8,16 +8,19 @@ import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.AbstractExecutor;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.statement.CouchbaseStatement;
+import liquibase.ext.couchbase.statement.CouchbaseTransactionStatement;
+import liquibase.ext.couchbase.types.CouchbaseTransactionAction;
 import liquibase.logging.Logger;
 import liquibase.servicelocator.LiquibaseService;
 import liquibase.sql.visitor.SqlVisitor;
 import liquibase.statement.SqlStatement;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import static java.util.Collections.emptyList;
 
 /**
- *
  * Low-level executor for {@link CouchbaseStatement}
  * Currently, not supporting part of liquibase functionality cause of NoSQL nature of Couchbase.<br><br>
  * Ensures that executed statements extend {@link CouchbaseStatement}.
@@ -25,7 +28,6 @@ import static java.util.Collections.emptyList;
  * @see AbstractExecutor
  * @see LiquibaseService
  * @see CouchbaseStatement
- *
  */
 
 @LiquibaseService
@@ -34,6 +36,8 @@ public class NoSqlExecutor extends AbstractExecutor {
 
     public static final String EXECUTOR_NAME = "jdbc";
     private final Logger log = Scope.getCurrentScope().getLog(getClass());
+    private final TransactionalStatementQueue transactionalStatementQueue =
+            Scope.getCurrentScope().getSingleton(TransactionalStatementQueue.class);
 
     @Override
     public void setDatabase(final Database database) {
@@ -116,9 +120,16 @@ public class NoSqlExecutor extends AbstractExecutor {
     }
 
     @Override
+    @SneakyThrows
     public void execute(final SqlStatement sql, final List<SqlVisitor> sqlVisitors) throws DatabaseException {
         if (sql instanceof CouchbaseStatement) {
             doExecute((CouchbaseStatement) sql);
+            return;
+        }
+
+        if (sql instanceof CouchbaseTransactionStatement) {
+            CouchbaseTransactionAction statement = buildTransactionalAction((CouchbaseTransactionStatement) sql);
+            transactionalStatementQueue.add(statement);
             return;
         }
 
@@ -127,8 +138,17 @@ public class NoSqlExecutor extends AbstractExecutor {
 
     private void doExecute(CouchbaseStatement sql) throws DatabaseException {
         try {
-            //TODO provide cluster operator
-            sql.execute(getDatabase().getConnection());
+            ClusterOperator clusterOperator = new ClusterOperator(getDatabase().getConnection().getCluster());
+            sql.execute(clusterOperator);
+        } catch (final Exception e) {
+            throw new DatabaseException("Could not execute", e);
+        }
+    }
+
+    private CouchbaseTransactionAction buildTransactionalAction(CouchbaseTransactionStatement sql) throws DatabaseException {
+        try {
+            ClusterOperator clusterOperator = new ClusterOperator(getDatabase().getConnection().getCluster());
+            return sql.asTransactionAction(clusterOperator);
         } catch (final Exception e) {
             throw new DatabaseException("Could not execute", e);
         }

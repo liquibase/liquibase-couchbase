@@ -2,7 +2,7 @@ package liquibase.ext.couchbase.sqlgenerator;
 
 import liquibase.database.Database;
 import liquibase.exception.ValidationErrors;
-import liquibase.ext.couchbase.statement.CouchbaseStatement;
+import liquibase.ext.couchbase.statement.NoSqlStatement;
 import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.AbstractSqlGenerator;
@@ -13,16 +13,16 @@ import liquibase.sqlgenerator.core.AbstractSqlGenerator;
  *
  */
 
-public class NoSqlGenerator extends AbstractSqlGenerator<CouchbaseStatement> {
+public class NoSqlGenerator extends AbstractSqlGenerator<NoSqlStatement> {
 
     @Override
-    public ValidationErrors validate(CouchbaseStatement statement, Database database,
-                                     SqlGeneratorChain<CouchbaseStatement> sqlGeneratorChain) {
+    public ValidationErrors validate(NoSqlStatement statement, Database database,
+                                     SqlGeneratorChain<NoSqlStatement> sqlGeneratorChain) {
         return null;
     }
 
     @Override
-    public Sql[] generateSql(CouchbaseStatement statement, Database database, SqlGeneratorChain<CouchbaseStatement> sqlGeneratorChain) {
+    public Sql[] generateSql(NoSqlStatement statement, Database database, SqlGeneratorChain<NoSqlStatement> sqlGeneratorChain) {
         return new Sql[0];
     }
 

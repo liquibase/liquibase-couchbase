@@ -54,6 +54,16 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
         return this;
     }
 
+    public ChangeLogAssert hasNoDocument(@NonNull String key) {
+        try {
+            changeLog = collection.get(key).contentAs(CouchbaseChangeLog.class);
+            failWithMessage("ChangeLog with key <%s> exists", key);
+        } catch (DocumentNotFoundException ignored) {
+        }
+
+        return this;
+    }
+
     public ChangeLogAssert withExecType(@NonNull ChangeSet.ExecType execType) {
         if (!changeLog.getExecType().equals(execType)) {
             failWithMessage("ChangeLog with key <%s> doesn't contain execType <%s>, actual type is <%s>", key,

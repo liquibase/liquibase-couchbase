@@ -16,6 +16,7 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,8 @@ import static java.util.stream.Collectors.toMap;
  *
  * @see BucketOperator
  */
+
+@Getter
 @RequiredArgsConstructor
 public class ClusterOperator {
 

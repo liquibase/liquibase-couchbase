@@ -1,13 +1,17 @@
 package liquibase.ext.couchbase.operator;
 
+import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.couchbase.client.java.transactions.TransactionAttemptContext;
+import com.couchbase.client.java.transactions.TransactionGetResult;
 
 import java.util.Arrays;
 import java.util.Map;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Common facade on {@link Bucket} including all common operations <br >
@@ -21,6 +25,10 @@ public class CollectionOperator {
 
     public void insertDoc(String id, JsonObject content) {
         collection.insert(id, content);
+    }
+
+    public void insertDocInTransaction(TransactionAttemptContext transaction, String id, JsonObject content) {
+        transaction.insert(collection, id, content);
     }
 
     public boolean docExists(String id) {
@@ -39,11 +47,30 @@ public class CollectionOperator {
         collection.upsert(id, content);
     }
 
+    private void upsertDocInTransaction(TransactionAttemptContext transaction,
+                        String key,
+                        JsonObject jsonObject) {
+        try {
+            TransactionGetResult document = transaction.get(collection, key);
+            transaction.replace(document, jsonObject);
+        } catch (DocumentNotFoundException ex) {
+            transaction.insert(collection, key, jsonObject);
+        }
+    }
+
     public void upsertDocs(Map<String, JsonObject> docs) {
         docs.forEach(this::upsertDoc);
     }
 
+    public void upsertDocsTransactionally(TransactionAttemptContext transaction, Map<String, JsonObject> docs) {
+        docs.forEach((key, jsonObject) -> upsertDocInTransaction(transaction, key, jsonObject));
+    }
+
     public void insertDocs(Map<String, JsonObject> docs) {
         docs.forEach(this::insertDoc);
+    }
+
+    public void insertDocsTransactionally(TransactionAttemptContext transaction, Map<String, JsonObject> docs) {
+        docs.forEach((key, jsonObject) -> insertDocInTransaction(transaction, key, jsonObject));
     }
 }

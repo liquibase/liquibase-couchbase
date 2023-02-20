@@ -31,9 +31,28 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
+    public CouchbaseCollectionAssert hasNoDocument(@NonNull String id) {
+        if (actual.exists(id).exists()) {
+            failWithMessage("Collection [<%s>] contains document with ID [<%s>] in scope [<%s>]",
+                    actual.name(),
+                    id,
+                    actual.scopeName()
+            );
+        }
+
+        return this;
+    }
+
     public CouchbaseCollectionAssert hasDocuments(@NonNull String... ids) {
         for (String id : ids) {
             hasDocument(id);
+        }
+        return this;
+    }
+
+    public CouchbaseCollectionAssert hasNoDocuments(@NonNull String... ids) {
+        for (String id : ids) {
+            hasNoDocument(id);
         }
         return this;
     }
