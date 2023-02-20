@@ -23,12 +23,7 @@ package liquibase.ext.couchbase.database;
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import liquibase.database.Database;
-import liquibase.database.DatabaseConnection;
-import liquibase.exception.DatabaseException;
-import liquibase.util.StringUtil;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Driver;
@@ -38,35 +33,43 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
+import liquibase.Scope;
+import liquibase.database.Database;
+import liquibase.database.DatabaseConnection;
+import liquibase.exception.DatabaseException;
+import liquibase.ext.couchbase.executor.TransactionalStatementQueue;
+import liquibase.util.StringUtil;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import static com.couchbase.client.core.util.Validators.notNull;
 import static com.couchbase.client.core.util.Validators.notNullOrEmpty;
 import static com.couchbase.client.java.ClusterOptions.clusterOptions;
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
-import static java.util.Collections.emptyList;
 import static liquibase.ext.couchbase.database.Constants.BUCKET_PARAM;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRIORITY;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 /**
- *
  * Main access point to the Couchbase database from Liquibase.
  * Provides access to the {@link Cluster} and {@link Bucket} instances. The latter is available only
  * if the bucket name is specified in the connection URL.<br><br>
  * Currently, doesn't support transactions and most of ths SQL-specific things like {@link #attached(Database)}
  * and {@link #nativeSQL(String)}.
- *
  */
 
 @Data
 @NoArgsConstructor
 public class CouchbaseConnection implements DatabaseConnection {
 
+    private final TransactionalStatementQueue transactionalStatementQueue =
+            Scope.getCurrentScope().getSingleton(TransactionalStatementQueue.class);
     private ConnectionString connectionString;
-    protected Cluster cluster;
-    protected Bucket database;
+    private Cluster cluster;
+    private Bucket database;
 
     @Override
     public boolean supports(String url) {
@@ -92,7 +95,8 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void rollback() {
-        //TODO investigate
+        //TODO investigate why it's called several times during 1 changeset and called every time even if there is no error
+        transactionalStatementQueue.clear();
     }
 
     @Override
@@ -201,7 +205,12 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void commit() {
-        //TODO investigate
+        if (transactionalStatementQueue.isEmpty()) {
+            return;
+        }
+
+        cluster.transactions().run(ctx -> transactionalStatementQueue.forEach(it -> it.accept(ctx)));
+        transactionalStatementQueue.clear();
     }
 
     @Override

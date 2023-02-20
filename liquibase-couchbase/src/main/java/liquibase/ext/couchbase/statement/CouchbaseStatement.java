@@ -6,7 +6,7 @@ import liquibase.statement.SqlStatement;
 
 /**
  *
- * A baseline for all Couchbase statements. Uses {@link ClusterOperator} to execute statements instead of
+ * A baseline for all DDL Couchbase statements. Uses {@link ClusterOperator} to execute statements instead of
  * {@link CouchbaseConnection}.
  *
  * @see SqlStatement
@@ -14,17 +14,7 @@ import liquibase.statement.SqlStatement;
  *
  */
 
-public abstract class CouchbaseStatement implements SqlStatement {
-
-    @Override
-    public boolean skipOnUnsupported() {
-        return false;
-    }
-
-    @Override
-    public boolean continueOnError() {
-        return false;
-    }
+public abstract class CouchbaseStatement extends NoSqlStatement {
 
     public void execute(ClusterOperator clusterOperator) {
 
