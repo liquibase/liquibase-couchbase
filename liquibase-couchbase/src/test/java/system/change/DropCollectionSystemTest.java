@@ -2,20 +2,19 @@ package system.change;
 
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
-import liquibase.ext.couchbase.operator.BucketOperator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import system.LiquiBaseSystemTest;
 
-import static common.constants.ChangeLogSampleFilePaths.*;
-import static common.constants.TestConstants.*;
+import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.DROP_EXISTING_COLLECTION_TEST_XML;
+import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class DropCollectionSystemTest extends LiquiBaseSystemTest {
-
-    private final BucketOperator bucketOperator = new BucketOperator(getBucket());
-
+class DropCollectionSystemTest extends LiquiBaseSystemTest {
     @Test
     @SneakyThrows
     void Should_drop_collection_when_exists() {

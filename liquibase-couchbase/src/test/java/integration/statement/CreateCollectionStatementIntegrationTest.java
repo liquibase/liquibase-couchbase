@@ -3,74 +3,62 @@ package integration.statement;
 import com.couchbase.client.core.error.CollectionExistsException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
+import common.RandomizedScopeTestCase;
+import liquibase.ext.couchbase.statement.CreateCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
-
-import liquibase.ext.couchbase.operator.BucketOperator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import common.BucketTestCase;
-import liquibase.ext.couchbase.statement.CreateCollectionStatement;
-import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
-import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_COLLECTION;
-import static common.constants.TestConstants.TEST_KEYSPACE;
-import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
  * Integration test for create collection statement
  */
-public class CreateCollectionStatementIntegrationTest extends BucketTestCase {
+class CreateCollectionStatementIntegrationTest extends RandomizedScopeTestCase {
 
-    private static final String collectionName = "travels";
-
-    private Bucket bucket;
-    private BucketOperator bucketOperator;
-
+    private Keyspace keyspace;
 
     @BeforeEach
     void setUp() {
-        bucket = cluster.bucket(TEST_BUCKET);
-        bucketOperator = new BucketOperator(getBucket());
+        keyspace = keyspace(bucketName, scopeName, collectionName);
     }
 
     @Test
     void Collection_should_be_created_if_it_not_exists() {
-        Keyspace keyspace = keyspace(TEST_BUCKET, DEFAULT_SCOPE, collectionName);
-        CreateCollectionStatement createCollectionStatement =
+        Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, collectionName);
+        CreateCollectionStatement statement =
                 new CreateCollectionStatement(keyspace, false);
 
-        createCollectionStatement.execute(database.getConnection());
+        statement.execute(database.getConnection());
 
-        assertThat(bucket).hasCollectionInScope(collectionName, DEFAULT_SCOPE);
+        assertThat(bucketOperator.getBucket()).hasCollectionInScope(collectionName, DEFAULT_SCOPE);
 
         bucketOperator.dropCollectionInDefaultScope(collectionName);
     }
 
     @Test
     void Collection_should_not_be_created_again_if_it_exists_and_skip_is_true() {
-        Collection existingCollection = bucket.collection(TEST_COLLECTION);
+        Collection existingCollection = bucketOperator.getCollection(collectionName, scopeName);
 
-        CreateCollectionStatement createCollectionStatement = new CreateCollectionStatement(TEST_KEYSPACE, true);
-        createCollectionStatement.execute(database.getConnection());
+        CreateCollectionStatement statement = new CreateCollectionStatement(keyspace, true);
+        statement.execute(database.getConnection());
 
         //todo replace with collection assert
-        assertThat(bucket.collection(TEST_COLLECTION)).isEqualTo(existingCollection);
-        assertThat(bucket).hasCollectionInScope(TEST_COLLECTION, TEST_SCOPE);
+        Bucket bucket = bucketOperator.getBucket();
+        assertThat(bucket).hasCollectionInScope(collectionName, scopeName);
+        assertThat(bucket.scope(scopeName).collection(collectionName)).isEqualTo(existingCollection);
     }
 
     @Test
     void Should_throw_exception_if_collection_exists_and_skip_is_false() {
-        CreateCollectionStatement createCollectionStatement =
-                new CreateCollectionStatement(TEST_KEYSPACE, false);
+        CreateCollectionStatement statement =
+                new CreateCollectionStatement(keyspace, false);
 
         assertThatExceptionOfType(CollectionExistsException.class)
-                .isThrownBy(() -> createCollectionStatement.execute(database.getConnection()));
+                .isThrownBy(() -> statement.execute(database.getConnection()));
     }
-
-
 }

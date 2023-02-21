@@ -69,6 +69,7 @@ public class ClusterOperator {
     public void createBucketWithOptionsAndSettings(BucketSettings settings, CreateBucketOptions options) {
         cluster.buckets().createBucket(settings, options);
     }
+
     public QueryIndexManager getQueryIndexes() {
         return cluster.queryIndexes();
     }
@@ -107,6 +108,12 @@ public class ClusterOperator {
 
     public void dropIndex(String indexName, String bucketName) {
         getQueryIndexes().dropIndex(bucketName, indexName);
+    }
+
+    public boolean indexExists(String indexName, String bucketName) {
+        return getQueryIndexes().getAllIndexes(bucketName).stream()
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
     }
 
     public boolean indexExists(String indexName, Keyspace keyspace) {

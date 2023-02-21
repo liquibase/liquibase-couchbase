@@ -1,31 +1,27 @@
 package integration.precondition;
 
-import common.BucketTestCase;
+import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.exception.precondition.CollectionNotExistsPreconditionException;
-
-import org.junit.jupiter.api.BeforeAll;
+import liquibase.ext.couchbase.precondition.CollectionExistsPrecondition;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import liquibase.ext.couchbase.precondition.CollectionExistsPrecondition;
-import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_COLLECTION;
-import static common.constants.TestConstants.TEST_SCOPE;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class CollectionExistsPreconditionIT extends BucketTestCase {
+class CollectionExistsPreconditionIT extends RandomizedScopeTestCase {
 
     private static final CollectionExistsPrecondition precondition = new CollectionExistsPrecondition();
 
-    @BeforeAll
-    static void setUpLocal() {
-        precondition.setBucketName(TEST_BUCKET);
-        precondition.setScopeName(TEST_SCOPE);
+    @BeforeEach
+    void setUpLocal() {
+        precondition.setBucketName(bucketName);
+        precondition.setScopeName(scopeName);
     }
 
     @Test
-    void Should_not_throws_when_collection_exists() {
-        precondition.setCollectionName(TEST_COLLECTION);
+    void Should_not_throw_when_collection_exists() {
+        precondition.setCollectionName(collectionName);
 
         assertDoesNotThrow(() -> precondition.check(database, null, null, null));
     }
@@ -38,6 +34,6 @@ class CollectionExistsPreconditionIT extends BucketTestCase {
         assertThatExceptionOfType(CollectionNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
                 .withMessage("Collection %s does not exist in bucket %s in scope %s",
-                        notCreatedCollection, TEST_BUCKET, TEST_SCOPE);
+                        notCreatedCollection, bucketName, scopeName);
     }
 }

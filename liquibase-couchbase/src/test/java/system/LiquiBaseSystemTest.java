@@ -1,6 +1,6 @@
 package system;
 
-import common.BucketTestCase;
+import common.ConstantScopeTestCase;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -10,7 +10,7 @@ import lombok.SneakyThrows;
 /**
  * End to end extension test on specific change logs
  */
-public class LiquiBaseSystemTest extends BucketTestCase {
+public class LiquiBaseSystemTest extends ConstantScopeTestCase {
 
     /**
      * @param changeLogFile full path to test xml file

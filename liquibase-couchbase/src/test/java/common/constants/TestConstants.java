@@ -27,15 +27,12 @@ public class TestConstants {
     public static final String TEST_COLLECTION_2 = "testCollection2";
     public static final String TEST_ID = "id";
     public static final String TEST_ID_2 = "id2";
-    public static final String TEST_ID_3 = "id3";
     public static final JsonObject TEST_DOCUMENT = JsonObject.create().put("key", "value");
     public static final JsonObject TEST_DOCUMENT_2 = JsonObject.create().put("key2", "value2");
     public static final JsonObject TEST_DOCUMENT_3 = JsonObject.create().put("name", "user").put("type", "customer");
     public static final String PROPERTY_FILE_NAME = "src/test/resources/test.properties";
     public static final String INDEX = "testIndex";
     public static final String COMPOUND_INDEX = "testCompoundIndex";
-    public static final String FIELD_1 = "name";
-    public static final String FIELD_2 = "type";
     public static final String MANUALLY_CREATED_INDEX = "manually_created_index";
     public static final String TEST_CONTENT = "{ \"name\":\"user\", \"type\":\"customer\" }";
 

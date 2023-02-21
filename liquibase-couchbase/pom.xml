@@ -25,7 +25,7 @@
         <sonar.scm.provider>git</sonar.scm.provider>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
-        <skipIntegrationTests>true</skipIntegrationTests>
+        <skipIntegrationTests>false</skipIntegrationTests>
 
         <!-- dependency versions -->
         <junit.version>5.9.2</junit.version>

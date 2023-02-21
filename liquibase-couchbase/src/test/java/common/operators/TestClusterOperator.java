@@ -1,10 +1,12 @@
 package common.operators;
 
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.manager.bucket.BucketSettings;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 
-import java.util.List;
 import java.util.Random;
+
+import static common.constants.TestConstants.INDEX;
 
 public class TestClusterOperator extends ClusterOperator {
     private final Random random;
@@ -16,18 +18,18 @@ public class TestClusterOperator extends ClusterOperator {
 
     public TestBucketOperator getBucketOperator(String bucketName) {
         requireBucketExists(bucketName);
-        return new TestBucketOperator(
-                cluster.bucket(bucketName)
-        );
+        return new TestBucketOperator(cluster);
     }
 
-    public String createTestIndex(String prefix, String bucketName, List<String> fields) {
-        String idxName = getTestIndexId(prefix);
-        createIndex(idxName, bucketName, fields);
-        return idxName;
+    public TestBucketOperator getOrCreateBucketOperator(String bucketName) {
+        if (!isBucketExists(bucketName)) {
+            cluster.buckets().createBucket(BucketSettings.create(bucketName));
+        }
+        return new TestBucketOperator(cluster);
     }
 
-    public String getTestIndexId(String prefix) {
-        return prefix + "_" + random.nextInt(10000);
+    public String getTestIndexId() {
+        return INDEX + "_" + random.nextInt(10000);
     }
+
 }
