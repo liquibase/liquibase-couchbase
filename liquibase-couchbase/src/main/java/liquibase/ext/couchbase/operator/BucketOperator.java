@@ -2,6 +2,7 @@ package liquibase.ext.couchbase.operator;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
 import lombok.Getter;
@@ -11,21 +12,34 @@ import lombok.RequiredArgsConstructor;
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 
 /**
- * A part of a facade package for Couchbase Java SDK.
- * Provides access to {@link Bucket} common operations and state checks.
+ * A part of a facade package for Couchbase Java SDK. Provides access to {@link Bucket} common operations and state
+ * checks.
  */
 @RequiredArgsConstructor
 public class BucketOperator {
 
-    //TODO split to BucketValidator and Bucket
+    // TODO split to BucketValidator and Bucket
 
     @Getter
     protected final Bucket bucket;
 
     public CollectionOperator getCollectionOperator(String collectionName, String scopeName) {
-        return new CollectionOperator(
-                bucket.scope(scopeName).collection(collectionName)
-        );
+        return new CollectionOperator(bucket.scope(scopeName).collection(collectionName));
+    }
+
+    public void createScope(String name) {
+        bucket.collections().createScope(name);
+    }
+
+    public Scope getScope(String scopeName) {
+        return bucket.scope(scopeName);
+    }
+
+    public Scope getOrCreateScope(String scopeName) {
+        if (!hasScope(scopeName)) {
+            createScope(scopeName);
+        }
+        return getScope(scopeName);
     }
 
     public void dropScope(String scopeName) {
@@ -78,4 +92,5 @@ public class BucketOperator {
                 .map(CollectionSpec::name)
                 .anyMatch(collectionName::equals);
     }
+
 }

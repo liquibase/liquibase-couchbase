@@ -1,15 +1,11 @@
 package common;
 
-import common.operators.TestClusterOperator;
-import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.CouchbaseTransactionAction;
 
 /**
  * Test class for statements (DML) to execute it inside transaction.
  */
-public class TransactionStatementTest extends BucketTestCase {
-
-    protected static ClusterOperator clusterOperator = new TestClusterOperator(cluster);
+public class TransactionStatementTest extends RandomizedScopeTestCase {
 
     /**
      * Executes statements in transaction

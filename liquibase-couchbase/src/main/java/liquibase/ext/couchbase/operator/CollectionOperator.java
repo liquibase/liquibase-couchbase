@@ -6,12 +6,12 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
+import liquibase.ext.couchbase.types.Document;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Map;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Common facade on {@link Bucket} including all common operations <br >
@@ -29,6 +29,10 @@ public class CollectionOperator {
 
     public void insertDocInTransaction(TransactionAttemptContext transaction, String id, JsonObject content) {
         transaction.insert(collection, id, content);
+    }
+
+    public void insertDoc(Document document) {
+        collection.insert(document.getId(), document.getContentAsObject());
     }
 
     public boolean docExists(String id) {

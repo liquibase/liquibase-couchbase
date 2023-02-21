@@ -4,15 +4,15 @@ import liquibase.change.core.TagDatabaseChange;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
 import liquibase.database.Database;
-import liquibase.ext.couchbase.provider.ServiceProvider;
 import liquibase.ext.couchbase.mapper.ChangeSetMapper;
 import liquibase.ext.couchbase.statement.CollectionExistsStatement;
 import liquibase.util.StringUtil;
 
 import java.util.List;
 
-import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
+import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 /**
@@ -39,7 +39,7 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
 
         //TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
         CollectionExistsStatement collectionExistsStatement =
-                new CollectionExistsStatement(bucketName, ServiceProvider.DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
+                new CollectionExistsStatement(bucketName, DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
         return collectionExistsStatement.isCollectionExists(getDatabase().getConnection());
     }
 

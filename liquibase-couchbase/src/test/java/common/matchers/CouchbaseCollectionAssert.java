@@ -56,6 +56,12 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         }
         return this;
     }
+    public CouchbaseCollectionAssert hasNoDocuments(@NonNull List<Document> docs) {
+        for (Document doc : docs) {
+            hasNoDocument(doc.getId());
+        }
+        return this;
+    }
 
     public CouchBaseDocumentAssert extractingDocument(@NonNull String id) {
         hasDocument(id);
