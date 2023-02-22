@@ -245,6 +245,8 @@
 							<xsd:enumeration value="ARRAY_CREATE"/>
 							<xsd:enumeration value="ARRAY_INSERT"/>
 							<xsd:enumeration value="ARRAY_INSERT_UNIQUE"/>
+							<xsd:enumeration value="INCREMENT"/>
+							<xsd:enumeration value="DECREMENT"/>
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:element>

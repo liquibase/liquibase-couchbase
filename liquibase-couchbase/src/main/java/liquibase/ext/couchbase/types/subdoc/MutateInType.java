@@ -17,7 +17,9 @@ public enum MutateInType {
     ARRAY_CREATE((path, value) -> MutateInSpec.arrayAppend(path, (List<Object>) value).createPath()),
 
     ARRAY_INSERT((path, value) -> MutateInSpec.arrayInsert(path, (List<Object>) value)),
-    ARRAY_INSERT_UNIQUE(MutateInSpec::arrayAddUnique);
+    ARRAY_INSERT_UNIQUE(MutateInSpec::arrayAddUnique),
+    INCREMENT((path, value) -> MutateInSpec.increment(path, (Long) value)),
+    DECREMENT((path, value) -> MutateInSpec.decrement(path, (Long) value));
     //TODO upsert,etc
 
     private final BiFunction<String, Object, MutateInSpec> factoryMethod;
