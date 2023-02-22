@@ -13,18 +13,19 @@ import java.util.Optional;
  * A statement that checks if a document exists by key.
  *
  * @see liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
- * @see CouchbaseStatement
+ * @see CouchbaseConditionalStatement
  *
  */
 
 @Data
 @RequiredArgsConstructor
-public class DocumentExistsByKeyStatement extends CouchbaseStatement {
+public class DocumentExistsByKeyStatement extends CouchbaseConditionalStatement {
 
     private final Keyspace keyspace;
     private final String key;
 
-    public boolean isDocumentExists(CouchbaseConnection connection) {
+    @Override
+    public boolean isTrue(CouchbaseConnection connection) {
         String bucket = keyspace.getBucket();
         String collectionName = keyspace.getCollection();
         String scopeName = keyspace.getScope();
@@ -37,10 +38,5 @@ public class DocumentExistsByKeyStatement extends CouchbaseStatement {
                 .map(bucketOperator -> bucketOperator.getCollectionOperator(collectionName, scopeName))
                 .map(collectionOperator -> collectionOperator.docExists(key))
                 .orElse(false);
-    }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        throw new UnsupportedOperationException();
     }
 }

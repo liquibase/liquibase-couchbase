@@ -32,7 +32,7 @@ public class ScopeExistsPrecondition extends AbstractCouchbasePrecondition {
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws ScopeNotExistsPreconditionException {
         final ScopeExistsStatement scopeExistsStatement = new ScopeExistsStatement(bucketName, scopeName);
 
-        if (scopeExistsStatement.isScopeExists((CouchbaseConnection) database.getConnection())) {
+        if (scopeExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
         throw new ScopeNotExistsPreconditionException(scopeName, bucketName, changeLog, this);

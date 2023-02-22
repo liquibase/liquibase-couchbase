@@ -55,9 +55,4 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
                 .numReplicas(numReplicas);
         clusterOperator.createQueryIndex(indexName, keyspace.getBucket(), fields, options);
     }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        execute(new ClusterOperator(connection.getCluster()));
-    }
 }

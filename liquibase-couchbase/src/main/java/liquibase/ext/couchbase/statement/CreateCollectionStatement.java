@@ -46,12 +46,4 @@ public class CreateCollectionStatement extends CouchbaseStatement {
 
         bucketOperator.createCollection(keyspace.getCollection(), keyspace.getScope());
     }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        //TODO
-        execute(new ClusterOperator(connection.getCluster()));
-    }
-
-
 }

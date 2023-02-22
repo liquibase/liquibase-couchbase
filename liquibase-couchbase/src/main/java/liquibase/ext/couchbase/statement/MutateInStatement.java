@@ -1,8 +1,6 @@
 package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.Collection;
-
-import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -26,11 +24,5 @@ public class MutateInStatement extends CouchbaseStatement {
 
         collection.mutateIn(mutate.getId(), mutate.getSpecs());
     }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        execute(new ClusterOperator(connection.getCluster()));
-    }
-
 }
 

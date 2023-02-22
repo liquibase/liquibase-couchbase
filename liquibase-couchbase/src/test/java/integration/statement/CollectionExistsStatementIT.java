@@ -12,7 +12,7 @@ class CollectionExistsStatementIT extends RandomizedScopeTestCase {
         CollectionExistsStatement statement = new CollectionExistsStatement(bucketName, scopeName,
                 collectionName);
 
-        assertThat(statement.isCollectionExists(database.getConnection())).isTrue();
+        assertThat(statement.isTrue(database.getConnection())).isTrue();
     }
 
     @Test
@@ -20,6 +20,6 @@ class CollectionExistsStatementIT extends RandomizedScopeTestCase {
         CollectionExistsStatement statement = new CollectionExistsStatement(bucketName, scopeName,
                 "notCreatedCollection");
 
-        assertThat(statement.isCollectionExists(database.getConnection())).isFalse();
+        assertThat(statement.isTrue(database.getConnection())).isFalse();
     }
 }

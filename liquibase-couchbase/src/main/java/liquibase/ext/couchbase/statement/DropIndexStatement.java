@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.manager.query.DropQueryIndexOptions;
 import liquibase.Scope;
-import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.IndexNotExistsException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -17,7 +16,7 @@ import static java.lang.String.format;
  * A statement to drop secondary index for a keyspace
  *
  * @see CouchbaseStatement
- * @see DropQueryIndexOptions
+ * @see ClusterOperator
  * @see Keyspace
  */
 
@@ -46,10 +45,5 @@ public class DropIndexStatement extends CouchbaseStatement {
         }
 
         clusterOperator.dropIndex(indexName, keyspace);
-    }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        execute(new ClusterOperator(connection.getCluster()));
     }
 }
