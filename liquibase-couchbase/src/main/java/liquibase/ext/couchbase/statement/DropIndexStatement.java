@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.statement;
 
+import com.couchbase.client.java.manager.query.DropQueryIndexOptions;
 import liquibase.Scope;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.IndexNotExistsException;
@@ -26,8 +27,9 @@ import static java.lang.String.format;
 public class DropIndexStatement extends CouchbaseStatement {
     private static final String notExistsMsg = "Index %s not exists, skipping removing";
     private final Logger logger = Scope.getCurrentScope().getLog(CreateQueryIndexStatement.class);
-    private final String indexName;
+
     private final boolean ignoreIfNotExists;
+    private final String indexName;
     private final Keyspace keyspace;
 
     @Override

@@ -2,11 +2,7 @@ package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -17,6 +13,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
@@ -60,7 +59,7 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
                 new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, ignoreIfExists, numReplicas, fields)

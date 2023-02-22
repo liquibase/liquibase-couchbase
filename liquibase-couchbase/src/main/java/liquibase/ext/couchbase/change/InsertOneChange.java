@@ -49,7 +49,7 @@ public class InsertOneChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{new InsertOneStatement(keyspace, document(id, document))
         };

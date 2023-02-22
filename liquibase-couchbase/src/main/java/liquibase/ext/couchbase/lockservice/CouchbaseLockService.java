@@ -27,7 +27,8 @@ public class CouchbaseLockService implements LockService {
     public static String LOCK_COLLECTION_NAME = "CHANGELOGLOCKS";
 
     private CouchbaseLiquibaseDatabase database;
-    private final Logger logger = Scope.getCurrentScope().getLog(getClass());
+    private final Logger logger = Scope.getCurrentScope()
+        .getLog(getClass());
     private CouchbaseChangelogLocker locker;
 
     @Setter
@@ -76,7 +77,6 @@ public class CouchbaseLockService implements LockService {
 
     @Override
     public boolean hasChangeLogLock() {
-        System.out.println("hasChangeLogLock");
         return hasChangeLogLock.get();
     }
 
@@ -191,7 +191,9 @@ public class CouchbaseLockService implements LockService {
         isInitialized = false;
         timer.cancel();
         try {
-            releaseLock();
+            if (hasChangeLogLock()) {
+                releaseLock();
+            }
         } catch (LockException e) {
             logger.severe("Could not release lock during reset");
         }

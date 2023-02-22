@@ -9,7 +9,6 @@ import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.EvictionPolicyType;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.change.utils.BucketCreationMapper;
 import liquibase.ext.couchbase.statement.CreateBucketStatement;
 import liquibase.statement.SqlStatement;
@@ -43,15 +42,18 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateBucketChange extends CouchbaseChange {
     private final BucketCreationMapper mapper = new BucketCreationMapper(this);
+
     private Boolean flushEnabled;
     private Boolean replicaIndexes;
-    private Boolean healthy;
+
     private Integer numReplicas;
     private Long maxExpiryInHours;
     private Long ramQuotaMB;
     private Long timeoutInSeconds;
+
     private String bucketName;
     private String storageBackend;
+
     private BucketType bucketType;
     private CompressionMode compressionMode;
     private ConflictResolutionType conflictResolutionType;
@@ -64,7 +66,7 @@ public class CreateBucketChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         return new SqlStatement[]{
                 new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings())
         };

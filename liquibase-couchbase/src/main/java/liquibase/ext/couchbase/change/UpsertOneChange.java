@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.change;
 
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.UpsertOneStatement;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -45,7 +44,7 @@ public class UpsertOneChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
                 new UpsertOneStatement(keyspace, document)

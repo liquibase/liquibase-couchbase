@@ -50,7 +50,7 @@ public class CreateCollectionChangeTest {
                 TEST_SCOPE, collectionName, false);
         Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, collectionName);
 
-        SqlStatement[] sqlStatements = change.generateStatements(database);
+        SqlStatement[] sqlStatements = change.generateStatements();
 
         assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(keyspace, false));
     }
