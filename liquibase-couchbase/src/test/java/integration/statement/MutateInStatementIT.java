@@ -5,9 +5,12 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.kv.MutateInSpec;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
+import liquibase.ext.couchbase.transformer.MutateInSpecTransformer;
 import liquibase.ext.couchbase.statement.MutateInStatement;
+import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Keyspace;
+import liquibase.ext.couchbase.types.Value;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateIn;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
@@ -25,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class MutateInStatementIT extends RandomizedScopeTestCase {
     private final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(collectionName,
             scopeName);
+    private final MutateInSpecTransformer mutateInSpecTransformer = new MutateInSpecTransformer();
     private Keyspace keyspace;
     private final Document doc1 = collectionOperator.generateTestDoc();
     private final Document doc2 = collectionOperator.generateTestDoc();
@@ -63,7 +67,8 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
     }
 
     private List<MutateInSpec> getInsertSpec(String path, String value) {
-        return Arrays.asList(new LiquibaseMutateInSpec(path, value, MutateInType.INSERT).toSpec());
+        return Arrays.asList(mutateInSpecTransformer.toSpec(
+                new LiquibaseMutateInSpec(path, new Value(value, DataType.STRING), MutateInType.INSERT)));
     }
 
 }

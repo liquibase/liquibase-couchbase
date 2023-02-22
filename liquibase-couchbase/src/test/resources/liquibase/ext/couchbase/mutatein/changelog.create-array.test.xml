@@ -24,20 +24,20 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="khinkali s govyadinoy" author="roman.oborin">
+    <changeSet id="createArray" author="dmitry.dashko">
         <ext:mutateIn>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:id>id</ext:id>
+            <ext:id>mutateInArrayCreateId</ext:id>
             <ext:mutateInSpecs>
                 <ext:mutateInSpec>
-                    <ext:path>user.age</ext:path>
+                    <ext:path>arr</ext:path>
                     <ext:value>
-						<ext:data>29</ext:data>
+						<ext:data>firstValue</ext:data>
 						<ext:type>String</ext:type>
 					</ext:value>
-                    <ext:mutateInType>INSERT</ext:mutateInType>
+                    <ext:mutateInType>ARRAY_CREATE</ext:mutateInType>
                 </ext:mutateInSpec>
             </ext:mutateInSpecs>
         </ext:mutateIn>

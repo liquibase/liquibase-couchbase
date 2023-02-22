@@ -1,5 +1,7 @@
 package liquibase.ext.couchbase.change;
 
+import liquibase.ext.couchbase.types.DataType;
+import liquibase.ext.couchbase.types.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +43,7 @@ public class MutateInChangeTest {
         assertThat(changeSet.getChanges())
                 .map(MutateInChange.class::cast)
                 .containsExactly(
-                        change(asList(spec("user.age", "29", MutateInType.INSERT)))
+                        change(asList(spec("user.age", "29", DataType.STRING, MutateInType.INSERT)))
                 );
     }
 
@@ -54,8 +56,8 @@ public class MutateInChangeTest {
                 .isEqualTo("MutateIn %s operations has been successfully fulfilled", 1);
     }
 
-    private LiquibaseMutateInSpec spec(String path, String value, MutateInType type) {
-        return new LiquibaseMutateInSpec(path, value, type);
+    private LiquibaseMutateInSpec spec(String path, String value, DataType dataType, MutateInType type) {
+        return new LiquibaseMutateInSpec(path, new Value(value, dataType), type);
     }
 
     private MutateInChange change(List<LiquibaseMutateInSpec> specs) {
