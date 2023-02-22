@@ -23,6 +23,7 @@ package liquibase.ext.couchbase.database;
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.transactions.error.TransactionFailedException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,6 +38,7 @@ import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
+import liquibase.ext.couchbase.exception.TransactionalStatementExecutionException;
 import liquibase.ext.couchbase.executor.TransactionalStatementQueue;
 import liquibase.util.StringUtil;
 import lombok.Data;
@@ -54,27 +56,24 @@ import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
 
 /**
- * Main access point to the Couchbase database from Liquibase.
- * Provides access to the {@link Cluster} and {@link Bucket} instances. The latter is available only
- * if the bucket name is specified in the connection URL.<br><br>
- * Currently, doesn't support transactions and most of ths SQL-specific things like {@link #attached(Database)}
- * and {@link #nativeSQL(String)}.
+ * Main access point to the Couchbase database from Liquibase. Provides access to the {@link Cluster} and {@link Bucket} instances. The
+ * latter is available only if the bucket name is specified in the connection URL.<br><br> Currently, doesn't support transactions and most
+ * of ths SQL-specific things like {@link #attached(Database)} and {@link #nativeSQL(String)}.
  */
 
 @Data
 @NoArgsConstructor
 public class CouchbaseConnection implements DatabaseConnection {
 
-    private final TransactionalStatementQueue transactionalStatementQueue =
-            Scope.getCurrentScope().getSingleton(TransactionalStatementQueue.class);
+    private final TransactionalStatementQueue transactionalStatementQueue = Scope.getCurrentScope()
+            .getSingleton(TransactionalStatementQueue.class);
     private ConnectionString connectionString;
     private Cluster cluster;
     private Bucket database;
 
     @Override
     public boolean supports(String url) {
-        return ofNullable(url)
-                .map(String::toLowerCase)
+        return ofNullable(url).map(String::toLowerCase)
                 .map(x -> x.startsWith(COUCHBASE_PRODUCT_SHORT_NAME))
                 .orElse(false);
     }
@@ -82,7 +81,8 @@ public class CouchbaseConnection implements DatabaseConnection {
     @Override
     public String getCatalog() throws DatabaseException {
         try {
-            return ofNullable(database).map(Bucket::name).orElse(StringUtils.EMPTY);
+            return ofNullable(database).map(Bucket::name)
+                    .orElse(StringUtils.EMPTY);
         } catch (final Exception e) {
             throw new DatabaseException(e);
         }
@@ -95,13 +95,12 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void rollback() {
-        //TODO investigate why it's called several times during 1 changeset and called every time even if there is no error
         transactionalStatementQueue.clear();
     }
 
     @Override
     public void setAutoCommit(boolean b) {
-        //TODO investigate
+        // TODO investigate
     }
 
     public String getDatabaseProductName() {
@@ -129,7 +128,7 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
 
-    //TODO Still questionable , should we allow null connection string?
+    // TODO Still questionable , should we allow null connection string?
     private List<String> getHosts() {
         notNull(connectionString, "Connection string");
         return Optional.of(connectionString)
@@ -157,33 +156,33 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
     @Override
-    public void open(final String url, final Driver driverObject, final Properties driverProperties)
-            throws DatabaseException {
+    public void open(final String url, final Driver driverObject, final Properties driverProperties) throws DatabaseException {
 
         try {
             String processedUrl = StringUtils.trimToEmpty(url);
 
             if (StringUtils.containsNone(processedUrl, '@')) {
-                final String user = getAndTrimProperty(driverProperties, "user")
-                        .orElseThrow(() -> new IllegalArgumentException("Username not specified neither in parameters " +
-                                "nor in connection string"));
+                final String user = getAndTrimProperty(driverProperties, "user").orElseThrow(
+                        () -> new IllegalArgumentException("Username not specified neither in parameters " + "nor in connection string"));
                 String[] parts = processedUrl.split("://");
                 processedUrl = parts[0] + "://" + user + '@' + parts[1];
             }
             Map<String, String> params = new HashMap<>();
-            ofNullable(driverProperties)
-                    .map(x -> x.get(BUCKET_PARAM))
+            ofNullable(driverProperties).map(x -> x.get(BUCKET_PARAM))
                     .map(String.class::cast)
                     .ifPresent(val -> params.put(BUCKET_PARAM, val));
-            connectionString = ConnectionString.create(processedUrl).withParams(params);
+            connectionString = ConnectionString.create(processedUrl)
+                    .withParams(params);
 
             final String password = getAndTrimProperty(driverProperties, "password").orElse(null);
 
-            cluster = ((CouchbaseClientDriver) driverObject)
-                    .connect(connectionString.original(), clusterOptions(connectionString.username(), password));
+            cluster = ((CouchbaseClientDriver) driverObject).connect(connectionString.original(),
+                    clusterOptions(connectionString.username(), password));
 
-            if (connectionString.params().containsKey(BUCKET_PARAM)) {
-                final String dbName = connectionString.params().get(BUCKET_PARAM);
+            if (connectionString.params()
+                    .containsKey(BUCKET_PARAM)) {
+                final String dbName = connectionString.params()
+                        .get(BUCKET_PARAM);
                 database = cluster.bucket(dbName);
             }
         } catch (final Exception e) {
@@ -209,8 +208,14 @@ public class CouchbaseConnection implements DatabaseConnection {
             return;
         }
 
-        cluster.transactions().run(ctx -> transactionalStatementQueue.forEach(it -> it.accept(ctx)));
-        transactionalStatementQueue.clear();
+        try {
+            cluster.transactions()
+                    .run(ctx -> transactionalStatementQueue.forEach(it -> it.accept(ctx)));
+        } catch (TransactionFailedException e) {
+            throw new TransactionalStatementExecutionException(e);
+        } finally {
+            transactionalStatementQueue.clear();
+        }
     }
 
     @Override
@@ -225,20 +230,23 @@ public class CouchbaseConnection implements DatabaseConnection {
     }
 
     private List<String> extractHosts(ConnectionString s) {
-        return s.hosts().stream()
+        return s.hosts()
+                .stream()
                 .map(ConnectionString.UnresolvedSocket::host)
                 .collect(toList());
     }
 
-    private static Optional<String> getAndTrimProperty(Properties driverProperties, String user) {
-        return Optional.ofNullable(driverProperties).map(props -> StringUtil.trimToNull(props.getProperty(user)));
+    private Optional<String> getAndTrimProperty(Properties driverProperties, String user) {
+        return ofNullable(driverProperties)
+                .map(props -> props.getProperty(user))
+                .map(StringUtil::trimToNull);
     }
 
     private String getBucketName(String url) {
-        return ofNullable(connectionString)
-                .map(ConnectionString::params)
+        return ofNullable(connectionString).map(ConnectionString::params)
                 .map(x -> x.get(BUCKET_PARAM))
                 .map(String.class::cast)
                 .orElse(url);
     }
+
 }

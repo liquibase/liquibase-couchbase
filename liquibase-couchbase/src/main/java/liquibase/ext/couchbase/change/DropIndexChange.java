@@ -1,10 +1,9 @@
 package liquibase.ext.couchbase.change;
 
-import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
 import liquibase.ext.couchbase.statement.DropPrimaryIndexStatement;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -41,11 +40,12 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 public class DropIndexChange extends CouchbaseChange {
 
     private Boolean isPrimary;
+    private Boolean ignoreIfNotExists;
+
     private String indexName;
     private String bucketName;
     private String collectionName;
     private String scopeName;
-    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -54,11 +54,11 @@ public class DropIndexChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
                 isPrimary ? new DropPrimaryIndexStatement(keyspace) :
-                        new DropIndexStatement(indexName, ignoreIfExists, keyspace)
+                        new DropIndexStatement(ignoreIfNotExists, indexName, keyspace)
         };
     }
 

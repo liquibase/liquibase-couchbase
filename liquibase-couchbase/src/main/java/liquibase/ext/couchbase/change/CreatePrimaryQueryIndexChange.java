@@ -54,7 +54,7 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         if (isNotBlank(getBucketName())) {
             return new SqlStatement[]{new CreatePrimaryQueryIndexStatement(getBucketName(), createPrimaryQueryIndexOptions())};
         }

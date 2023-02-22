@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static liquibase.ext.couchbase.executor.NoSqlExecutor.EXECUTOR_NAME;
+import static liquibase.ext.couchbase.executor.CouchbaseExecutor.EXECUTOR_NAME;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -43,7 +43,7 @@ public class MutateInChange extends CouchbaseChange {
     private static final MutateInSpecTransformer mutateInSpecTransformer = new MutateInSpecTransformer();
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         MutateIn mutate = buildMutate(keyspace);
         return new SqlStatement[]{

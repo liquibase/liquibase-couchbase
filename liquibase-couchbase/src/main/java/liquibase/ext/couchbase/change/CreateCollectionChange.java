@@ -1,10 +1,9 @@
 package liquibase.ext.couchbase.change;
 
-import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateCollectionStatement;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,7 +48,7 @@ public class CreateCollectionChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
+    public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[]{
                 new CreateCollectionStatement(keyspace, skipIfExists)

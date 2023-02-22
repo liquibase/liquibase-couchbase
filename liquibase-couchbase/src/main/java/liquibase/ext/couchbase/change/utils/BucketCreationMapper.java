@@ -16,22 +16,22 @@ public class BucketCreationMapper {
 
     public CreateBucketOptions bucketOptions() {
         return CreateBucketOptions.createBucketOptions()
-                .timeout(Duration.ofSeconds(change.getTimeoutInSeconds()));
+            .timeout(Duration.ofSeconds(change.getTimeoutInSeconds()));
     }
 
     public BucketSettings bucketSettings() {
         return BucketSettings.create(change.getBucketName())
-                .compressionMode(change.getCompressionMode())
-                .flushEnabled(change.getFlushEnabled())
-                .ramQuotaMB(change.getRamQuotaMB())
-                .numReplicas(change.getNumReplicas())
-                .replicaIndexes(change.getReplicaIndexes())
-                .maxExpiry(Duration.ofHours(change.getMaxExpiryInHours()))
-                .bucketType(change.getBucketType())
-                .conflictResolutionType(change.getConflictResolutionType())
-                .evictionPolicy(change.getEvictionPolicy())
-                .minimumDurabilityLevel(change.getMinimumDurabilityLevel())
-                .storageBackend(StorageBackend.of(change.getStorageBackend()));
+            .compressionMode(change.getCompressionMode())
+            .flushEnabled(change.getFlushEnabled())
+            .ramQuotaMB(change.getRamQuotaMB())
+            .numReplicas(change.getNumReplicas())
+            .replicaIndexes(change.getReplicaIndexes())
+            .maxExpiry(Duration.ofHours(change.getMaxExpiryInHours()))
+            .bucketType(change.getBucketType())
+            .conflictResolutionType(change.getConflictResolutionType())
+            .evictionPolicy(change.getEvictionPolicy())
+            .minimumDurabilityLevel(change.getMinimumDurabilityLevel())
+            .storageBackend(StorageBackend.of(change.getStorageBackend()));
     }
 
 }
