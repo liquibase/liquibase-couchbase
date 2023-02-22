@@ -24,20 +24,22 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="khinkali s govyadinoy" author="roman.oborin">
+    <changeSet id="arrayPrependValue" author="dmitry.dashko">
         <ext:mutateIn>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:id>id</ext:id>
+            <ext:id>mutateInArrayPrependId</ext:id>
             <ext:mutateInSpecs>
                 <ext:mutateInSpec>
-                    <ext:path>user.age</ext:path>
-                    <ext:value>
-						<ext:data>29</ext:data>
-						<ext:type>String</ext:type>
-					</ext:value>
-                    <ext:mutateInType>INSERT</ext:mutateInType>
+                    <ext:path>arr</ext:path>
+					<ext:values>
+						<ext:value>
+							<ext:data>prependValue</ext:data>
+							<ext:type>String</ext:type>
+						</ext:value>
+					</ext:values>
+                    <ext:mutateInType>ARRAY_PREPEND</ext:mutateInType>
                 </ext:mutateInSpec>
             </ext:mutateInSpecs>
         </ext:mutateIn>

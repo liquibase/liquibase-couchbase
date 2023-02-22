@@ -8,6 +8,7 @@ import java.util.List;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.database.Database;
+import liquibase.ext.couchbase.transformer.MutateInSpecTransformer;
 import liquibase.ext.couchbase.statement.MutateInStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
@@ -39,6 +40,8 @@ public class MutateInChange extends CouchbaseChange {
 
     private List<LiquibaseMutateInSpec> mutateInSpecs = new ArrayList<>();
 
+    private static final MutateInSpecTransformer mutateInSpecTransformer = new MutateInSpecTransformer();
+
     @Override
     public SqlStatement[] generateStatements(Database database) {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
@@ -56,7 +59,7 @@ public class MutateInChange extends CouchbaseChange {
 
     private MutateIn buildMutate(Keyspace keyspace) {
         List<MutateInSpec> specs = mutateInSpecs.stream()
-                .map(LiquibaseMutateInSpec::toSpec)
+                .map(mutateInSpecTransformer::toSpec)
                 .collect(toList());
         return MutateIn.builder()
                 .id(id)
