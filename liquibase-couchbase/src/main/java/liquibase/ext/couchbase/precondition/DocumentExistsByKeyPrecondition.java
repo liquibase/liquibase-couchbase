@@ -39,7 +39,7 @@ public class DocumentExistsByKeyPrecondition extends AbstractCouchbasePreconditi
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         final DocumentExistsByKeyStatement documentExistsByKeyStatement = new DocumentExistsByKeyStatement(keyspace, key);
 
-        if (documentExistsByKeyStatement.isDocumentExists((CouchbaseConnection) database.getConnection())) {
+        if (documentExistsByKeyStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
         throw new DocumentNotExistsPreconditionException(key, bucketName, scopeName, collectionName, changeLog, this);

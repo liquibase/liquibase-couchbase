@@ -35,7 +35,7 @@ public class CollectionExistsPrecondition extends AbstractCouchbasePrecondition 
         final CollectionExistsStatement collectionExistsStatement =
                 new CollectionExistsStatement(bucketName, scopeName, collectionName);
 
-        if (collectionExistsStatement.isCollectionExists((CouchbaseConnection) database.getConnection())) {
+        if (collectionExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
         throw new CollectionNotExistsPreconditionException(collectionName, bucketName, scopeName, changeLog, this);

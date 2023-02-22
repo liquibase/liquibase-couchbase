@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
-import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,10 +18,5 @@ public class CreateBucketStatement extends CouchbaseStatement {
     @Override
     public void execute(ClusterOperator operator) {
         operator.createBucketWithOptionsAndSettings(settings, options);
-    }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        execute(new ClusterOperator(connection.getCluster()));
     }
 }

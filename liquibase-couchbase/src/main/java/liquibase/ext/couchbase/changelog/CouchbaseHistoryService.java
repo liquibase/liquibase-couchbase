@@ -40,7 +40,7 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
         //TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
         CollectionExistsStatement collectionExistsStatement =
                 new CollectionExistsStatement(bucketName, DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
-        return collectionExistsStatement.isCollectionExists(getDatabase().getConnection());
+        return collectionExistsStatement.isTrue(getDatabase().getConnection());
     }
 
     @Override

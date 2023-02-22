@@ -1,7 +1,6 @@
 package liquibase.ext.couchbase.statement;
 
 import liquibase.Scope;
-import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.CollectionNotExistsException;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
@@ -36,11 +35,5 @@ public class DropCollectionStatement extends CouchbaseStatement {
             throw new CollectionNotExistsException(keyspace.getCollection(), keyspace.getScope());
         }
         bucketOperator.dropCollection(collectionName, scopeName);
-    }
-
-    @Override
-    public void execute(CouchbaseConnection connection) {
-        //TODO remove when all statements move to execute with cluster and we refactor NoSqlExecutor
-        execute(new ClusterOperator(connection.getCluster()));
     }
 }

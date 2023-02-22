@@ -28,13 +28,13 @@ class DocumentExistsByKeyStatementIT extends RandomizedScopeTestCase {
         collectionOperator.insertDoc(document);
         DocumentExistsByKeyStatement statement = new DocumentExistsByKeyStatement(keyspace, document.getId());
 
-        assertThat(statement.isDocumentExists(database.getConnection())).isTrue();
+        assertThat(statement.isTrue(database.getConnection())).isTrue();
     }
 
     @Test
     void Should_return_false_when_document_doesnt_exists() {
         DocumentExistsByKeyStatement statement = new DocumentExistsByKeyStatement(keyspace, "notExistedKey");
 
-        assertThat(statement.isDocumentExists(database.getConnection())).isFalse();
+        assertThat(statement.isTrue(database.getConnection())).isFalse();
     }
 }

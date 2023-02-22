@@ -31,7 +31,7 @@ public class BucketExistsPrecondition extends AbstractCouchbasePrecondition {
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws BucketNotExistsPreconditionException {
         final BucketExistsStatement bucketExistsStatement = new BucketExistsStatement(bucketName);
 
-        if (bucketExistsStatement.isBucketExists((CouchbaseConnection) database.getConnection())) {
+        if (bucketExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
         throw new BucketNotExistsPreconditionException(bucketName, changeLog, this);

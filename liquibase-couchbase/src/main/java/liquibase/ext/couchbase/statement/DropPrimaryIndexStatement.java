@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,7 @@ import lombok.RequiredArgsConstructor;
  * A statement to drop primary index for a keyspace
  *
  * @see CouchbaseStatement
- * @see DropPrimaryQueryIndexOptions
+ * @see ClusterOperator
  * @see Keyspace
  *
  */
@@ -24,7 +23,7 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
     private final Keyspace keyspace;
 
     @Override
-    public void execute(CouchbaseConnection connection) {
-        new ClusterOperator(connection.getCluster()).dropPrimaryIndex(keyspace);
+    public void execute(ClusterOperator clusterOperator) {
+        clusterOperator.dropPrimaryIndex(keyspace);
     }
 }

@@ -1,7 +1,6 @@
 package integration.statement;
 
 import common.ConstantScopeTestCase;
-import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.BucketExistsStatement;
 import org.junit.jupiter.api.Test;
 
@@ -14,13 +13,13 @@ class BucketExistsStatementIT extends ConstantScopeTestCase {
     void Should_return_true_when_bucket_exists() {
         BucketExistsStatement statement = new BucketExistsStatement(TEST_BUCKET);
 
-        assertThat(statement.isBucketExists(database.getConnection())).isTrue();
+        assertThat(statement.isTrue(database.getConnection())).isTrue();
     }
 
     @Test
     void Should_return_false_when_bucket_doesnt_exists() {
         BucketExistsStatement statement = new BucketExistsStatement("someNotCreatedBucket");
 
-        assertThat(statement.isBucketExists(database.getConnection())).isFalse();
+        assertThat(statement.isTrue(database.getConnection())).isFalse();
     }
 }
