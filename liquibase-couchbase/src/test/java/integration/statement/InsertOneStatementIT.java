@@ -66,7 +66,7 @@ class InsertOneStatementIT extends TransactionStatementTest {
     void Should_no_insert_documents_when_transaction_was_broken() {
         Document doc = collectionOperator.generateTestDoc();
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        String existingKey = "createdDoc";
+        String existingKey = doc.getId();
         String uncreatedKey1 = "uncreated1";
         String uncreatedKey2 = "uncreated2";
         collectionOperator.insertDoc(doc);
