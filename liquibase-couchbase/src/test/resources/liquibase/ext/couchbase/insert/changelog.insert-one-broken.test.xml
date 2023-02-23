@@ -29,15 +29,19 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:id>existingKey</ext:id>
-            <ext:document>{"name":"Name", "age": 99}</ext:document>
+			<ext:document>
+				<ext:id>existingKey</ext:id>
+				<ext:content>{"name":"Name", "age": 99}</ext:content>
+			</ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:id>newKey</ext:id>
-            <ext:document>{"name":"Name", "age": 99}</ext:document>
+			<ext:document>
+				<ext:id>newKey</ext:id>
+				<ext:content>{"name":"Name", "age": 99}</ext:content>
+			</ext:document>
         </ext:insertOne>
     </changeSet>
 </databaseChangeLog>

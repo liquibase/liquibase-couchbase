@@ -17,7 +17,6 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestConstants {
-    public static final Duration STANDARD_TIMEOUT = Duration.ofSeconds(10);
     public static final String DEFAULT_SCOPE = "_default";
     public static final String DEFAULT_COLLECTION = "_default";
     public static final String TRAVELS_BUCKET = "travels-bucket";
@@ -26,7 +25,6 @@ public class TestConstants {
     public static final String TEST_COLLECTION = "testCollection";
     public static final String TEST_COLLECTION_2 = "testCollection2";
     public static final String TEST_ID = "id";
-    public static final String TEST_ID_2 = "id2";
     public static final JsonObject TEST_DOCUMENT = JsonObject.create().put("key", "value");
     public static final JsonObject TEST_DOCUMENT_2 = JsonObject.create().put("key2", "value2");
     public static final JsonObject TEST_DOCUMENT_3 = JsonObject.create().put("name", "user").put("type", "customer");
@@ -34,7 +32,6 @@ public class TestConstants {
     public static final String INDEX = "testIndex";
     public static final String COMPOUND_INDEX = "testCompoundIndex";
     public static final String MANUALLY_CREATED_INDEX = "manually_created_index";
-    public static final String TEST_CONTENT = "{ \"name\":\"user\", \"type\":\"customer\" }";
 
     public static final Keyspace TEST_KEYSPACE = keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     public static final DockerImageName CB_IMAGE_NAME = DockerImageName.parse("couchbase/server");

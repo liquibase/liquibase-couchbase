@@ -56,6 +56,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         }
         return this;
     }
+
     public CouchbaseCollectionAssert hasNoDocuments(@NonNull List<Document> docs) {
         for (Document doc : docs) {
             hasNoDocument(doc.getId());
@@ -68,7 +69,6 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
         return new CouchBaseDocumentAssert(actual.get(id).contentAsObject());
     }
-
 
     public CouchbaseCollectionAssert containDocuments(List<Document> testDocuments) {
         testDocuments.forEach((doc) -> extractingDocument(doc.getId()).itsContentEquals(doc.getContent()));
