@@ -8,8 +8,8 @@ import lombok.NonNull;
 
 public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAssert, JsonObject> {
 
-    CouchBaseDocumentAssert(JsonObject collection) {
-        super(collection, CouchBaseDocumentAssert.class);
+    CouchBaseDocumentAssert(JsonObject document) {
+        super(document, CouchBaseDocumentAssert.class);
     }
 
     public CouchBaseDocumentAssert itsContentEquals(@NonNull JsonObject expected) {

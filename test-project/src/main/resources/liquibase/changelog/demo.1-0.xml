@@ -33,29 +33,37 @@
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-            <ext:id>1</ext:id>
-            <ext:document>{"name":"Roman", "age": 51}</ext:document>
+			<ext:document>
+				<ext:id>1</ext:id>
+				<ext:content>{"name":"Roman", "age": 51}</ext:content>
+			</ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-            <ext:id>2</ext:id>
-            <ext:document>{"name":"Evgenii", "age": 52}</ext:document>
+			<ext:document>
+				<ext:id>2</ext:id>
+				<ext:content>{"name":"Evgenii", "age": 52}</ext:content>
+			</ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-            <ext:id>3</ext:id>
-            <ext:document>{"name":"Konstantin", "age": 53}</ext:document>
+			<ext:document>
+				<ext:id>2</ext:id>
+				<ext:content>{"name":"Konstantin", "age": 53}</ext:content>
+			</ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-            <ext:id>4</ext:id>
-            <ext:document>{"name":"Dmitry", "age": 54}</ext:document>
+			<ext:document>
+				<ext:id>4</ext:id>
+				<ext:content>{"name":"Dmitry", "age": 54}</ext:content>
+			</ext:document>
         </ext:insertOne>
     </changeSet>
 
