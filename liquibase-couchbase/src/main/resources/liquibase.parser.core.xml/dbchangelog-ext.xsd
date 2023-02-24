@@ -246,6 +246,9 @@
 							<xsd:enumeration value="ARRAY_INSERT_UNIQUE"/>
 							<xsd:enumeration value="INCREMENT"/>
 							<xsd:enumeration value="DECREMENT"/>
+							<xsd:enumeration value="UPSERT"/>
+							<xsd:enumeration value="REPLACE"/>
+							<xsd:enumeration value="REMOVE"/>
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:element>
@@ -272,6 +275,8 @@
 							<xsd:enumeration value="Double"/>
 							<xsd:enumeration value="Boolean"/>
 							<xsd:enumeration value="String"/>
+							<xsd:enumeration value="Json"/>
+							<xsd:enumeration value="JsonArray"/>
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:element>

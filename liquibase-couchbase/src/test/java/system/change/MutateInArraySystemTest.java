@@ -2,8 +2,6 @@ package system.change;
 
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
-import common.operators.TestBucketOperator;
-import common.operators.TestClusterOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.operator.CollectionOperator;
@@ -19,7 +17,6 @@ import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_ARRAY_CREATE_T
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_ARRAY_PREPEND_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_ARRAY_UNIQUE_ERROR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_ARRAY_UNIQUE_TEST_XML;
-import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_SCOPE;
@@ -28,8 +25,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class MutateInArraySystemTest extends LiquiBaseSystemTest {
 
-    private static final TestClusterOperator clusterOperator = new TestClusterOperator(cluster);
-    private static final TestBucketOperator bucketOperator = clusterOperator.getBucketOperator(TEST_BUCKET);
     private static final CollectionOperator testCollectionOperator = new CollectionOperator(
             bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);

@@ -1,5 +1,7 @@
 package liquibase.ext.couchbase.types;
 
+import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
 import liquibase.ext.couchbase.exception.MutateInTypeUnsupportedException;
 import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AllArgsConstructor;
@@ -35,7 +37,7 @@ public class Value extends AbstractLiquibaseSerializable {
     }
 
     public void setType(String type) {
-        this.type = DataType.valueOf(type.toUpperCase());
+        this.type = DataType.getByName(type);
     }
 
     public Object mapDataToType() {
@@ -48,6 +50,10 @@ public class Value extends AbstractLiquibaseSerializable {
                 return Boolean.valueOf(data);
             case STRING:
                 return data;
+            case JSON:
+                return JsonObject.fromJson(data);
+            case JSON_ARRAY:
+                return JsonArray.fromJson(data);
             default:
                 throw new MutateInTypeUnsupportedException(type);
         }

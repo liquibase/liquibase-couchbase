@@ -34,9 +34,9 @@
                 <ext:mutateInSpec>
                     <ext:path>user.age</ext:path>
                     <ext:value>
-						<ext:data>29</ext:data>
-						<ext:type>String</ext:type>
-					</ext:value>
+                        <ext:data>29</ext:data>
+                        <ext:type>String</ext:type>
+                    </ext:value>
                     <ext:mutateInType>INSERT</ext:mutateInType>
                 </ext:mutateInSpec>
             </ext:mutateInSpecs>

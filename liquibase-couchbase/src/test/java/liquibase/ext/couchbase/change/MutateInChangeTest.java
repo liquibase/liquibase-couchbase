@@ -16,7 +16,7 @@ import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
 
-import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INSERT_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_ID;
@@ -34,7 +34,7 @@ public class MutateInChangeTest {
     void setUp() {
         CouchbaseLiquibaseDatabase database = mock(CouchbaseLiquibaseDatabase.class);
         ChangeLogProvider provider = new TestChangeLogProvider(database);
-        changeLog = provider.load(MUTATE_IN_TEST_XML);
+        changeLog = provider.load(MUTATE_IN_INSERT_TEST_XML);
     }
 
     @Test
