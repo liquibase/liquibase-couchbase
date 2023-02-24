@@ -26,7 +26,7 @@ public class ChangeLogSampleFilePaths {
     public static final String CHANGELOG_TEST_XML = rootPrefix + "/changelog/changelog.changelog-test.xml";
     public static final String CHANGELOG_DUPLICATE_TEST_XML = rootPrefix + "/changelog/changelog.changelog-duplicate-test.xml";
     public static final String CREATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-bucket.test.xml";
-    public static final String MUTATE_IN_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in.test.xml";
+    public static final String MUTATE_IN_INSERT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-insert.test.xml";
     public static final String MUTATE_IN_ARRAY_CREATE_TEST_XML = rootPrefix + "/mutatein/changelog.create-array.test.xml";
     public static final String MUTATE_IN_ARRAY_APPEND_TEST_XML = rootPrefix + "/mutatein/changelog.array-append-value.test.xml";
     public static final String MUTATE_IN_ARRAY_PREPEND_TEST_XML = rootPrefix + "/mutatein/changelog.array-prepend-value.test.xml";
@@ -35,6 +35,12 @@ public class ChangeLogSampleFilePaths {
     public static final String MUTATE_IN_INCREMENT_DECREMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-increment-decrement" +
             ".test.xml";
     public static final String MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-increment-error" +
+            ".test.xml";
+    public static final String MUTATE_IN_UPSERT_REPLACE_REMOVE_TEST_XML = rootPrefix + "/mutatein/changelog" +
+            ".mutate-in-upsert-replace-remove.test.xml";
+    public static final String MUTATE_IN_REPLACE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-replace-document.test.xml";
+    public static final String MUTATE_IN_REMOVE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-remove-document.test.xml";
+    public static final String MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-insert-no-path-error" +
             ".test.xml";
     public static final String INSERT_UPSERT_STRESS_TEST_XML = rootPrefix + "/stress/stress-test-10k-insert-5k-upsert.xml";
 

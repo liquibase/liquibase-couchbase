@@ -5,10 +5,12 @@ import com.couchbase.client.java.kv.MutateInSpec;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import liquibase.SingletonObject;
+
 /**
  * Factory for {@link MutateInSpec} from xml enumeration <br> Association between xml enumeration to MutateInSpec
  */
-public enum MutateInType {
+public enum MutateInType implements SingletonObject {
 
     INSERT(MutateInSpec::insert),
     ARRAY_PREPEND((path, value) -> MutateInSpec.arrayPrepend(path, (List<Object>) value)),
@@ -18,8 +20,10 @@ public enum MutateInType {
     ARRAY_INSERT((path, value) -> MutateInSpec.arrayInsert(path, (List<Object>) value)),
     ARRAY_INSERT_UNIQUE(MutateInSpec::arrayAddUnique),
     INCREMENT((path, value) -> MutateInSpec.increment(path, (Long) value)),
-    DECREMENT((path, value) -> MutateInSpec.decrement(path, (Long) value));
-    // TODO upsert,etc
+    DECREMENT((path, value) -> MutateInSpec.decrement(path, (Long) value)),
+    UPSERT(MutateInSpec::upsert),
+    REPLACE(MutateInSpec::replace),
+    REMOVE((path, value) -> MutateInSpec.remove(path));
 
     private final BiFunction<String, Object, MutateInSpec> factoryMethod;
 
@@ -30,5 +34,7 @@ public enum MutateInType {
     public MutateInSpec toMutateInSpec(String path, Object value) {
         return factoryMethod.apply(path, value);
     }
+
+
 
 }
