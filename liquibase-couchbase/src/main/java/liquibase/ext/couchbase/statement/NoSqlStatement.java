@@ -3,9 +3,7 @@ package liquibase.ext.couchbase.statement;
 import liquibase.statement.SqlStatement;
 
 /**
- *
  * A baseline for all Couchbase statements.
- *
  */
 public abstract class NoSqlStatement implements SqlStatement {
 

@@ -7,13 +7,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- *
  * A statement to drop primary index for a keyspace
- *
  * @see CouchbaseStatement
  * @see ClusterOperator
  * @see Keyspace
- *
  */
 
 @Getter

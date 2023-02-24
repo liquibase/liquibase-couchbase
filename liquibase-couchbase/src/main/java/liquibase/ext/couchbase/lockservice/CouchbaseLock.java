@@ -16,6 +16,7 @@ public class CouchbaseLock {
     /**
      * Timestamp in milliseconds
      */
-    @NonNull private Long lockedAt;
+    @NonNull
+    private Long lockedAt;
 
 }

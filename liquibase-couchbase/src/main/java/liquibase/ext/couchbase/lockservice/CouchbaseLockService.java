@@ -28,7 +28,7 @@ public class CouchbaseLockService implements LockService {
 
     private CouchbaseLiquibaseDatabase database;
     private final Logger logger = Scope.getCurrentScope()
-        .getLog(getClass());
+            .getLog(getClass());
     private CouchbaseChangelogLocker locker;
 
     @Setter
@@ -87,7 +87,7 @@ public class CouchbaseLockService implements LockService {
         logger.info("Initializing CouchbaseLockService");
 
         serviceProvider = Optional.ofNullable(serviceProvider)
-            .orElseGet(() -> new ContextServiceProvider(database));
+                .orElseGet(() -> new ContextServiceProvider(database));
         Collection collection = serviceProvider.getServiceCollection(LOCK_COLLECTION_NAME);
         locker = new CouchbaseChangelogLocker(collection);
         bucketName = collection.bucketName();

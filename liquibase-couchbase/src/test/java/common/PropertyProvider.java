@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.Properties;
 
 import lombok.SneakyThrows;
+
 import static common.constants.TestConstants.PROPERTY_FILE_NAME;
 
 public class PropertyProvider {
@@ -16,9 +17,9 @@ public class PropertyProvider {
 
     /**
      * Lookup firstly in Env properties and then in property file
-     *
      * @param name - Property name
      * @return not null value or
+     *
      * @throws IllegalArgumentException if property isn't provided
      */
     @NotNull

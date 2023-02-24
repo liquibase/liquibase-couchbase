@@ -8,12 +8,8 @@ import lombok.Getter;
 import static java.lang.String.format;
 
 /**
- *
- * An exception thrown when scope does not exist.
- * Thrown by {@link liquibase.ext.couchbase.precondition.ScopeExistsPrecondition}
- *
+ * An exception thrown when scope does not exist. Thrown by {@link liquibase.ext.couchbase.precondition.ScopeExistsPrecondition}
  * @see PreconditionFailedException
- *
  */
 
 @Getter

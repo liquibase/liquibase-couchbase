@@ -8,12 +8,8 @@ import lombok.Getter;
 import static java.lang.String.format;
 
 /**
- *
- * An exception thrown when document does not exist.
- * Thrown by {@link liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition}
- *
+ * An exception thrown when document does not exist. Thrown by {@link liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition}
  * @see PreconditionFailedException
- *
  */
 
 @Getter

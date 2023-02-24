@@ -9,6 +9,7 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.types.Document;
+
 import static common.constants.ChangeLogSampleFilePaths.UPSERT_ONE_TEST_XML;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.TEST_COLLECTION;

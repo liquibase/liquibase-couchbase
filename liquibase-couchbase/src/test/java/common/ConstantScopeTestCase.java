@@ -12,6 +12,7 @@ import static common.constants.TestConstants.TEST_SCOPE;
 @Slf4j
 public class ConstantScopeTestCase extends CouchbaseContainerizedTest {
     protected static final TestBucketOperator bucketOperator = new TestBucketOperator(cluster);
+
     static {
         bucketOperator.createScope(TEST_SCOPE);
         bucketOperator.createCollection(TEST_COLLECTION, TEST_SCOPE);

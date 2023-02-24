@@ -48,7 +48,7 @@ public class ChangeSetMapper {
                 .comments(changeSet.getComments())
                 .labels(changeSet.getLabels().getLabels())
                 .liquibaseVersion(LiquibaseUtil.getBuildVersion()).build();
-        //TODO why changeSet.getInheritableContextFilter() ?
+        // TODO why changeSet.getInheritableContextFilter() ?
     }
 
 }

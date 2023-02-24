@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * A statement to insert many instances of a {@link Document} inside one transaction into a keyspace
- *
  * @see Document
  * @see CouchbaseStatement
  * @see Keyspace

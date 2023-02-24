@@ -47,7 +47,7 @@ class CreateCollectionStatementIntegrationTest extends RandomizedScopeTestCase {
         CreateCollectionStatement statement = new CreateCollectionStatement(keyspace, true);
         statement.execute(database.getConnection());
 
-        //todo replace with collection assert
+        // todo replace with collection assert
         Bucket bucket = bucketOperator.getBucket();
         assertThat(bucket).hasCollectionInScope(collectionName, scopeName);
         assertThat(bucket.scope(scopeName).collection(collectionName)).isEqualTo(existingCollection);

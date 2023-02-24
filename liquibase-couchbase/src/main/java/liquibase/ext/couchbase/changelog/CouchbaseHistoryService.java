@@ -16,9 +16,7 @@ import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_S
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 /**
- *
  * Concrete implementation of {@link NoSqlHistoryService} for Couchbase
- *
  */
 
 public class CouchbaseHistoryService extends NoSqlHistoryService {
@@ -37,7 +35,7 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
     protected boolean existsChangeLogCollection() {
         String bucketName = getServiceProvider().getServiceBucketName();
 
-        //TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
+        // TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
         CollectionExistsStatement collectionExistsStatement =
                 new CollectionExistsStatement(bucketName, DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
         return collectionExistsStatement.isTrue(getDatabase().getConnection());

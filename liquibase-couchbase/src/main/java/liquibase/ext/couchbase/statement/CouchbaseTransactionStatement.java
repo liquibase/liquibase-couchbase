@@ -11,9 +11,8 @@ import liquibase.ext.couchbase.types.CouchbaseTransactionAction;
 import liquibase.statement.SqlStatement;
 
 /**
- * A baseline for all Couchbase statements which should be executed inside one transaction (DML). Uses {@link ClusterOperator}
- * to execute statements instead of {@link CouchbaseConnection}. Returns {@link Consumer} to execute it later in transaction.
- *
+ * A baseline for all Couchbase statements which should be executed inside one transaction (DML). Uses {@link ClusterOperator} to execute
+ * statements instead of {@link CouchbaseConnection}. Returns {@link Consumer} to execute it later in transaction.
  * @see TransactionalStatementQueue
  * @see CouchbaseConnection
  * @see SqlStatement
@@ -27,6 +26,6 @@ public abstract class CouchbaseTransactionStatement extends NoSqlStatement {
     }
 
     public abstract void doInTransaction(TransactionAttemptContext transaction,
-                                    ClusterOperator clusterOperator);
+                                         ClusterOperator clusterOperator);
 
 }

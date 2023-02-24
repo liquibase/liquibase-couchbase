@@ -8,12 +8,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 /**
- *
  * A statement that checks if a scope exists.
- *
  * @see liquibase.ext.couchbase.precondition.ScopeExistsPrecondition
  * @see CouchbaseConditionalStatement
- *
  */
 
 @Data

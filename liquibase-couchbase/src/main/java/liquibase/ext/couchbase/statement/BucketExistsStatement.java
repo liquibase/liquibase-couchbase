@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
- *
  * @see liquibase.ext.couchbase.precondition.BucketExistsPrecondition
  * @see CouchbaseConditionalStatement
- *
  */
 
 @Data

@@ -21,10 +21,7 @@ import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 
 /**
- *
- * Will move to a separate module in the future. Right now it provides
- * required functionality for the history service.
- *
+ * Will move to a separate module in the future. Right now it provides required functionality for the history service.
  */
 
 public class ChangeLogOperator {

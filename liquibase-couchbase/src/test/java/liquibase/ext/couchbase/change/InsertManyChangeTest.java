@@ -9,6 +9,7 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.types.Document;
+
 import static common.constants.ChangeLogSampleFilePaths.INSERT_MANY_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

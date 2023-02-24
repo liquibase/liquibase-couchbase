@@ -24,7 +24,7 @@ public class MutateInIncrementDecrementSystemTest extends LiquiBaseSystemTest {
     private static final TestClusterOperator clusterOperator = new TestClusterOperator(cluster);
     private static final TestBucketOperator bucketOperator = clusterOperator.getBucketOperator(TEST_BUCKET);
     private static final CollectionOperator testCollectionOperator = new CollectionOperator(
-        bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
+            bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
 
     @Test
@@ -39,18 +39,18 @@ public class MutateInIncrementDecrementSystemTest extends LiquiBaseSystemTest {
 
         JsonObject expected = expectedWithIncrementDecrementAndCreated();
         assertThat(collection).extractingDocument(id)
-            .itsContentEquals(expected);
+                .itsContentEquals(expected);
 
         testCollectionOperator.removeDoc(id);
     }
 
     private static JsonObject expectedWithIncrementDecrementAndCreated() {
         return JsonObject.create()
-            .put("key", "value")
-            .put("increment", 6)
-            .put("decrement", 4)
-            .put("newIncrement", 5)
-            .put("newDecrement", -5);
+                .put("key", "value")
+                .put("increment", 6)
+                .put("decrement", 4)
+                .put("newIncrement", 5)
+                .put("newDecrement", -5);
     }
 
     @Test
@@ -64,15 +64,15 @@ public class MutateInIncrementDecrementSystemTest extends LiquiBaseSystemTest {
         assertThatExceptionOfType(LiquibaseException.class).isThrownBy(liquibase::update);
 
         assertThat(collection).extractingDocument(id)
-            .itsContentEquals(document);
+                .itsContentEquals(document);
 
         testCollectionOperator.removeDoc(id);
     }
 
     private static JsonObject initDocument() {
         return JsonObject.create()
-            .put("key", "value")
-            .put("increment", 5)
-            .put("decrement", 5);
+                .put("key", "value")
+                .put("increment", 5)
+                .put("decrement", 5);
     }
 }

@@ -18,16 +18,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Part of change set package. Responsible for creating bucket with specified name and options
- * name.
- *
+ * Part of change set package. Responsible for creating bucket with specified name and options name.
+ * @link <a
+ * href="https://docs.couchbase.com/java-sdk/current/concept-docs/buckets-and-clusters.html#creating-and-removing-buckets">Reference
+ * documentation</a>
  * @see CreateBucketStatement
  * @see CreateBucketOptions
  * @see BucketSettings
- *
- * @link <a href="https://docs.couchbase.com/java-sdk/current/concept-docs/buckets-and-clusters.html#creating-and-removing-buckets">Reference
- * documentation</a>
- *
  */
 @Getter
 @Setter
@@ -67,7 +64,7 @@ public class CreateBucketChange extends CouchbaseChange {
 
     @Override
     public SqlStatement[] generateStatements() {
-        return new SqlStatement[]{
+        return new SqlStatement[] {
                 new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings())
         };
     }

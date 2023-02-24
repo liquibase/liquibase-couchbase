@@ -7,12 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
- *
  * A statement to create primary index for a keyspace
- *
  * @see CouchbaseStatement
  * @see CreatePrimaryQueryIndexOptions
- *
  */
 
 @Data

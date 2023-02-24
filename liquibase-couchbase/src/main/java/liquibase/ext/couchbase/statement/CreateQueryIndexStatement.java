@@ -18,7 +18,6 @@ import static java.lang.String.format;
 
 /**
  * A statement to create secondary index for a keyspace
- *
  * @see CouchbaseStatement
  * @see CreateQueryIndexOptions
  */

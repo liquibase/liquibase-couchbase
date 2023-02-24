@@ -8,13 +8,10 @@ import liquibase.database.Database;
 import lombok.Data;
 
 /**
- *
  * A precondition that checks if a bucket exists.
- *
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
  * @see BucketNotExistsPreconditionException
- *
  */
 
 @Data

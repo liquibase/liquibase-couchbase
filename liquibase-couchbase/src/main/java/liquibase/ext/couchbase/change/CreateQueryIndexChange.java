@@ -20,12 +20,10 @@ import java.util.List;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
- * Part of change set package. Responsible for creating query index with specified bucket name, scope name,
- * collection name, index name and other relevant options.<br><br>
- *
+ * Part of change set package. Responsible for creating query index with specified bucket name, scope name, collection name, index name and
+ * other relevant options.<br><br>
  * @apiNote Compound index can be created by specifying multiple fields in the list of fields.
- * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createindex.html">Reference
- * documentation</a>
+ * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createindex.html">Reference documentation</a>
  * @see CreateQueryIndexStatement
  * @see CreateQueryIndexOptions
  */
@@ -61,7 +59,7 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[]{
+        return new SqlStatement[] {
                 new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, ignoreIfExists, numReplicas, fields)
         };
     }

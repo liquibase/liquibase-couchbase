@@ -23,11 +23,11 @@ public class CollectionExistsStatement extends CouchbaseConditionalStatement {
     @Override
     public boolean isTrue(CouchbaseConnection connection) {
         return Optional.of(connection.getCluster())
-            .map(ClusterOperator::new)
-            .filter(op -> op.isBucketExists(bucketName))
-            .map(op -> op.getBucketOperator(bucketName))
-            .map(op -> op.hasCollectionInScope(collectionName, scopeName))
-            .orElse(false);
+                .map(ClusterOperator::new)
+                .filter(op -> op.isBucketExists(bucketName))
+                .map(op -> op.getBucketOperator(bucketName))
+                .map(op -> op.hasCollectionInScope(collectionName, scopeName))
+                .orElse(false);
     }
 
 }

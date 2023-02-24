@@ -12,13 +12,10 @@ import liquibase.precondition.AbstractPrecondition;
 import lombok.Data;
 
 /**
- *
  * An abstract precondition for all Couchbase-related preconditions.
- *
  * @see AbstractPrecondition
  * @see PreconditionFailedException
  * @see PreconditionErrorException
- *
  */
 
 @Data

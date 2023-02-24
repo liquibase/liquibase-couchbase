@@ -9,12 +9,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 /**
- *
  * A statement that checks if a document exists by key.
- *
  * @see liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
  * @see CouchbaseConditionalStatement
- *
  */
 
 @Data

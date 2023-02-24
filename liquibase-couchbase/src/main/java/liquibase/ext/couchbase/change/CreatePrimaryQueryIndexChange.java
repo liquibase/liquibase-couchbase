@@ -15,16 +15,12 @@ import lombok.Setter;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
- *
- * Part of change set package. Responsible for creating primary query index with specified bucket name, scope name,
- * collection name, index name and other relevant options.
- *
- * @see CreatePrimaryQueryIndexStatement
- * @see CreatePrimaryQueryIndexOptions
- *
+ * Part of change set package. Responsible for creating primary query index with specified bucket name, scope name, collection name, index
+ * name and other relevant options.
  * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createprimaryindex.html">Reference
  * documentation</a>
- *
+ * @see CreatePrimaryQueryIndexStatement
+ * @see CreatePrimaryQueryIndexOptions
  */
 
 @Getter
@@ -56,10 +52,11 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         if (isNotBlank(getBucketName())) {
-            return new SqlStatement[]{new CreatePrimaryQueryIndexStatement(getBucketName(), createPrimaryQueryIndexOptions())};
+            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(getBucketName(), createPrimaryQueryIndexOptions())};
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;
     }
+
     private CreatePrimaryQueryIndexOptions createPrimaryQueryIndexOptions() {
         return CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()

@@ -14,16 +14,10 @@ import lombok.Setter;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
- *
- * Part of change set package. Responsible for dropping index with specified bucket name, scope name, collection name and
- * index name.
- *
+ * Part of change set package. Responsible for dropping index with specified bucket name, scope name, collection name and index name.
+ * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/dropindex.html">Reference documentation</a>
  * @see DropIndexStatement
  * @see Keyspace
- *
- * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/dropindex.html">Reference
- * documentation</a>
- *
  */
 
 @DatabaseChange(
@@ -56,7 +50,7 @@ public class DropIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[]{
+        return new SqlStatement[] {
                 isPrimary ? new DropPrimaryIndexStatement(keyspace) :
                         new DropIndexStatement(ignoreIfNotExists, indexName, keyspace)
         };

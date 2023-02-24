@@ -15,6 +15,7 @@ import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
+
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;

@@ -12,8 +12,7 @@ import lombok.RequiredArgsConstructor;
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 
 /**
- * A part of a facade package for Couchbase Java SDK. Provides access to {@link Bucket} common operations and state
- * checks.
+ * A part of a facade package for Couchbase Java SDK. Provides access to {@link Bucket} common operations and state checks.
  */
 @RequiredArgsConstructor
 public class BucketOperator {

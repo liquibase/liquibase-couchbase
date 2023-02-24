@@ -11,7 +11,7 @@ public class TransactionStatementTest extends RandomizedScopeTestCase {
      * Executes statements in transaction
      */
     @SafeVarargs
-    protected final void doInTransaction(CouchbaseTransactionAction... statements){
+    protected final void doInTransaction(CouchbaseTransactionAction... statements) {
         cluster.transactions().run(transaction -> {
             for (CouchbaseTransactionAction statement : statements) {
                 statement.accept(transaction);
@@ -23,7 +23,7 @@ public class TransactionStatementTest extends RandomizedScopeTestCase {
      * Method for imitating failed transaction
      */
     @SafeVarargs
-    protected final void doInFailingTransaction(CouchbaseTransactionAction... statements){
+    protected final void doInFailingTransaction(CouchbaseTransactionAction... statements) {
         cluster.transactions().run(transaction -> {
             for (CouchbaseTransactionAction statement : statements) {
                 statement.accept(transaction);
