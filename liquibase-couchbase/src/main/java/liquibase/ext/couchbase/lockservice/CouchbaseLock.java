@@ -4,15 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
+/**
+ * Entity for handling lock specific {@link com.couchbase.client.java.Bucket Bucket}
+ */
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class CouchbaseLock {
 
+    /**
+     * Id of underlying lock bucket
+     */
+    @NonNull
     private String id;
+    /**
+     * Instance of {@link liquibase.lockservice.LockService LockService} who owns that lock
+     */
+    @NonNull
+    private String owner;
     /**
      * Timestamp in milliseconds
      */

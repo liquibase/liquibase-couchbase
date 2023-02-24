@@ -1,13 +1,5 @@
 package liquibase.ext.couchbase.lockservice;
 
-import liquibase.Scope;
-import liquibase.executor.Executor;
-import liquibase.executor.ExecutorService;
-import liquibase.ext.couchbase.database.CouchbaseConnection;
-import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
-import liquibase.ext.couchbase.provider.ContextServiceProvider;
-import liquibase.lockservice.LockServiceFactory;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import liquibase.Scope;
+import liquibase.executor.Executor;
+import liquibase.executor.ExecutorService;
+import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.provider.ContextServiceProvider;
+import liquibase.lockservice.LockServiceFactory;
+import lombok.SneakyThrows;
 import static liquibase.ext.couchbase.executor.CouchbaseExecutor.EXECUTOR_NAME;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 import static org.assertj.core.api.Assertions.assertThat;

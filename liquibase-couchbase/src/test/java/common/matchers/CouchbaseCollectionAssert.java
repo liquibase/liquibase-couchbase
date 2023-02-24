@@ -1,11 +1,13 @@
 package common.matchers;
 
+import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Collection;
 
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
 
+import liquibase.ext.couchbase.lockservice.CouchbaseLock;
 import liquibase.ext.couchbase.types.Document;
 import lombok.NonNull;
 
@@ -76,4 +78,18 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
+    public CouchbaseCollectionAssert hasLockHeldBy(String lockId, String owner) {
+        try {
+            boolean owns = actual.get(lockId)
+                    .contentAs(CouchbaseLock.class)
+                    .getOwner().equals(owner);
+            if (!owns) {
+                failWithMessage("[%s] is not owner of lock [%s]", owner, lockId);
+            }
+        } catch (CouchbaseException e) {
+            failWithMessage("No such lock with id [%s]", lockId);
+        }
+
+        return this;
+    }
 }
