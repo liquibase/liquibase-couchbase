@@ -209,6 +209,14 @@
 		</xsd:complexType>
 	</xsd:element>
 
+	<xsd:element name="dropBucket">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="bucketName" type="xsd:string"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
 	<xsd:element name="mutateIn">
 		<xsd:complexType>
 			<xsd:sequence>
