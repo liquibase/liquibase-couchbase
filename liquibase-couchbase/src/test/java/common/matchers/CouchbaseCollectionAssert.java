@@ -75,4 +75,5 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
         return this;
     }
+
 }

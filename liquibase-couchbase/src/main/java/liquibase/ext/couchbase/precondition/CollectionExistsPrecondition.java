@@ -9,13 +9,10 @@ import liquibase.ext.couchbase.statement.CollectionExistsStatement;
 import lombok.Data;
 
 /**
- *
  * A precondition that checks if a collection exists.
- *
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
  * @see CollectionNotExistsPreconditionException
- *
  */
 
 @Data

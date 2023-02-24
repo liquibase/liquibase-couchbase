@@ -93,7 +93,8 @@ class HistoryServiceSystemTest extends LiquiBaseSystemTest {
         Liquibase liquibase = liquiBase(CHANGELOG_DUPLICATE_TEST_XML);
 
         assertThatExceptionOfType(ValidationFailedException.class).isThrownBy(liquibase::update).withMessage(
-                "Validation Failed:%s" + "     1 changesets had duplicate identifiers%s" + "          " + "liquibase" + "/ext/couchbase/changelog/changelog" + ".changelog-duplicate-test.xml::3::dmitry%s",
+                "Validation Failed:%s" + "     1 changesets had duplicate identifiers%s" + "          " + "liquibase" + "/ext/couchbase" +
+                        "/changelog/changelog" + ".changelog-duplicate-test.xml::3::dmitry%s",
                 separator, separator, separator);
 
         assertThat(serviceBucketOperator.getBucket()).hasCollectionInScope(CHANGE_LOG_COLLECTION, serviceScope.name());

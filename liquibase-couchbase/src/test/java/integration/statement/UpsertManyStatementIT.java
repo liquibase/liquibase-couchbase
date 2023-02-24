@@ -55,7 +55,7 @@ class UpsertManyStatementIT extends TransactionStatementTest {
         assertThatExceptionOfType(TransactionFailedException.class)
                 .isThrownBy(() -> doInFailingTransaction(statement.asTransactionAction(clusterOperator)));
 
-        Collection collection = bucketOperator.getCollection(collectionName,scopeName);
+        Collection collection = bucketOperator.getCollection(collectionName, scopeName);
         assertThat(collection).hasNoDocuments(testDocuments);
     }
 

@@ -14,8 +14,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * Common facade on {@link Bucket} including all common operations <br >
- * and state checks
+ * Common facade on {@link Bucket} including all common operations <br > and state checks
  */
 @RequiredArgsConstructor
 public class CollectionOperator {
@@ -52,8 +51,8 @@ public class CollectionOperator {
     }
 
     private void upsertDocInTransaction(TransactionAttemptContext transaction,
-                        String key,
-                        JsonObject jsonObject) {
+                                        String key,
+                                        JsonObject jsonObject) {
         try {
             TransactionGetResult document = transaction.get(collection, key);
             transaction.replace(document, jsonObject);

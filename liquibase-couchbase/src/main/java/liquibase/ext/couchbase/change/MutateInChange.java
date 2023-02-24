@@ -17,6 +17,7 @@ import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
@@ -46,7 +47,7 @@ public class MutateInChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         MutateIn mutate = buildMutate(keyspace);
-        return new SqlStatement[]{
+        return new SqlStatement[] {
                 new MutateInStatement(mutate)
         };
     }

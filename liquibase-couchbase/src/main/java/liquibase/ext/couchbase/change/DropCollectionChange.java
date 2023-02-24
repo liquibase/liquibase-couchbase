@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 
@@ -37,6 +38,6 @@ public class DropCollectionChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[]{new DropCollectionStatement(keyspace, false)};
+        return new SqlStatement[] {new DropCollectionStatement(keyspace, false)};
     }
 }

@@ -8,6 +8,7 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+
 import static common.constants.ChangeLogSampleFilePaths.CREATE_PRIMARY_QUERY_INDEX_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

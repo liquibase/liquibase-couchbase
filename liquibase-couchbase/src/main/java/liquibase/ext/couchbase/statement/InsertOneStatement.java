@@ -8,16 +8,14 @@ import liquibase.ext.couchbase.types.Document;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
 import static java.util.Collections.singletonList;
 
 /**
- *
  * A statement to insert one {@link Document} inside one transaction into a keyspace
- *
  * @see Document
  * @see CouchbaseStatement
  * @see Keyspace
- *
  */
 
 @Getter
@@ -29,7 +27,7 @@ public class InsertOneStatement extends CouchbaseTransactionStatement {
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction,
-                            ClusterOperator clusterOperator) {
+                                ClusterOperator clusterOperator) {
         InsertManyStatement statement = new InsertManyStatement(keyspace, singletonList(document));
         statement.doInTransaction(transaction, clusterOperator);
     }

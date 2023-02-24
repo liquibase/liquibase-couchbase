@@ -22,14 +22,10 @@ import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLEC
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 /**
- *
  * Abstract class for all NoSQL history services, extends {@link AbstractChangeLogHistoryService}<br><br>
- *
  * {@link CouchbaseHistoryService} is the default implementation for Couchbase
- *
  * @see ChangeLogOperator
  * @see RanChangeSet
- *
  */
 
 @Getter
@@ -80,7 +76,7 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
      */
     @Override
     public List<RanChangeSet> getRanChangeSets() throws DatabaseException {
-        //liquibase invokes it several times, but we only need to get list 1 time.
+        // liquibase invokes it several times, but we only need to get list 1 time.
         if (isNull(ranChangeSetList)) {
             ranChangeSetList = getAllChangeLogs();
         }
@@ -97,33 +93,33 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
 
     @Override
     public void tag(final String tagString) {
-        //TODO implement (liquibase tag --tag=sometag)
+        // TODO implement (liquibase tag --tag=sometag)
     }
 
     @Override
     public void removeFromHistory(final ChangeSet changeSet) {
-        //TODO implement
+        // TODO implement
     }
 
     @Override
     public void replaceChecksum(final ChangeSet changeSet) {
-        //TODO implement
+        // TODO implement
     }
 
     @Override
     public void clearAllCheckSums() {
-        //TODO implement
+        // TODO implement
     }
 
     @Override
     public boolean tagExists(final String tag) {
-        //TODO implement
+        // TODO implement
         return true;
     }
 
     @Override
     public void destroy() {
-        //TODO implement
+        // TODO implement
     }
 
     protected abstract void createRepository();

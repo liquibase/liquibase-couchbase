@@ -7,11 +7,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- *
- * A fallback option for Couchbase keyspace.
- * The idea has been taken from Couchbase Kotlin SDK.
- * Will be replaced after the official Couchbase Java SDK will support its own version.
- *
+ * A fallback option for Couchbase keyspace. The idea has been taken from Couchbase Kotlin SDK. Will be replaced after the official
+ * Couchbase Java SDK will support its own version.
  */
 
 @Data

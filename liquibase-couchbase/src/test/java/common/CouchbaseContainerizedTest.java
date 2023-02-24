@@ -11,12 +11,12 @@ import java.time.Duration;
 
 import liquibase.ext.couchbase.database.ConnectionData;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+
 import static common.constants.TestConstants.CB_IMAGE_NAME;
 import static common.constants.TestConstants.TEST_BUCKET;
 
 /**
- * Basis for Couchbase interacting tests
- * Data will not be cleared automatically, it's your care to clean up
+ * Basis for Couchbase interacting tests Data will not be cleared automatically, it's your care to clean up
  */
 public abstract class CouchbaseContainerizedTest {
     protected static final Cluster cluster;

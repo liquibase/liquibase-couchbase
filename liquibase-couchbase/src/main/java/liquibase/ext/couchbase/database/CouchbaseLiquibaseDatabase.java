@@ -9,6 +9,7 @@ import liquibase.exception.DatabaseException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
@@ -16,10 +17,7 @@ import static liquibase.ext.couchbase.database.Constants.COUCHBASE_SSL_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.DEFAULT_PORT;
 
 /**
- *
- *
  * Represents instance of {@link com.couchbase.client.java.Cluster}.<br><br>
- *
  */
 
 @NoArgsConstructor

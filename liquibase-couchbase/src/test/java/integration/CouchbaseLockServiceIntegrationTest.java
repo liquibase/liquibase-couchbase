@@ -110,8 +110,8 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
         assertTrue(lockService.hasChangeLogLock());
 
         assertThatExceptionOfType(LockException.class)
-            .isThrownBy(lockService::waitForLock)
-            .withMessage("Could not acquire lock");
+                .isThrownBy(lockService::waitForLock)
+                .withMessage("Could not acquire lock");
 
     }
 
@@ -149,8 +149,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
             try {
                 TimeUnit.MILLISECONDS.sleep(millis);
                 lockService.releaseLock();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

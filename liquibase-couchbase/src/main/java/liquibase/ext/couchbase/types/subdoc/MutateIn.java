@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Represents data necessary to build {@link MutateInSpec}
- *
  * @see Keyspace
  * @see MutateInSpec
  */

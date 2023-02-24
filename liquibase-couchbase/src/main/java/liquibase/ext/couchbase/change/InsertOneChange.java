@@ -17,16 +17,16 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
  * Part of change set package. Responsible for inserting a single document into a collection.
+ * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#insert">Reference documentation</a>
  * @see InsertOneStatement
  * @see Keyspace
- *
- * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#insert">Reference documentation</a>
  */
 
 @Getter
 @Setter
 @DatabaseChange(name = "insertOne",
-                description = "Insert a single document into a collection https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html",
+                description = "Insert a single document into a collection https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations" +
+                        ".html",
                 priority = ChangeMetaData.PRIORITY_DEFAULT,
                 appliesTo = {"collection", "database"})
 @NoArgsConstructor

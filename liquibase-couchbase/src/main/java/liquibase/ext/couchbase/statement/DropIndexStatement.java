@@ -14,7 +14,6 @@ import static java.lang.String.format;
 
 /**
  * A statement to drop secondary index for a keyspace
- *
  * @see CouchbaseStatement
  * @see ClusterOperator
  * @see Keyspace

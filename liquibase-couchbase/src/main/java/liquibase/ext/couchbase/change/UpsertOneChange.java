@@ -9,17 +9,14 @@ import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
- *
  * Part of change set package. Responsible for upserting a single document into a collection.
- *
+ * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#upsert">Reference documentation</a>
  * @see UpsertOneStatement
  * @see Keyspace
- *
- * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#upsert">Reference documentation</a>
- *
  */
 
 @Data
@@ -46,7 +43,7 @@ public class UpsertOneChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[]{
+        return new SqlStatement[] {
                 new UpsertOneStatement(keyspace, document)
         };
     }

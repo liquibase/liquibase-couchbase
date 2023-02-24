@@ -15,7 +15,6 @@ import static java.lang.String.format;
 
 /**
  * A statement to create a collection
- *
  * @see liquibase.ext.couchbase.change.CreateCollectionChange
  * @see liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
  * @see CouchbaseStatement

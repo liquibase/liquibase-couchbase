@@ -11,6 +11,7 @@ import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.statement.CreateCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
+
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;

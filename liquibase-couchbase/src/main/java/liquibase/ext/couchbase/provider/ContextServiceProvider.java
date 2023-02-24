@@ -41,10 +41,10 @@ public class ContextServiceProvider implements ServiceProvider {
         CouchbaseConnection connection = database.getConnection();
         Cluster cluster = connection.getCluster();
         Bucket serviceBucket = Optional.ofNullable(connection.getDatabase())
-            .orElseGet(() -> getServiceBucketFrom(cluster));
+                .orElseGet(() -> getServiceBucketFrom(cluster));
         checkAndCreateScopeAndCollectionIn(serviceBucket, cluster, collectionName);
         return serviceBucket.scope(DEFAULT_SERVICE_SCOPE)
-            .collection(collectionName);
+                .collection(collectionName);
     }
 
     private void checkAndCreateScopeAndCollectionIn(Bucket bucket, Cluster cluster, String collectionName) {
@@ -76,43 +76,43 @@ public class ContextServiceProvider implements ServiceProvider {
 
     private void checkAndCreatePrimaryIndexIn(Bucket bucket, Cluster cluster, String collectionName) {
         GetAllQueryIndexesOptions getAllIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions()
-            .collectionName(collectionName)
-            .scopeName(DEFAULT_SERVICE_SCOPE);
+                .collectionName(collectionName)
+                .scopeName(DEFAULT_SERVICE_SCOPE);
         boolean indexExists = cluster.queryIndexes()
-            .getAllIndexes(bucket.name(), getAllIndexesOptions)
-            .stream()
-            .anyMatch(index -> Objects.equals(index.keyspace(), collectionName) && index.primary());
+                .getAllIndexes(bucket.name(), getAllIndexesOptions)
+                .stream()
+                .anyMatch(index -> Objects.equals(index.keyspace(), collectionName) && index.primary());
         if (indexExists) { return; }
         CreatePrimaryQueryIndexOptions createIndexOptions = CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions()
-            .indexName(INDEX_NAME)
-            .scopeName(DEFAULT_SERVICE_SCOPE)
-            .collectionName(collectionName);
+                .indexName(INDEX_NAME)
+                .scopeName(DEFAULT_SERVICE_SCOPE)
+                .collectionName(collectionName);
         cluster.queryIndexes()
-            .createPrimaryIndex(bucket.name(), createIndexOptions);
+                .createPrimaryIndex(bucket.name(), createIndexOptions);
         WatchQueryIndexesOptions watchOptions = WatchQueryIndexesOptions.watchQueryIndexesOptions()
-            .watchPrimary(true)
-            .scopeName(DEFAULT_SERVICE_SCOPE)
-            .collectionName(collectionName);
+                .watchPrimary(true)
+                .scopeName(DEFAULT_SERVICE_SCOPE)
+                .collectionName(collectionName);
         cluster.queryIndexes()
-            .watchIndexes(bucket.name(), Collections.singletonList(INDEX_NAME), TIMEOUT, watchOptions);
+                .watchIndexes(bucket.name(), Collections.singletonList(INDEX_NAME), TIMEOUT, watchOptions);
     }
 
     @Override
     public Scope getScopeOfCollection(String collectionName) {
         Collection serviceCollection = getServiceCollection(collectionName);
         return database.getConnection()
-            .getCluster()
-            .bucket(serviceCollection.bucketName())
-            .scope(serviceCollection.scopeName());
+                .getCluster()
+                .bucket(serviceCollection.bucketName())
+                .scope(serviceCollection.scopeName());
     }
 
     @Override
     public String getServiceBucketName() {
         Bucket serviceBucket = database.getConnection()
-            .getDatabase();
+                .getDatabase();
         return Optional.ofNullable(serviceBucket)
-            .map(Bucket::name)
-            .orElse(FALLBACK_SERVICE_BUCKET_NAME);
+                .map(Bucket::name)
+                .orElse(FALLBACK_SERVICE_BUCKET_NAME);
     }
 
 }

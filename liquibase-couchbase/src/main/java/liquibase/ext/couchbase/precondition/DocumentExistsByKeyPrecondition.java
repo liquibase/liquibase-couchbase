@@ -12,13 +12,10 @@ import lombok.Data;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
- *
  * A precondition that checks if a document exists.
- *
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
  * @see DocumentNotExistsPreconditionException
- *
  */
 
 @Data

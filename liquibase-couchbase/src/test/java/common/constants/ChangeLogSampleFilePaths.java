@@ -32,8 +32,10 @@ public class ChangeLogSampleFilePaths {
     public static final String MUTATE_IN_ARRAY_PREPEND_TEST_XML = rootPrefix + "/mutatein/changelog.array-prepend-value.test.xml";
     public static final String MUTATE_IN_ARRAY_UNIQUE_TEST_XML = rootPrefix + "/mutatein/changelog.array-unique-value.test.xml";
     public static final String MUTATE_IN_ARRAY_UNIQUE_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.array-unique-value-error.test.xml";
-    public static final String MUTATE_IN_INCREMENT_DECREMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-increment-decrement.test.xml";
-    public static final String MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-increment-error.test.xml";
+    public static final String MUTATE_IN_INCREMENT_DECREMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-increment-decrement" +
+            ".test.xml";
+    public static final String MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-increment-error" +
+            ".test.xml";
     public static final String INSERT_UPSERT_STRESS_TEST_XML = rootPrefix + "/stress/stress-test-10k-insert-5k-upsert.xml";
 
 }

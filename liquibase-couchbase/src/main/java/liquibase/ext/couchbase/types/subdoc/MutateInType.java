@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 /**
- * Factory for {@link MutateInSpec} from xml enumeration <br>
- * Association between xml enumeration to MutateInSpec
+ * Factory for {@link MutateInSpec} from xml enumeration <br> Association between xml enumeration to MutateInSpec
  */
 public enum MutateInType {
 
@@ -20,7 +19,7 @@ public enum MutateInType {
     ARRAY_INSERT_UNIQUE(MutateInSpec::arrayAddUnique),
     INCREMENT((path, value) -> MutateInSpec.increment(path, (Long) value)),
     DECREMENT((path, value) -> MutateInSpec.decrement(path, (Long) value));
-    //TODO upsert,etc
+    // TODO upsert,etc
 
     private final BiFunction<String, Object, MutateInSpec> factoryMethod;
 
@@ -29,7 +28,7 @@ public enum MutateInType {
     }
 
     public MutateInSpec toMutateInSpec(String path, Object value) {
-        return factoryMethod.apply(path,value);
+        return factoryMethod.apply(path, value);
     }
 
 }
