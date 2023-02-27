@@ -56,6 +56,7 @@ public class CreateBucketChange extends CouchbaseChange {
     private ConflictResolutionType conflictResolutionType;
     private EvictionPolicyType evictionPolicy;
     private DurabilityLevel minimumDurabilityLevel;
+    private boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -65,7 +66,7 @@ public class CreateBucketChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         return new SqlStatement[] {
-                new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings())
+                new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings(), ignoreIfExists)
         };
     }
 

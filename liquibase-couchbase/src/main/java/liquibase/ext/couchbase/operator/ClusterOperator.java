@@ -97,6 +97,10 @@ public class ClusterOperator {
         }
     }
 
+    public void dropBucket(String name) {
+        cluster.buckets().dropBucket(name);
+    }
+
     public void dropIndex(String indexName, Keyspace keyspace) {
         DropQueryIndexOptions options = DropQueryIndexOptions.dropQueryIndexOptions()
                 .collectionName(keyspace.getCollection())

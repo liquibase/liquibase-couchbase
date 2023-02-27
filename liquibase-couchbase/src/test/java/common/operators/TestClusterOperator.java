@@ -25,7 +25,7 @@ public class TestClusterOperator extends ClusterOperator {
         if (!isBucketExists(bucketName)) {
             cluster.buckets().createBucket(BucketSettings.create(bucketName));
         }
-        return new TestBucketOperator(cluster);
+        return this.getBucketOperator(bucketName);
     }
 
     public String getTestIndexId() {
