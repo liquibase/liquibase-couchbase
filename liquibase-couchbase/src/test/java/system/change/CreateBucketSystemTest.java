@@ -16,6 +16,6 @@ public class CreateBucketSystemTest extends LiquiBaseSystemTest {
     void Bucket_should_be_created() {
         Liquibase liquibase = liquiBase(CREATE_BUCKET_TEST_XML);
         liquibase.update();
-        CouchBaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_TEST_NAME);
+        CouchBaseClusterAssert.assertThat(cluster).hasBucket("createBucketSystemTest");
     }
 }

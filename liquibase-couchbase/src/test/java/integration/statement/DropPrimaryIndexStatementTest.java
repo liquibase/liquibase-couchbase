@@ -28,7 +28,7 @@ class DropPrimaryIndexStatementTest extends RandomizedScopeTestCase {
     }
 
     @Test
-    void Should_drop_primary_index_for_specific_keyspace() {
+    void Should_drop_primary_index_for_specific_keyspace() throws InterruptedException {
         CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
                 .scopeName(scopeName)
                 .collectionName(collectionName);

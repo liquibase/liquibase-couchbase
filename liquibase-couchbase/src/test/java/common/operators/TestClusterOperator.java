@@ -18,7 +18,7 @@ public class TestClusterOperator extends ClusterOperator {
 
     public TestBucketOperator getBucketOperator(String bucketName) {
         requireBucketExists(bucketName);
-        return new TestBucketOperator(cluster);
+        return new TestBucketOperator(cluster.bucket(bucketName));
     }
 
     public TestBucketOperator getOrCreateBucketOperator(String bucketName) {

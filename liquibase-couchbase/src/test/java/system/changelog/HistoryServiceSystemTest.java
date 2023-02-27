@@ -7,8 +7,6 @@ import common.operators.TestBucketOperator;
 import common.operators.TestClusterOperator;
 import liquibase.Liquibase;
 import liquibase.exception.ValidationFailedException;
-import liquibase.ext.couchbase.provider.ContextServiceProvider;
-import liquibase.ext.couchbase.provider.ServiceProvider;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,34 +17,33 @@ import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_DUPLICATE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.ChangeLogAssert.assertThat;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static liquibase.changelog.ChangeSet.ExecType.EXECUTED;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
+import static liquibase.ext.couchbase.provider.ServiceProvider.FALLBACK_SERVICE_BUCKET_NAME;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class HistoryServiceSystemTest extends LiquiBaseSystemTest {
     private static final String separator = System.lineSeparator();
-    private static final ServiceProvider serviceProvider = new ContextServiceProvider(database);
     private static final TestClusterOperator clusterOperator = new TestClusterOperator(cluster);
-    private static final TestBucketOperator serviceBucketOperator = clusterOperator.getOrCreateBucketOperator(
-            serviceProvider.getServiceBucketName());
-    private static final TestBucketOperator bucketOperator = clusterOperator.getBucketOperator(TEST_BUCKET);
-    private static final Scope serviceScope = serviceBucketOperator.getOrCreateScope(DEFAULT_SERVICE_SCOPE);
+    private static final TestBucketOperator changeLogBucketOperator = clusterOperator.getOrCreateBucketOperator(FALLBACK_SERVICE_BUCKET_NAME);
+    private static final TestBucketOperator testBucketOperator = clusterOperator.getOrCreateBucketOperator(TEST_BUCKET);
+    private Scope serviceScope;
 
     @BeforeEach
     void initBeforeEach() {
-        if (bucketOperator.hasScope(TEST_SCOPE)) {
-            bucketOperator.dropScope(TEST_SCOPE);
+        serviceScope = changeLogBucketOperator.getScope(DEFAULT_SERVICE_SCOPE);
+        if (changeLogBucketOperator.hasCollectionInScope(CHANGE_LOG_COLLECTION, DEFAULT_SERVICE_SCOPE)) {
+            cleanAllChangeLogs();
         }
-
-        bucketOperator.createDefaultTestScope();
-        bucketOperator.createDefaultTestCollection();
-
-        cleanAllChangeLogs();
+        if (testBucketOperator.hasScope(TEST_SCOPE)) {
+            testBucketOperator.dropScope(TEST_SCOPE);
+            testBucketOperator.createDefaultTestScope();
+            testBucketOperator.createDefaultTestCollection();
+        }
     }
 
     @AfterEach
@@ -97,7 +94,7 @@ class HistoryServiceSystemTest extends LiquiBaseSystemTest {
                         "/changelog/changelog" + ".changelog-duplicate-test.xml::3::dmitry%s",
                 separator, separator, separator);
 
-        assertThat(serviceBucketOperator.getBucket()).hasCollectionInScope(CHANGE_LOG_COLLECTION, serviceScope.name());
+        assertThat(changeLogBucketOperator.getBucket()).hasCollectionInScope(CHANGE_LOG_COLLECTION, serviceScope.name());
     }
 
 }
