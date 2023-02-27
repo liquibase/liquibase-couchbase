@@ -39,6 +39,7 @@
             <ext:evictionPolicy>FULL</ext:evictionPolicy>
             <ext:minimumDurabilityLevel>MAJORITY_AND_PERSIST_TO_ACTIVE</ext:minimumDurabilityLevel>
             <ext:storageBackend>couchstore</ext:storageBackend>
+            <ext:ignoreIfExists>false</ext:ignoreIfExists>
         </ext:createBucket>
     </changeSet>
 
