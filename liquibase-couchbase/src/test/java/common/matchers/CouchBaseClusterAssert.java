@@ -8,6 +8,7 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
+import java.util.Map;
 
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.NonNull;
@@ -48,4 +49,11 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
         return this;
     }
 
+    public CouchBaseClusterAssert hasNoBucket(String bucketName) {
+        Map<String, BucketSettings> allBuckets = actual.buckets().getAllBuckets();
+        if(allBuckets.containsKey(bucketName)) {
+            failWithMessage("Failed to delete bucket with <%s> name", bucketName);
+        }
+        return this;
+    }
 }

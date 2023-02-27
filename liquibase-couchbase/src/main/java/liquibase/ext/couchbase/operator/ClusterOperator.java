@@ -68,6 +68,10 @@ public class ClusterOperator {
         cluster.buckets().createBucket(settings, options);
     }
 
+    public void dropBucket(String bucketName) {
+        cluster.buckets().dropBucket(bucketName);
+    }
+
     public QueryIndexManager getQueryIndexes() {
         return cluster.queryIndexes();
     }
