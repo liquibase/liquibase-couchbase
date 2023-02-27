@@ -82,7 +82,7 @@ class InsertOneStatementIT extends TransactionStatementTest {
                         statement3.asTransactionAction(clusterOperator)
                 ));
 
-        Collection collection = bucketOperator.getCollectionFromDefaultScope(DEFAULT_COLLECTION);
+        Collection collection = bucketOperator.getCollection(collectionName, scopeName);
         assertThat(collection)
                 .hasDocument(existingKey)
                 .hasNoDocument(uncreatedKey1)

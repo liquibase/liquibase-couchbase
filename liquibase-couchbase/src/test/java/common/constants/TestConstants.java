@@ -36,4 +36,5 @@ public class TestConstants {
     public static final Keyspace TEST_KEYSPACE = keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     public static final DockerImageName CB_IMAGE_NAME = DockerImageName.parse("couchbase/server");
     public static final String CREATE_BUCKET_TEST_NAME = "createBucketTest";
+    public static final Duration CLUSTER_READY_TIMEOUT = Duration.ofSeconds(10);
 }

@@ -18,14 +18,14 @@ public class TestClusterOperator extends ClusterOperator {
 
     public TestBucketOperator getBucketOperator(String bucketName) {
         requireBucketExists(bucketName);
-        return new TestBucketOperator(cluster);
+        return new TestBucketOperator(cluster.bucket(bucketName));
     }
 
     public TestBucketOperator getOrCreateBucketOperator(String bucketName) {
         if (!isBucketExists(bucketName)) {
             cluster.buckets().createBucket(BucketSettings.create(bucketName));
         }
-        return new TestBucketOperator(cluster);
+        return this.getBucketOperator(bucketName);
     }
 
     public String getTestIndexId() {

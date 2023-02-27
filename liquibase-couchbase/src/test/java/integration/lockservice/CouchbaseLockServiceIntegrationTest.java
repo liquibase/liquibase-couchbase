@@ -29,16 +29,18 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
     private static final String LOCK_ID = FALLBACK_SERVICE_BUCKET_NAME;
 
     private static final CouchbaseLockService lockService = new CouchbaseLockService();
-    private static ContextServiceProvider serviceProvider;
-    private final ClusterOperator clusterOperator = new ClusterOperator(cluster);
+    private static final ContextServiceProvider serviceProvider = new ContextServiceProvider(database);
+    private static final ClusterOperator clusterOperator = new ClusterOperator(cluster);
 
     @BeforeAll
     static void setUp() {
         lockService.setDatabase(database);
-        serviceProvider = new ContextServiceProvider(database);
         lockService.setServiceProvider(serviceProvider);
         lockService.setChangeLogLockRecheckTime(1000);
         lockService.setChangeLogLockWaitTime(1000);
+        if (serviceBucketExists()) {
+            cluster.buckets().dropBucket(FALLBACK_SERVICE_BUCKET_NAME);
+        }
     }
 
     @AfterAll
@@ -88,7 +90,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
     }
 
 
-    private boolean serviceBucketExists() {
+    private static boolean serviceBucketExists() {
         return clusterOperator.isBucketExists(FALLBACK_SERVICE_BUCKET_NAME);
     }
 
