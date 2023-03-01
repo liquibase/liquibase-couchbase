@@ -23,14 +23,19 @@ import liquibase.logging.Logger;
 import liquibase.servicelocator.LiquibaseService;
 import lombok.Getter;
 import lombok.Setter;
+
+import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Optional.ofNullable;
+import static liquibase.ext.couchbase.provider.LiquibasePropertyProvider.getPropertyOrDefault;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 @LiquibaseService
 public class CouchbaseLockService implements LockService {
 
+    private static final int WAIT_LOCK_TIME = parseInt(getPropertyOrDefault("waitLockTimeInSec", "300"));
+    private static final int WAIT_RECHECK_LOCK_TIME = parseInt(getPropertyOrDefault("waitRecheckLockTimeInSec", "10"));
     public static final String LOCK_COLLECTION_NAME = "CHANGELOGLOCKS";
     private final Logger logger = Scope.getCurrentScope()
             .getLog(getClass());
@@ -58,16 +63,16 @@ public class CouchbaseLockService implements LockService {
     };
 
     /**
-     * Time to wait for the lock to be acquired, in milliseconds. Default value is 5 minutes.
+     * Time to wait for the lock to be acquired, in milliseconds. Default value is 300 seconds.
      */
     @Setter(onMethod = @__({@Override}))
-    private long changeLogLockWaitTime = TimeUnit.MINUTES.toMillis(5);
+    private long changeLogLockWaitTime = TimeUnit.SECONDS.toMillis(WAIT_LOCK_TIME);
 
     /**
      * Time to wait between rechecking the lock, in milliseconds. Default value is 10 seconds.
      */
     @Setter(onMethod = @__({@Override}))
-    private long changeLogLockRecheckTime = TimeUnit.SECONDS.toMillis(10);
+    private long changeLogLockRecheckTime = TimeUnit.SECONDS.toMillis(WAIT_RECHECK_LOCK_TIME);
 
     public CouchbaseLockService(String serviceId) {
         this.serviceId = serviceId;

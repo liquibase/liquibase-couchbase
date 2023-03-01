@@ -23,13 +23,13 @@ import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static liquibase.changelog.ChangeSet.ExecType.EXECUTED;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
-import static liquibase.ext.couchbase.provider.ServiceProvider.FALLBACK_SERVICE_BUCKET_NAME;
+import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class HistoryServiceSystemTest extends LiquiBaseSystemTest {
     private static final String separator = System.lineSeparator();
     private static final TestClusterOperator clusterOperator = new TestClusterOperator(cluster);
-    private static final TestBucketOperator changeLogBucketOperator = clusterOperator.getOrCreateBucketOperator(FALLBACK_SERVICE_BUCKET_NAME);
+    private static final TestBucketOperator changeLogBucketOperator = clusterOperator.getOrCreateBucketOperator(SERVICE_BUCKET_NAME);
     private static final TestBucketOperator testBucketOperator = clusterOperator.getOrCreateBucketOperator(TEST_BUCKET);
     private Scope serviceScope;
 

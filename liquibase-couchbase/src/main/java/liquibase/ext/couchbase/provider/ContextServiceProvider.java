@@ -64,14 +64,14 @@ public class ContextServiceProvider implements ServiceProvider {
 
     private Bucket getServiceBucketFrom(Cluster cluster) {
         ClusterOperator clusterOperator = new ClusterOperator(cluster);
-        boolean serviceBucketExists = clusterOperator.isBucketExists(FALLBACK_SERVICE_BUCKET_NAME);
+        boolean serviceBucketExists = clusterOperator.isBucketExists(SERVICE_BUCKET_NAME);
         if (!serviceBucketExists) {
-            BucketSettings bucketSettings = create(FALLBACK_SERVICE_BUCKET_NAME);
+            BucketSettings bucketSettings = create(SERVICE_BUCKET_NAME);
             CreateBucketOptions bucketOptions = CreateBucketOptions.createBucketOptions();
             clusterOperator.createBucketWithOptionsAndSettings(bucketSettings, bucketOptions);
             cluster.waitUntilReady(TIMEOUT);
         }
-        return cluster.bucket(FALLBACK_SERVICE_BUCKET_NAME);
+        return cluster.bucket(SERVICE_BUCKET_NAME);
     }
 
     private void checkAndCreatePrimaryIndexIn(Bucket bucket, Cluster cluster, String collectionName) {
@@ -104,15 +104,6 @@ public class ContextServiceProvider implements ServiceProvider {
                 .getCluster()
                 .bucket(serviceCollection.bucketName())
                 .scope(serviceCollection.scopeName());
-    }
-
-    @Override
-    public String getServiceBucketName() {
-        Bucket serviceBucket = database.getConnection()
-                .getDatabase();
-        return Optional.ofNullable(serviceBucket)
-                .map(Bucket::name)
-                .orElse(FALLBACK_SERVICE_BUCKET_NAME);
     }
 
 }
