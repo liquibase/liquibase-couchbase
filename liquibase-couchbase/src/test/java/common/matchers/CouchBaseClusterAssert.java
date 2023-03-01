@@ -7,6 +7,7 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 
 import org.assertj.core.api.AbstractAssert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,9 +52,34 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
 
     public CouchBaseClusterAssert hasNoBucket(String bucketName) {
         Map<String, BucketSettings> allBuckets = actual.buckets().getAllBuckets();
-        if(allBuckets.containsKey(bucketName)) {
+        if (allBuckets.containsKey(bucketName)) {
             failWithMessage("Failed to delete bucket [%s]", bucketName);
         }
+        return this;
+    }
+
+    public CouchBaseClusterAssert bucketUpdatedSuccessfully(String bucketName, BucketSettings settings) {
+        BucketSettings actualSettings = actual.buckets().getBucket(bucketName);
+        List<String> invalidFields = new ArrayList<>();
+        if (settings.flushEnabled() != actualSettings.flushEnabled()) {
+            invalidFields.add("flushEnabled");
+        }
+        if (settings.compressionMode() != actualSettings.compressionMode()) {
+            invalidFields.add("compressionMode");
+        }
+        if (!settings.maxExpiry().equals(actualSettings.maxExpiry())) {
+            invalidFields.add("maxExpiry");
+        }
+        if (settings.numReplicas() != actualSettings.numReplicas()) {
+            invalidFields.add("numReplicas");
+        }
+        if (settings.ramQuotaMB() != actualSettings.ramQuotaMB()) {
+            invalidFields.add("ramQuotaMB");
+        }
+        if (!invalidFields.isEmpty()) {
+            failWithMessage("The <%s> properties of the bucket has not been updated", invalidFields);
+        }
+
         return this;
     }
 }
