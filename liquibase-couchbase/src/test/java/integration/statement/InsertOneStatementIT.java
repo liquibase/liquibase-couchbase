@@ -71,9 +71,9 @@ class InsertOneStatementIT extends TransactionStatementTest {
         String uncreatedKey2 = "uncreated2";
         collectionOperator.insertDoc(doc);
 
-        InsertOneStatement statement1 = new InsertOneStatement(keyspace, document(uncreatedKey1, doc.getContent()));
-        InsertOneStatement statement2 = new InsertOneStatement(keyspace, document(uncreatedKey2, doc.getContent()));
-        InsertOneStatement statement3 = new InsertOneStatement(keyspace, document(existingKey, doc.getContent()));
+        InsertOneStatement statement1 = new InsertOneStatement(keyspace, document(uncreatedKey1, doc.getValue()));
+        InsertOneStatement statement2 = new InsertOneStatement(keyspace, document(uncreatedKey2, doc.getValue()));
+        InsertOneStatement statement3 = new InsertOneStatement(keyspace, document(existingKey, doc.getValue()));
 
         assertThatExceptionOfType(TransactionFailedException.class)
                 .isThrownBy(() -> doInTransaction(

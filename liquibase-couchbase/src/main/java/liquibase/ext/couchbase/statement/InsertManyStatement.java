@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class InsertManyStatement extends CouchbaseTransactionStatement {
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {
-        Map<String, JsonObject> contentList = clusterOperator.checkDocsAndTransformToJsons(documents);
+        Map<String, Object> contentList = clusterOperator.checkDocsAndTransformToObjects(documents);
         clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
                 .insertDocsTransactionally(transaction, contentList);

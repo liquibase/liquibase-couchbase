@@ -48,7 +48,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_ignore_index_creation_with_the_same_name() {
         String indexToCreate = clusterOperator.getTestIndexId();
         clusterOperator.createIndex(indexToCreate, bucketName,
-                new ArrayList<>(testDocument.getContentAsObject().getNames()));
+                new ArrayList<>(testDocument.getContentAsJson().getNames()));
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
 
         statement.execute(database.getConnection());

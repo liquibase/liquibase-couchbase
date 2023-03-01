@@ -3,6 +3,7 @@ package liquibase.ext.couchbase.types;
 import com.couchbase.client.java.json.JsonObject;
 import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,12 +17,13 @@ import java.util.stream.Collectors;
  */
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Document extends AbstractLiquibaseSerializable {
 
     private String id;
-    private String content;
+    private Value value = new Value();
 
     @Override
     public String getSerializedObjectName() {
@@ -33,20 +35,24 @@ public class Document extends AbstractLiquibaseSerializable {
         return STANDARD_CHANGELOG_NAMESPACE;
     }
 
-    public static Document document(String id, String content) {
-        return new Document(id, content);
+    public static Document document(String id, String content, DataType type) {
+        return Document.builder().id(id).value(new Value(content, type)).build();
     }
 
-    public static Document document(String id, JsonObject content) {
-        return new Document(id, content.toString());
+    public static Document document(String id, Value value) {
+        return Document.builder().id(id).value(value).build();
     }
 
-    public JsonObject getContentAsObject() {
-        return JsonObject.fromJson(content);
+    public Object getContentAsObject() {
+        return value.mapDataToType();
+    }
+
+    public JsonObject getContentAsJson() {
+        return (JsonObject) getContentAsObject();
     }
 
     public List<Field> getFields() {
-        return getContentAsObject().getNames().stream().map(Field::new).collect(Collectors.toList());
+        return getContentAsJson().getNames().stream().map(Field::new).collect(Collectors.toList());
     }
 
     @Override

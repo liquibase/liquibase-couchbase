@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.change;
 
+import liquibase.ext.couchbase.types.DataType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +12,15 @@ import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.types.Document;
 
 import static common.constants.ChangeLogSampleFilePaths.INSERT_MANY_TEST_XML;
+import static liquibase.ext.couchbase.types.Document.document;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 
 class InsertManyChangeTest {
 
-    private final Document DOC_1 = new Document("id1", "{key:value}");
-    private final Document DOC_2 = new Document("id2", "{key2:value2}");
+    private final Document DOC_1 = document("id1", "{key:value}", DataType.JSON);
+    private final Document DOC_2 = document("id2", "{key2:value2}", DataType.JSON);
     private DatabaseChangeLog changeLog;
 
     @BeforeEach

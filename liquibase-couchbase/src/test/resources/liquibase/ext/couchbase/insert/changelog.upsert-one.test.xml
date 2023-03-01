@@ -31,7 +31,10 @@
             <ext:collectionName>testCollection</ext:collectionName>
             <ext:document>
                 <ext:id>id</ext:id>
-                <ext:content>{key:value}</ext:content>
+                <ext:value>
+                    <ext:data>{key:value}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
             </ext:document>
         </ext:upsertOne>
         <ext:upsertOne>
@@ -40,7 +43,10 @@
             <ext:collectionName>testCollection</ext:collectionName>
             <ext:document>
                 <ext:id>id</ext:id>
-                <ext:content>{key:value}</ext:content>
+                <ext:value>
+                    <ext:data>{key:value}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
             </ext:document>
         </ext:upsertOne>
         <ext:upsertOne>
@@ -49,7 +55,10 @@
             <ext:collectionName>testCollection</ext:collectionName>
             <ext:document>
                 <ext:id>id</ext:id>
-                <ext:content>{key:value}</ext:content>
+                <ext:value>
+                    <ext:data>{key:value}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
             </ext:document>
         </ext:upsertOne>
     </changeSet>

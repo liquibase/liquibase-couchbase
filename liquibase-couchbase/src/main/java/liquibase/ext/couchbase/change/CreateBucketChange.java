@@ -56,7 +56,7 @@ public class CreateBucketChange extends CouchbaseChange {
     private ConflictResolutionType conflictResolutionType;
     private EvictionPolicyType evictionPolicy;
     private DurabilityLevel minimumDurabilityLevel;
-    private boolean ignoreIfExists;
+    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {

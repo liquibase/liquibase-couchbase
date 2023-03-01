@@ -26,12 +26,12 @@ public class CollectionOperator {
         collection.insert(id, content);
     }
 
-    public void insertDocInTransaction(TransactionAttemptContext transaction, String id, JsonObject content) {
+    public void insertDocInTransaction(TransactionAttemptContext transaction, String id, Object content) {
         transaction.insert(collection, id, content);
     }
 
     public void insertDoc(Document document) {
-        collection.insert(document.getId(), document.getContentAsObject());
+        collection.insert(document.getId(), document.getValue().mapDataToType());
     }
 
     public boolean docExists(String id) {
@@ -52,28 +52,20 @@ public class CollectionOperator {
 
     private void upsertDocInTransaction(TransactionAttemptContext transaction,
                                         String key,
-                                        JsonObject jsonObject) {
+                                        Object content) {
         try {
             TransactionGetResult document = transaction.get(collection, key);
-            transaction.replace(document, jsonObject);
+            transaction.replace(document, content);
         } catch (DocumentNotFoundException ex) {
-            transaction.insert(collection, key, jsonObject);
+            transaction.insert(collection, key, content);
         }
     }
 
-    public void upsertDocs(Map<String, JsonObject> docs) {
-        docs.forEach(this::upsertDoc);
+    public void upsertDocsTransactionally(TransactionAttemptContext transaction, Map<String, Object> docs) {
+        docs.forEach((key, content) -> upsertDocInTransaction(transaction, key, content));
     }
 
-    public void upsertDocsTransactionally(TransactionAttemptContext transaction, Map<String, JsonObject> docs) {
-        docs.forEach((key, jsonObject) -> upsertDocInTransaction(transaction, key, jsonObject));
-    }
-
-    public void insertDocs(Map<String, JsonObject> docs) {
-        docs.forEach(this::insertDoc);
-    }
-
-    public void insertDocsTransactionally(TransactionAttemptContext transaction, Map<String, JsonObject> docs) {
-        docs.forEach((key, jsonObject) -> insertDocInTransaction(transaction, key, jsonObject));
+    public void insertDocsTransactionally(TransactionAttemptContext transaction, Map<String, Object> docs) {
+        docs.forEach((key, content) -> insertDocInTransaction(transaction, key, content));
     }
 }

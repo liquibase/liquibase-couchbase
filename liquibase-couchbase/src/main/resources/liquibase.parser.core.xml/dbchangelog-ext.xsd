@@ -112,7 +112,7 @@
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element name="id" type="xsd:string"/>
-				<xsd:element name="content" type="xsd:string"/>
+                <xsd:element ref="value"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>

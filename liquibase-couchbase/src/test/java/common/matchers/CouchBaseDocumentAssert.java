@@ -2,6 +2,7 @@ package common.matchers;
 
 import com.couchbase.client.java.json.JsonObject;
 
+import liquibase.ext.couchbase.types.Value;
 import org.assertj.core.api.AbstractAssert;
 
 import lombok.NonNull;
@@ -14,6 +15,16 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
 
     public CouchBaseDocumentAssert itsContentEquals(@NonNull JsonObject expected) {
         if (!actual.equals(expected)) {
+            failWithMessage("Unexpected content for document , expected <%s>, actual <%s>",
+                    expected,
+                    actual
+            );
+        }
+        return this;
+    }
+
+    public CouchBaseDocumentAssert itsContentEquals(@NonNull Value expected) {
+        if (!actual.equals(expected.mapDataToType())) {
             failWithMessage("Unexpected content for document , expected <%s>, actual <%s>",
                     expected,
                     actual
