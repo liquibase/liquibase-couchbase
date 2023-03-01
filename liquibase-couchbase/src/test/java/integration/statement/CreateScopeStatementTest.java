@@ -5,20 +5,21 @@ import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.CreateScopeStatement;
 import org.junit.jupiter.api.Test;
 
-import static common.constants.TestConstants.TEST_SCOPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
 class CreateScopeStatementTest extends RandomizedScopeTestCase {
-
     @Test
     void Should_create_scope() {
-        CreateScopeStatement createScopeStatement = new CreateScopeStatement(TEST_SCOPE, bucketName);
+        if (bucketOperator.hasScope(scopeName)) {
+            bucketOperator.dropScope(scopeName);
+        }
+        CreateScopeStatement createScopeStatement = new CreateScopeStatement(scopeName, bucketName);
 
         createScopeStatement.execute(database.getConnection());
 
-        assertThat(createScopeStatement.getScopeName()).isEqualTo(TEST_SCOPE);
+        assertThat(createScopeStatement.getScopeName()).isEqualTo(scopeName);
     }
 
     @Test
@@ -26,7 +27,7 @@ class CreateScopeStatementTest extends RandomizedScopeTestCase {
         CreateScopeStatement statement = new CreateScopeStatement(scopeName, bucketName);
 
         assertThatExceptionOfType(ScopeExistsException.class)
-            .isThrownBy(() -> statement.execute(database.getConnection()))
+                .isThrownBy(() -> statement.execute(database.getConnection()))
                 .withMessage("Scope [%s] already exists.", scopeName);
     }
 

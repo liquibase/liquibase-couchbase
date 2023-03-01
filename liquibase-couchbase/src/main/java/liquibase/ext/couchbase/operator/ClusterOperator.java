@@ -67,6 +67,10 @@ public class ClusterOperator {
         cluster.buckets().createBucket(settings, options);
     }
 
+    public void createBucket(String name) {
+        cluster.buckets().createBucket(BucketSettings.create(name));
+    }
+
     public void dropBucket(String bucketName) {
         cluster.buckets().dropBucket(bucketName);
     }
@@ -87,7 +91,7 @@ public class ClusterOperator {
         getQueryIndexes().createIndex(bucket, name, fieldList, options);
     }
 
-    public void createScope(String scopeName,  Keyspace keyspace) {
+    public void createScope(String scopeName, Keyspace keyspace) {
         String bucket = keyspace.getBucket();
         this.getBucketOperator(bucket).createScope(scopeName);
     }
