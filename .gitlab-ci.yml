@@ -27,7 +27,7 @@ stages:
 build:
     stage: build
     script:
-        - 'mvn $MAVEN_CLI_OPTS compile'
+        - 'mvn $MAVEN_CLI_OPTS install'
     except:
         variables:
             - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
