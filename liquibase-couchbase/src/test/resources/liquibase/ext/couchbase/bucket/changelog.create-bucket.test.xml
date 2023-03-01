@@ -40,7 +40,6 @@
             <ext:storageBackend>couchstore</ext:storageBackend>
             <ext:timeoutInSeconds>10</ext:timeoutInSeconds>
             <ext:ignoreIfExists>false</ext:ignoreIfExists>
-            <ext:ignoreIfExists>false</ext:ignoreIfExists>
         </ext:createBucket>
     </changeSet>
 

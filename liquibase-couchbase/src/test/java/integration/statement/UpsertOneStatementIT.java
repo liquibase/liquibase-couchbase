@@ -5,6 +5,7 @@ import com.couchbase.client.java.transactions.error.TransactionFailedException;
 import common.TransactionStatementTest;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.UpsertOneStatement;
+import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +43,7 @@ class UpsertOneStatementIT extends TransactionStatementTest {
         collectionOperator.insertDoc(testDocument);
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         UpsertOneStatement statement = new UpsertOneStatement(keyspace,
-                document(testDocument.getId(), TEST_DOCUMENT_2));
+                document(testDocument.getId(), TEST_DOCUMENT_2.toString(), DataType.JSON));
 
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
@@ -58,16 +59,15 @@ class UpsertOneStatementIT extends TransactionStatementTest {
         String uncreatedKey3 = "uncreated2";
 
         UpsertOneStatement statement1 = new UpsertOneStatement(keyspace,
-                document(uncreatedKey1, testDocument.getContent()));
+                document(uncreatedKey1, testDocument.getValue()));
         UpsertOneStatement statement2 = new UpsertOneStatement(keyspace,
-                document(uncreatedKey2, testDocument.getContent()));
+                document(uncreatedKey2, testDocument.getValue()));
         UpsertOneStatement statement3 = new UpsertOneStatement(keyspace,
-                document(uncreatedKey3, testDocument.getContent()));
+                document(uncreatedKey3, testDocument.getValue()));
 
-        assertThatExceptionOfType(TransactionFailedException.class).isThrownBy(() -> {
-            doInFailingTransaction(statement1.asTransactionAction(clusterOperator),
-                    statement2.asTransactionAction(clusterOperator), statement3.asTransactionAction(clusterOperator));
-        });
+        assertThatExceptionOfType(TransactionFailedException.class)
+                .isThrownBy(() -> doInFailingTransaction(statement1.asTransactionAction(clusterOperator),
+                statement2.asTransactionAction(clusterOperator), statement3.asTransactionAction(clusterOperator)));
 
         Collection collection = bucketOperator.getCollection(collectionName, scopeName);
         assertThat(collection).hasNoDocument(uncreatedKey1).hasNoDocument(uncreatedKey2).hasNoDocument(uncreatedKey3);

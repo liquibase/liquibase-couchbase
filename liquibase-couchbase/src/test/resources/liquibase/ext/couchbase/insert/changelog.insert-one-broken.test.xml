@@ -29,19 +29,25 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-			<ext:document>
-				<ext:id>existingKey</ext:id>
-				<ext:content>{"name":"Name", "age": 99}</ext:content>
-			</ext:document>
+            <ext:document>
+                <ext:id>existingKey</ext:id>
+                <ext:value>
+                    <ext:data>{"name":"Name", "age": 99}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-			<ext:document>
-				<ext:id>newKey</ext:id>
-				<ext:content>{"name":"Name", "age": 99}</ext:content>
-			</ext:document>
+            <ext:document>
+                <ext:id>newKey</ext:id>
+                <ext:value>
+                    <ext:data>{"name":"Name", "age": 99}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
         </ext:insertOne>
     </changeSet>
 </databaseChangeLog>

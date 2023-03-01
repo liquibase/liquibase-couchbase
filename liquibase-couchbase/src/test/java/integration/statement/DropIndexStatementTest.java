@@ -49,7 +49,7 @@ class DropIndexStatementTest extends RandomizedScopeTestCase {
     }
 
     private static String getFirstField(Document doc) {
-        return doc.getContentAsObject().getNames().stream().findFirst().get();
+        return doc.getContentAsJson().getNames().stream().findFirst().get();
     }
 
 }

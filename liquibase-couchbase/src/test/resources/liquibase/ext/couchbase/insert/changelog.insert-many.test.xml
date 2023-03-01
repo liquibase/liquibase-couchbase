@@ -32,11 +32,17 @@
             <ext:documents>
                 <ext:document>
                     <ext:id>id1</ext:id>
-                    <ext:content>{key:value}</ext:content>
+                    <ext:value>
+                        <ext:data>{key:value}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
                 </ext:document>
                 <ext:document>
                     <ext:id>id2</ext:id>
-                    <ext:content>{key2:value2}</ext:content>
+                    <ext:value>
+                        <ext:data>{key2:value2}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
                 </ext:document>
             </ext:documents>
         </ext:insertMany>

@@ -5,7 +5,6 @@ import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
-import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
@@ -106,10 +105,6 @@ public class ClusterOperator {
         }
     }
 
-    public void dropBucket(String name) {
-        cluster.buckets().dropBucket(name);
-    }
-
     public void dropIndex(String indexName, Keyspace keyspace) {
         DropQueryIndexOptions options = DropQueryIndexOptions.dropQueryIndexOptions()
                 .collectionName(keyspace.getCollection())
@@ -144,10 +139,10 @@ public class ClusterOperator {
         getQueryIndexes().dropPrimaryIndex(keyspace.getBucket(), options);
     }
 
-    public Map<String, JsonObject> checkDocsAndTransformToJsons(List<Document> documents) {
+    public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {
         try {
             return documents.stream()
-                    .collect(toMap(Document::getId, ee -> JsonObject.fromJson(ee.getContent())));
+                    .collect(toMap(Document::getId, ee -> ee.getValue().mapDataToType()));
         } catch (InvalidArgumentException ex) {
             throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
         }

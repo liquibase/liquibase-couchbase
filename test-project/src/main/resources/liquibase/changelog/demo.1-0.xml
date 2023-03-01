@@ -33,37 +33,49 @@
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-			<ext:document>
-				<ext:id>1</ext:id>
-				<ext:content>{"name":"Roman", "age": 51}</ext:content>
-			</ext:document>
+            <ext:document>
+                <ext:id>1</ext:id>
+                <ext:value>
+                    <ext:data>{"name":"Roman", "age": 51}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-			<ext:document>
-				<ext:id>2</ext:id>
-				<ext:content>{"name":"Evgenii", "age": 52}</ext:content>
-			</ext:document>
+            <ext:document>
+                <ext:id>2</ext:id>
+                <ext:value>
+                    <ext:data>{"name":"Evgenii", "age": 52}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-			<ext:document>
-				<ext:id>2</ext:id>
-				<ext:content>{"name":"Konstantin", "age": 53}</ext:content>
-			</ext:document>
+            <ext:document>
+                <ext:id>2</ext:id>
+                <ext:value>
+                    <ext:data>{"name":"Konstantin", "age": 53}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
         </ext:insertOne>
         <ext:insertOne>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
-			<ext:document>
-				<ext:id>4</ext:id>
-				<ext:content>{"name":"Dmitry", "age": 54}</ext:content>
-			</ext:document>
+            <ext:document>
+                <ext:id>4</ext:id>
+                <ext:value>
+                    <ext:data>{"name":"Dmitry", "age": 54}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
         </ext:insertOne>
     </changeSet>
 

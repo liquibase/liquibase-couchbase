@@ -73,7 +73,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
     }
 
     public CouchbaseCollectionAssert containDocuments(List<Document> testDocuments) {
-        testDocuments.forEach((doc) -> extractingDocument(doc.getId()).itsContentEquals(doc.getContent()));
+        testDocuments.forEach((doc) -> extractingDocument(doc.getId()).itsContentEquals(doc.getValue()));
 
         return this;
     }
