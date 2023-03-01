@@ -14,7 +14,7 @@ import lombok.NonNull;
 public class CouchbaseLock {
 
     /**
-     * Id of underlying lock bucket
+     * An ID of the underlying lock bucket
      */
     @NonNull
     private String id;

@@ -23,7 +23,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
     public CouchbaseCollectionAssert hasDocument(@NonNull String id) {
         if (!actual.exists(id).exists()) {
-            failWithMessage("Collection [<%s>] doesn't contains document with ID [<%s>] in scope [<%s>]",
+            failWithMessage("Collection [%s] doesn't contain document with ID [%s] in the scope [%s]",
                     actual.name(),
                     id,
                     actual.scopeName()
@@ -35,7 +35,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
     public CouchbaseCollectionAssert hasNoDocument(@NonNull String id) {
         if (actual.exists(id).exists()) {
-            failWithMessage("Collection [<%s>] contains document with ID [<%s>] in scope [<%s>]",
+            failWithMessage("Collection [%s] contains document with ID [%s] in the scope [%s]",
                     actual.name(),
                     id,
                     actual.scopeName()
@@ -84,10 +84,10 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
                     .contentAs(CouchbaseLock.class)
                     .getOwner().equals(owner);
             if (!owns) {
-                failWithMessage("[%s] is not owner of lock [%s]", owner, lockId);
+                failWithMessage("[%s] is not an owner of the lock [%s]", owner, lockId);
             }
         } catch (CouchbaseException e) {
-            failWithMessage("No such lock with id [%s]", lockId);
+            failWithMessage("No such lock with ID [%s]", lockId);
         }
 
         return this;

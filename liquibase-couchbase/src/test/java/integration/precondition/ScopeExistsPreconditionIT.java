@@ -28,11 +28,11 @@ class ScopeExistsPreconditionIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_throw_exception_when_scope_doesnt_exists() {
-        String notExistedScope = "notExistedScope";
-        precondition.setScopeName(notExistedScope);
+        String notExistingScope = "notExistingScope";
+        precondition.setScopeName(notExistingScope);
 
         assertThatExceptionOfType(ScopeNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
-                .withMessage("Scope %s does not exist in bucket %s", notExistedScope, bucketName);
+                .withMessage("Scope %s does not exist in bucket %s", notExistingScope, bucketName);
     }
 }

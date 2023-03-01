@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents a Couchbase document, contain it's key and JSON value
+ * Represents a Couchbase document, contains its key and JSON value
  * @see AbstractLiquibaseSerializable
  * @see liquibase.serializer.LiquibaseSerializable
  */

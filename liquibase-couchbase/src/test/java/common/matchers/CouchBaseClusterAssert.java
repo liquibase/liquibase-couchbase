@@ -44,7 +44,7 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
     public CouchBaseClusterAssert hasBucket(String bucketName) {
         BucketSettings bucket = actual.buckets().getBucket(bucketName);
         if (bucket == null) {
-            failWithMessage("Bucket with name <%s> does not exist", bucketName);
+            failWithMessage("Bucket [%s] doesn't exist", bucketName);
         }
         return this;
     }
@@ -52,7 +52,7 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
     public CouchBaseClusterAssert hasNoBucket(String bucketName) {
         Map<String, BucketSettings> allBuckets = actual.buckets().getAllBuckets();
         if(allBuckets.containsKey(bucketName)) {
-            failWithMessage("Failed to delete bucket with <%s> name", bucketName);
+            failWithMessage("Failed to delete bucket [%s]", bucketName);
         }
         return this;
     }

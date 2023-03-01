@@ -14,9 +14,9 @@ public class TestPropertyProvider implements PropertyProvider {
     private static final Properties testProperties = readPropertiesFile();
 
     /**
-     * Lookup firstly in Env properties and then in property file
-     * @param name - Property name
-     * @return not null value or
+     * Lookup first in the Env properties and then in the property file
+     * @param name property name
+     * @return non-null string value of the property
      *
      * @throws IllegalArgumentException if property isn't provided
      */

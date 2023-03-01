@@ -16,7 +16,7 @@ class CollectionExistsStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
-    void Should_return_false_when_collection_doesnt_exists() {
+    void Should_return_false_when_collection_does_not_exist() {
         CollectionExistsStatement statement = new CollectionExistsStatement(bucketName, scopeName,
                 "notCreatedCollection");
 
