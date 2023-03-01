@@ -41,6 +41,7 @@
         <sonar.maven.plugin.version>3.9.1.2184</sonar.maven.plugin.version>
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
         <failsafe.maven.plugin.version>3.0.0-M9</failsafe.maven.plugin.version>
+        <commons-io.version>2.11.0</commons-io.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${google.guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- test dependencies -->

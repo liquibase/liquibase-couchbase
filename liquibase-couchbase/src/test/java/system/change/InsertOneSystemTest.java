@@ -8,8 +8,6 @@ import liquibase.Liquibase;
 import liquibase.changelog.ChangeSet;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.operator.CollectionOperator;
-import liquibase.ext.couchbase.provider.ContextServiceProvider;
-import liquibase.ext.couchbase.provider.ServiceProvider;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import system.LiquiBaseSystemTest;
@@ -21,14 +19,14 @@ import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
+import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class InsertOneSystemTest extends LiquiBaseSystemTest {
     private static final CollectionOperator testCollectionOperator =
             bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE);
     private static final Collection collection = testCollectionOperator.getCollection();
-    private static final ServiceProvider serviceProvider = new ContextServiceProvider(database);
-    private static final Scope scope = cluster.bucket(serviceProvider.getServiceBucketName()).scope(DEFAULT_SERVICE_SCOPE);
+    private static final Scope scope = cluster.bucket(SERVICE_BUCKET_NAME).scope(DEFAULT_SERVICE_SCOPE);
 
     @Test
     @SneakyThrows

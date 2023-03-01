@@ -19,14 +19,14 @@ import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.lockservice.CouchbaseLockService.LOCK_COLLECTION_NAME;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
-import static liquibase.ext.couchbase.provider.ServiceProvider.FALLBACK_SERVICE_BUCKET_NAME;
+import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedTest {
 
-    private static final String LOCK_ID = FALLBACK_SERVICE_BUCKET_NAME;
+    private static final String LOCK_ID = SERVICE_BUCKET_NAME;
 
     private static final CouchbaseLockService lockService = new CouchbaseLockService();
     private static final ContextServiceProvider serviceProvider = new ContextServiceProvider(database);
@@ -39,7 +39,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
         lockService.setChangeLogLockRecheckTime(1000);
         lockService.setChangeLogLockWaitTime(1000);
         if (serviceBucketExists()) {
-            cluster.buckets().dropBucket(FALLBACK_SERVICE_BUCKET_NAME);
+            cluster.buckets().dropBucket(SERVICE_BUCKET_NAME);
         }
     }
 
@@ -57,7 +57,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
         lockService.init();
 
         assertTrue(serviceBucketExists());
-        assertThat(cluster.bucket(FALLBACK_SERVICE_BUCKET_NAME)).hasCollectionInScope(LOCK_COLLECTION_NAME, DEFAULT_SERVICE_SCOPE);
+        assertThat(cluster.bucket(SERVICE_BUCKET_NAME)).hasCollectionInScope(LOCK_COLLECTION_NAME, DEFAULT_SERVICE_SCOPE);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
 
 
     private static boolean serviceBucketExists() {
-        return clusterOperator.isBucketExists(FALLBACK_SERVICE_BUCKET_NAME);
+        return clusterOperator.isBucketExists(SERVICE_BUCKET_NAME);
     }
 
     private Collection getServiceCollection() {

@@ -13,6 +13,7 @@ import java.util.List;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
+import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 /**
@@ -33,7 +34,7 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
 
     @Override
     protected boolean existsChangeLogCollection() {
-        String bucketName = getServiceProvider().getServiceBucketName();
+        String bucketName = SERVICE_BUCKET_NAME;
 
         // TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
         CollectionExistsStatement collectionExistsStatement =
