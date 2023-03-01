@@ -11,9 +11,9 @@ public interface PropertyProvider {
 
 
     /**
-     * Lookup firstly in Env properties and then in property file
-     * @param name - Property name
-     * @return not null value or
+     * Lookup first in the Env properties and then in the property file
+     * @param name property name
+     * @return non-null string value of property
      *
      * @throws IllegalArgumentException if property isn't provided
      */
@@ -24,9 +24,9 @@ public interface PropertyProvider {
     }
 
     /**
-     * Lookup firstly in Env properties and then in property file
-     * @param name - Property name
-     * @return not null value or default value
+     * Lookup first in the Env properties and then in the property file
+     * @param name property name
+     * @return non-null string value or default value
      */
     @NonNull
     static String getPropertyOrDefault(String name, String defaultValue, Properties properties) {

@@ -35,13 +35,13 @@ class DocumentExistsByKeyPreconditionIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_throw_exception_when_document_doesnt_exists() {
-        String notExistedKey = "notExistedKey";
+        String notExistingKey = "notExistingKey";
 
-        precondition.setKey(notExistedKey);
+        precondition.setKey(notExistingKey);
 
         assertThatExceptionOfType(DocumentNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
-                .withMessage("Key %s does not exist in bucket %s in scope %s and " +
-                        "collection %s", notExistedKey, bucketName, scopeName, collectionName);
+                .withMessage("Key %s does not exist in bucket %s in scope %s and collection %s",
+                        notExistingKey, bucketName, scopeName, collectionName);
     }
 }

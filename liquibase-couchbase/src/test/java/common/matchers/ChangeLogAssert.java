@@ -17,8 +17,8 @@ import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLEC
 public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
 
     private String key;
-    private Scope scope;
-    private Collection collection;
+    private final Scope scope;
+    private final Collection collection;
 
     private CouchbaseChangeLog changeLog;
 
@@ -33,10 +33,10 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
         return new ChangeLogAssert(scope);
     }
 
-    public ChangeLogAssert documentsSizeEqualTo(@NonNull int numberOfDocuments) {
-        List<JsonObject> documents = scope.query("Select * from DATABASECHANGELOG").rowsAsObject();
+    public ChangeLogAssert documentsSizeEqualTo(int numberOfDocuments) {
+        List<JsonObject> documents = scope.query("Select * from " + CHANGE_LOG_COLLECTION).rowsAsObject();
         if (documents.size() != numberOfDocuments) {
-            failWithMessage("Size of documents not equals to <%s>, actual number is <%s>", numberOfDocuments,
+            failWithMessage("The size of documents is not equal to [%s], the actual number is [%s]", numberOfDocuments,
                     documents.size());
         }
 
@@ -48,7 +48,7 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
             changeLog = collection.get(key).contentAs(CouchbaseChangeLog.class);
             this.key = key;
         } catch (DocumentNotFoundException ex) {
-            failWithMessage("ChangeLog with key <%s> not exists", key);
+            failWithMessage("A changelog with key [%s] doesn't exist", key);
         }
 
         return this;
@@ -57,7 +57,7 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
     public ChangeLogAssert hasNoDocument(@NonNull String key) {
         try {
             changeLog = collection.get(key).contentAs(CouchbaseChangeLog.class);
-            failWithMessage("ChangeLog with key <%s> exists", key);
+            failWithMessage("A changelog with key [%s] exists", key);
         } catch (DocumentNotFoundException ignored) {
         }
 
@@ -66,7 +66,7 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
 
     public ChangeLogAssert withExecType(@NonNull ChangeSet.ExecType execType) {
         if (!changeLog.getExecType().equals(execType)) {
-            failWithMessage("ChangeLog with key <%s> doesn't contain execType <%s>, actual type is <%s>", key,
+            failWithMessage("A changelog with key [%s] doesn't contain an execType [%s], the actual type is [%s]", key,
                     execType, changeLog.getExecType());
         }
 
@@ -75,7 +75,7 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
 
     public ChangeLogAssert withOrder(@NonNull int order) {
         if (changeLog.getOrderExecuted() != order) {
-            failWithMessage("ChangeLog with key <%s> doesn't have order <%s>, actual order is <%s>", key,
+            failWithMessage("A changelog with key [%s] doesn't have an order [%s], the actual order is [%s]", key,
                     order, changeLog.getOrderExecuted());
         }
 

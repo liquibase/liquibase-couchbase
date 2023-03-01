@@ -32,7 +32,7 @@ public class CouchbaseChangelogLocker {
      */
     public void release(String lockId, String owner) throws LockException {
         if (!isHeldBy(lockId, owner)) {
-            throw new LockException(format("Service [%s] is not owner of [%s] lock", owner, lockId));
+            throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
         }
 
         collection.remove(lockId);

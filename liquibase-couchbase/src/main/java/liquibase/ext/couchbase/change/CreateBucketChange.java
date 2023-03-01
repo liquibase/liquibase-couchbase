@@ -60,7 +60,7 @@ public class CreateBucketChange extends CouchbaseChange {
 
     @Override
     public String getConfirmationMessage() {
-        return String.format("Bucket <%s> has been created", bucketName);
+        return String.format("Bucket [%s] has been created", bucketName);
     }
 
     @Override

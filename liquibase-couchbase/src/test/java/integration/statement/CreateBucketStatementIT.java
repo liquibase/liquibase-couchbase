@@ -35,7 +35,7 @@ public class CreateBucketStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
-    public void Should_skip_if_bucket_exist_and_ignoring_enable() {
+    public void Should_skip_if_bucket_exists_and_ignoring_enable() {
         clusterOperator.getOrCreateBucketOperator(CREATE_BUCKET_TEST_NAME);
         BucketSettings settings = BucketSettings.create(CREATE_BUCKET_TEST_NAME);
         CreateBucketOptions bucketOptions = CreateBucketOptions.createBucketOptions();
@@ -46,7 +46,7 @@ public class CreateBucketStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
-    public void Should_throw_if_bucket_exist_and_ignoring_disable() {
+    public void Should_throw_if_bucket_exists_and_ignoring_disable() {
         clusterOperator.getOrCreateBucketOperator(CREATE_BUCKET_TEST_NAME);
         BucketSettings settings = BucketSettings.create(CREATE_BUCKET_TEST_NAME);
         CreateBucketOptions bucketOptions = CreateBucketOptions.createBucketOptions();

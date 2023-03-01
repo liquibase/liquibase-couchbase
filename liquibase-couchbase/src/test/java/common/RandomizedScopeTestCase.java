@@ -8,7 +8,8 @@ import static common.constants.TestConstants.INDEX;
 import static common.constants.TestConstants.TEST_BUCKET;
 
 /**
- * Singleton Use existing testBucket, creates random scope and collection before all tests
+ * Singleton <br>
+ * Uses existing testBucket, creates random scope and collection before all tests
  */
 @Slf4j
 public class RandomizedScopeTestCase extends CouchbaseContainerizedTest {

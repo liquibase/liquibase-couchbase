@@ -12,7 +12,6 @@ import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.matchers.CouchBaseClusterAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
-
 class DropPrimaryIndexStatementTest extends RandomizedScopeTestCase {
     private Keyspace keyspace;
 

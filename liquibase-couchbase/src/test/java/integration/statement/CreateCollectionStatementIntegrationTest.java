@@ -28,7 +28,7 @@ class CreateCollectionStatementIntegrationTest extends RandomizedScopeTestCase {
     }
 
     @Test
-    void Collection_should_be_created_if_it_not_exists() {
+    void Collection_should_be_created_if_it_does_not_exists() {
         Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, collectionName);
         CreateCollectionStatement statement =
                 new CreateCollectionStatement(keyspace, false);

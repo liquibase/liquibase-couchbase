@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Document's value(s). Used in MutateIn
+ * Document value(s). Used in MutateIn
  * @see AbstractLiquibaseSerializable
  * @see liquibase.serializer.LiquibaseSerializable
  */

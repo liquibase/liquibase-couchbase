@@ -28,12 +28,12 @@ class CollectionExistsPreconditionIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_throw_exception_when_collection_doesnt_exists() {
-        String notCreatedCollection = "notCreatedCollection";
-        precondition.setCollectionName(notCreatedCollection);
+        String notExistingCollection = "notExistingCollection";
+        precondition.setCollectionName(notExistingCollection);
 
         assertThatExceptionOfType(CollectionNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
                 .withMessage("Collection %s does not exist in bucket %s in scope %s",
-                        notCreatedCollection, bucketName, scopeName);
+                        notExistingCollection, bucketName, scopeName);
     }
 }

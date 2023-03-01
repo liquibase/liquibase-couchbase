@@ -17,7 +17,7 @@ class BucketExistsStatementIT extends ConstantScopeTestCase {
     }
 
     @Test
-    void Should_return_false_when_bucket_doesnt_exists() {
+    void Should_return_false_when_bucket_doesnt_exist() {
         BucketExistsStatement statement = new BucketExistsStatement("someNotCreatedBucket");
 
         assertThat(statement.isTrue(database.getConnection())).isFalse();

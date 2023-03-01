@@ -108,14 +108,14 @@ public class CouchbaseLockService implements LockService {
             return;
         }
 
-        logger.info("Initializing CouchbaseLockService");
+        logger.info(format("Initializing CouchbaseLockService [%s]", serviceId));
 
         serviceProvider = ofNullable(serviceProvider)
                 .orElse(new ContextServiceProvider(database));
         Collection collection = serviceProvider.getServiceCollection(LOCK_COLLECTION_NAME);
         locker = new CouchbaseChangelogLocker(collection);
         bucketName = collection.bucketName();
-        logger.info("Using locks for bucket " + bucketName);
+        logger.info(format("Using locks for bucket [%s]", bucketName));
 
         refreshLockState();
         timer.schedule(refreshLockStateTask, 0, changeLogLockRecheckTime);
@@ -135,7 +135,7 @@ public class CouchbaseLockService implements LockService {
         while (!acquireLock()) {
             failIfTimeLimitExceeded(timeToGiveUp);
 
-            logger.info(format("Service [%s] is waiting for lock on bucket [%s]", serviceId, bucketName));
+            logger.info(format("Service [%s] is waiting for a lock on the bucket [%s]", serviceId, bucketName));
             doWait();
         }
     }
@@ -167,21 +167,21 @@ public class CouchbaseLockService implements LockService {
         }
 
         Instant lockedAt = now();
-        logger.info(format("Acquiring lock on bucket [%s], serviceId [%s]", bucketName, serviceId));
+        logger.info(format("Acquiring lock on the bucket [%s] from the service [%s]", bucketName, serviceId));
         boolean locked = locker.tryAcquire(bucketName, serviceId, lockedAt);
         hasLock.set(locked);
-        String result = locked ? "has been successfully received" : "has been not received";
-        logger.info(format("Lock on bucket [%s], with serviceId [%s] ,%s", bucketName, serviceId, result));
+        String result = locked ? "has been successfully acquired" : "hasn't been acquired";
+        logger.info(format("Lock on the bucket [%s] from the service [%s] %s", bucketName, serviceId, result));
 
         return hasLock.get();
     }
 
     @Override
     public void releaseLock() throws LockException {
-        logger.info(format("Releasing lock on bucket [%s] , serviceID [%s]", bucketName, serviceId));
+        logger.info(format("Releasing lock on the bucket [%s] from the service [%s]", bucketName, serviceId));
         locker.release(bucketName, serviceId);
         hasLock.set(false);
-        logger.info(format("Lock on bucket [%s] ,with serviceID [%s], has been released successfully", bucketName, serviceId));
+        logger.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", bucketName, serviceId));
     }
 
     @Override
@@ -206,7 +206,7 @@ public class CouchbaseLockService implements LockService {
         try {
             releaseLock();
         } catch (LockException e) {
-            logger.severe("Could not release lock during destroy");
+            logger.severe("Could not release a lock during the destroy");
         }
     }
 
@@ -220,7 +220,7 @@ public class CouchbaseLockService implements LockService {
                 releaseLock();
             }
         } catch (LockException e) {
-            logger.severe("Could not release lock during reset");
+            logger.severe("Could not release a lock during the reset");
         }
     }
 
