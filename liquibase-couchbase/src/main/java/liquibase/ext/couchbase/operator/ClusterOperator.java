@@ -5,6 +5,7 @@ import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
+import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
@@ -69,6 +70,10 @@ public class ClusterOperator {
 
     public void createBucket(String name) {
         cluster.buckets().createBucket(BucketSettings.create(name));
+    }
+
+    public void updateBucketWithOptionsAndSettings(BucketSettings settings, UpdateBucketOptions options) {
+        cluster.buckets().updateBucket(settings, options);
     }
 
     public void dropBucket(String bucketName) {

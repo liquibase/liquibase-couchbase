@@ -13,6 +13,7 @@ import liquibase.ext.couchbase.change.utils.BucketCreationMapper;
 import liquibase.ext.couchbase.statement.CreateBucketStatement;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,6 +38,7 @@ import lombok.Setter;
 )
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CreateBucketChange extends CouchbaseChange {
     private final BucketCreationMapper mapper = new BucketCreationMapper(this);
 
