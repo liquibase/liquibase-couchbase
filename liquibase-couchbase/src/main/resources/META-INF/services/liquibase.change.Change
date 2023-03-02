@@ -11,4 +11,5 @@ liquibase.ext.couchbase.change.CreateBucketChange
 liquibase.ext.couchbase.change.MutateInChange
 liquibase.ext.couchbase.change.CreateScopeChange
 liquibase.ext.couchbase.change.DropBucketChange
+liquibase.ext.couchbase.change.DropScopeChange
 liquibase.ext.couchbase.change.UpdateBucketChange
