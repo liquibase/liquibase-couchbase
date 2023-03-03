@@ -53,7 +53,7 @@
     </changeSet>
 
     <changeSet id="3" author="evgenii.anishchenko">
-        <ext:insertMany>
+        <ext:insertDocuments>
             <ext:bucketName>bucketUnderAttack</ext:bucketName>
             <ext:scopeName>_default</ext:scopeName>
             <ext:collectionName>names</ext:collectionName>
@@ -70059,11 +70059,11 @@
                 </ext:value>
                 </ext:document>
             </ext:documents>
-        </ext:insertMany>
+        </ext:insertDocuments>
     </changeSet>
 
     <changeSet id="4" author="evgenii.anishchenko">
-        <ext:upsertMany>
+        <ext:upsertDocuments>
             <ext:bucketName>bucketUnderAttack</ext:bucketName>
             <ext:scopeName>_default</ext:scopeName>
             <ext:collectionName>names</ext:collectionName>
@@ -105069,7 +105069,7 @@
                 </ext:value>
                 </ext:document>
             </ext:documents>
-        </ext:upsertMany>
+        </ext:upsertDocuments>
     </changeSet>
 
 </databaseChangeLog>
