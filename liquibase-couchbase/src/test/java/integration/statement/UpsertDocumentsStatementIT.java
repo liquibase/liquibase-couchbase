@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import common.TransactionStatementTest;
 import common.operators.TestCollectionOperator;
-import liquibase.ext.couchbase.statement.UpsertManyStatement;
+import liquibase.ext.couchbase.statement.UpsertDocumentsStatement;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-class UpsertManyStatementIT extends TransactionStatementTest {
+class UpsertDocumentsStatementIT extends TransactionStatementTest {
     private TestCollectionOperator collectionOperator;
     private List<Document> testDocuments;
 
@@ -39,7 +39,7 @@ class UpsertManyStatementIT extends TransactionStatementTest {
         List<Document> testDocuments = Lists.newArrayList(doc1, doc2);
         collectionOperator.insertDoc(doc1.getId(), TEST_DOCUMENT_3);
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        UpsertManyStatement statement = new UpsertManyStatement(keyspace, testDocuments);
+        UpsertDocumentsStatement statement = new UpsertDocumentsStatement(keyspace, testDocuments);
 
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
@@ -50,7 +50,7 @@ class UpsertManyStatementIT extends TransactionStatementTest {
     @Test
     void Should_no_insert_documents_when_transaction_was_broken() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        UpsertManyStatement statement = new UpsertManyStatement(keyspace, testDocuments);
+        UpsertDocumentsStatement statement = new UpsertDocumentsStatement(keyspace, testDocuments);
 
         assertThatExceptionOfType(TransactionFailedException.class)
                 .isThrownBy(() -> doInFailingTransaction(statement.asTransactionAction(clusterOperator)));

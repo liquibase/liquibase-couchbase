@@ -25,7 +25,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="konstantin.umanets">
-        <ext:insertMany>
+        <ext:insertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>_default</ext:scopeName>
             <ext:collectionName>_default</ext:collectionName>
@@ -45,6 +45,6 @@
                     </ext:value>
                 </ext:document>
             </ext:documents>
-        </ext:insertMany>
+        </ext:insertDocuments>
     </changeSet>
 </databaseChangeLog>

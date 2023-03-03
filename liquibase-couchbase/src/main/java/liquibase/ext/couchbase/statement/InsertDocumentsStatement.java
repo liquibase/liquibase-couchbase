@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * A statement to upsert many instances of a {@link Document} inside one transaction into a keyspace
+ * A statement to insert many instances of a {@link Document} inside one transaction into a keyspace
  * @see Document
  * @see CouchbaseStatement
  * @see Keyspace
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UpsertManyStatement extends CouchbaseTransactionStatement {
+public class InsertDocumentsStatement extends CouchbaseTransactionStatement {
 
     private final Keyspace keyspace;
     private final List<Document> documents;
@@ -30,10 +30,9 @@ public class UpsertManyStatement extends CouchbaseTransactionStatement {
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {
         Map<String, Object> contentList = clusterOperator.checkDocsAndTransformToObjects(documents);
-
         clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
-                .upsertDocsTransactionally(transaction, contentList);
+                .insertDocsTransactionally(transaction, contentList);
     }
 
 }

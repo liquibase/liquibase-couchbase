@@ -29,7 +29,7 @@
 
 
     <changeSet id="3" author="evgenii.anishchenko">
-        <ext:insertOne>
+        <ext:insertDocuments>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
@@ -40,8 +40,8 @@
                     <ext:type>Json</ext:type>
                 </ext:value>
             </ext:document>
-        </ext:insertOne>
-        <ext:insertOne>
+        </ext:insertDocuments>
+        <ext:insertDocuments>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
@@ -52,8 +52,8 @@
                     <ext:type>Json</ext:type>
                 </ext:value>
             </ext:document>
-        </ext:insertOne>
-        <ext:insertOne>
+        </ext:insertDocuments>
+        <ext:insertDocuments>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
@@ -64,8 +64,8 @@
                     <ext:type>Json</ext:type>
                 </ext:value>
             </ext:document>
-        </ext:insertOne>
-        <ext:insertOne>
+        </ext:insertDocuments>
+        <ext:insertDocuments>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
@@ -76,7 +76,7 @@
                     <ext:type>Json</ext:type>
                 </ext:value>
             </ext:document>
-        </ext:insertOne>
+        </ext:insertDocuments>
     </changeSet>
 
     <changeSet id="4" author="evgenii.anishchenko">

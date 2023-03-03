@@ -8,7 +8,7 @@
 		 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="5" author="roman.oborin">
-        <ext:upsertOne>
+        <ext:upsertDocuments>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
@@ -19,9 +19,9 @@
                     <ext:type>Json</ext:type>
                 </ext:value>
             </ext:document>
-        </ext:upsertOne>
+        </ext:upsertDocuments>
 
-        <ext:upsertMany>
+        <ext:upsertDocuments>
             <ext:bucketName>demoBucket</ext:bucketName>
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
@@ -48,7 +48,7 @@
                     </ext:value>
                 </ext:document>
             </ext:documents>
-        </ext:upsertMany>
+        </ext:upsertDocuments>
     </changeSet>
 
     <changeSet id="6" author="roman.oborin">
