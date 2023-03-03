@@ -3,14 +3,12 @@ package liquibase.ext.couchbase.operator;
 import com.couchbase.client.core.error.BucketNotFoundException;
 import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
-import com.couchbase.client.java.manager.query.DropQueryIndexOptions;
-import com.couchbase.client.java.manager.query.GetAllQueryIndexesOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
 import liquibase.ext.couchbase.types.Document;
@@ -52,16 +50,31 @@ public class ClusterOperator {
         getQueryIndexes().createPrimaryIndex(bucket, options);
     }
 
+    public void createCollectionPrimaryIndex(Keyspace keyspace, CreatePrimaryQueryIndexOptions options) {
+        Collection col = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        if (options != null) {
+            col.queryIndexes().createPrimaryIndex(options);
+        }
+        else {
+            col.queryIndexes().createPrimaryIndex();
+        }
+    }
+
     public void createPrimaryIndex(String bucket) {
         getQueryIndexes().createPrimaryIndex(bucket);
     }
 
-    public void createQueryIndex(String indexName, String bucket, List<Field> fields,
+    public void createQueryIndex(String indexName, Keyspace keyspace, List<Field> fields,
                                  CreateQueryIndexOptions options) {
         List<String> fieldList = fields.stream()
                 .map(Field::getField)
                 .collect(toList());
-        cluster.queryIndexes().createIndex(bucket, indexName, fieldList, options);
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        collection.queryIndexes().createIndex(indexName, fieldList, options);
     }
 
     public void createBucketWithOptionsAndSettings(BucketSettings settings, CreateBucketOptions options) {
@@ -89,11 +102,10 @@ public class ClusterOperator {
     }
 
     public void createIndex(String name, Keyspace keyspace, List<String> fieldList) {
-        String bucket = keyspace.getBucket();
-        CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions()
-                .scopeName(keyspace.getScope())
-                .collectionName(keyspace.getCollection());
-        getQueryIndexes().createIndex(bucket, name, fieldList, options);
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        collection.queryIndexes().createIndex(name, fieldList);
     }
 
     public void createScope(String scopeName, Keyspace keyspace) {
@@ -115,10 +127,10 @@ public class ClusterOperator {
     }
 
     public void dropIndex(String indexName, Keyspace keyspace) {
-        DropQueryIndexOptions options = DropQueryIndexOptions.dropQueryIndexOptions()
-                .collectionName(keyspace.getCollection())
-                .scopeName(keyspace.getScope());
-        getQueryIndexes().dropIndex(keyspace.getBucket(), indexName, options);
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        collection.queryIndexes().dropIndex(indexName);
     }
 
     public void dropIndex(String indexName, String bucketName) {
@@ -132,20 +144,19 @@ public class ClusterOperator {
     }
 
     public boolean indexExists(String indexName, Keyspace keyspace) {
-        GetAllQueryIndexesOptions options = GetAllQueryIndexesOptions.getAllQueryIndexesOptions()
-                .collectionName(keyspace.getCollection())
-                .scopeName(keyspace.getScope());
-        return getQueryIndexes().getAllIndexes(keyspace.getBucket(), options).stream()
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        return collection.queryIndexes().getAllIndexes().stream()
                 .map(QueryIndex::name)
                 .anyMatch(indexName::equals);
     }
 
     public void dropPrimaryIndex(Keyspace keyspace) {
-        DropPrimaryQueryIndexOptions options = DropPrimaryQueryIndexOptions
-                .dropPrimaryQueryIndexOptions()
-                .collectionName(keyspace.getCollection())
-                .scopeName(keyspace.getScope());
-        getQueryIndexes().dropPrimaryIndex(keyspace.getBucket(), options);
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        collection.queryIndexes().dropPrimaryIndex();
     }
 
     public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {

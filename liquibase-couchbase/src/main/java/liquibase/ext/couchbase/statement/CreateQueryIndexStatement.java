@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import liquibase.Scope;
-import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.IndexExistsException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Field;
@@ -48,10 +47,8 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
             throw new IndexExistsException(indexName);
         }
         CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions()
-                .collectionName(keyspace.getCollection())
-                .scopeName(keyspace.getScope())
                 .deferred(deferred)
                 .numReplicas(numReplicas);
-        clusterOperator.createQueryIndex(indexName, keyspace.getBucket(), fields, options);
+        clusterOperator.createQueryIndex(indexName, keyspace, fields, options);
     }
 }
