@@ -140,24 +140,6 @@ public class CouchbaseLockService implements LockService {
         }
     }
 
-    private void refreshLockState() {
-        hasLock.set(locker.isHeldBy(bucketName, serviceId));
-    }
-
-    private void failIfTimeLimitExceeded(Instant timeToGiveUp) throws LockException {
-        if (now().isAfter(timeToGiveUp)) {
-            throw new LockException("Could not acquire lock");
-        }
-    }
-
-    private void doWait() throws LockException {
-        try {
-            TimeUnit.MILLISECONDS.sleep(changeLogLockRecheckTime);
-        } catch (InterruptedException e) {
-            throw new LockException(e);
-        }
-    }
-
     @Override
     public boolean acquireLock() {
         init();
@@ -221,6 +203,27 @@ public class CouchbaseLockService implements LockService {
             }
         } catch (LockException e) {
             logger.severe("Could not release a lock during the reset");
+        }
+    }
+
+    private void refreshLockState() {
+        hasLock.set(locker.isHeldBy(bucketName, serviceId));
+        if (hasLock.get()) {
+            locker.refreshLockExpiry(bucketName);
+        }
+    }
+
+    private void failIfTimeLimitExceeded(Instant timeToGiveUp) throws LockException {
+        if (now().isAfter(timeToGiveUp)) {
+            throw new LockException("Could not acquire lock");
+        }
+    }
+
+    private void doWait() throws LockException {
+        try {
+            TimeUnit.MILLISECONDS.sleep(changeLogLockRecheckTime);
+        } catch (InterruptedException e) {
+            throw new LockException(e);
         }
     }
 
