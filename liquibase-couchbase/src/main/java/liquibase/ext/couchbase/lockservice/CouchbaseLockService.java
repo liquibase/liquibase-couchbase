@@ -1,16 +1,6 @@
 package liquibase.ext.couchbase.lockservice;
 
 import com.couchbase.client.java.Collection;
-
-import java.time.Instant;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.annotation.PreDestroy;
-
 import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.exception.LockException;
@@ -23,6 +13,13 @@ import liquibase.logging.Logger;
 import liquibase.servicelocator.LiquibaseService;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -37,6 +34,7 @@ public class CouchbaseLockService implements LockService {
     private static final int WAIT_LOCK_TIME = parseInt(getPropertyOrDefault("waitLockTimeInSec", "300"));
     private static final int WAIT_RECHECK_LOCK_TIME = parseInt(getPropertyOrDefault("waitRecheckLockTimeInSec", "10"));
     public static final String LOCK_COLLECTION_NAME = "CHANGELOGLOCKS";
+
     private final Logger logger = Scope.getCurrentScope()
             .getLog(getClass());
 
@@ -58,20 +56,20 @@ public class CouchbaseLockService implements LockService {
     private final TimerTask refreshLockStateTask = new TimerTask() {
         @Override
         public void run() {
-            refreshLockState();
+            refreshLockExpiry();
         }
     };
 
     /**
      * Time to wait for the lock to be acquired, in milliseconds. Default value is 300 seconds.
      */
-    @Setter(onMethod = @__({@Override}))
+    @Setter(onMethod = @__( {@Override}))
     private long changeLogLockWaitTime = TimeUnit.SECONDS.toMillis(WAIT_LOCK_TIME);
 
     /**
      * Time to wait between rechecking the lock, in milliseconds. Default value is 10 seconds.
      */
-    @Setter(onMethod = @__({@Override}))
+    @Setter(onMethod = @__( {@Override}))
     private long changeLogLockRecheckTime = TimeUnit.SECONDS.toMillis(WAIT_RECHECK_LOCK_TIME);
 
     public CouchbaseLockService(String serviceId) {
@@ -117,7 +115,7 @@ public class CouchbaseLockService implements LockService {
         bucketName = collection.bucketName();
         logger.info(format("Using locks for bucket [%s]", bucketName));
 
-        refreshLockState();
+        refreshLockExpiry();
         timer.schedule(refreshLockStateTask, 0, changeLogLockRecheckTime);
 
         isInitialized = true;
@@ -169,6 +167,7 @@ public class CouchbaseLockService implements LockService {
     @Override
     public void forceReleaseLock() throws LockException {
         try {
+            cleanTimer();
             locker.forceRelease(bucketName);
             hasLock.set(false);
         } catch (Exception e) {
@@ -182,12 +181,11 @@ public class CouchbaseLockService implements LockService {
     }
 
     @Override
-    @PreDestroy
     public void destroy() {
         logger.info("Destroying CouchbaseLockService");
         try {
             releaseLock();
-        } catch (LockException e) {
+        } catch (Exception e) {
             logger.severe("Could not release a lock during the destroy");
         }
     }
@@ -196,18 +194,23 @@ public class CouchbaseLockService implements LockService {
     public void reset() {
         logger.info("Resetting CouchbaseLockService");
         isInitialized = false;
-        timer.cancel();
         try {
+            cleanTimer();
             if (hasChangeLogLock()) {
                 releaseLock();
             }
-        } catch (LockException e) {
+        } catch (Exception e) {
             logger.severe("Could not release a lock during the reset");
         }
     }
 
-    private void refreshLockState() {
-        hasLock.set(locker.isHeldBy(bucketName, serviceId));
+    private void cleanTimer() {
+        timer.cancel();
+        timer.purge();
+        refreshLockStateTask.cancel();
+    }
+
+    private void refreshLockExpiry() {
         if (hasLock.get()) {
             locker.refreshLockExpiry(bucketName);
         }
