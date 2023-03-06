@@ -1,0 +1,17 @@
+language: java
+
+jdk: 
+  - oraclejdk8
+
+cache:
+  directories:
+  - $HOME/.m2
+
+script:
+  - java --version
+  - ./mvnw clean install
+  - ./mvnw test
+  - ./mvnw failsafe:integration-test
+
+before_install:
+  - chmod +x mvnw
