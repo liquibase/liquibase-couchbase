@@ -13,7 +13,10 @@ import static liquibase.ext.couchbase.provider.LiquibasePropertyProvider.getProp
 
 public interface ServiceProvider {
 
-    String SERVICE_BUCKET_NAME = getPropertyOrDefault("serviceBucketName", "liquibaseServiceBucket");
+    /**
+     * Service bucket where all history is written and lock is acquired.
+     */
+    String SERVICE_BUCKET_NAME = getPropertyOrDefault("service.bucketName", "liquibaseServiceBucket");
     String DEFAULT_SERVICE_SCOPE = "liquibaseServiceScope";
     String CHANGE_LOG_COLLECTION = "DATABASECHANGELOG";
 
