@@ -249,8 +249,10 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="path"/>
-                <xsd:element ref="value" minOccurs="0"/>
-                <xsd:element ref="values" minOccurs="0"/>
+                <xsd:choice>
+                    <xsd:element ref="value" minOccurs="0" />
+                    <xsd:element ref="values" minOccurs="0" />
+                </xsd:choice>
                 <xsd:element name="mutateInType">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
