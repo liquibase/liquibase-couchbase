@@ -15,8 +15,8 @@ import java.time.Instant;
 
 import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
 import static java.lang.String.format;
-import static java.time.Duration.parse;
-import static liquibase.ext.couchbase.provider.LiquibasePropertyProvider.getPropertyOrDefault;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL_PROLONGATION;
 
 /**
  * Collection based locker for {@link com.couchbase.client.java.Bucket Bucket} Operates with documents in Liquibase service
@@ -30,13 +30,13 @@ public class CouchbaseChangelogLocker {
 
     private final Collection collection;
     /**
-     * liquibase lock ttl
+     * Liquibase lock ttl
      */
-    private final Duration expiry = parse(getPropertyOrDefault("service.lock.ttl", "PT3M"));
+    private final Duration expiry = LOCK_TTL.getCurrentValue();
     /**
-     * time which will be added to prolong the lock ttl
+     * Time which will be added to prolong the lock ttl
      */
-    private final Duration expiryProlongation = parse(getPropertyOrDefault("service.lock.timeToProlongTtl", "PT1M"));
+    private final Duration expiryProlongation = LOCK_TTL_PROLONGATION.getCurrentValue();
 
     /**
      * Trying to acquire lock, attempt is success only when there is no such document with given bucketName. Inserts ${@link CouchbaseLock}

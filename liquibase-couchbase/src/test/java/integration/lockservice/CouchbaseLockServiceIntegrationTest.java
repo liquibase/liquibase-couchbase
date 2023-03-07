@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import common.CouchbaseContainerizedTest;
+import liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration;
 import liquibase.ext.couchbase.lockservice.CouchbaseLockService;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.provider.ContextServiceProvider;
 import lombok.SneakyThrows;
 import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
-import static liquibase.ext.couchbase.lockservice.CouchbaseLockService.LOCK_COLLECTION_NAME;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
 import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -31,6 +31,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
     private static final CouchbaseLockService lockService = new CouchbaseLockService();
     private static final ContextServiceProvider serviceProvider = new ContextServiceProvider(database);
     private static final ClusterOperator clusterOperator = new ClusterOperator(cluster);
+    private static final String lockCollectionName = CouchbaseLiquibaseConfiguration.CHANGELOG_LOCK_COLLECTION_NAME.getCurrentValue();
 
     @BeforeAll
     static void setUp() {
@@ -57,7 +58,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
         lockService.init();
 
         assertTrue(serviceBucketExists());
-        assertThat(cluster.bucket(SERVICE_BUCKET_NAME)).hasCollectionInScope(LOCK_COLLECTION_NAME, DEFAULT_SERVICE_SCOPE);
+        assertThat(cluster.bucket(SERVICE_BUCKET_NAME)).hasCollectionInScope(lockCollectionName, DEFAULT_SERVICE_SCOPE);
     }
 
     @Test
@@ -95,7 +96,7 @@ public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedT
     }
 
     private Collection getServiceCollection() {
-        return serviceProvider.getServiceCollection(LOCK_COLLECTION_NAME);
+        return serviceProvider.getServiceCollection(lockCollectionName);
     }
 
 }

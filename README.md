@@ -17,6 +17,12 @@ To use the Couchbase extension for Liquibase, you will need to have Couchbase Se
 
 For more detailed information on how to use this extension, please refer to the documentation.
 
+## Properties
+
+If you want override default properties, create `liquibase-couchbase.properties` under your `resources` folder
+
+List of supported properties you can find in `CouchbaseLiquibaseConfiguration` class 
+
 ## Contributing
 If you would like to contribute to the Couchbase extension for Liquibase, please see the [contribution guidelines](CONTRIBUTING.md).
 
