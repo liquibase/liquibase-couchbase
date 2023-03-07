@@ -1,40 +1,38 @@
 package integration.precondition;
 
-import liquibase.ext.couchbase.exception.ScopeNotExistsPreconditionException;
-
+import common.RandomizedScopeTestCase;
+import common.operators.TestBucketOperator;
+import liquibase.ext.couchbase.exception.precondition.ScopeNotExistsPreconditionException;
+import liquibase.ext.couchbase.precondition.ScopeExistsPrecondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import liquibase.ext.couchbase.precondition.ScopeExistsPrecondition;
-import common.BucketTestCase;
-import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_SCOPE;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class ScopeExistsPreconditionIT extends BucketTestCase {
+class ScopeExistsPreconditionIT extends RandomizedScopeTestCase {
 
     private static final ScopeExistsPrecondition precondition = new ScopeExistsPrecondition();
 
     @BeforeEach
     void setUpLocal() {
-        precondition.setBucketName(TEST_BUCKET);
+        precondition.setBucketName(bucketName);
     }
 
     @Test
-    void Should_not_throws_when_scope_exists() {
-        precondition.setScopeName(TEST_SCOPE);
+    void Should_not_throw_when_scope_exists() {
+        precondition.setScopeName(scopeName);
 
         assertDoesNotThrow(() -> precondition.check(database, null, null, null));
     }
 
     @Test
     void Should_throw_exception_when_scope_doesnt_exists() {
-        String notExistedScope = "notExistedScope";
-        precondition.setScopeName(notExistedScope);
+        String notExistingScope = "notExistingScope";
+        precondition.setScopeName(notExistingScope);
 
         assertThatExceptionOfType(ScopeNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
-                .withMessage("Scope %s does not exist in bucket %s", notExistedScope, TEST_BUCKET);
+                .withMessage("Scope %s does not exist in bucket %s", notExistingScope, bucketName);
     }
 }

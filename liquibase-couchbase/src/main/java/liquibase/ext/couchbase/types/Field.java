@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Document's field name, is highly used in indexes
+ * Document field name, frequently used in indexes
+ * @see AbstractLiquibaseSerializable
+ * @see liquibase.serializer.LiquibaseSerializable
+ * @see liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement
  */
 @Setter
 @Getter
@@ -18,6 +21,7 @@ import lombok.Setter;
 public class Field extends AbstractLiquibaseSerializable {
 
     private String field;
+
     @Override
     public String getSerializedObjectName() {
         return "field";

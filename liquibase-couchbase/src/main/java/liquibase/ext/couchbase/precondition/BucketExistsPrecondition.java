@@ -2,12 +2,17 @@ package liquibase.ext.couchbase.precondition;
 
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.statement.BucketExistsStatement;
-import liquibase.ext.couchbase.exception.BucketNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.BucketNotExistsPreconditionException;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import lombok.Data;
 
-import static java.lang.String.format;
+/**
+ * A precondition that checks if a bucket exists.
+ * @see AbstractCouchbasePrecondition
+ * @see liquibase.precondition.AbstractPrecondition
+ * @see BucketNotExistsPreconditionException
+ */
 
 @Data
 public class BucketExistsPrecondition extends AbstractCouchbasePrecondition {
@@ -23,7 +28,7 @@ public class BucketExistsPrecondition extends AbstractCouchbasePrecondition {
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws BucketNotExistsPreconditionException {
         final BucketExistsStatement bucketExistsStatement = new BucketExistsStatement(bucketName);
 
-        if (bucketExistsStatement.isBucketExists((CouchbaseConnection) database.getConnection())) {
+        if (bucketExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
         throw new BucketNotExistsPreconditionException(bucketName, changeLog, this);

@@ -1,15 +1,22 @@
 package liquibase.ext.couchbase.precondition;
 
-import com.wdt.couchbase.Keyspace;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
-import liquibase.ext.couchbase.exception.DocumentNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.DocumentNotExistsPreconditionException;
 import liquibase.ext.couchbase.statement.DocumentExistsByKeyStatement;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.exception.PreconditionFailedException;
 import lombok.Data;
 
-import static com.wdt.couchbase.Keyspace.keyspace;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
+
+/**
+ * A precondition that checks if a document exists.
+ * @see AbstractCouchbasePrecondition
+ * @see liquibase.precondition.AbstractPrecondition
+ * @see DocumentNotExistsPreconditionException
+ */
 
 @Data
 public class DocumentExistsByKeyPrecondition extends AbstractCouchbasePrecondition {
@@ -29,7 +36,7 @@ public class DocumentExistsByKeyPrecondition extends AbstractCouchbasePreconditi
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         final DocumentExistsByKeyStatement documentExistsByKeyStatement = new DocumentExistsByKeyStatement(keyspace, key);
 
-        if (documentExistsByKeyStatement.isDocumentExists((CouchbaseConnection) database.getConnection())) {
+        if (documentExistsByKeyStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
         throw new DocumentNotExistsPreconditionException(key, bucketName, scopeName, collectionName, changeLog, this);

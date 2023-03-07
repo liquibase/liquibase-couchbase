@@ -4,86 +4,106 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
-import com.couchbase.client.java.manager.bucket.BucketManager;
+import com.couchbase.client.java.manager.bucket.BucketSettings;
+import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
+import com.couchbase.client.java.manager.collection.CollectionManager;
 import com.couchbase.client.java.manager.collection.CollectionSpec;
-import com.couchbase.client.java.manager.collection.ScopeSpec;
+import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
+import com.couchbase.client.java.manager.query.GetAllQueryIndexesOptions;
+import com.couchbase.client.java.manager.query.WatchQueryIndexesOptions;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.operator.BucketOperator;
+import liquibase.ext.couchbase.operator.ClusterOperator;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.couchbase.client.java.manager.bucket.BucketSettings.create;
+
+/**
+ * A concrete implementation of {@link ServiceProvider} interface. Uses either default bucket from {@link CouchbaseLiquibaseDatabase} or
+ * creates a new one as a fallback option.<br><br>
+ */
 
 @RequiredArgsConstructor
 public class ContextServiceProvider implements ServiceProvider {
 
     private final CouchbaseLiquibaseDatabase database;
     private static final Duration TIMEOUT = Duration.ofSeconds(10);
+    private static final String INDEX_NAME = "primary";
 
     @Override
     public Collection getServiceCollection(String collectionName) {
         CouchbaseConnection connection = database.getConnection();
+        Cluster cluster = connection.getCluster();
         Bucket serviceBucket = Optional.ofNullable(connection.getDatabase())
-            .orElseGet(() -> getServiceBucketFrom(connection.getCluster()));
-        checkAndCreateScopeAndCollectionIn(serviceBucket, collectionName);
-        return serviceBucket.scope(DEFAULT_SERVICE_SCOPE).collection(collectionName);
+                .orElseGet(() -> getServiceBucketFrom(cluster));
+        checkAndCreateScopeAndCollectionIn(serviceBucket, cluster, collectionName);
+        return serviceBucket.scope(DEFAULT_SERVICE_SCOPE)
+                .collection(collectionName);
     }
 
-    private void checkAndCreateScopeAndCollectionIn(Bucket bucket, String collectionName) {
-        if(!serviceScopeExistsIn(bucket)) {
-            bucket.collections().createScope(DEFAULT_SERVICE_SCOPE);
+    private void checkAndCreateScopeAndCollectionIn(Bucket bucket, Cluster cluster, String collectionName) {
+        BucketOperator bucketOperator = new BucketOperator(bucket);
+        CollectionManager collections = bucket.collections();
+        if (!bucketOperator.hasScope(DEFAULT_SERVICE_SCOPE)) {
+            collections.createScope(DEFAULT_SERVICE_SCOPE);
             bucket.waitUntilReady(TIMEOUT);
         }
-        if(!collectionExistsIn(bucket, collectionName)) {
-            bucket.collections().createCollection(CollectionSpec.create(collectionName, DEFAULT_SERVICE_SCOPE));
+        if (!bucketOperator.hasCollectionInScope(collectionName, DEFAULT_SERVICE_SCOPE)) {
+            collections.createCollection(CollectionSpec.create(collectionName, DEFAULT_SERVICE_SCOPE));
             bucket.waitUntilReady(TIMEOUT);
         }
+        bucket.waitUntilReady(TIMEOUT);
+        checkAndCreatePrimaryIndexIn(bucket, cluster, collectionName);
     }
 
     private Bucket getServiceBucketFrom(Cluster cluster) {
-        BucketManager manager = cluster.buckets();
-        boolean serviceBucketExists = manager.getAllBuckets()
-            .values()
-            .stream()
-            .anyMatch(bucketSettings -> bucketSettings.name().equals(FALLBACK_SERVICE_BUCKET_NAME));
-        if(!serviceBucketExists) {
-            manager.createBucket(create(FALLBACK_SERVICE_BUCKET_NAME));
+        ClusterOperator clusterOperator = new ClusterOperator(cluster);
+        boolean serviceBucketExists = clusterOperator.isBucketExists(SERVICE_BUCKET_NAME);
+        if (!serviceBucketExists) {
+            BucketSettings bucketSettings = create(SERVICE_BUCKET_NAME);
+            CreateBucketOptions bucketOptions = CreateBucketOptions.createBucketOptions();
+            clusterOperator.createBucketWithOptionsAndSettings(bucketSettings, bucketOptions);
             cluster.waitUntilReady(TIMEOUT);
         }
-        return cluster.bucket(FALLBACK_SERVICE_BUCKET_NAME);
+        return cluster.bucket(SERVICE_BUCKET_NAME);
     }
 
-    private boolean serviceScopeExistsIn(Bucket bucket) {
-        return bucket.collections()
-            .getAllScopes()
-            .stream()
-            .anyMatch(scope -> scope.name().equals(DEFAULT_SERVICE_SCOPE));
-    }
-
-    private boolean collectionExistsIn(Bucket bucket, String collectionName) {
-        return bucket.collections()
-            .getAllScopes()
-            .stream()
-            .map(ScopeSpec::collections)
-            .flatMap(java.util.Collection::stream)
-            .map(CollectionSpec::name)
-            .anyMatch(collectionName::equals);
+    private void checkAndCreatePrimaryIndexIn(Bucket bucket, Cluster cluster, String collectionName) {
+        GetAllQueryIndexesOptions getAllIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions()
+                .collectionName(collectionName)
+                .scopeName(DEFAULT_SERVICE_SCOPE);
+        boolean indexExists = cluster.queryIndexes()
+                .getAllIndexes(bucket.name(), getAllIndexesOptions)
+                .stream()
+                .anyMatch(index -> Objects.equals(index.keyspace(), collectionName) && index.primary());
+        if (indexExists) { return; }
+        CreatePrimaryQueryIndexOptions createIndexOptions = CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions()
+                .indexName(INDEX_NAME)
+                .scopeName(DEFAULT_SERVICE_SCOPE)
+                .collectionName(collectionName);
+        cluster.queryIndexes()
+                .createPrimaryIndex(bucket.name(), createIndexOptions);
+        WatchQueryIndexesOptions watchOptions = WatchQueryIndexesOptions.watchQueryIndexesOptions()
+                .watchPrimary(true)
+                .scopeName(DEFAULT_SERVICE_SCOPE)
+                .collectionName(collectionName);
+        cluster.queryIndexes()
+                .watchIndexes(bucket.name(), Collections.singletonList(INDEX_NAME), TIMEOUT, watchOptions);
     }
 
     @Override
     public Scope getScopeOfCollection(String collectionName) {
         Collection serviceCollection = getServiceCollection(collectionName);
-        return database.getConnection().getCluster().bucket(serviceCollection.bucketName()).scope(serviceCollection.scopeName());
-    }
-
-    @Override
-    public String getServiceBucketName() {
-        Bucket serviceBucket = database.getConnection().getDatabase();
-        return Optional.ofNullable(serviceBucket)
-                .map(Bucket::name)
-                .orElse(FALLBACK_SERVICE_BUCKET_NAME);
+        return database.getConnection()
+                .getCluster()
+                .bucket(serviceCollection.bucketName())
+                .scope(serviceCollection.scopeName());
     }
 
 }

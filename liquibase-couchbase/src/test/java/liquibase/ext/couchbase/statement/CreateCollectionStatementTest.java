@@ -40,7 +40,7 @@ public class CreateCollectionStatementTest {
     }
 
     @Test
-    void Should_сreateCollection_if_it_not_exists_and_skip_is_false() {
+    void Should_createCollection_if_it_not_exists_and_skip_is_false() {
         CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE, false);
         when(clusterOperator.getBucketOperator(TEST_BUCKET)).thenReturn(bucketOperator);
         when(bucketOperator.hasCollectionInScope(TEST_COLLECTION, TEST_SCOPE)).thenReturn(false);

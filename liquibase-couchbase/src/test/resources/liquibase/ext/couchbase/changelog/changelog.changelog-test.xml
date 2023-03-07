@@ -26,13 +26,23 @@
 
     <changeSet id="1" author="dmitry">
 
-        <ext:createCollection bucketName="testBucket" scopeName="testScope" collectionName="historyTest1" skipIfExists="false"/>
+        <ext:createCollection>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:collectionName>historyTest1</ext:collectionName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:skipIfExists>false</ext:skipIfExists>
+        </ext:createCollection>
 
     </changeSet>
 
     <changeSet id="2" author="dmitry">
 
-        <ext:createCollection bucketName="testBucket" scopeName="testScope" collectionName="historyTest2" skipIfExists="false"/>
+        <ext:createCollection>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:collectionName>historyTest2</ext:collectionName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:skipIfExists>false</ext:skipIfExists>
+        </ext:createCollection>
 
     </changeSet>
 

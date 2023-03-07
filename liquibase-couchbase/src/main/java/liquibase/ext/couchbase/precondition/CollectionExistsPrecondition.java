@@ -4,9 +4,16 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.exception.PreconditionFailedException;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
-import liquibase.ext.couchbase.exception.CollectionsNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.CollectionNotExistsPreconditionException;
 import liquibase.ext.couchbase.statement.CollectionExistsStatement;
 import lombok.Data;
+
+/**
+ * A precondition that checks if a collection exists.
+ * @see AbstractCouchbasePrecondition
+ * @see liquibase.precondition.AbstractPrecondition
+ * @see CollectionNotExistsPreconditionException
+ */
 
 @Data
 public class CollectionExistsPrecondition extends AbstractCouchbasePrecondition {
@@ -25,10 +32,10 @@ public class CollectionExistsPrecondition extends AbstractCouchbasePrecondition 
         final CollectionExistsStatement collectionExistsStatement =
                 new CollectionExistsStatement(bucketName, scopeName, collectionName);
 
-        if (collectionExistsStatement.isCollectionExists((CouchbaseConnection) database.getConnection())) {
+        if (collectionExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
-        throw new CollectionsNotExistsPreconditionException(collectionName, bucketName, scopeName, changeLog, this);
+        throw new CollectionNotExistsPreconditionException(collectionName, bucketName, scopeName, changeLog, this);
     }
 
     @Override

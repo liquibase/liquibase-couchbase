@@ -1,73 +1,39 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.core.error.BucketNotFoundException;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.manager.bucket.BucketManager;
-import com.couchbase.client.java.manager.collection.CollectionSpec;
-import com.couchbase.client.java.manager.collection.ScopeSpec;
-
-import com.wdt.couchbase.Keyspace;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
+import liquibase.ext.couchbase.operator.ClusterOperator;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+/**
+ * A statement that checks if a document exists by key.
+ * @see liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
+ * @see CouchbaseConditionalStatement
+ */
+
 @Data
 @RequiredArgsConstructor
-public class DocumentExistsByKeyStatement extends CouchbaseStatement {
+public class DocumentExistsByKeyStatement extends CouchbaseConditionalStatement {
 
     private final Keyspace keyspace;
     private final String key;
 
-    public boolean isDocumentExists(CouchbaseConnection connection) {
-        Cluster cluster = connection.getCluster();
-
-        return Optional.ofNullable(cluster)
-                .map(Cluster::buckets)
-                .filter(this::isBucketExist)
-                .map(x -> tryGetScope(cluster))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(this::tryGetCollection)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(x -> isDocumentExists(cluster))
-                .orElse(false);
-    }
-
-    private boolean isDocumentExists(Cluster cluster) {
-        return cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection())
-                .exists(key).exists();
-    }
-
-    private Optional<CollectionSpec> tryGetCollection(ScopeSpec scope) {
-        return scope.collections().stream()
-                .filter(collection -> collection.name().equals(keyspace.getCollection()))
-                .findFirst();
-    }
-
-    private boolean isBucketExist(BucketManager buckets) {
-        try {
-            buckets.getBucket(keyspace.getBucket());
-            return true;
-        } catch (BucketNotFoundException ex) {
-            return false;
-        }
-    }
-
-    private Optional<ScopeSpec> tryGetScope(Cluster cluster) {
-        return cluster.bucket(keyspace.getBucket())
-                .collections()
-                .getAllScopes().stream()
-                .filter(sc -> sc.name().equals(keyspace.getScope()))
-                .findFirst();
-    }
-
     @Override
-    public void execute(CouchbaseConnection connection) {
-        throw new UnsupportedOperationException();
+    public boolean isTrue(CouchbaseConnection connection) {
+        String bucket = keyspace.getBucket();
+        String collectionName = keyspace.getCollection();
+        String scopeName = keyspace.getScope();
+
+        return Optional.ofNullable(connection.getCluster())
+                .map(ClusterOperator::new)
+                .filter(clusterOperator -> clusterOperator.isBucketExists(bucket))
+                .map(clusterOperator -> clusterOperator.getBucketOperator(bucket))
+                .filter(bucketOperator -> bucketOperator.hasCollectionInScope(collectionName, scopeName))
+                .map(bucketOperator -> bucketOperator.getCollectionOperator(collectionName, scopeName))
+                .map(collectionOperator -> collectionOperator.docExists(key))
+                .orElse(false);
     }
 }

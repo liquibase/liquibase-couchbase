@@ -1,26 +1,23 @@
 package integration.statement;
 
+import common.RandomizedScopeTestCase;
+import liquibase.ext.couchbase.statement.ScopeExistsStatement;
 import org.junit.jupiter.api.Test;
 
-import liquibase.ext.couchbase.statement.ScopeExistsStatement;
-import common.BucketTestCase;
-import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_SCOPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ScopeExistsStatementIT extends BucketTestCase {
-
+class ScopeExistsStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_return_true_when_scope_exists() {
-        ScopeExistsStatement statement = new ScopeExistsStatement(TEST_BUCKET, TEST_SCOPE);
+        ScopeExistsStatement statement = new ScopeExistsStatement(bucketName, scopeName);
 
-        assertThat(statement.isScopeExists(database.getConnection())).isTrue();
+        assertThat(statement.isTrue(database.getConnection())).isTrue();
     }
 
     @Test
     void Should_return_false_when_scope_doesnt_exists() {
-        ScopeExistsStatement statement = new ScopeExistsStatement(TEST_BUCKET, "notCreatedScope");
+        ScopeExistsStatement statement = new ScopeExistsStatement(bucketName, "notCreatedScope");
 
-        assertThat(statement.isScopeExists(database.getConnection())).isFalse();
+        assertThat(statement.isTrue(database.getConnection())).isFalse();
     }
 }

@@ -1,0 +1,50 @@
+variables:
+    # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
+    MAVEN_OPTS: >-
+        -Dhttps.protocols=TLSv1.2
+        -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+        -Dorg.slf4j.simpleLogger.showDateTime=true
+        -Djava.awt.headless=true
+
+    MAVEN_CLI_OPTS: >-
+        --batch-mode
+        --errors
+        --fail-at-end
+        --show-version
+        --no-transfer-progress
+        -DinstallAtEnd=true
+default:
+    image: maven:3-openjdk-8
+    cache:
+        paths:
+            - .m2/repository
+
+stages:
+    - build
+    - test
+    - integration-test
+
+build:
+    stage: build
+    script:
+        - 'mvn $MAVEN_CLI_OPTS install'
+    except:
+        variables:
+            - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+test:
+    stage: test
+    script:
+        - 'mvn $MAVEN_CLI_OPTS test'
+    except:
+        variables:
+            - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+integration:
+    stage: test
+    when: manual
+    script:
+        - 'mvn $MAVEN_CLI_OPTS failsafe:integration-test'
+    except:
+        variables:
+            - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

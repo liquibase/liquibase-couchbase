@@ -1,10 +1,11 @@
 package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
+
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
 import liquibase.ext.couchbase.types.Field;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,16 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
+
+/**
+ * Part of change set package. Responsible for creating query index with specified bucket name, scope name, collection name, index name and
+ * other relevant options.<br><br>
+ * @apiNote Compound index can be created by specifying multiple fields in the list of fields.
+ * @link <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/createindex.html">Reference documentation</a>
+ * @see CreateQueryIndexStatement
+ * @see CreateQueryIndexOptions
+ */
 
 @Getter
 @Setter
@@ -47,22 +57,10 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     }
 
     @Override
-    public SqlStatement[] generateStatements(Database database) {
-        if (isNotBlank(getBucketName()) && isNotBlank(getIndexName())) {
-            return new SqlStatement[]{
-                    new CreateQueryIndexStatement(getBucketName(), getIndexName(), fields, createQueryIndexOptions())
-            };
-        }
-        return SqlStatement.EMPTY_SQL_STATEMENT;
-    }
-
-    private CreateQueryIndexOptions createQueryIndexOptions() {
-        return CreateQueryIndexOptions
-                .createQueryIndexOptions()
-                .collectionName(getCollectionName())
-                .scopeName(getScopeName())
-                .deferred(getDeferred())
-                .numReplicas(getNumReplicas())
-                .ignoreIfExists(getIgnoreIfExists());
+    public SqlStatement[] generateStatements() {
+        Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
+        return new SqlStatement[] {
+                new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, ignoreIfExists, numReplicas, fields)
+        };
     }
 }

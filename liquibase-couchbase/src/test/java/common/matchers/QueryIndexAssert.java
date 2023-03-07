@@ -27,7 +27,7 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
                 .map(QueryIndex::name)
                 .anyMatch(indexName::equals);
         if (contains) {
-            failWithMessage("Bucket <%s> has index named <%s>, but it shouldn't",
+            failWithMessage("Bucket [%s] has an index named [%s], but it shouldn't",
                     bucketName,
                     indexName);
         }
@@ -38,7 +38,7 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
     public QueryIndexAssert has(String indexName) {
         boolean contains = actual.getAllIndexes(bucketName).stream().map(QueryIndex::name).anyMatch(indexName::equals);
         if (!contains) {
-            failWithMessage("Bucket <%s> doesn't have index named <%s> , but it shouldn't",
+            failWithMessage("Bucket [%s] doesn't have an index named [%s], but it should",
                     bucketName,
                     indexName);
         }
@@ -52,7 +52,7 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
                 .filter(it -> bucketName.equals(it.bucketName()))
                 .anyMatch(QueryIndex::primary);
         if (hasPrimary) {
-            failWithMessage("Bucket <%s> has primary index , but it shouldn't", bucketName);
+            failWithMessage("Bucket [%s] has a primary index, but it shouldn't", bucketName);
         }
 
         return this;
@@ -62,7 +62,7 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
         long count = actual.getAllIndexes(bucketName).stream()
                 .filter(index -> index.name().equals(indexName) && index.primary()).count();
         if (count != 1) {
-            failWithMessage("Primary index with the name <%s> is absent", indexName);
+            failWithMessage("Primary index with the name [%s] is absent", indexName);
         }
         return this;
     }
@@ -71,7 +71,7 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
         long count = actual.getAllIndexes(bucketName).stream().filter(index -> index.name().equals(indexName)
                 && !index.primary()).count();
         if (count != 1) {
-            failWithMessage("Query index with name <%s> is absent in bucket <%s> or more than one", indexName, bucketName);
+            failWithMessage("Bucket [%s] either doesn't have an index with the name [%s] or has more than one", indexName, bucketName);
         }
         return this;
     }

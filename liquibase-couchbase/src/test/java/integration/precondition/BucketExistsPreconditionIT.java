@@ -1,16 +1,15 @@
 package integration.precondition;
 
-import common.BucketTestCase;
-import liquibase.ext.couchbase.exception.BucketNotExistsPreconditionException;
-
+import common.ConstantScopeTestCase;
+import liquibase.ext.couchbase.exception.precondition.BucketNotExistsPreconditionException;
+import liquibase.ext.couchbase.precondition.BucketExistsPrecondition;
 import org.junit.jupiter.api.Test;
 
-import liquibase.ext.couchbase.precondition.BucketExistsPrecondition;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class BucketExistsPreconditionIT extends BucketTestCase {
+class BucketExistsPreconditionIT extends ConstantScopeTestCase {
 
     @Test
     void Should_not_throw_exception_when_bucket_exists() {

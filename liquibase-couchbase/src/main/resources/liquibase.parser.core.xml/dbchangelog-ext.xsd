@@ -9,10 +9,20 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
-                             default="_default"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="skipIfExists" type="xsd:boolean" minOccurs="0" default="false"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="skipIfExists" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="dropCollection">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="skipIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -20,12 +30,12 @@
     <xsd:element name="dropQueryIndex">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="isPrimary" type="xsd:boolean" minOccurs="0" default="true"/>
-                <xsd:element name="indexName" type="xsd:string" minOccurs="0" default=""/>
+                <xsd:element name="isPrimary" type="xsd:boolean"/>
+                <xsd:element name="indexName" type="xsd:string"/>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
-                             default="_default"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -60,19 +70,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="insertOne">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
-                             default="_default"/>
-                <xsd:element name="id" type="xsd:string"/>
-                <xsd:element name="document" type="xsd:string"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
     <xsd:element name="fields">
         <xsd:complexType>
             <xsd:sequence>
@@ -81,14 +78,16 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="insertMany">
+    <xsd:element name="insertDocuments">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
-                             default="_default"/>
-                <xsd:element ref="documents"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:choice>
+                    <xsd:element ref="document"/>
+                    <xsd:element ref="documents"/>
+                </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -105,34 +104,201 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="id" type="xsd:string"/>
-                <xsd:element name="content" type="xsd:string"/>
+                <xsd:element ref="value"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="upsertOne">
+    <xsd:element name="upsertDocuments">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
-                             default="_default"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:choice>
+                    <xsd:element ref="document"/>
+                    <xsd:element ref="documents"/>
+                </xsd:choice>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <xsd:element name="createBucket">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="flushEnabled" type="xsd:boolean"/>
+                <xsd:element name="replicaIndexes" type="xsd:boolean"/>
+                <xsd:element name="numReplicas" type="xsd:int"/>
+                <xsd:element name="ramQuotaMB" type="xsd:long"/>
+                <xsd:element name="maxExpiryInHours" type="xsd:long"/>
+                <xsd:element name="timeoutInSeconds" type="xsd:long"/>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="bucketType">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="COUCHBASE"/>
+                            <xsd:enumeration value="MEMCACHED"/>
+                            <xsd:enumeration value="EPHEMERAL"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="compressionMode">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="OFF"/>
+                            <xsd:enumeration value="PASSIVE"/>
+                            <xsd:enumeration value="ACTIVE"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="conflictResolutionType">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="TIMESTAMP"/>
+                            <xsd:enumeration value="SEQUENCE_NUMBER"/>
+                            <xsd:enumeration value="CUSTOM"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="evictionPolicy">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="FULL"/>
+                            <xsd:enumeration value="VALUE_ONLY"/>
+                            <xsd:enumeration value="NOT_RECENTLY_USED"/>
+                            <xsd:enumeration value="NO_EVICTION"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="minimumDurabilityLevel">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="NONE"/>
+                            <xsd:enumeration value="MAJORITY"/>
+                            <xsd:enumeration value="MAJORITY_AND_PERSIST_TO_ACTIVE"/>
+                            <xsd:enumeration value="PERSIST_TO_MAJORITY"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="storageBackend">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="couchstore"/>
+                            <xsd:enumeration value="magma"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="dropBucket">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="updateBucket">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="compressionMode">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="OFF"/>
+                            <xsd:enumeration value="PASSIVE"/>
+                            <xsd:enumeration value="ACTIVE"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="maxExpiryInHours" type="xsd:long"/>
+                <xsd:element name="numReplicas" type="xsd:int"/>
+                <xsd:element name="ramQuotaMB" type="xsd:long"/>
+                <xsd:element name="flushEnabled" type="xsd:boolean"/>
+                <xsd:element name="timeoutInSeconds" type="xsd:long"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="mutateIn">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+
                 <xsd:element name="id" type="xsd:string"/>
-                <xsd:element name="document" type="xsd:string"/>
+                <xsd:element ref="mutateInSpecs"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="upsertMany">
+    <xsd:element name="mutateInSpecs">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string" minOccurs="0" default="_default"/>
-                <xsd:element name="collectionName" type="xsd:string" minOccurs="0"
-                             default="_default"/>
-                <xsd:element ref="documents"/>
+                <xsd:element ref="mutateInSpec" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+
+    <xsd:element name="mutateInSpec">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="path"/>
+                <xsd:element ref="value" minOccurs="0"/>
+                <xsd:element ref="values" minOccurs="0"/>
+                <xsd:element name="mutateInType">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="INSERT"/>
+                            <xsd:enumeration value="ARRAY_PREPEND"/>
+                            <xsd:enumeration value="ARRAY_APPEND"/>
+                            <xsd:enumeration value="ARRAY_CREATE"/>
+                            <xsd:enumeration value="ARRAY_INSERT"/>
+                            <xsd:enumeration value="ARRAY_INSERT_UNIQUE"/>
+                            <xsd:enumeration value="INCREMENT"/>
+                            <xsd:enumeration value="DECREMENT"/>
+                            <xsd:enumeration value="UPSERT"/>
+                            <xsd:enumeration value="REPLACE"/>
+                            <xsd:enumeration value="REMOVE"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="values">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="value" minOccurs="1" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="value">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="data" type="xsd:string"/>
+                <xsd:element name="type">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="Long"/>
+                            <xsd:enumeration value="Double"/>
+                            <xsd:enumeration value="Boolean"/>
+                            <xsd:enumeration value="String"/>
+                            <xsd:enumeration value="Json"/>
+                            <xsd:enumeration value="JsonArray"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 
 </xsd:schema>

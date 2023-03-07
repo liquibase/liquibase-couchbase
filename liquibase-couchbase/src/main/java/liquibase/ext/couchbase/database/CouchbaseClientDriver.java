@@ -13,14 +13,19 @@ import java.util.logging.Logger;
 
 import liquibase.Scope;
 import liquibase.exception.DatabaseException;
+
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_SSL_PREFIX;
+
+/**
+ * Couchbase driver implementation. Connects to Couchbase cluster and provides URL validation.
+ */
 
 public class CouchbaseClientDriver implements Driver {
 
     @Override
     public Connection connect(final String url, final Properties info) {
-        //Not applicable for non JDBC DBs
+        // Not applicable for non JDBC DBs
         throw new UnsupportedOperationException("Cannot initiate a SQL Connection for a NoSql DB");
     }
 

@@ -4,16 +4,21 @@ import liquibase.change.core.TagDatabaseChange;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
 import liquibase.database.Database;
-import liquibase.ext.couchbase.provider.ServiceProvider;
 import liquibase.ext.couchbase.mapper.ChangeSetMapper;
 import liquibase.ext.couchbase.statement.CollectionExistsStatement;
 import liquibase.util.StringUtil;
 
 import java.util.List;
 
-import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
+import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
+import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
+import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
+
+/**
+ * Concrete implementation of {@link NoSqlHistoryService} for Couchbase
+ */
 
 public class CouchbaseHistoryService extends NoSqlHistoryService {
 
@@ -29,12 +34,12 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
 
     @Override
     protected boolean existsChangeLogCollection() {
-        String bucketName = getServiceProvider().getServiceBucketName();
+        String bucketName = SERVICE_BUCKET_NAME;
 
-        //TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
+        // TODO think about moving it to bucketOperator, but without providing bucket, because bucket may not exist
         CollectionExistsStatement collectionExistsStatement =
-                new CollectionExistsStatement(bucketName, ServiceProvider.DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
-        return collectionExistsStatement.isCollectionExists(getDatabase().getConnection());
+                new CollectionExistsStatement(bucketName, DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
+        return collectionExistsStatement.isTrue(getDatabase().getConnection());
     }
 
     @Override

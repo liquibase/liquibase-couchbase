@@ -22,8 +22,8 @@ public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert,
     }
 
     public CouchBaseBucketAssert hasCollectionInDefaultScope(@NonNull String collectionName) {
-        if (!bucketOperator.hasCollectionDefaultInScope(collectionName)) {
-            failWithMessage("Collection <%s> not exists in bucket <%s> in scope <%s>",
+        if (!bucketOperator.hasCollectionInDefaultScope(collectionName)) {
+            failWithMessage("Collection [%s] doesn't exist in the bucket [%s] in the scope [%s]",
                     collectionName,
                     actual.name(),
                     actual.defaultScope().name()
@@ -36,7 +36,20 @@ public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert,
     public CouchBaseBucketAssert hasCollectionInScope(@NonNull String collectionName,
                                                       @NonNull String scopeName) {
         if (!bucketOperator.hasCollectionInScope(collectionName, scopeName)) {
-            failWithMessage("Collection <%s> not exists in bucket <%s> in scope <%s>",
+            failWithMessage("Collection [%s] doesn't exist in the bucket [%s] in the scope [%s]",
+                    collectionName,
+                    actual.name(),
+                    scopeName
+            );
+        }
+
+        return this;
+    }
+
+    public CouchBaseBucketAssert hasNoCollectionInScope(@NonNull String collectionName,
+                                                        @NonNull String scopeName) {
+        if (bucketOperator.hasCollectionInScope(collectionName, scopeName)) {
+            failWithMessage("Collection [%s] exists in the bucket [%s] in the scope [%s]",
                     collectionName,
                     actual.name(),
                     scopeName

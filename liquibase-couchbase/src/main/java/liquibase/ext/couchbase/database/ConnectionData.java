@@ -4,8 +4,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Encapsulates common data for connection to couchbase cluster
+ * Encapsulates common data for connection to Couchbase cluster
  */
+
 @Data
 @RequiredArgsConstructor
 public class ConnectionData {

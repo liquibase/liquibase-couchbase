@@ -4,24 +4,21 @@ import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.statement.SqlStatement;
 
-public abstract class CouchbaseStatement implements SqlStatement {
+/**
+ * A baseline for all DDL Couchbase statements. Uses {@link ClusterOperator} to execute statements instead of {@link CouchbaseConnection}.
+ * @see SqlStatement
+ * @see ClusterOperator
+ */
 
-    @Override
-    public boolean skipOnUnsupported() {
-        return false;
-    }
+public abstract class CouchbaseStatement extends NoSqlStatement {
 
-    @Override
-    public boolean continueOnError() {
-        return false;
-    }
-
-    public void execute(ClusterOperator clusterOperator) {
-
-    };
+    public void execute(ClusterOperator clusterOperator) { }
 
     /**
      * Backward compatibility, later we will remove that
      */
-    public abstract void execute(CouchbaseConnection connection);
+    public void execute(CouchbaseConnection connection) {
+        execute(new ClusterOperator(connection.getCluster()));
+    }
+
 }

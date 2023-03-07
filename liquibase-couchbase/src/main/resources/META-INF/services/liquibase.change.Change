@@ -1,8 +1,13 @@
 liquibase.ext.couchbase.change.CreatePrimaryQueryIndexChange
 liquibase.ext.couchbase.change.CreateCollectionChange
+liquibase.ext.couchbase.change.DropCollectionChange
 liquibase.ext.couchbase.change.CreateQueryIndexChange
 liquibase.ext.couchbase.change.DropIndexChange
-liquibase.ext.couchbase.change.InsertOneChange
-liquibase.ext.couchbase.change.InsertManyChange
-liquibase.ext.couchbase.change.UpsertOneChange
-liquibase.ext.couchbase.change.UpsertManyChange
+liquibase.ext.couchbase.change.InsertDocumentsChange
+liquibase.ext.couchbase.change.UpsertDocumentsChange
+liquibase.ext.couchbase.change.CreateBucketChange
+liquibase.ext.couchbase.change.MutateInChange
+liquibase.ext.couchbase.change.CreateScopeChange
+liquibase.ext.couchbase.change.DropBucketChange
+liquibase.ext.couchbase.change.DropScopeChange
+liquibase.ext.couchbase.change.UpdateBucketChange
