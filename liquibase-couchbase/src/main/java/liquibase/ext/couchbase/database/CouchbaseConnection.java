@@ -23,6 +23,7 @@ package liquibase.ext.couchbase.database;
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.transactions.config.TransactionOptions;
 import com.couchbase.client.java.transactions.error.TransactionFailedException;
 import liquibase.Scope;
@@ -34,6 +35,7 @@ import liquibase.ext.couchbase.executor.TransactionalStatementQueue;
 import liquibase.util.StringUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Driver;
@@ -76,7 +78,8 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public boolean supports(String url) {
-        return ofNullable(url).map(String::toLowerCase)
+        return ofNullable(url)
+                .map(String::toLowerCase)
                 .map(x -> x.startsWith(COUCHBASE_PRODUCT_SHORT_NAME))
                 .orElse(false);
     }
@@ -179,8 +182,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
             final String password = getAndTrimProperty(driverProperties, "password").orElse(null);
 
-            cluster = ((CouchbaseClientDriver) driverObject).connect(connectionString.original(),
-                    clusterOptions(connectionString.username(), password));
+            cluster = connect(connectionString.original(), clusterOptions(connectionString.username(), password));
 
             if (connectionString.params()
                     .containsKey(BUCKET_PARAM)) {
@@ -250,6 +252,17 @@ public class CouchbaseConnection implements DatabaseConnection {
                 .map(x -> x.get(BUCKET_PARAM))
                 .map(String.class::cast)
                 .orElse(url);
+    }
+
+
+    @SneakyThrows
+    private Cluster connect(String connectionString, ClusterOptions clusterOptions) {
+        try {
+            return Cluster.connect(connectionString, clusterOptions);
+        } catch (final Exception e) {
+            throw new DatabaseException("Connection could not be established to: "
+                    + connectionString, e);
+        }
     }
 
 }
