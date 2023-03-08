@@ -1,17 +1,17 @@
 package liquibase.ext.couchbase.operator;
 
-import com.couchbase.client.core.deps.com.fasterxml.jackson.databind.JsonNode;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import liquibase.changelog.RanChangeSet;
 import liquibase.ext.couchbase.changelog.CouchbaseChangeLog;
-import liquibase.ext.couchbase.provider.ContextServiceProvider;
-import liquibase.ext.couchbase.provider.ServiceProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.mapper.ChangeSetMapper;
+import liquibase.ext.couchbase.provider.ContextServiceProvider;
+import liquibase.ext.couchbase.provider.ServiceProvider;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,11 +64,10 @@ public class ChangeLogOperator {
         Scope scope = serviceProvider.getScopeOfCollection(CHANGE_LOG_COLLECTION);
 
         QueryOptions queryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
-        List<JsonNode> rows = scope.query(SELECT_LAST_ORDER_N1QL, queryOptions)
-                .rowsAs(JsonNode.class);
+        List<JsonObject> rows = scope.query(SELECT_LAST_ORDER_N1QL, queryOptions).rowsAsObject();
 
         return rows.stream()
-                .map(jsonNode -> jsonNode.get("orderExecuted").asInt())
+                .map(jsonObject -> jsonObject.getInt("orderExecuted"))
                 .findFirst()
                 .orElse(NO_ORDER);
     }
