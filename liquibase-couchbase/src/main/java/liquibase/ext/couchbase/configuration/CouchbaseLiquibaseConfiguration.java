@@ -17,6 +17,8 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
     public static final ConfigurationDefinition<Duration> CHANGELOG_RECHECK_TIME;
     public static final ConfigurationDefinition<Duration> LOCK_TTL;
     public static final ConfigurationDefinition<Duration> LOCK_TTL_PROLONGATION;
+    public static final ConfigurationDefinition<Duration> TRANSACTION_TIMEOUT;
+    public static final ConfigurationDefinition<Duration> MUTATE_IN_TIMEOUT;
 
     static {
         ConfigurationDefinition.Builder builder = new ConfigurationDefinition.Builder("liquibase.couchbase");
@@ -58,6 +60,20 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .addAliasKey("liquibase.couchbase.lockservice.lockTtl")
                 .setDescription("Liquibase locks time to live")
                 .setDefaultValue(Duration.ofMinutes(3L))
+                .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
+                .build();
+
+        TRANSACTION_TIMEOUT = builder.define("transactionTimeout", Duration.class)
+                .addAliasKey("liquibase.couchbase.transaction.timeout")
+                .setDescription("Transactions timeout")
+                .setDefaultValue(Duration.ofSeconds(15))
+                .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
+                .build();
+
+        MUTATE_IN_TIMEOUT = builder.define("mutateInTimeout", Duration.class)
+                .addAliasKey("liquibase.couchbase.mutateIn.timeout")
+                .setDescription("MutateIn operation timeout")
+                .setDefaultValue(Duration.ofSeconds(2))
                 .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
                 .build();
     }

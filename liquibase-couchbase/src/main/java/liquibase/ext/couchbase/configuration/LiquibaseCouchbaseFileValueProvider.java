@@ -1,22 +1,21 @@
 package liquibase.ext.couchbase.configuration;
 
-import liquibase.Scope;
-import liquibase.configuration.AbstractMapConfigurationValueProvider;
-import liquibase.logging.Logger;
-import liquibase.servicelocator.LiquibaseService;
-
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.google.common.io.Resources.getResource;
-import static java.nio.file.Files.newBufferedReader;
-import static java.nio.file.Paths.get;
+import liquibase.Scope;
+import liquibase.configuration.AbstractMapConfigurationValueProvider;
+import liquibase.logging.Logger;
+import liquibase.resource.Resource;
+import liquibase.resource.ResourceAccessor;
+import liquibase.servicelocator.LiquibaseService;
 
 /**
- * Custom properties provider for {@link CouchbaseLiquibaseConfiguration}
- * Look up in classpath for file named {@code liquibase-couchbase.properties}
+ * Custom properties provider for {@link CouchbaseLiquibaseConfiguration} Look up in classpath for file named
+ * {@code liquibase-couchbase.properties}
+ *
  * @see CouchbaseLiquibaseConfiguration
  */
 @LiquibaseService
@@ -29,16 +28,25 @@ public class LiquibaseCouchbaseFileValueProvider extends AbstractMapConfiguratio
 
     public LiquibaseCouchbaseFileValueProvider() {
         properties = new Properties();
-        try (BufferedReader reader = newBufferedReader(get(getResource(propsFileName).getFile()))) {
-            properties.load(reader);
-            log.config("Loaded next properties from " + propsFileName + " " + properties.entrySet());
-        } catch (IOException e) {
-            log.config("No " + propsFileName + " file provided, using default properties");
-        }
+    }
+
+    private void loadProps(ResourceAccessor resourceAccessor) throws IOException {
+        Resource resource = resourceAccessor.getExisting(propsFileName);
+        log.config("Loaded next properties from " + propsFileName + " " + properties.entrySet());
+        InputStream inputStream = resource.openInputStream();
+        properties.load(inputStream);
+        inputStream.close();
     }
 
     @Override
     protected Map<?, ?> getMap() {
+        properties.clear();
+        ResourceAccessor resourceAccessor = Scope.getCurrentScope().getResourceAccessor();
+        try {
+            loadProps(resourceAccessor);
+        } catch (IOException e) {
+            log.config("No " + propsFileName + " file provided, using default properties");
+        }
         return properties;
     }
 
