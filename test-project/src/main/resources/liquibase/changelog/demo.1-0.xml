@@ -58,7 +58,7 @@
             <ext:scopeName>demoScope</ext:scopeName>
             <ext:collectionName>demoCollection</ext:collectionName>
             <ext:document>
-                <ext:id>2</ext:id>
+                <ext:id>3</ext:id>
                 <ext:value>
                     <ext:data>{"name":"Konstantin", "age": 53}</ext:data>
                     <ext:type>Json</ext:type>

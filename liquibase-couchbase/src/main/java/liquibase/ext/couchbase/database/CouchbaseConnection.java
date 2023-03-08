@@ -23,17 +23,8 @@ package liquibase.ext.couchbase.database;
 import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.transactions.config.TransactionOptions;
 import com.couchbase.client.java.transactions.error.TransactionFailedException;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.sql.Driver;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-
 import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
@@ -43,14 +34,24 @@ import liquibase.ext.couchbase.executor.TransactionalStatementQueue;
 import liquibase.util.StringUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
+import java.sql.Driver;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
 
 import static com.couchbase.client.core.util.Validators.notNull;
 import static com.couchbase.client.core.util.Validators.notNullOrEmpty;
 import static com.couchbase.client.java.ClusterOptions.clusterOptions;
+import static com.couchbase.client.java.transactions.config.TransactionOptions.transactionOptions;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.TRANSACTION_TIMEOUT;
 import static liquibase.ext.couchbase.database.Constants.BUCKET_PARAM;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRIORITY;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
@@ -68,6 +69,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     private final TransactionalStatementQueue transactionalStatementQueue = Scope.getCurrentScope()
             .getSingleton(TransactionalStatementQueue.class);
+    private final TransactionOptions transactionOptions = transactionOptions().timeout(TRANSACTION_TIMEOUT.getCurrentValue());
     private ConnectionString connectionString;
     private Cluster cluster;
     private Bucket database;
@@ -211,7 +213,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
         try {
             cluster.transactions()
-                    .run(ctx -> transactionalStatementQueue.forEach(it -> it.accept(ctx)));
+                    .run(ctx -> transactionalStatementQueue.forEach(it -> it.accept(ctx)), transactionOptions);
         } catch (TransactionFailedException e) {
             throw new TransactionalStatementExecutionException(e);
         } finally {

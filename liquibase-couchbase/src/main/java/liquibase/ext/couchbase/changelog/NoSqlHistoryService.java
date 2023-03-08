@@ -1,5 +1,7 @@
 package liquibase.ext.couchbase.changelog;
 
+import java.util.List;
+
 import liquibase.Scope;
 import liquibase.changelog.AbstractChangeLogHistoryService;
 import liquibase.changelog.ChangeSet;
@@ -14,9 +16,6 @@ import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.isNull;
@@ -29,6 +28,7 @@ import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 /**
  * Abstract class for all NoSQL history services, extends {@link AbstractChangeLogHistoryService}<br><br> {@link CouchbaseHistoryService} is
  * the default implementation for Couchbase
+ *
  * @see ChangeLogOperator
  * @see RanChangeSet
  */
