@@ -12,6 +12,10 @@ public class ChangeLogSampleFilePaths {
             "changelog.drop-existing-collection.test.xml";
     public static final String DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-collection-in-not-created-bucket.test.xml";
+    public static final String DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML = rootPrefix + "/collection/" +
+            "changelog.drop-not-created-collection-change.test.xml";
+    public static final String SKIP_DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML = rootPrefix + "/collection/" +
+            "changelog.skip-drop-not-created-collection-change.test.xml";
     public static final String DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-collection-in-not-created-scope.test.xml";
     public static final String CREATE_PRIMARY_QUERY_INDEX_TEST_XML = rootPrefix + "/index/changelog.create-primary-query-index.test.xml";
