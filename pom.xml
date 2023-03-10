@@ -58,8 +58,8 @@
     </developers>
 
     <modules>
-        <module>test-project</module>
         <module>liquibase-couchbase</module>
+        <module>test-project</module>
         <module>spring-boot-starter-liquibase-couchbase</module>
     </modules>
 
@@ -73,6 +73,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <liquibase.core.version>4.19.0</liquibase.core.version>
     </properties>
 
 
