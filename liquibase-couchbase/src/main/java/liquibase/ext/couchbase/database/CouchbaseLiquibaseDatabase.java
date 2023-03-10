@@ -10,6 +10,9 @@ import lombok.SneakyThrows;
 import java.util.Properties;
 
 import static java.util.Optional.ofNullable;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.COUCHBASE_PASSWORD;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.COUCHBASE_URL;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.COUCHBASE_USERNAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
@@ -29,9 +32,9 @@ public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
     public CouchbaseLiquibaseDatabase() {
         connectionData = new ConnectionData(
-                "Administrator",
-                "password",
-                "couchbase://127.0.0.1"
+                COUCHBASE_USERNAME.getCurrentValue(),
+                COUCHBASE_PASSWORD.getCurrentValue(),
+                COUCHBASE_URL.getCurrentValue()
         );
     }
 
