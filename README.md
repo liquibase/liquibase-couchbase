@@ -2,30 +2,55 @@
 
 The Couchbase extension for Liquibase allows you to use migrate your database schema using Liquibase and store your changelogs in a Couchbase bucket.
 
-## Features
-- Various operations support: inserting/upserting documents, creating/dropping indexes, creating/updating/dropping buckets, collections, scopes, etc.
-- Sub-document operations support: adding/removing/updating fields and values in documents
-- Using plain JSON inside XML changelogs
-
 ## Planned Features
-- Support for N1QL queries
+- Support for SQL++ queries
 - Support for JSON as changelog format
 - Support for CSV files
-- Support for JSON files as data source with multiple import modes
+- Additional import modes for JSON files
 - Reactive operations support
 - Transaction configuration properties
 - MutateIn configuration properties
 - Dropping documents
+- JSON schema validation
 
 ## Getting Started
 An example of how you can use the Couchbase extension for Liquibase can be found in the [test-project](test-project) directory. 
 It contains an example of how you can use the extension to create a bucket, create a scope, create a collection, create an index,
 insert and upsert one or many documents.
 
-For more detailed information on how to use this extension, please refer to the documentation.
+This extension supports both XML (with schema validation) and JSON (without schema validation) changelogs.
+
+## Installation
+This extension could be used in one of two ways:
+- Directly as a library jar file (main project in `liquibase-couchbase` directory) (see `LiquibaseSystemTest` as an example)
+- As a Spring Boot starter jar (`spring-boot-starter-liquibase-couchbase` directory)
+
+## Changelogs list
+- Create bucket
+- Update bucket
+- Drop bucket
+- Create scope
+- Drop scope
+- Create collection
+- Drop collection
+- Create index (primary and secondary)
+- Drop index
+- Insert document(s) (either plain JSON inside the XML or JSON files)
+- Upsert document(s) (either plain JSON inside the XML or JSON files)
+- Mutate document(s)
+
+## Properties
+If you want override default properties, create `liquibase-couchbase.properties` under your `resources` folder.
+You can find list of supported properties in `CouchbaseLiquibaseConfiguration` class.
+
+## Testing
+Tests in the extension are written using JUnit 5 and Testcontainers. To run the tests, you will need to have Docker installed and running.
+By default, integration and system tests are turned off. To run them, you will need to either set the `skipIntegrationTests` to `false` or 
+use the following command: `mvn clean install -DskipIntegrationTests=false`.
 
 ## Contributing
 If you would like to contribute to the Couchbase extension for Liquibase, please see the [contribution guidelines](CONTRIBUTING.md).
 
 ## License
-The Couchbase extension for Liquibase is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) and [NOTICE](NOTICE) files for details.
+The Couchbase extension for Liquibase is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) and [NOTICE](NOTICE) 
+files for details.

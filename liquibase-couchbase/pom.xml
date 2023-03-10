@@ -7,11 +7,11 @@
     <parent>
         <groupId>org.liquibase.ext</groupId>
         <artifactId>liquibase-couchbase-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>liquibase-couchbase</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -42,6 +42,7 @@
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
         <failsafe.maven.plugin.version>3.0.0-M9</failsafe.maven.plugin.version>
         <commons-io.version>2.11.0</commons-io.version>
+        <commons-lang-3.version>3.12.0</commons-lang-3.version>
     </properties>
 
     <dependencies>
@@ -72,6 +73,13 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang-3.version}</version>
+        </dependency>
+
+
 
         <!-- test dependencies -->
         <dependency>

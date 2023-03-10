@@ -2,8 +2,7 @@ package liquibase.ext.couchbase.provider;
 
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
-
-import static liquibase.ext.couchbase.provider.LiquibasePropertyProvider.getPropertyOrDefault;
+import liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration;
 
 /**
  * An interface for providing context information for different services of the extension. Responsible for working with the service bucket
@@ -13,7 +12,11 @@ import static liquibase.ext.couchbase.provider.LiquibasePropertyProvider.getProp
 
 public interface ServiceProvider {
 
-    String SERVICE_BUCKET_NAME = getPropertyOrDefault("serviceBucketName", "liquibaseServiceBucket");
+    /**
+     * Service bucket where all history is written and lock is acquired.
+     */
+    //todo let's remove constants from interface
+    String SERVICE_BUCKET_NAME = CouchbaseLiquibaseConfiguration.SERVICE_BUCKET_NAME.getCurrentValue();
     String DEFAULT_SERVICE_SCOPE = "liquibaseServiceScope";
     String CHANGE_LOG_COLLECTION = "DATABASECHANGELOG";
 

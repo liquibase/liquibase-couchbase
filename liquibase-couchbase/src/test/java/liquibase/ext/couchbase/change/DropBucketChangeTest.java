@@ -26,7 +26,7 @@ public class DropBucketChangeTest {
 
     @Test
     void Should_parse_changes_correctly() {
-        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET);
+        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET, true);
         DatabaseChangeLog load = changeLogProvider.load(DROP_BUCKET_TEST_XML);
         ChangeSet changeSet = firstOf(load.getChangeSets());
 

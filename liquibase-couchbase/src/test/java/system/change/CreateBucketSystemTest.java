@@ -4,17 +4,16 @@ import common.matchers.CouchBaseClusterAssert;
 import liquibase.Liquibase;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import system.LiquiBaseSystemTest;
+import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_XML;
-import static common.constants.TestConstants.CREATE_BUCKET_TEST_NAME;
 
-public class CreateBucketSystemTest extends LiquiBaseSystemTest {
+public class CreateBucketSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
     void Bucket_should_be_created() {
-        Liquibase liquibase = liquiBase(CREATE_BUCKET_TEST_XML);
+        Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_XML);
         liquibase.update();
         CouchBaseClusterAssert.assertThat(cluster).hasBucket("createBucketSystemTest");
     }

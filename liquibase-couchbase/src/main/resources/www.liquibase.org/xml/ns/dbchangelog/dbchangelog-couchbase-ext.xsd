@@ -196,9 +196,10 @@
 
     <xsd:element name="dropBucket">
         <xsd:complexType>
-            <xsd:sequence>
+            <xsd:all>
                 <xsd:element name="bucketName" type="xsd:string"/>
-            </xsd:sequence>
+                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
+            </xsd:all>
         </xsd:complexType>
     </xsd:element>
 
@@ -249,8 +250,10 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="path"/>
-                <xsd:element ref="value" minOccurs="0"/>
-                <xsd:element ref="values" minOccurs="0"/>
+                <xsd:choice>
+                    <xsd:element ref="value" minOccurs="0" />
+                    <xsd:element ref="values" minOccurs="0" />
+                </xsd:choice>
                 <xsd:element name="mutateInType">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">

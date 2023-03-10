@@ -6,24 +6,26 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
 import liquibase.ext.couchbase.changelog.CouchbaseChangeLog;
 import liquibase.util.LiquibaseUtil;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @UtilityClass
 public class ChangeSetMapper {
 
+    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+
+    @SneakyThrows
     public static RanChangeSet mapToRanChangeSet(CouchbaseChangeLog changeLog) {
-        Date date = Date.from(changeLog.getDateExecuted().atZone(ZoneId.systemDefault())
-                .toInstant());
         RanChangeSet ranChangeSet = new RanChangeSet(
                 changeLog.getFileName(),
                 changeLog.getId(),
                 changeLog.getAuthor(),
                 CheckSum.parse(changeLog.getCheckSum()),
-                date,
+                dateFormat.parse(changeLog.getDateExecuted()),
                 changeLog.getTag(),
                 changeLog.getExecType(),
                 changeLog.getDescription(),
@@ -43,7 +45,7 @@ public class ChangeSetMapper {
                 .id(changeSet.getId())
                 .author(changeSet.getAuthor())
                 .checkSum(changeSet.generateCheckSum().toString())
-                .dateExecuted(LocalDateTime.now())
+                .dateExecuted(dateFormat.format(new Date()))
                 .description(changeSet.getDescription())
                 .comments(changeSet.getComments())
                 .labels(changeSet.getLabels().getLabels())

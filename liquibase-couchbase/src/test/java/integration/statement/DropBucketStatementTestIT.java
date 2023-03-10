@@ -22,7 +22,7 @@ class DropBucketStatementTestIT extends ConstantScopeTestCase {
 
     @Test
     void Should_drop_existing_bucket() {
-        DropBucketStatement statement = new DropBucketStatement(CREATE_BUCKET_TEST_NAME);
+        DropBucketStatement statement = new DropBucketStatement(CREATE_BUCKET_TEST_NAME, false);
         statement.execute(clusterOperator);
 
         assertThat(cluster).hasNoBucket(CREATE_BUCKET_TEST_NAME);
@@ -32,10 +32,17 @@ class DropBucketStatementTestIT extends ConstantScopeTestCase {
     @Test
     void Should_throw_error_when_delete_non_existing_bucket() {
         String notFoundBucketName = "notFoundBucket";
-        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName);
+        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName, false);
 
         assertThatExceptionOfType(BucketNotExistException.class)
                 .isThrownBy(() -> statement.execute(clusterOperator))
                 .withMessage("Bucket [%s] not exists", notFoundBucketName);
+    }
+
+    @Test
+    void Should_ignore_when_delete_non_existing_bucket() {
+        String notFoundBucketName = "notFoundBucket";
+        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName, true);
+        statement.execute(clusterOperator);
     }
 }

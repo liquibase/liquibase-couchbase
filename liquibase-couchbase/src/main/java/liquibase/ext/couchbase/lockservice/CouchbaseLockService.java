@@ -21,19 +21,16 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Optional.ofNullable;
-import static liquibase.ext.couchbase.provider.LiquibasePropertyProvider.getPropertyOrDefault;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.CHANGELOG_LOCK_COLLECTION_NAME;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.CHANGELOG_RECHECK_TIME;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.CHANGELOG_WAIT_TIME;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 
 @LiquibaseService
 public class CouchbaseLockService implements LockService {
-
-    private static final int WAIT_LOCK_TIME = parseInt(getPropertyOrDefault("waitLockTimeInSec", "300"));
-    private static final int WAIT_RECHECK_LOCK_TIME = parseInt(getPropertyOrDefault("waitRecheckLockTimeInSec", "10"));
-    public static final String LOCK_COLLECTION_NAME = "CHANGELOGLOCKS";
 
     private final Logger logger = Scope.getCurrentScope()
             .getLog(getClass());
@@ -64,13 +61,13 @@ public class CouchbaseLockService implements LockService {
      * Time to wait for the lock to be acquired, in milliseconds. Default value is 300 seconds.
      */
     @Setter(onMethod = @__( {@Override}))
-    private long changeLogLockWaitTime = TimeUnit.SECONDS.toMillis(WAIT_LOCK_TIME);
+    private long changeLogLockWaitTime = CHANGELOG_WAIT_TIME.getCurrentValue().toMillis();
 
     /**
      * Time to wait between rechecking the lock, in milliseconds. Default value is 10 seconds.
      */
     @Setter(onMethod = @__( {@Override}))
-    private long changeLogLockRecheckTime = TimeUnit.SECONDS.toMillis(WAIT_RECHECK_LOCK_TIME);
+    private long changeLogLockRecheckTime = CHANGELOG_RECHECK_TIME.getCurrentValue().toMillis();
 
     public CouchbaseLockService(String serviceId) {
         this.serviceId = serviceId;
@@ -110,7 +107,7 @@ public class CouchbaseLockService implements LockService {
 
         serviceProvider = ofNullable(serviceProvider)
                 .orElse(new ContextServiceProvider(database));
-        Collection collection = serviceProvider.getServiceCollection(LOCK_COLLECTION_NAME);
+        Collection collection = serviceProvider.getServiceCollection(CHANGELOG_LOCK_COLLECTION_NAME.getCurrentValue());
         locker = new CouchbaseChangelogLocker(collection);
         bucketName = collection.bucketName();
         logger.info(format("Using locks for bucket [%s]", bucketName));

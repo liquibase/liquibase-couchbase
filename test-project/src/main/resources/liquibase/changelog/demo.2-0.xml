@@ -53,22 +53,22 @@
 
     <changeSet id="6" author="roman.oborin">
 
-        <ext:dropQueryIndex>
-            <ext:isPrimary>false</ext:isPrimary>
-            <ext:indexName>namedIndex</ext:indexName>
-            <ext:bucketName>demoBucket</ext:bucketName>
-            <ext:scopeName>demoScope</ext:scopeName>
-            <ext:collectionName>demoCollection</ext:collectionName>
-            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
-        </ext:dropQueryIndex>
-        <ext:dropQueryIndex>
-            <ext:isPrimary>true</ext:isPrimary>
-            <ext:indexName>demoPrimaryIndex</ext:indexName>
-            <ext:bucketName>demoBucket</ext:bucketName>
-            <ext:scopeName>demoScope</ext:scopeName>
-            <ext:collectionName>demoCollection</ext:collectionName>
-            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
-        </ext:dropQueryIndex>
+<!--        <ext:dropQueryIndex>-->
+<!--            <ext:isPrimary>false</ext:isPrimary>-->
+<!--            <ext:indexName>namedIndex</ext:indexName>-->
+<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
+<!--            <ext:scopeName>demoScope</ext:scopeName>-->
+<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
+<!--            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>-->
+<!--        </ext:dropQueryIndex>-->
+<!--        <ext:dropQueryIndex>-->
+<!--            <ext:isPrimary>true</ext:isPrimary>-->
+<!--            <ext:indexName>demoPrimaryIndex</ext:indexName>-->
+<!--            <ext:bucketName>demoBucket</ext:bucketName>-->
+<!--            <ext:scopeName>demoScope</ext:scopeName>-->
+<!--            <ext:collectionName>demoCollection</ext:collectionName>-->
+<!--            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>-->
+<!--        </ext:dropQueryIndex>-->
     </changeSet>
 
 </databaseChangeLog>
