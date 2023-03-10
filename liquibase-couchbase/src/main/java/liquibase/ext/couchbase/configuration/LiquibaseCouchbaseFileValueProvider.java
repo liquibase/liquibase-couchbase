@@ -1,16 +1,16 @@
 package liquibase.ext.couchbase.configuration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Properties;
-
 import liquibase.Scope;
 import liquibase.configuration.AbstractMapConfigurationValueProvider;
 import liquibase.logging.Logger;
 import liquibase.resource.Resource;
 import liquibase.resource.ResourceAccessor;
 import liquibase.servicelocator.LiquibaseService;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Custom properties provider for {@link CouchbaseLiquibaseConfiguration} Look up in classpath for file named
@@ -52,7 +52,7 @@ public class LiquibaseCouchbaseFileValueProvider extends AbstractMapConfiguratio
 
     @Override
     protected String getSourceDescription() {
-        return "Liquibase-couchbase properties";
+        return "Liquibase-couchbase.properties";
     }
 
     @Override
