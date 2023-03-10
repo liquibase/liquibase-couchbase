@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>spring-boot-starter-liquibase-couchbase</artifactId>
-    <version>${project.parent.version}</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
