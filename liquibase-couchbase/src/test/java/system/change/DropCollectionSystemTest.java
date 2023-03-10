@@ -4,7 +4,7 @@ import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import system.LiquiBaseSystemTest;
+import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML;
@@ -17,14 +17,14 @@ import static common.matchers.CouchBaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class DropCollectionSystemTest extends LiquiBaseSystemTest {
+class DropCollectionSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Should_drop_collection_when_exists() {
         String collectionName = "dropExistingCollection";
         bucketOperator.createCollection(collectionName, TEST_SCOPE);
 
-        Liquibase liquibase = liquiBase(DROP_EXISTING_COLLECTION_TEST_XML);
+        Liquibase liquibase = liquibase(DROP_EXISTING_COLLECTION_TEST_XML);
 
         liquibase.update();
 
@@ -34,7 +34,7 @@ class DropCollectionSystemTest extends LiquiBaseSystemTest {
     @Test
     @SneakyThrows
     void Should_throw_error_when_bucket_not_exists() {
-        Liquibase liquibase = liquiBase(DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML);
+        Liquibase liquibase = liquibase(DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML);
 
         assertThatExceptionOfType(LiquibaseException.class)
                 .isThrownBy(liquibase::update);
@@ -43,7 +43,7 @@ class DropCollectionSystemTest extends LiquiBaseSystemTest {
     @Test
     @SneakyThrows
     void Should_throw_error_when_scope_not_exists() {
-        Liquibase liquibase = liquiBase(DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML);
+        Liquibase liquibase = liquibase(DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML);
 
         assertThatExceptionOfType(LiquibaseException.class)
                 .isThrownBy(liquibase::update);

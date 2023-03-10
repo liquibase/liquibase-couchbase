@@ -7,7 +7,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import system.LiquiBaseSystemTest;
+import system.LiquibaseSystemTest;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +23,7 @@ import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class MutateInArraySystemTest extends LiquiBaseSystemTest {
+public class MutateInArraySystemTest extends LiquibaseSystemTest {
 
     private static final CollectionOperator testCollectionOperator = new CollectionOperator(
             bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
@@ -35,7 +35,7 @@ public class MutateInArraySystemTest extends LiquiBaseSystemTest {
         String id = "mutateInArrayCreateId";
         testCollectionOperator.insertDoc(id, TEST_DOCUMENT);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_ARRAY_CREATE_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_CREATE_TEST_XML);
         liquibase.update();
 
         JsonObject expected = JsonObject.create()
@@ -53,7 +53,7 @@ public class MutateInArraySystemTest extends LiquiBaseSystemTest {
         JsonObject document = JsonObject.create().put("key", "value").put("arr", Collections.singletonList("oldValue"));
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_ARRAY_APPEND_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_APPEND_TEST_XML);
         liquibase.update();
 
         JsonObject expected = JsonObject.create()
@@ -71,7 +71,7 @@ public class MutateInArraySystemTest extends LiquiBaseSystemTest {
         JsonObject document = JsonObject.create().put("key", "value").put("arr", Collections.singletonList("oldValue"));
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_ARRAY_PREPEND_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_PREPEND_TEST_XML);
         liquibase.update();
 
         JsonObject expected = JsonObject.create()
@@ -89,7 +89,7 @@ public class MutateInArraySystemTest extends LiquiBaseSystemTest {
         JsonObject document = JsonObject.create().put("key", "value").put("arr", Collections.singletonList("oldValue"));
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_ARRAY_UNIQUE_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_UNIQUE_TEST_XML);
         liquibase.update();
 
         JsonObject expected = JsonObject.create()
@@ -107,7 +107,7 @@ public class MutateInArraySystemTest extends LiquiBaseSystemTest {
         JsonObject document = JsonObject.create().put("key", "value").put("arr", Collections.singletonList("oldValue"));
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_ARRAY_UNIQUE_ERROR_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_UNIQUE_ERROR_TEST_XML);
         assertThatExceptionOfType(LiquibaseException.class).isThrownBy(liquibase::update);
 
         JsonObject expected = JsonObject.create()
