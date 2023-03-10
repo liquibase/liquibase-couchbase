@@ -7,7 +7,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import system.LiquiBaseSystemTest;
+import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INCREMENT_DECREMENT_TEST_XML;
@@ -16,7 +16,7 @@ import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class MutateInIncrementDecrementSystemTest extends LiquiBaseSystemTest {
+public class MutateInIncrementDecrementSystemTest extends LiquibaseSystemTest {
 
     private static final CollectionOperator testCollectionOperator = new CollectionOperator(
             bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
@@ -29,7 +29,7 @@ public class MutateInIncrementDecrementSystemTest extends LiquiBaseSystemTest {
         JsonObject document = initDocument();
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_INCREMENT_DECREMENT_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_INCREMENT_DECREMENT_TEST_XML);
         liquibase.update();
 
         JsonObject expected = expectedWithIncrementDecrementAndCreated();
@@ -55,7 +55,7 @@ public class MutateInIncrementDecrementSystemTest extends LiquiBaseSystemTest {
         JsonObject document = initDocument();
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML);
         assertThatExceptionOfType(LiquibaseException.class).isThrownBy(liquibase::update);
 
         assertThat(collection).extractingDocument(id)

@@ -7,7 +7,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import system.LiquiBaseSystemTest;
+import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_REMOVE_DOCUMENT_TEST_XML;
@@ -19,7 +19,7 @@ import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class MutateInSingleValueSystemTest extends LiquiBaseSystemTest {
+public class MutateInSingleValueSystemTest extends LiquibaseSystemTest {
 
     private static final CollectionOperator testCollectionOperator = new CollectionOperator(
             bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
@@ -32,7 +32,7 @@ public class MutateInSingleValueSystemTest extends LiquiBaseSystemTest {
         JsonObject document = initDocumentForInsertUpdateRemove();
         testCollectionOperator.insertDoc(id, document);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_UPSERT_REPLACE_REMOVE_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_UPSERT_REPLACE_REMOVE_TEST_XML);
         liquibase.update();
 
         JsonObject expected = expectedOfInsertUpdateRemove();
@@ -65,7 +65,7 @@ public class MutateInSingleValueSystemTest extends LiquiBaseSystemTest {
         String id = "replaceDocument";
         testCollectionOperator.insertDoc(id, TEST_DOCUMENT);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_REPLACE_DOCUMENT_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_REPLACE_DOCUMENT_TEST_XML);
         liquibase.update();
 
         JsonObject expected = JsonObject.create()
@@ -81,7 +81,7 @@ public class MutateInSingleValueSystemTest extends LiquiBaseSystemTest {
         String id = "removeDocument";
         testCollectionOperator.insertDoc(id, TEST_DOCUMENT);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_REMOVE_DOCUMENT_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_REMOVE_DOCUMENT_TEST_XML);
         liquibase.update();
 
         assertThat(collection).hasNoDocument(id);
@@ -93,7 +93,7 @@ public class MutateInSingleValueSystemTest extends LiquiBaseSystemTest {
         String id = "insertNoPathError";
         testCollectionOperator.insertDoc(id, TEST_DOCUMENT);
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML);
         assertThatExceptionOfType(LiquibaseException.class).isThrownBy(liquibase::update);
 
         assertThat(collection).extractingDocument(id).itsContentEquals(TEST_DOCUMENT);
