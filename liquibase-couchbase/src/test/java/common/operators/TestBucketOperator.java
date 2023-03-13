@@ -4,6 +4,8 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import liquibase.ext.couchbase.operator.BucketOperator;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
 import static common.constants.TestConstants.TEST_BUCKET;
@@ -12,7 +14,7 @@ import static common.constants.TestConstants.TEST_SCOPE;
 
 public class TestBucketOperator extends BucketOperator {
 
-    private static long id = 0;
+    private static final AtomicLong id = new AtomicLong();
 
     public TestBucketOperator(Bucket bucket) {
         super(bucket);
@@ -29,28 +31,28 @@ public class TestBucketOperator extends BucketOperator {
     }
 
     public String createTestScope(String prefix) {
-        String scopeName = prefix + "_" + id++;
+        String scopeName = prefix + "_" + id.getAndIncrement();
         bucket.collections().createScope(scopeName);
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
         return scopeName;
     }
 
     public String createTestScope() {
-        String scopeName = TEST_SCOPE + "_" + id++;
+        String scopeName = TEST_SCOPE + "_" + id.getAndIncrement();
         bucket.collections().createScope(scopeName);
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
         return scopeName;
     }
 
     public String createTestCollection(String prefix, String scopeName) {
-        String collectionName = prefix + "_" + id++;
+        String collectionName = prefix + "_" + id.getAndIncrement();
         bucket.collections().createCollection(create(collectionName, scopeName));
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
         return collectionName;
     }
 
     public String createTestCollection(String scopeName) {
-        String collectionName = TEST_COLLECTION + "_" + id++;
+        String collectionName = TEST_COLLECTION + "_" + id.getAndIncrement();
         bucket.collections().createCollection(create(collectionName, scopeName));
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
         return collectionName;

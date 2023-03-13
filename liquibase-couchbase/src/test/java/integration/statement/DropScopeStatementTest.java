@@ -18,6 +18,7 @@ class DropScopeStatementTest extends RandomizedScopeTestCase {
         dropScopeStatement.execute(clusterOperator);
 
         assertThat(clusterOperator.getBucketOperator(bucketName).hasScope(scopeName)).isFalse();
+        bucketOperator.getOrCreateScope(scopeName);
     }
 
     @Test

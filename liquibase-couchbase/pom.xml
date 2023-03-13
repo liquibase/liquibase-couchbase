@@ -25,7 +25,7 @@
         <sonar.scm.provider>git</sonar.scm.provider>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
-        <skipIntegrationTests>true</skipIntegrationTests>
+        <skip.integration.tests>true</skip.integration.tests>
 
         <!-- dependency versions -->
         <junit.version>5.9.2</junit.version>
@@ -166,7 +166,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <skipITs>${skipIntegrationTests}</skipITs>
+                            <skipITs>${skip.integration.tests}</skipITs>
                             <includes>
                                 <include>**/integration/**</include>
                                 <include>**/system/**</include>

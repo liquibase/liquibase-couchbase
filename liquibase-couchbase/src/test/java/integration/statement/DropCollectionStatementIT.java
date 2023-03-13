@@ -22,12 +22,12 @@ class DropCollectionStatementIT extends RandomizedScopeTestCase {
     void Collection_should_be_dropped_when_exists() {
         bucketOperator.createCollection(COLLECTION_TO_DROP, scopeName);
 
-        Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
+        Keyspace keyspace = keyspace(bucketName, scopeName, COLLECTION_TO_DROP);
         DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
 
         statement.execute(clusterOperator);
 
-        assertThat(bucketOperator.getBucket()).hasNoCollectionInScope(collectionName, scopeName);
+        assertThat(bucketOperator.getBucket()).hasNoCollectionInScope(COLLECTION_TO_DROP, scopeName);
     }
 
     @Test
