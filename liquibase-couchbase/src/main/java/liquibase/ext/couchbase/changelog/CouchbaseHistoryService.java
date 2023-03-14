@@ -5,9 +5,13 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.mapper.ChangeSetMapper;
+import liquibase.ext.couchbase.operator.ChangeLogOperator;
+import liquibase.ext.couchbase.provider.ContextServiceProvider;
 import liquibase.ext.couchbase.statement.CollectionExistsStatement;
 import liquibase.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
@@ -93,7 +97,10 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
 
     @Override
     protected List<RanChangeSet> getAllChangeLogs() {
-        return getChangeLogOperator().getAllChangeLogs();
+        if (existsChangeLogCollection()) {
+            return getChangeLogOperator().getAllChangeLogs();
+        }
+        return new ArrayList<>();
     }
 
 }
