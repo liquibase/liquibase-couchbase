@@ -2,6 +2,19 @@
 
 The Couchbase extension for Liquibase allows you to use migrate your database schema using Liquibase and store your changelogs in a Couchbase bucket.
 
+## Compatibility matrix
+
+| Couchbase<br/> Version | Description | Comments     |
+|------------------------|-------------|--------------|
+| 7.1.3                  | Works       | Well tested  |
+| 7.0.3                  | Works       | Stable       |
+| < 7.0                  | Unsupported | Incompatible |
+
+#### Notice
+**Minimum supported version is 7.0** <br/>
+As it uses latest Couchbase SDK, extension supports fully qualified keyspaces `Bucket.Scope.Collection ` <br/>
+Which are incompatible with < **7.0** Cluster version <br />
+
 ## Planned Features
 - Support for SQL++ queries
 - Support for JSON as changelog format
