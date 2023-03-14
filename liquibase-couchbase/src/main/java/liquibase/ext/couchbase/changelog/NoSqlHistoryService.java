@@ -1,7 +1,5 @@
 package liquibase.ext.couchbase.changelog;
 
-import java.util.List;
-
 import liquibase.Scope;
 import liquibase.changelog.AbstractChangeLogHistoryService;
 import liquibase.changelog.ChangeSet;
@@ -16,6 +14,9 @@ import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.isNull;
@@ -28,7 +29,6 @@ import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 /**
  * Abstract class for all NoSQL history services, extends {@link AbstractChangeLogHistoryService}<br><br> {@link CouchbaseHistoryService} is
  * the default implementation for Couchbase
- *
  * @see ChangeLogOperator
  * @see RanChangeSet
  */
@@ -43,6 +43,7 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
     private List<RanChangeSet> ranChangeSetList;
     private ChangeLogOperator changeLogOperator;
     private ServiceProvider serviceProvider;
+    private boolean initialized;
     private final Logger log = Scope.getCurrentScope().getLog(getClass());
 
     public int getPriority() {
@@ -51,22 +52,31 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
 
     @Override
     public CouchbaseLiquibaseDatabase getDatabase() {
-        return (CouchbaseLiquibaseDatabase) super.getDatabase();
+        return (CouchbaseLiquibaseDatabase) Scope.getCurrentScope().getDatabase();
     }
 
-    @Override
-    public void init() {
+    public NoSqlHistoryService() {
         changeLogOperator = new ChangeLogOperator(getDatabase());
         serviceProvider = new ContextServiceProvider(getDatabase());
+    }
+
+    /**
+     * If there is no table in the database for recording change history create one.
+     */
+    @Override
+    public void init() {
+        if (initialized) {
+            return;
+        }
         if (!existsChangeLogCollection()) {
             log.info("Create Change Log Collection");
 
-            // If there is no table in the database for recording change history create one.
             Keyspace keyspace = keyspace(SERVICE_BUCKET_NAME, DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
             log.info(format(CREATING_TEMPLATE, keyspace.getKeyspace()));
             createRepository();
             log.info(format(CREATED_TEMPLATE, keyspace.getKeyspace()));
         }
+        initialized = true;
     }
 
     @Override
