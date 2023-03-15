@@ -39,6 +39,10 @@ public class Document extends AbstractLiquibaseSerializable {
         return Document.builder().id(id).value(new Value(content, type)).build();
     }
 
+    public static Document document(String id, JsonObject json) {
+        return Document.builder().id(id).value(new Value(json.toString(), DataType.JSON)).build();
+    }
+
     public static Document document(String id, Value value) {
         return Document.builder().id(id).value(value).build();
     }

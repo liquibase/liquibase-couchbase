@@ -1,6 +1,7 @@
 package liquibase.ext.couchbase.validator;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 import liquibase.SingletonObject;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
@@ -20,7 +21,7 @@ import static liquibase.ext.couchbase.types.subdoc.MutateInType.UPSERT;
 
 public class MutateInValidatorRegistry implements SingletonObject {
 
-    private final EnumMap<MutateInType, MutateInValidator> map;
+    private final Map<MutateInType, MutateInValidator> map;
 
     public MutateInValidatorRegistry() {
         map = new EnumMap<>(MutateInType.class);
