@@ -150,6 +150,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.maven.plugin.version}</version>
                 <configuration>
+                    <goal>test</goal>
                     <includes>
                         <include>**/liquibase/ext/couchbase/**</include>
                     </includes>

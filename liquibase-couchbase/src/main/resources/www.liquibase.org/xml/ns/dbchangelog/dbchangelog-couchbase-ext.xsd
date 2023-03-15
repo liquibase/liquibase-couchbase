@@ -87,6 +87,7 @@
                 <xsd:choice>
                     <xsd:element ref="document"/>
                     <xsd:element ref="documents"/>
+                    <xsd:element ref="file"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
@@ -118,11 +119,39 @@
                 <xsd:choice>
                     <xsd:element ref="document"/>
                     <xsd:element ref="documents"/>
+                    <xsd:element ref="file"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="file">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="filePath" type="xsd:string"/>
+                <xsd:element name="importType">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="LINES"/>
+                            <xsd:enumeration value="LIST"/>
+                            <xsd:enumeration value="SAMPLE"/>
+                            <xsd:enumeration value="KEY_GENERATORS"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="keyProviderType">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:enumeration value="DEFAULT"/>
+                            <xsd:enumeration value="UID"/>
+                            <xsd:enumeration value="RANDOM"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="keyProviderExpression" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:element name="createBucket">
         <xsd:complexType>
@@ -302,6 +331,5 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-
 
 </xsd:schema>
