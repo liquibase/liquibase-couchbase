@@ -70,4 +70,5 @@ public class TestBucketOperator extends BucketOperator {
     public static Bucket getTestBucket(Cluster cluster) {
         return cluster.bucket(TEST_BUCKET);
     }
+
 }

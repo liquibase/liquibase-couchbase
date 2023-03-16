@@ -1,0 +1,13 @@
+{
+  "history": {
+    "changeLog": "liquibase/harness/compatibility/foundational/changelogs/couchbase/createCollection.xml",
+    "id": "1",
+    "author": "harness",
+    "lastCheckSum": "8:d930cc7408c5234f555a7e447e20d2cb",
+    "description": "createCollection bucketName=harnessBucket, collectionName=harnessNewCollection, scopeName=harnessScope",
+    "tag": null,
+    "execType": "EXECUTED",
+    "orderExecuted": 1
+  }
+}
+

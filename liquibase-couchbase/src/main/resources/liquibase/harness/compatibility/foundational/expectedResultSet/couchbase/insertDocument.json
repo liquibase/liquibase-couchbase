@@ -1,0 +1,14 @@
+{
+  "history": {
+    "changeLog": "liquibase/harness/compatibility/foundational/changelogs/couchbase/insertDocument.xml",
+    "id": "3",
+    "author": "harness",
+    "lastCheckSum": "8:a44b1d6c049a70c871b674a8124647ab",
+    "description": "insertDocuments bucketName=harnessBucket, collectionName=harnessCollection, scopeName=harnessScope",
+    "tag": null,
+    "execType": "EXECUTED",
+    "orderExecuted": 3
+  },
+  "numberOfDocuments": 1
+}
+
