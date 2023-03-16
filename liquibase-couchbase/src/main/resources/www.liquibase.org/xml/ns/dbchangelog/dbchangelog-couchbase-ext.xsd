@@ -343,4 +343,15 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="removeDocuments">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+                <xsd:element name="collectionName" type="xsd:string"/>
+                <xsd:element name="id" maxOccurs="unbounded" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>

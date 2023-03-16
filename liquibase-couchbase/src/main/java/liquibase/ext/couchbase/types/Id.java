@@ -8,25 +8,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Document field name, frequently used in indexes
+ * Document id, used in documents remove change
  *
  * @see AbstractLiquibaseSerializable
  * @see liquibase.serializer.LiquibaseSerializable
- * @see liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement
+ * @see liquibase.ext.couchbase.statement.RemoveDocumentsStatement
  */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Field extends AbstractLiquibaseSerializable {
-
-    @SuppressWarnings("java:S1700") // This is a requirement from Liquibase to have type with field named as classname
-    private String field;
+@EqualsAndHashCode(callSuper = false)
+public class Id extends AbstractLiquibaseSerializable {
+    @SuppressWarnings("java:S1700")// This is a requirement from Liquibase to have type with field named as classname
+    private String id;
 
     @Override
     public String getSerializedObjectName() {
-        return "field";
+        return "id";
     }
 
     @Override
