@@ -2,14 +2,13 @@ package common.matchers;
 
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Collection;
-
+import liquibase.ext.couchbase.lockservice.CouchbaseLock;
+import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Id;
+import lombok.NonNull;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
-
-import liquibase.ext.couchbase.lockservice.CouchbaseLock;
-import liquibase.ext.couchbase.types.Document;
-import lombok.NonNull;
 
 public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectionAssert, Collection> {
 
@@ -52,6 +51,17 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
+    public CouchbaseCollectionAssert hasAnyDocument(@NonNull List<Id> ids) {
+        if (ids.stream().noneMatch(id -> actual.exists(id.getId()).exists())) {
+            failWithMessage("Collection [%s] in the scope [%s] doesn't contain any documents from list [%s]",
+                    actual.name(),
+                    actual.scopeName(),
+                    ids
+            );
+        }
+        return this;
+    }
+
     public CouchbaseCollectionAssert hasNoDocuments(@NonNull String... ids) {
         for (String id : ids) {
             hasNoDocument(id);
@@ -62,6 +72,13 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
     public CouchbaseCollectionAssert hasNoDocuments(@NonNull List<Document> docs) {
         for (Document doc : docs) {
             hasNoDocument(doc.getId());
+        }
+        return this;
+    }
+
+    public CouchbaseCollectionAssert hasNoDocumentsByIds(@NonNull List<Id> ids) {
+        for (Id id : ids) {
+            hasNoDocument(id.getId());
         }
         return this;
     }
