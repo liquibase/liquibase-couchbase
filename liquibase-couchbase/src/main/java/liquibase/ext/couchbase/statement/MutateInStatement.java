@@ -10,16 +10,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.MUTATE_IN_TIMEOUT;
-
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class MutateInStatement extends CouchbaseStatement {
 
-    private static final MutateInOptions mutateInOptions = mutateInOptions().timeout(MUTATE_IN_TIMEOUT.getCurrentValue());
     private final MutateIn mutate;
+    private final MutateInOptions mutateInOptions;
 
     @Override
     public void execute(ClusterOperator clusterOperator) {

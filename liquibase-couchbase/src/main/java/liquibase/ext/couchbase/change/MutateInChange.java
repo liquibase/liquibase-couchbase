@@ -1,15 +1,12 @@
 package liquibase.ext.couchbase.change;
 
+import com.couchbase.client.java.kv.MutateInOptions;
 import com.couchbase.client.java.kv.MutateInSpec;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.couchbase.client.java.kv.StoreSemantics;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
-import liquibase.ext.couchbase.transformer.MutateInSpecTransformer;
 import liquibase.ext.couchbase.statement.MutateInStatement;
+import liquibase.ext.couchbase.transformer.MutateInSpecTransformer;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateIn;
@@ -17,9 +14,18 @@ import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
 import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.MUTATE_IN_TIMEOUT;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 @Data
@@ -34,10 +40,12 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 public class MutateInChange extends CouchbaseChange {
 
     private String id;
-
     private String bucketName;
     private String scopeName;
     private String collectionName;
+    private String expiry;
+    private Boolean preserveExpiry;
+    private StoreSemantics storeSemantics;
 
     private List<LiquibaseMutateInSpec> mutateInSpecs = new ArrayList<>();
 
@@ -47,9 +55,23 @@ public class MutateInChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         MutateIn mutate = buildMutate(keyspace);
+        MutateInOptions mutateInOptions = buildOptions(expiry, preserveExpiry, storeSemantics);
         return new SqlStatement[] {
-                new MutateInStatement(mutate)
+                new MutateInStatement(mutate, mutateInOptions)
         };
+    }
+
+    private MutateInOptions buildOptions(String expiry, Boolean preserveExpiry, StoreSemantics storeSemantics) {
+        MutateInOptions options = mutateInOptions();
+        options.timeout(MUTATE_IN_TIMEOUT.getCurrentValue());
+        ofNullable(expiry)
+                .filter(StringUtils::isNotEmpty)
+                .ifPresent(value -> options.expiry(Duration.parse(value)));
+        ofNullable(preserveExpiry)
+                .ifPresent(options::preserveExpiry);
+        ofNullable(storeSemantics)
+                .ifPresent(options::storeSemantics);
+        return options;
     }
 
     @Override
@@ -68,4 +90,5 @@ public class MutateInChange extends CouchbaseChange {
                 .specs(specs)
                 .build();
     }
+
 }

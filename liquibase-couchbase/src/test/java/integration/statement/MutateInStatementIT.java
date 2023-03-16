@@ -18,12 +18,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.InstanceOfAssertFactories.DURATION;
 
 class MutateInStatementIT extends RandomizedScopeTestCase {
     private final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(collectionName,
@@ -50,7 +53,7 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
         List<MutateInSpec> specs = getInsertSpec("age", "30");
         MutateIn mutate = MutateIn.builder().id(doc1.getId()).keyspace(keyspace).specs(specs).build();
 
-        new MutateInStatement(mutate).execute(clusterOperator);
+        new MutateInStatement(mutate, mutateInOptions().timeout(Duration.ofSeconds(2))).execute(clusterOperator);
         Collection collection = collectionOperator.getCollection();
         assertThat(collection).extractingDocument(doc2.getId()).hasNoField("age");
         assertThat(collection).extractingDocument(doc1.getId()).hasField("age");
@@ -62,7 +65,7 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
         MutateIn mutate = MutateIn.builder().id(doc1.getId()).keyspace(keyspace).specs(specs).build();
 
         assertThatExceptionOfType(PathExistsException.class).isThrownBy(
-                () -> new MutateInStatement(mutate).execute(clusterOperator)).withMessageContaining(
+                () -> new MutateInStatement(mutate, mutateInOptions().timeout(Duration.ofSeconds(2))).execute(clusterOperator)).withMessageContaining(
                 "Path already exists in document");
     }
 

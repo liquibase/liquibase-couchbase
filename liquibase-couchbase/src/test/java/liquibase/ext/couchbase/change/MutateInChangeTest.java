@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.change;
 
+import com.couchbase.client.java.kv.StoreSemantics;
 import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,6 +68,9 @@ public class MutateInChangeTest {
                 TEST_BUCKET,
                 TEST_SCOPE,
                 TEST_COLLECTION,
+                "PT1H",
+                true,
+                StoreSemantics.INSERT,
                 specs
         );
     }
