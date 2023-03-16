@@ -24,20 +24,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="khinkali s govyadinoy" author="roman.oborin">
+    <changeSet id="insertFieldWithCreatingDocument" author="dmitry.dashko">
         <ext:mutateIn>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:expiry>PT1H</ext:expiry>
-            <ext:preserveExpiry>true</ext:preserveExpiry>
             <ext:storeSemantics>INSERT</ext:storeSemantics>
-            <ext:id>id</ext:id>
+            <ext:id>newDocumentMutateInId</ext:id>
             <ext:mutateInSpecs>
                 <ext:mutateInSpec>
-                    <ext:path>user.age</ext:path>
+                    <ext:path>field</ext:path>
                     <ext:value>
-                        <ext:data>29</ext:data>
+                        <ext:data>HelloWorld</ext:data>
                         <ext:type>String</ext:type>
                     </ext:value>
                     <ext:mutateInType>INSERT</ext:mutateInType>
