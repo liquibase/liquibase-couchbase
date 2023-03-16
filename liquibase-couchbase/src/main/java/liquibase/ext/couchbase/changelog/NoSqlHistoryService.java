@@ -4,6 +4,7 @@ import liquibase.Scope;
 import liquibase.changelog.AbstractChangeLogHistoryService;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
+import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.DatabaseHistoryException;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
@@ -52,12 +53,16 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
 
     @Override
     public CouchbaseLiquibaseDatabase getDatabase() {
-        return (CouchbaseLiquibaseDatabase) Scope.getCurrentScope().getDatabase();
+        return (CouchbaseLiquibaseDatabase) super.getDatabase();
     }
 
-    public NoSqlHistoryService() {
-        changeLogOperator = new ChangeLogOperator(getDatabase());
-        serviceProvider = new ContextServiceProvider(getDatabase());
+    @Override
+    public void setDatabase(Database database) {
+        CouchbaseLiquibaseDatabase couchbaseDatabase = (CouchbaseLiquibaseDatabase) database;
+        super.setDatabase(couchbaseDatabase);
+        // TODO think how we can init operators (harness test doesn't see database in scope)
+        changeLogOperator = new ChangeLogOperator(couchbaseDatabase);
+        serviceProvider = new ContextServiceProvider(couchbaseDatabase);
     }
 
     /**

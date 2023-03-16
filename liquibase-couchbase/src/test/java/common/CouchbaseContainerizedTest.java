@@ -1,16 +1,11 @@
 package common;
 
 import com.couchbase.client.java.Cluster;
-import liquibase.ext.couchbase.database.ConnectionData;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
-import org.testcontainers.couchbase.CouchbaseService;
 
-import java.time.Duration;
-
-import static common.constants.TestConstants.CB_IMAGE_NAME;
+import static common.ContainerizedTestUtil.createContainer;
+import static common.ContainerizedTestUtil.createDatabase;
 import static common.constants.TestConstants.TEST_BUCKET;
 
 /**
@@ -22,30 +17,10 @@ public abstract class CouchbaseContainerizedTest {
     protected static final CouchbaseLiquibaseDatabase database;
 
     static {
-        container = createContainer();
+        container = createContainer(TEST_BUCKET);
         container.start();
-        database = createDatabase();
+        database = createDatabase(container);
         cluster = database.getConnection().getCluster();
     }
-
-    private static CouchbaseLiquibaseDatabase createDatabase() {
-        return new CouchbaseLiquibaseDatabase(new ConnectionData(
-                container.getUsername(),
-                container.getPassword(),
-                container.getConnectionString()
-        ));
-    }
-
-    private static CouchbaseContainer createContainer() {
-        String cbVersion = TestPropertyProvider.getProperty("couchbase.version");
-        BucketDefinition bucketDef = new BucketDefinition(TEST_BUCKET).withPrimaryIndex(false);
-
-        return new CouchbaseContainer(CB_IMAGE_NAME.withTag(cbVersion))
-                .withBucket(bucketDef)
-                .withServiceQuota(CouchbaseService.KV, 512)
-                .withStartupTimeout(Duration.ofMinutes(2L))
-                .waitingFor(Wait.forHealthcheck());
-    }
-
 
 }
