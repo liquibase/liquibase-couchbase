@@ -7,10 +7,12 @@ import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Id;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,5 +69,14 @@ public class CollectionOperator {
 
     public void insertDocsTransactionally(TransactionAttemptContext transaction, Map<String, Object> docs) {
         docs.forEach((key, content) -> insertDocInTransaction(transaction, key, content));
+    }
+
+    public void removeDocsTransactionally(TransactionAttemptContext transaction,  List<Id> idList) {
+        idList.forEach(id -> removeDocTransactionally(transaction, id.getId()));
+    }
+
+    private void removeDocTransactionally(TransactionAttemptContext transaction, String id) {
+        TransactionGetResult result = transaction.get(collection, id);
+        transaction.remove(result);
     }
 }
