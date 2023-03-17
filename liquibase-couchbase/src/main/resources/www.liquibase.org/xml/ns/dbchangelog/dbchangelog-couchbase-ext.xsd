@@ -354,4 +354,12 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="executeQuery">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="query" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>

@@ -34,6 +34,7 @@ public class ChangeLogSampleFilePaths {
     public static final String CHANGELOG_TEST_XML = rootPrefix + "/changelog/changelog.changelog-test.xml";
     public static final String CHANGELOG_DUPLICATE_TEST_XML = rootPrefix + "/changelog/changelog.changelog-duplicate-test.xml";
     public static final String CREATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-bucket.test.xml";
+    public static final String EXECUTE_QUERY_TEST_XML = rootPrefix + "/bucket/changelog.execute-query.test.xml";
     public static final String MUTATE_IN_INSERT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-insert.test.xml";
     public static final String MUTATE_IN_ARRAY_CREATE_TEST_XML = rootPrefix + "/mutatein/changelog.create-array.test.xml";
     public static final String MUTATE_IN_ARRAY_APPEND_TEST_XML = rootPrefix + "/mutatein/changelog.array-append-value.test.xml";
