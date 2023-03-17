@@ -106,7 +106,7 @@ public class MutateInSingleValueSystemTest extends LiquibaseSystemTest {
     void Should_create_document_and_insert_field() {
         String id = "newDocumentMutateInId";
 
-        Liquibase liquibase = liquiBase(MUTATE_IN_CREATE_DOCUMENT_AND_INSERT_FIELD_TEST_XML);
+        Liquibase liquibase = liquibase(MUTATE_IN_CREATE_DOCUMENT_AND_INSERT_FIELD_TEST_XML);
         liquibase.update();
 
         JsonObject expected = JsonObject.create()

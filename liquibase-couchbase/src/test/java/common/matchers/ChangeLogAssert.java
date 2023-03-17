@@ -4,6 +4,8 @@ import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.query.QueryOptions;
+import com.couchbase.client.java.query.QueryScanConsistency;
 import liquibase.changelog.ChangeSet;
 import liquibase.ext.couchbase.changelog.CouchbaseChangeLog;
 import lombok.NonNull;
@@ -11,10 +13,13 @@ import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
 
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 
 
 public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
+
+    private static final String SELECT_ALL_HISTORY_DOCUMENTS_QUERY = "SELECT * FROM DATABASECHANGELOG";
 
     private String key;
     private final Scope scope;
@@ -34,7 +39,8 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
     }
 
     public ChangeLogAssert documentsSizeEqualTo(int numberOfDocuments) {
-        List<JsonObject> documents = scope.query("Select * from " + CHANGE_LOG_COLLECTION).rowsAsObject();
+        QueryOptions queryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
+        List<JsonObject> documents = scope.query(SELECT_ALL_HISTORY_DOCUMENTS_QUERY, queryOptions).rowsAsObject();
         if (documents.size() != numberOfDocuments) {
             failWithMessage("The size of documents is not equal to [%s], the actual number is [%s]", numberOfDocuments,
                     documents.size());
@@ -51,6 +57,13 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
             failWithMessage("A changelog with key [%s] doesn't exist", key);
         }
 
+        return this;
+    }
+
+    public ChangeLogAssert hasDocuments(@NonNull String... keys) {
+        for (String key : keys) {
+            hasDocument(key);
+        }
         return this;
     }
 
@@ -77,6 +90,14 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
         if (changeLog.getOrderExecuted() != order) {
             failWithMessage("A changelog with key [%s] doesn't have an order [%s], the actual order is [%s]", key,
                     order, changeLog.getOrderExecuted());
+        }
+
+        return this;
+    }
+
+    public ChangeLogAssert withTag(@NonNull String tag) {
+        if (!changeLog.getTag().equals(tag)) {
+            failWithMessage("A changelog with key [%s] doesn't have tag [%s]", key, tag);
         }
 
         return this;

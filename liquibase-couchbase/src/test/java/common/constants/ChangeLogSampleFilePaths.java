@@ -33,6 +33,9 @@ public class ChangeLogSampleFilePaths {
     public static final String UPSERT_FROM_FILE_TEST_XML = rootPrefix + "/insert/changelog.upsert-from-file.test.xml";
     public static final String CHANGELOG_TEST_XML = rootPrefix + "/changelog/changelog.changelog-test.xml";
     public static final String CHANGELOG_DUPLICATE_TEST_XML = rootPrefix + "/changelog/changelog.changelog-duplicate-test.xml";
+    public static final String CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-count-test.xml";
+    public static final String CHANGELOG_ROLLBACK_BY_TAG_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-tag-test.xml";
+    public static final String CHANGELOG_TAG_TEST_XML = rootPrefix + "/changelog/changelog.tag-test.xml";
     public static final String CREATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-bucket.test.xml";
     public static final String MUTATE_IN_INSERT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-insert.test.xml";
     public static final String MUTATE_IN_ARRAY_CREATE_TEST_XML = rootPrefix + "/mutatein/changelog.create-array.test.xml";
