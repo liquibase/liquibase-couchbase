@@ -3,7 +3,6 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.core.error.CollectionExistsException;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.TEST_BUCKET;
@@ -19,14 +18,8 @@ import static org.mockito.Mockito.when;
 
 public class CreateCollectionStatementTest {
 
-    private BucketOperator bucketOperator;
-    private ClusterOperator clusterOperator;
-
-    @BeforeEach
-    void setUp() {
-        clusterOperator = mock(ClusterOperator.class);
-        bucketOperator = mock(BucketOperator.class);
-    }
+    private final BucketOperator bucketOperator = mock(BucketOperator.class);
+    private final ClusterOperator clusterOperator = mock(ClusterOperator.class);
 
     @Test
     void Should_not_createCollection_if_collection_exists_and_skip_is_true() {

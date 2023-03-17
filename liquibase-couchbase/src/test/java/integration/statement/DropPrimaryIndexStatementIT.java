@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
-import static common.matchers.CouchBaseClusterAssert.assertThat;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
-class DropPrimaryIndexStatementTest extends RandomizedScopeTestCase {
+class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
     private Keyspace keyspace;
 
     @Test
@@ -26,7 +26,7 @@ class DropPrimaryIndexStatementTest extends RandomizedScopeTestCase {
     }
 
     @Test
-    void Should_drop_primary_index_for_specific_keyspace() throws InterruptedException {
+    void Should_drop_primary_index_for_specific_keyspace() {
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
         keyspace = keyspace(bucketName, scopeName, collectionName);
         clusterOperator.createCollectionPrimaryIndex(keyspace, null);

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
-import static common.matchers.CouchBaseClusterAssert.assertThat;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

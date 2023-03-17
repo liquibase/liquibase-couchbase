@@ -15,18 +15,18 @@ public class TestChangeFactory {
                 .bucketName(bucketName).bucketType(BucketType.COUCHBASE)
                 .replicaIndexes(false)
                 .conflictResolutionType(ConflictResolutionType.SEQUENCE_NUMBER)
-                .compressionMode(CompressionMode.OFF).maxExpiryInHours((long) 1)
+                .compressionMode(CompressionMode.OFF).maxExpiryInHours(1L)
                 .storageBackend("couchstore")
                 .evictionPolicy(EvictionPolicyType.VALUE_ONLY)
                 .minimumDurabilityLevel(DurabilityLevel.NONE)
-                .numReplicas(0).ramQuotaMB((long) 128).flushEnabled(true)
-                .timeoutInSeconds((long) 10).build();
+                .numReplicas(0).ramQuotaMB(128L).flushEnabled(true)
+                .timeoutInSeconds(10L).build();
     }
 
     public static UpdateBucketChange prepareUpdateBucketChange(String bucketName) {
         return UpdateBucketChange.builder()
                 .bucketName(bucketName).compressionMode(CompressionMode.ACTIVE)
-                .maxExpiryInHours((long) 2).numReplicas(1).ramQuotaMB((long) 256)
-                .flushEnabled(false).timeoutInSeconds((long) 20).build();
+                .maxExpiryInHours(2L).numReplicas(1).ramQuotaMB(256L)
+                .flushEnabled(false).timeoutInSeconds(20L).build();
     }
 }

@@ -8,7 +8,7 @@ import liquibase.ext.couchbase.statement.DropCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.Test;
 
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 

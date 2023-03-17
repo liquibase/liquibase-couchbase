@@ -1,12 +1,13 @@
 package integration.statement;
 
-import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;import static common.matchers.CouchBaseBucketAssert.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
 import com.couchbase.client.core.error.ParsingFailureException;
 import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.ExecuteQueryStatement;
 import org.junit.jupiter.api.Test;
+
+import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class ExecuteQueryStatementIT extends RandomizedScopeTestCase {
 

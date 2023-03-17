@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test;
 import static common.change.TestChangeFactory.prepareCreateBucketChange;
 import static common.change.TestChangeFactory.prepareUpdateBucketChange;
 import static common.constants.TestConstants.UPDATE_TEST_BUCKET;
-import static common.matchers.CouchBaseClusterAssert.assertThat;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
 @Slf4j
-class UpdateBucketStatementTestIT extends ConstantScopeTestCase {
+class UpdateBucketStatementIT extends ConstantScopeTestCase {
 
     @AfterEach
     void clean() {

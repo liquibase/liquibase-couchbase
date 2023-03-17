@@ -7,13 +7,13 @@ import org.assertj.core.api.AbstractAssert;
 
 import lombok.NonNull;
 
-public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAssert, JsonObject> {
+public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAssert, JsonObject> {
 
-    CouchBaseDocumentAssert(JsonObject document) {
-        super(document, CouchBaseDocumentAssert.class);
+    CouchbaseDocumentAssert(JsonObject document) {
+        super(document, CouchbaseDocumentAssert.class);
     }
 
-    public CouchBaseDocumentAssert itsContentEquals(@NonNull JsonObject expected) {
+    public CouchbaseDocumentAssert itsContentEquals(@NonNull JsonObject expected) {
         if (!actual.equals(expected)) {
             failWithMessage("Unexpected content for document, expected is [%s], actual is [%s]",
                     expected,
@@ -23,7 +23,7 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
         return this;
     }
 
-    public CouchBaseDocumentAssert itsContentEquals(@NonNull Value expected) {
+    public CouchbaseDocumentAssert itsContentEquals(@NonNull Value expected) {
         if (!actual.equals(expected.mapDataToType())) {
             failWithMessage("Unexpected content for document, expected is [%s], actual is [%s]",
                     expected,
@@ -33,7 +33,7 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
         return this;
     }
 
-    public CouchBaseDocumentAssert itsContentEquals(@NonNull String expected) {
+    public CouchbaseDocumentAssert itsContentEquals(@NonNull String expected) {
         if (!actual.toString().equals(expected)) {
             failWithMessage("Unexpected content for document, expected is [%s], actual is [%s]",
                     expected,
@@ -43,7 +43,7 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
         return this;
     }
 
-    public CouchBaseDocumentAssert hasNoField(@NonNull String name) {
+    public CouchbaseDocumentAssert hasNoField(@NonNull String name) {
         if (actual.containsKey(name)) {
             failWithMessage("JsonObject [%s] should not contain key [%s], but it does",
                     actual,
@@ -53,7 +53,7 @@ public class CouchBaseDocumentAssert extends AbstractAssert<CouchBaseDocumentAss
         return this;
     }
 
-    public CouchBaseDocumentAssert hasField(@NonNull String name) {
+    public CouchbaseDocumentAssert hasField(@NonNull String name) {
         if (!actual.containsKey(name)) {
             failWithMessage("JsonObject [%s] should contain key [%s], but it doesn't",
                     actual,

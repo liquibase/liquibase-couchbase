@@ -16,7 +16,7 @@ import liquibase.ext.couchbase.lockservice.CouchbaseLockService;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.provider.ContextServiceProvider;
 import lombok.SneakyThrows;
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
 import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CouchbaseLockServiceIntegrationTest extends CouchbaseContainerizedTest {
+public class CouchbaseLockServiceIT extends CouchbaseContainerizedTest {
 
     private static final String LOCK_ID = SERVICE_BUCKET_NAME;
 

@@ -9,7 +9,7 @@ import system.LiquibaseSystemTest;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 
 public class CreateCollectionSystemTest extends LiquibaseSystemTest {
 

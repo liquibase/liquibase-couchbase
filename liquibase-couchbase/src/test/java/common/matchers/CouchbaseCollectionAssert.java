@@ -83,10 +83,10 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchBaseDocumentAssert extractingDocument(@NonNull String id) {
+    public CouchbaseDocumentAssert extractingDocument(@NonNull String id) {
         hasDocument(id);
 
-        return new CouchBaseDocumentAssert(actual.get(id).contentAsObject());
+        return new CouchbaseDocumentAssert(actual.get(id).contentAsObject());
     }
 
     public CouchbaseCollectionAssert containDocuments(List<Document> testDocuments) {

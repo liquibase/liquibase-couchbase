@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
-class CreateScopeStatementTest extends RandomizedScopeTestCase {
+class CreateScopeStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_create_scope() {
         if (bucketOperator.hasScope(scopeName)) {
