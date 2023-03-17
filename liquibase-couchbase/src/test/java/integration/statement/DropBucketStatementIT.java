@@ -6,15 +6,16 @@ import liquibase.ext.couchbase.statement.DropBucketStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
 import static common.constants.TestConstants.CREATE_BUCKET_TEST_NAME;
 import static common.matchers.CouchBaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-
-class DropBucketStatementTestIT extends ConstantScopeTestCase {
+class DropBucketStatementIT extends ConstantScopeTestCase {
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InterruptedException {
+        cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
         if (!clusterOperator.isBucketExists(CREATE_BUCKET_TEST_NAME)) {
             clusterOperator.createBucket(CREATE_BUCKET_TEST_NAME);
         }
