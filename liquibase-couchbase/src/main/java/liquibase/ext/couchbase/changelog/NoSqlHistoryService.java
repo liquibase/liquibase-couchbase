@@ -26,6 +26,7 @@ import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_S
 import static liquibase.ext.couchbase.provider.ServiceProvider.SERVICE_BUCKET_NAME;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 /**
  * Abstract class for all NoSQL history services, extends {@link AbstractChangeLogHistoryService}<br><br> {@link CouchbaseHistoryService} is
@@ -114,12 +115,17 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
 
     @Override
     public void tag(final String tagString) {
-        // TODO implement (liquibase tag --tag=sometag)
+        changeLogOperator.tagLastChangeSet(tagString);
     }
 
     @Override
     public void removeFromHistory(final ChangeSet changeSet) {
-        // TODO implement
+        changeLogOperator.removeChangeSetFromHistory(changeSet);
+
+        if (isEmpty(ranChangeSetList)) {
+            return;
+        }
+        ranChangeSetList.remove(new RanChangeSet(changeSet));
     }
 
     @Override
