@@ -13,11 +13,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
-import static common.matchers.CouchBaseClusterAssert.assertThat;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

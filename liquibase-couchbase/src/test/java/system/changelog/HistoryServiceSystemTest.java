@@ -25,7 +25,7 @@ import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.ChangeLogAssert.assertThat;
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static liquibase.changelog.ChangeSet.ExecType.EXECUTED;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
@@ -71,8 +71,9 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
 
         liquibase.update();
 
-        assertThat(serviceScope).hasDocument(changeSet(1)).withExecType(EXECUTED).withOrder(1);
-        assertThat(serviceScope).hasDocument(changeSet(2)).withExecType(EXECUTED).withOrder(2);
+        assertThat(serviceScope)
+                .hasDocument(changeSet(1)).withExecType(EXECUTED).withOrder(1)
+                .hasDocument(changeSet(2)).withExecType(EXECUTED).withOrder(2);
     }
 
     private String changeSet(Integer changeSetNum) {

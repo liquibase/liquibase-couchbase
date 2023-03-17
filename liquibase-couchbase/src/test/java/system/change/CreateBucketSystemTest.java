@@ -1,6 +1,6 @@
 package system.change;
 
-import common.matchers.CouchBaseClusterAssert;
+import common.matchers.CouchbaseClusterAssert;
 import liquibase.Liquibase;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,6 @@ public class CreateBucketSystemTest extends LiquibaseSystemTest {
     void Bucket_should_be_created() {
         Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_XML);
         liquibase.update();
-        CouchBaseClusterAssert.assertThat(cluster).hasBucket("createBucketSystemTest");
+        CouchbaseClusterAssert.assertThat(cluster).hasBucket("createBucketSystemTest");
     }
 }

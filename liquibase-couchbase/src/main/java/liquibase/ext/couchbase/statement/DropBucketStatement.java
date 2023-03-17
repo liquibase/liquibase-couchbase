@@ -1,7 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import static java.lang.String.format;
-
 import liquibase.Scope;
 import liquibase.ext.couchbase.exception.BucketNotExistException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
@@ -9,6 +7,9 @@ import liquibase.logging.Logger;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static java.lang.String.format;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 /**
  * A statement to drop bucket
@@ -31,7 +32,7 @@ public class DropBucketStatement extends CouchbaseStatement {
     public void execute(ClusterOperator clusterOperator) {
         boolean bucketNotExist = !clusterOperator.isBucketExists(bucketName);
 
-        if (ignoreIfNotExists && bucketNotExist) {
+        if (isTrue(ignoreIfNotExists) && bucketNotExist) {
             logger.info(format(BUCKET_NOT_EXISTS_MESSAGE, bucketName));
             return;
         }

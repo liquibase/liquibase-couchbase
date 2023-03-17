@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
-import static common.matchers.CouchBaseClusterAssert.assertThat;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static java.util.Collections.singletonList;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 
-class DropIndexStatementTest extends RandomizedScopeTestCase {
+class DropIndexStatementIT extends RandomizedScopeTestCase {
 
     private Keyspace keyspace;
     private Document doc;

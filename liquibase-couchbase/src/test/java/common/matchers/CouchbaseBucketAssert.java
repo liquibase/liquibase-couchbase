@@ -7,21 +7,21 @@ import org.assertj.core.api.AbstractAssert;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import lombok.NonNull;
 
-public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert, Bucket> {
+public class CouchbaseBucketAssert extends AbstractAssert<CouchbaseBucketAssert, Bucket> {
 
     private final BucketOperator bucketOperator;
 
-    private CouchBaseBucketAssert(Bucket bucket) {
-        super(bucket, CouchBaseBucketAssert.class);
+    private CouchbaseBucketAssert(Bucket bucket) {
+        super(bucket, CouchbaseBucketAssert.class);
         bucketOperator = new BucketOperator(bucket);
     }
 
 
-    public static CouchBaseBucketAssert assertThat(@NonNull Bucket actual) {
-        return new CouchBaseBucketAssert(actual);
+    public static CouchbaseBucketAssert assertThat(@NonNull Bucket actual) {
+        return new CouchbaseBucketAssert(actual);
     }
 
-    public CouchBaseBucketAssert hasCollectionInDefaultScope(@NonNull String collectionName) {
+    public CouchbaseBucketAssert hasCollectionInDefaultScope(@NonNull String collectionName) {
         if (!bucketOperator.hasCollectionInDefaultScope(collectionName)) {
             failWithMessage("Collection [%s] doesn't exist in the bucket [%s] in the scope [%s]",
                     collectionName,
@@ -33,7 +33,7 @@ public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert,
         return this;
     }
 
-    public CouchBaseBucketAssert hasCollectionInScope(@NonNull String collectionName,
+    public CouchbaseBucketAssert hasCollectionInScope(@NonNull String collectionName,
                                                       @NonNull String scopeName) {
         if (!bucketOperator.hasCollectionInScope(collectionName, scopeName)) {
             failWithMessage("Collection [%s] doesn't exist in the bucket [%s] in the scope [%s]",
@@ -46,7 +46,7 @@ public class CouchBaseBucketAssert extends AbstractAssert<CouchBaseBucketAssert,
         return this;
     }
 
-    public CouchBaseBucketAssert hasNoCollectionInScope(@NonNull String collectionName,
+    public CouchbaseBucketAssert hasNoCollectionInScope(@NonNull String collectionName,
                                                         @NonNull String scopeName) {
         if (bucketOperator.hasCollectionInScope(collectionName, scopeName)) {
             failWithMessage("Collection [%s] exists in the bucket [%s] in the scope [%s]",

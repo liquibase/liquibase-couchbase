@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
-class DropScopeStatementTest extends RandomizedScopeTestCase {
+class DropScopeStatementIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_drop_scope() {

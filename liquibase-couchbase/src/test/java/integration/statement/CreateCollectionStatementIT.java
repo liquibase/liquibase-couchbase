@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.DEFAULT_SCOPE;
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 /**
  * Integration test for create collection statement
  */
-class CreateCollectionStatementIntegrationTest extends RandomizedScopeTestCase {
+class CreateCollectionStatementIT extends RandomizedScopeTestCase {
 
     private Keyspace keyspace;
 

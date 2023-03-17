@@ -7,13 +7,12 @@ import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_EXISTING_COLLECTION_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.SKIP_DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
 import static common.constants.TestConstants.CREATE_BUCKET_TEST_NAME;
-import static common.matchers.CouchBaseClusterAssert.assertThat;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class DropBucketStatementIT extends ConstantScopeTestCase {
 
     @BeforeEach
-    void setUp() throws InterruptedException {
+    void setUp() {
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
         if (!clusterOperator.isBucketExists(CREATE_BUCKET_TEST_NAME)) {
             clusterOperator.createBucket(CREATE_BUCKET_TEST_NAME);
@@ -32,7 +33,7 @@ class DropBucketStatementIT extends ConstantScopeTestCase {
 
     @Test
     void Should_throw_error_when_delete_non_existing_bucket() {
-        String notFoundBucketName = "notFoundBucket";
+        String notFoundBucketName = "notFoundBucket1";
         DropBucketStatement statement = new DropBucketStatement(notFoundBucketName, false);
 
         assertThatExceptionOfType(BucketNotExistException.class)
@@ -42,8 +43,8 @@ class DropBucketStatementIT extends ConstantScopeTestCase {
 
     @Test
     void Should_ignore_when_delete_non_existing_bucket() {
-        String notFoundBucketName = "notFoundBucket";
+        String notFoundBucketName = "notFoundBucket2";
         DropBucketStatement statement = new DropBucketStatement(notFoundBucketName, true);
-        statement.execute(clusterOperator);
+        assertThatNoException().isThrownBy(() -> statement.execute(clusterOperator));
     }
 }

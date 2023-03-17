@@ -14,14 +14,14 @@ import java.util.Map;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.NonNull;
 
-public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAssert, Cluster> {
+public class CouchbaseClusterAssert extends AbstractAssert<CouchbaseClusterAssert, Cluster> {
 
-    private CouchBaseClusterAssert(Cluster cluster) {
-        super(cluster, CouchBaseClusterAssert.class);
+    private CouchbaseClusterAssert(Cluster cluster) {
+        super(cluster, CouchbaseClusterAssert.class);
     }
 
-    public static CouchBaseClusterAssert assertThat(@NonNull Cluster actual) {
-        return new CouchBaseClusterAssert(actual);
+    public static CouchbaseClusterAssert assertThat(@NonNull Cluster actual) {
+        return new CouchbaseClusterAssert(actual);
     }
 
     /**
@@ -42,7 +42,7 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
         return new QueryIndexAssert(queryIndexManager, indexes, keyspace.getBucket());
     }
 
-    public CouchBaseClusterAssert hasBucket(String bucketName) {
+    public CouchbaseClusterAssert hasBucket(String bucketName) {
         BucketSettings bucket = actual.buckets().getBucket(bucketName);
         if (bucket == null) {
             failWithMessage("Bucket [%s] doesn't exist", bucketName);
@@ -50,7 +50,7 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
         return this;
     }
 
-    public CouchBaseClusterAssert hasNoBucket(String bucketName) {
+    public CouchbaseClusterAssert hasNoBucket(String bucketName) {
         Map<String, BucketSettings> allBuckets = actual.buckets().getAllBuckets();
         if (allBuckets.containsKey(bucketName)) {
             failWithMessage("Failed to delete bucket [%s]", bucketName);
@@ -58,7 +58,7 @@ public class CouchBaseClusterAssert extends AbstractAssert<CouchBaseClusterAsser
         return this;
     }
 
-    public CouchBaseClusterAssert bucketUpdatedSuccessfully(String bucketName, BucketSettings settings) {
+    public CouchbaseClusterAssert bucketUpdatedSuccessfully(String bucketName, BucketSettings settings) {
         BucketSettings actualSettings = actual.buckets().getBucket(bucketName);
         List<String> invalidFields = new ArrayList<>();
         if (settings.flushEnabled() != actualSettings.flushEnabled()) {
