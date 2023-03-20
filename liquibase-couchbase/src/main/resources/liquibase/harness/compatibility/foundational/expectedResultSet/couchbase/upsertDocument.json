@@ -1,13 +1,13 @@
 {
   "history": {
     "changeLog": "liquibase/harness/compatibility/foundational/changelogs/couchbase/upsertDocument.xml",
-    "id": "4",
+    "id": "3",
     "author": "harness",
     "lastCheckSum": "8:b08b6b5f7fc0d2516b6d89d9f39a8f88",
     "description": "upsertDocuments bucketName=harnessBucket, collectionName=harnessCollection, scopeName=harnessScope",
-    "tag": null,
+    "tag": "test_tag",
     "execType": "EXECUTED",
-    "orderExecuted": 4
+    "orderExecuted": 1
   },
   "numberOfDocuments": 1
 }

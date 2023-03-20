@@ -13,5 +13,13 @@
             <ext:scopeName>harnessScope</ext:scopeName>
             <ext:skipIfExists>false</ext:skipIfExists>
         </ext:createCollection>
+        <rollback>
+            <ext:dropCollection>
+                <ext:bucketName>harnessBucket</ext:bucketName>
+                <ext:collectionName>harnessNewCollection</ext:collectionName>
+                <ext:scopeName>harnessScope</ext:scopeName>
+                <ext:skipIfNotExists>false</ext:skipIfNotExists>
+            </ext:dropCollection>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

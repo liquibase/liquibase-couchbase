@@ -24,11 +24,17 @@ class HarnessCouchbaseCompatibility extends HarnessContainerizedSpecification {
     private RollbackStrategy strategy
     @Shared
     private List<DatabaseUnderTest> databases
+    @Shared
+    private TestBucketOperator bucketOperator
 
     def setupSpec() {
         databases = TestConfig.instance.getFilteredDatabasesUnderTest()
         strategy = TestUtils.chooseRollbackStrategy()
         strategy.prepareForRollback(databases)
+
+        bucketOperator = new TestBucketOperator(cluster.bucket(HARNESS_BUCKET))
+        bucketOperator.createScope(HARNESS_SCOPE)
+        bucketOperator.createCollection(HARNESS_COLLECTION, HARNESS_SCOPE)
     }
 
     def "apply #testInput.change against #testInput.databaseName #testInput.version"() {
@@ -42,13 +48,8 @@ class HarnessCouchbaseCompatibility extends HarnessContainerizedSpecification {
         argsMap.put("username", testInput.username)
         argsMap.put("password", testInput.password)
 
-        and: "prepare operators"
+        and: "prepare changeLog operator"
         def changeLogOperator = new ChangeLogOperator(database)
-        def bucketOperator = new TestBucketOperator(cluster.bucket(HARNESS_BUCKET))
-
-        and: "create harness scope and default collection"
-        bucketOperator.createScope(HARNESS_SCOPE)
-        bucketOperator.createCollection(HARNESS_COLLECTION, HARNESS_SCOPE)
 
         and: "fail test if expectedResultSet is not provided"
         boolean expectedResultNotEmpty = StringUtils.isNotEmpty(expectedResultSet)
@@ -95,7 +96,6 @@ class HarnessCouchbaseCompatibility extends HarnessContainerizedSpecification {
         lastRanChangeSetJsonObject == expectedHistoryJsonObject
 
         and: "check for actual presence of created object"
-        //TODO check if change only special types
         def numberOfDocuments = expectedJsonObject.getInt("numberOfDocuments")
         if (numberOfDocuments != null) {
             def numberOfResultDocuments = getResultDocuments()
@@ -103,14 +103,12 @@ class HarnessCouchbaseCompatibility extends HarnessContainerizedSpecification {
         }
 
         cleanup: "rollback changes if we ran changeSet"
-        bucketOperator.dropScope(HARNESS_SCOPE)
-        //TODO uncomment when rollback will be ready
-//        if (shouldRunChangeSet) {
-//            for (int i = 0; i < changelogList.size(); i++) {
-//                argsMap.put("changeLogFile", changelogList.get(i))
-//                strategy.performRollback(argsMap)
-//            }
-//        }
+        if (connectionIsOnline) {
+            for (int i = 0; i < changelogs.size(); i++) {
+                argsMap.put("changeLogFile", changelogs.get(i))
+                strategy.performRollback(argsMap)
+            }
+        }
 
         where: "test input in next data table"
         testInput << FoundationalTestDataProvider.buildTestInput(database)
