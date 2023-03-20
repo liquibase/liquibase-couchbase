@@ -3,7 +3,7 @@ package integration.statement;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import common.RandomizedScopeTestCase;
-import common.matchers.CouchBaseClusterAssert;
+import common.matchers.CouchbaseClusterAssert;
 import liquibase.ext.couchbase.exception.BucketExistsException;
 import liquibase.ext.couchbase.statement.CreateBucketStatement;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class CreateBucketStatementIT extends RandomizedScopeTestCase {
         CreateBucketOptions bucketOptions = CreateBucketOptions.createBucketOptions();
         CreateBucketStatement createBucketStatement = new CreateBucketStatement(bucketOptions, settings, false);
         createBucketStatement.execute(clusterOperator);
-        CouchBaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_TEST_NAME);
+        CouchbaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_TEST_NAME);
     }
 
     @Test

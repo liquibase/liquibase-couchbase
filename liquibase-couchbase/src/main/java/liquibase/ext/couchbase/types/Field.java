@@ -9,6 +9,7 @@ import lombok.Setter;
 
 /**
  * Document field name, frequently used in indexes
+ *
  * @see AbstractLiquibaseSerializable
  * @see liquibase.serializer.LiquibaseSerializable
  * @see liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement
@@ -20,6 +21,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Field extends AbstractLiquibaseSerializable {
 
+    @SuppressWarnings("java:S1700") // This is a requirement from Liquibase to have type with field named as classname
     private String field;
 
     @Override

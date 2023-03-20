@@ -108,11 +108,6 @@ public class ClusterOperator {
         collection.queryIndexes().createIndex(name, fieldList);
     }
 
-    public void createScope(String scopeName, Keyspace keyspace) {
-        String bucket = keyspace.getBucket();
-        this.getBucketOperator(bucket).createScope(scopeName);
-    }
-
     public void createIndex(String name, String bucket, List<String> fieldList) {
         getQueryIndexes().createIndex(bucket, name, fieldList);
     }

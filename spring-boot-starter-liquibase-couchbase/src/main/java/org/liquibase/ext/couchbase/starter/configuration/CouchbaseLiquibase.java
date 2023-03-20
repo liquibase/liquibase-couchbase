@@ -1,10 +1,5 @@
 package org.liquibase.ext.couchbase.starter.configuration;
 
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.ResourceLoader;
-
 import liquibase.Liquibase;
 import liquibase.Scope;
 import liquibase.configuration.ConfiguredValue;
@@ -13,16 +8,20 @@ import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.integration.commandline.LiquibaseCommandLineConfiguration;
 import liquibase.integration.spring.SpringResourceAccessor;
 import liquibase.logging.Logger;
-import lombok.Setter;
+import lombok.Data;
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ResourceLoader;
 
+@Data
 public class CouchbaseLiquibase implements InitializingBean, BeanNameAware, ResourceLoaderAware {
 
     private Logger log = Scope.getCurrentScope().getLog(getClass());
 
-    @Setter
     private ResourceLoader resourceLoader;
-    @Setter
     private String beanName;
+    private String changeLog;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -34,7 +33,7 @@ public class CouchbaseLiquibase implements InitializingBean, BeanNameAware, Reso
         }
 
         try (Liquibase liquibase = createLiquibase()) {
-            liquibase.update("classpath:config/liquibase/master.xml");
+            liquibase.update(changeLog);
         }
     }
 

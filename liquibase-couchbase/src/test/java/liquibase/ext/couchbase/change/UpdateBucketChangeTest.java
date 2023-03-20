@@ -29,8 +29,8 @@ public class UpdateBucketChangeTest {
     void Should_parse_changes_correctly() {
         UpdateBucketChange updateBucketChange = UpdateBucketChange.builder()
                 .bucketName(UPDATE_TEST_BUCKET).compressionMode(CompressionMode.PASSIVE)
-                .maxExpiryInHours((long) 2).numReplicas(1).ramQuotaMB((long) 256)
-                .flushEnabled(false).timeoutInSeconds((long) 18).build();
+                .maxExpiryInHours(2L).numReplicas(1).ramQuotaMB(256L)
+                .flushEnabled(false).timeoutInSeconds(18L).build();
 
         DatabaseChangeLog load = changeLogProvider.load(UPDATE_BUCKET_TEST_XML);
         ChangeSet changeSet = firstOf(load.getChangeSets());

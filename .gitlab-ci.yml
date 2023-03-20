@@ -1,50 +1,60 @@
-variables:
-    # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
-    MAVEN_OPTS: >-
-        -Dhttps.protocols=TLSv1.2
-        -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
-        -Dorg.slf4j.simpleLogger.showDateTime=true
-        -Djava.awt.headless=true
+services:
+  - name: docker:dind
+    command: [ "--tls=false" ]
 
-    MAVEN_CLI_OPTS: >-
-        --batch-mode
-        --errors
-        --fail-at-end
-        --show-version
-        --no-transfer-progress
-        -DinstallAtEnd=true
-default:
-    image: maven:3-openjdk-8
-    cache:
-        paths:
-            - .m2/repository
+variables:
+  #  TESTCONTAINERS_HOST_OVERRIDE: "host.docker.internal"
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Djava.awt.headless=true
+
+  MAVEN_CLI_OPTS: >-
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    --no-transfer-progress
+#    -DinstallAtEnd=true
+
+  INT_TEST_DISABLE: >-
+    -Dskip.integration.tests=true
+
+  INT_TEST_ENABLE: >-
+    -Dskip.integration.tests=false
+
+image: maven:3-openjdk-8
+cache:
+  paths:
+    - .m2/repository
 
 stages:
-    - build
-    - test
-    - integration-test
+  - build
+  - test
 
 build:
-    stage: build
-    script:
-        - 'mvn $MAVEN_CLI_OPTS install'
-    except:
-        variables:
-            - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  stage: build
+  script:
+    - 'mvn $MAVEN_CLI_OPTS install $INT_TEST_DISABLE'
+  except:
+    variables:
+      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 test:
-    stage: test
-    script:
-        - 'mvn $MAVEN_CLI_OPTS test'
-    except:
-        variables:
-            - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-integration:
-    stage: test
-    when: manual
-    script:
-        - 'mvn $MAVEN_CLI_OPTS failsafe:integration-test'
-    except:
-        variables:
-            - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  stage: test
+  script:
+    - 'mvn $MAVEN_CLI_OPTS verify $INT_TEST_ENABLE'
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - liquibase-couchbase/target/surefire-reports/TEST-*.xml
+        - liquibase-couchbase/target/failsafe-reports/TEST-*.xml
+  except:
+    variables:
+      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

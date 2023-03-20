@@ -8,7 +8,7 @@ import liquibase.ext.couchbase.statement.DropCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.Test;
 
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -22,12 +22,12 @@ class DropCollectionStatementIT extends RandomizedScopeTestCase {
     void Collection_should_be_dropped_when_exists() {
         bucketOperator.createCollection(COLLECTION_TO_DROP, scopeName);
 
-        Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
+        Keyspace keyspace = keyspace(bucketName, scopeName, COLLECTION_TO_DROP);
         DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
 
         statement.execute(clusterOperator);
 
-        assertThat(bucketOperator.getBucket()).hasNoCollectionInScope(collectionName, scopeName);
+        assertThat(bucketOperator.getBucket()).hasNoCollectionInScope(COLLECTION_TO_DROP, scopeName);
     }
 
     @Test

@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
+import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_CREATE_DOCUMENT_AND_INSERT_FIELD_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_REMOVE_DOCUMENT_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_REPLACE_DOCUMENT_TEST_XML;
@@ -97,6 +98,21 @@ public class MutateInSingleValueSystemTest extends LiquibaseSystemTest {
         assertThatExceptionOfType(LiquibaseException.class).isThrownBy(liquibase::update);
 
         assertThat(collection).extractingDocument(id).itsContentEquals(TEST_DOCUMENT);
+        testCollectionOperator.removeDoc(id);
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_create_document_and_insert_field() {
+        String id = "newDocumentMutateInId";
+
+        Liquibase liquibase = liquibase(MUTATE_IN_CREATE_DOCUMENT_AND_INSERT_FIELD_TEST_XML);
+        liquibase.update();
+
+        JsonObject expected = JsonObject.create()
+                .put("field", "HelloWorld");
+        assertThat(collection).extractingDocument(id).itsContentEquals(expected);
+
         testCollectionOperator.removeDoc(id);
     }
 

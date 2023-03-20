@@ -29,6 +29,9 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
+            <ext:expiry>PT1H</ext:expiry>
+            <ext:preserveExpiry>true</ext:preserveExpiry>
+            <ext:storeSemantics>INSERT</ext:storeSemantics>
             <ext:id>id</ext:id>
             <ext:mutateInSpecs>
                 <ext:mutateInSpec>

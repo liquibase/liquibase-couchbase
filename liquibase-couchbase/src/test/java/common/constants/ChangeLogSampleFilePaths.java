@@ -22,14 +22,22 @@ public class ChangeLogSampleFilePaths {
     public static final String CREATE_QUERY_INDEX_TEST_XML = rootPrefix + "/index/changelog.create-query-index.test.xml";
     public static final String DROP_INDEX_TEST_XML = rootPrefix + "/index/changelog.drop-index.test.xml";
     public static final String INSERT_MANY_TEST_XML = rootPrefix + "/insert/changelog.insert-many.test.xml";
+    public static final String REMOVE_ONE_TEST_XML = rootPrefix + "/remove/changelog.remove-one.test.xml";
+    public static final String REMOVE_MANY_TEST_XML = rootPrefix + "/remove/changelog.remove-many.test.xml";
+    public static final String INSERT_FROM_FILE_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file.test.xml";
     public static final String INSERT_ONE_BROKEN_TEST_XML = rootPrefix + "/insert/changelog.insert-one-broken.test.xml";
     public static final String INSERT_ONE_2_CHANGESETS_ONE_SUCCESSFULL_TEST_XML = rootPrefix + "/insert/" +
             "changelog.insert-one-2-changesets-with-one-broken.test.xml";
     public static final String UPSERT_MANY_TEST_XML = rootPrefix + "/insert/changelog.upsert-many.test.xml";
     public static final String UPSERT_ONE_TEST_XML = rootPrefix + "/insert/changelog.upsert-one.test.xml";
+    public static final String UPSERT_FROM_FILE_TEST_XML = rootPrefix + "/insert/changelog.upsert-from-file.test.xml";
     public static final String CHANGELOG_TEST_XML = rootPrefix + "/changelog/changelog.changelog-test.xml";
     public static final String CHANGELOG_DUPLICATE_TEST_XML = rootPrefix + "/changelog/changelog.changelog-duplicate-test.xml";
+    public static final String CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-count-test.xml";
+    public static final String CHANGELOG_ROLLBACK_BY_TAG_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-tag-test.xml";
+    public static final String CHANGELOG_TAG_TEST_XML = rootPrefix + "/changelog/changelog.tag-test.xml";
     public static final String CREATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-bucket.test.xml";
+    public static final String EXECUTE_QUERY_TEST_XML = rootPrefix + "/bucket/changelog.execute-query.test.xml";
     public static final String MUTATE_IN_INSERT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-insert.test.xml";
     public static final String MUTATE_IN_ARRAY_CREATE_TEST_XML = rootPrefix + "/mutatein/changelog.create-array.test.xml";
     public static final String MUTATE_IN_ARRAY_APPEND_TEST_XML = rootPrefix + "/mutatein/changelog.array-append-value.test.xml";
@@ -46,6 +54,8 @@ public class ChangeLogSampleFilePaths {
     public static final String MUTATE_IN_REMOVE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-remove-document.test.xml";
     public static final String MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-insert-no-path-error" +
             ".test.xml";
+    public static final String MUTATE_IN_CREATE_DOCUMENT_AND_INSERT_FIELD_TEST_XML = rootPrefix + "/mutatein/" +
+            "changelog.mutate-in-insert-with-creating-document.test.xml";
     public static final String INSERT_UPSERT_STRESS_TEST_XML = rootPrefix + "/stress/stress-test-10k-insert-5k-upsert.xml";
     public static final String DROP_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.drop-bucket.test.xml";
     public static final String UPDATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.update-bucket.test.xml";

@@ -4,16 +4,15 @@ import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 
-import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static common.constants.TestConstants.INDEX;
 
 public class TestClusterOperator extends ClusterOperator {
-    private final Random random;
+    private static final AtomicLong id = new AtomicLong();
 
     public TestClusterOperator(Cluster cluster) {
         super(cluster);
-        random = new Random();
     }
 
     public TestBucketOperator getBucketOperator(String bucketName) {
@@ -29,7 +28,7 @@ public class TestClusterOperator extends ClusterOperator {
     }
 
     public String getTestIndexId() {
-        return INDEX + "_" + random.nextInt(10000);
+        return INDEX + "_" + id.getAndIncrement();
     }
 
 }

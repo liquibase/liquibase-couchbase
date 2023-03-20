@@ -1,8 +1,10 @@
 package system.changelog;
 
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
+import common.matchers.CouchbaseCollectionAssert;
 import common.operators.TestBucketOperator;
 import common.operators.TestClusterOperator;
 import liquibase.Liquibase;
@@ -15,11 +17,15 @@ import system.LiquibaseSystemTest;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_DUPLICATE_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_ROLLBACK_BY_TAG_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_TAG_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.ChangeLogAssert.assertThat;
-import static common.matchers.CouchBaseBucketAssert.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static liquibase.changelog.ChangeSet.ExecType.EXECUTED;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static liquibase.ext.couchbase.provider.ServiceProvider.DEFAULT_SERVICE_SCOPE;
@@ -32,6 +38,7 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
     private static final TestBucketOperator changeLogBucketOperator = clusterOperator.getOrCreateBucketOperator(SERVICE_BUCKET_NAME);
     private static final TestBucketOperator testBucketOperator = clusterOperator.getOrCreateBucketOperator(TEST_BUCKET);
     private Scope serviceScope;
+    private Collection testCollection;
 
     @BeforeEach
     void initBeforeEach() {
@@ -43,6 +50,7 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
             testBucketOperator.dropScope(TEST_SCOPE);
             testBucketOperator.createDefaultTestScope();
             testBucketOperator.createDefaultTestCollection();
+            testCollection = testBucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
         }
     }
 
@@ -63,8 +71,9 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
 
         liquibase.update();
 
-        assertThat(serviceScope).hasDocument(changeSet(1)).withExecType(EXECUTED).withOrder(1);
-        assertThat(serviceScope).hasDocument(changeSet(2)).withExecType(EXECUTED).withOrder(2);
+        assertThat(serviceScope)
+                .hasDocument(changeSet(1)).withExecType(EXECUTED).withOrder(1)
+                .hasDocument(changeSet(2)).withExecType(EXECUTED).withOrder(2);
     }
 
     private String changeSet(Integer changeSetNum) {
@@ -95,6 +104,48 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
                 separator, separator, separator);
 
         assertThat(changeLogBucketOperator.getBucket()).hasCollectionInScope(CHANGE_LOG_COLLECTION, serviceScope.name());
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_rollback_2_last_changes() {
+        Liquibase liquibase = liquibase(CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML);
+        liquibase.update();
+
+        assertThat(serviceScope).documentsSizeEqualTo(3);
+        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackCountId1", "rollbackCountId2", "rollbackCountId3");
+
+        liquibase.rollback(2, null);
+
+        assertThat(serviceScope).documentsSizeEqualTo(1);
+        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackCountId1");
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_rollback_2_last_changes_by_tag() {
+        Liquibase liquibase = liquibase(CHANGELOG_ROLLBACK_BY_TAG_TEST_XML);
+        liquibase.update();
+
+        assertThat(serviceScope).documentsSizeEqualTo(4);
+        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackTagId1", "rollbackTagId2", "rollbackTagId3");
+
+        liquibase.rollback("lastTag1", (String) null);
+
+        assertThat(serviceScope).documentsSizeEqualTo(1);
+        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackTagId1");
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_tag_last_history_changeSet() {
+        Liquibase liquibase = liquibase(CHANGELOG_TAG_TEST_XML);
+
+        liquibase.update();
+        liquibase.tag("lastTag");
+
+        assertThat(serviceScope).hasDocument("liquibase/ext/couchbase/changelog/changelog.tag-test.xml::tagId1::dmitry.dashko")
+                .withTag("lastTag");
     }
 
 }
