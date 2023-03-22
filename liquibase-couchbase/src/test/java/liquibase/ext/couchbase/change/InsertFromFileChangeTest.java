@@ -5,12 +5,15 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.types.File;
 import liquibase.ext.couchbase.types.ImportType;
-import org.junit.jupiter.api.Test;
 import liquibase.ext.couchbase.types.KeyProviderType;
+import org.junit.jupiter.api.Test;
 
+import static common.constants.ChangeLogSampleFilePaths.EXPRESSION_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INCREMENT_KEY_GENERATOR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_FROM_FILE_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.KEY_GENERATORS_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.UID_KEY_GENERATOR_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
@@ -43,7 +46,7 @@ class InsertFromFileChangeTest {
 
     @Test
     void Should_contains_uid_key_provider() {
-        DatabaseChangeLog changeLog = changeLogProvider.load(KEY_GENERATORS_TEST_XML);
+        DatabaseChangeLog changeLog = changeLogProvider.load(UID_KEY_GENERATOR_TEST_XML);
 
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         InsertDocumentsChange change = (InsertDocumentsChange) firstOf(changeSet.getChanges());
@@ -61,6 +64,29 @@ class InsertFromFileChangeTest {
         assertThat(change.getFile()).isNotNull();
         assertThat(change.getFile().getFilePath()).contains(TEST_FILE_NAME_LIST);
         assertThat(change.getFile().getImportType()).isEqualTo(ImportType.LIST);
+    }
+    @Test
+    void Should_contains_incremental_key_provider() {
+        DatabaseChangeLog changeLog = changeLogProvider.load(INCREMENT_KEY_GENERATOR_TEST_XML);
+
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        InsertDocumentsChange change = (InsertDocumentsChange) firstOf(changeSet.getChanges());
+        assertThat(change.getDocuments()).isEmpty();
+        assertThat(change.getFile()).isNotNull();
+        assertThat(change.getFile().getKeyProviderType()).isEqualTo(KeyProviderType.INCREMENT);
+    }
+
+    @Test
+    void Should_contains_expression_key_provider() {
+        DatabaseChangeLog changeLog = changeLogProvider.load(EXPRESSION_KEY_GENERATOR_TEST_XML);
+
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        InsertDocumentsChange change = (InsertDocumentsChange) firstOf(changeSet.getChanges());
+        assertThat(change.getDocuments()).isEmpty();
+        File file = change.getFile();
+        assertThat(file).isNotNull();
+        assertThat(file.getKeyProviderExpression()).isNotEmpty();
+        assertThat(file.getKeyProviderType()).isEqualTo(KeyProviderType.EXPRESSION);
     }
 }
 

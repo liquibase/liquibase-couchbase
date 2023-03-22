@@ -144,7 +144,8 @@
                         <xsd:restriction base="xsd:string">
                             <xsd:enumeration value="DEFAULT"/>
                             <xsd:enumeration value="UID"/>
-                            <xsd:enumeration value="RANDOM"/>
+                            <xsd:enumeration value="INCREMENT"/>
+                            <xsd:enumeration value="EXPRESSION"/>
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
