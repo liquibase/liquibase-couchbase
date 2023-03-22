@@ -23,6 +23,8 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
     public static final ConfigurationDefinition<Duration> LOCK_TTL_PROLONGATION;
     public static final ConfigurationDefinition<Duration> TRANSACTION_TIMEOUT;
     public static final ConfigurationDefinition<Duration> MUTATE_IN_TIMEOUT;
+    public static final ConfigurationDefinition<Boolean> IS_REACTIVE_TRANSACTIONS;
+    public static final ConfigurationDefinition<Integer> REACTIVE_TRANSACTION_PARALLEL_THREADS;
 
     static {
         ConfigurationDefinition.Builder builder = new ConfigurationDefinition.Builder("liquibase.couchbase");
@@ -79,6 +81,18 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .setDescription("MutateIn operation timeout")
                 .setDefaultValue(Duration.ofSeconds(2))
                 .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
+                .build();
+
+        IS_REACTIVE_TRANSACTIONS = builder.define("transaction.reactive.enabled", Boolean.class)
+                .addAliasKey("transactionReactiveEnabled")
+                .setDescription("Flag if transactions is reactive")
+                .setDefaultValue(false)
+                .build();
+
+        REACTIVE_TRANSACTION_PARALLEL_THREADS = builder.define("transaction.reactive.threads", Integer.class)
+                .addAliasKey("transactionReactiveThreads")
+                .setDescription("Number of parallel threads for executing statements in reactive transaction")
+                .setDefaultValue(16)
                 .build();
 
         COUCHBASE_URL = builder.define("url", String.class)

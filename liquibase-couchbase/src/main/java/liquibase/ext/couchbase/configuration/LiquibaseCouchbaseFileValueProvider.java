@@ -15,7 +15,6 @@ import java.util.Properties;
 /**
  * Custom properties provider for {@link CouchbaseLiquibaseConfiguration} Look up in classpath for file named
  * {@code liquibase-couchbase.properties}
- *
  * @see CouchbaseLiquibaseConfiguration
  */
 @LiquibaseService
@@ -33,9 +32,9 @@ public class LiquibaseCouchbaseFileValueProvider extends AbstractMapConfiguratio
     private void loadProps(ResourceAccessor resourceAccessor) throws IOException {
         Resource resource = resourceAccessor.getExisting(propsFileName);
         log.config("Loaded next properties from " + propsFileName + " " + properties.entrySet());
-        InputStream inputStream = resource.openInputStream();
-        properties.load(inputStream);
-        inputStream.close();
+        try (InputStream inputStream = resource.openInputStream()) {
+            properties.load(inputStream);
+        }
     }
 
     @Override
