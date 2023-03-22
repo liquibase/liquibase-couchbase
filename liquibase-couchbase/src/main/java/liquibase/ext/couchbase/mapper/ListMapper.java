@@ -1,22 +1,46 @@
 package liquibase.ext.couchbase.mapper;
 
+import com.couchbase.client.java.json.JsonObject;
+import liquibase.ext.couchbase.provider.DocumentKeyProvider;
+import liquibase.ext.couchbase.provider.factory.DocumentKeyProviderFactory;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.File;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
+import static liquibase.Scope.getCurrentScope;
+import static liquibase.ext.couchbase.types.Document.document;
 
 
 /**
  * Document mapper for LIST mode (equals to cbimport LIST mode), when we have JsonArray with documents in file
- *
  * @link <a href="https://docs.couchbase.com/server/current/tools/cbimport-json.html#list">cbimport documentation</a>
  */
-@NoArgsConstructor
+
 public class ListMapper implements DocFileMapper {
+    private final DocumentKeyProviderFactory keyProviderFactory;
+
+    public ListMapper() {
+        this(getCurrentScope().getSingleton(DocumentKeyProviderFactory.class));
+    }
+
+    public ListMapper(DocumentKeyProviderFactory keyProviderFactory) {
+        this.keyProviderFactory = keyProviderFactory;
+    }
+
     @Override
     public List<Document> map(File file) {
-        // TODO implement this in scope of the separate task
-        return null;
+        List<Map<String, Object>> jsonsFromFile = file.readJsonList();
+        DocumentKeyProvider keyProvider = keyProviderFactory.getKeyProvider(file);
+        return extractDocuments(jsonsFromFile, keyProvider);
+    }
+
+    private List<Document> extractDocuments(List<Map<String, Object>> jsonsFromFile, DocumentKeyProvider keyProvider) {
+        return jsonsFromFile.stream()
+                .map(JsonObject::from)
+                .map(doc -> document(keyProvider.getKey(doc), doc))
+                .collect(toList());
     }
 }

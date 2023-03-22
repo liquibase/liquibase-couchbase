@@ -20,7 +20,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return new CouchbaseCollectionAssert(actual);
     }
 
-    public CouchbaseCollectionAssert hasDocument(@NonNull String id) {
+    public CouchbaseCollectionAssert containsId(@NonNull String id) {
         if (!actual.exists(id).exists()) {
             failWithMessage("Collection [%s] doesn't contain document with ID [%s] in the scope [%s]",
                     actual.name(),
@@ -32,7 +32,7 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchbaseCollectionAssert hasNoDocument(@NonNull String id) {
+    public CouchbaseCollectionAssert doesNotContainId(@NonNull String id) {
         if (actual.exists(id).exists()) {
             failWithMessage("Collection [%s] contains document with ID [%s] in the scope [%s]",
                     actual.name(),
@@ -44,14 +44,28 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchbaseCollectionAssert hasDocuments(@NonNull String... ids) {
+    public CouchbaseCollectionAssert containsIds(@NonNull String... ids) {
         for (String id : ids) {
-            hasDocument(id);
+            containsId(id);
         }
         return this;
     }
 
-    public CouchbaseCollectionAssert hasAnyDocument(@NonNull List<Id> ids) {
+    public CouchbaseCollectionAssert doesNotContainIds(@NonNull String... ids) {
+        for (String id : ids) {
+            doesNotContainId(id);
+        }
+        return this;
+    }
+
+    public CouchbaseCollectionAssert doesNotContainIds(@NonNull List<Id> ids) {
+        for (Id id : ids) {
+            doesNotContainId(id.getId());
+        }
+        return this;
+    }
+
+    public CouchbaseCollectionAssert containsAnyId(@NonNull List<Id> ids) {
         if (ids.stream().noneMatch(id -> actual.exists(id.getId()).exists())) {
             failWithMessage("Collection [%s] in the scope [%s] doesn't contain any documents from list [%s]",
                     actual.name(),
@@ -62,37 +76,34 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchbaseCollectionAssert hasNoDocuments(@NonNull String... ids) {
-        for (String id : ids) {
-            hasNoDocument(id);
-        }
+    public CouchbaseCollectionAssert contains(@NonNull List<Document> docs) {
+        docs.forEach(this::contains);
         return this;
     }
 
-    public CouchbaseCollectionAssert hasNoDocuments(@NonNull List<Document> docs) {
+    public CouchbaseCollectionAssert contains(Document doc) {
+        extractingDocument(doc.getId()).itsContentEquals(doc.getContentAsJson());
+
+        return this;
+    }
+
+    public CouchbaseCollectionAssert doesNotContain(Document doc) {
+        doesNotContainId(doc.getId());
+
+        return this;
+    }
+
+    public CouchbaseCollectionAssert doesNotContain(@NonNull List<Document> docs) {
         for (Document doc : docs) {
-            hasNoDocument(doc.getId());
-        }
-        return this;
-    }
-
-    public CouchbaseCollectionAssert hasNoDocumentsByIds(@NonNull List<Id> ids) {
-        for (Id id : ids) {
-            hasNoDocument(id.getId());
+            doesNotContainId(doc.getId());
         }
         return this;
     }
 
     public CouchbaseDocumentAssert extractingDocument(@NonNull String id) {
-        hasDocument(id);
+        containsId(id);
 
         return new CouchbaseDocumentAssert(actual.get(id).contentAsObject());
-    }
-
-    public CouchbaseCollectionAssert containDocuments(List<Document> testDocuments) {
-        testDocuments.forEach((doc) -> extractingDocument(doc.getId()).itsContentEquals(doc.getValue()));
-
-        return this;
     }
 
     public CouchbaseCollectionAssert hasLockHeldBy(String lockId, String owner) {

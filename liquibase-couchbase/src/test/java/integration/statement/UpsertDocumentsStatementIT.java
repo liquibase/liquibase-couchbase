@@ -44,7 +44,7 @@ class UpsertDocumentsStatementIT extends TransactionStatementTest {
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
         Collection collection = bucketOperator.getCollection(collectionName, scopeName);
-        assertThat(collection).containDocuments(testDocuments);
+        assertThat(collection).contains(testDocuments);
     }
 
     @Test
@@ -56,7 +56,7 @@ class UpsertDocumentsStatementIT extends TransactionStatementTest {
                 .isThrownBy(() -> doInFailingTransaction(statement.asTransactionAction(clusterOperator)));
 
         Collection collection = bucketOperator.getCollection(collectionName, scopeName);
-        assertThat(collection).hasNoDocuments(testDocuments);
+        assertThat(collection).doesNotContain(testDocuments);
     }
 
 }

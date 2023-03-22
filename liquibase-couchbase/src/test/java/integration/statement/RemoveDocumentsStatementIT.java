@@ -41,7 +41,7 @@ class RemoveDocumentsStatementIT extends TransactionStatementTest {
 
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
-        assertThat(collection).hasNoDocumentsByIds(ids);
+        assertThat(collection).doesNotContainIds(ids);
     }
 
     @Test
@@ -51,7 +51,7 @@ class RemoveDocumentsStatementIT extends TransactionStatementTest {
         assertThatExceptionOfType(TransactionFailedException.class)
                 .isThrownBy(() -> doInFailingTransaction(statement.asTransactionAction(clusterOperator)));
 
-        assertThat(collection).hasAnyDocument(ids);
+        assertThat(collection).containsAnyId(ids);
     }
 
 }
