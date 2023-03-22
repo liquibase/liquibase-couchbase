@@ -10,7 +10,8 @@ import lombok.Getter;
 public enum KeyProviderType implements SingletonObject {
     DEFAULT("DEFAULT"),
     UID("UID"),
-    RANDOM("RANDOM");
+    INCREMENT("INCREMENT"),
+    EXPRESSION("EXPRESSION");
 
     private final String name;
 
