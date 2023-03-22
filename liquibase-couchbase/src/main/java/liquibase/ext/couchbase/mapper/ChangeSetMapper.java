@@ -1,9 +1,11 @@
 package liquibase.ext.couchbase.mapper;
 
+import liquibase.ContextExpression;
 import liquibase.Labels;
 import liquibase.change.CheckSum;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
+import liquibase.ext.couchbase.changelog.Context;
 import liquibase.ext.couchbase.changelog.CouchbaseChangeLog;
 import liquibase.util.LiquibaseUtil;
 import lombok.SneakyThrows;
@@ -30,7 +32,7 @@ public class ChangeSetMapper {
                 changeLog.getExecType(),
                 changeLog.getDescription(),
                 changeLog.getComments(),
-                null,
+                new ContextExpression(changeLog.getContext().getOriginalString()),
                 new Labels(changeLog.getLabels()),
                 changeLog.getDeploymentId()
         );
@@ -49,8 +51,8 @@ public class ChangeSetMapper {
                 .description(changeSet.getDescription())
                 .comments(changeSet.getComments())
                 .labels(changeSet.getLabels().getLabels())
+                .context(new Context(changeSet.getContextFilter()))
                 .liquibaseVersion(LiquibaseUtil.getBuildVersion()).build();
-        // TODO why changeSet.getInheritableContextFilter() ?
     }
 
 }

@@ -36,6 +36,7 @@ public class ChangeLogSampleFilePaths {
     public static final String CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-count-test.xml";
     public static final String CHANGELOG_ROLLBACK_BY_TAG_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-tag-test.xml";
     public static final String CHANGELOG_TAG_TEST_XML = rootPrefix + "/changelog/changelog.tag-test.xml";
+    public static final String CHANGELOG_CONTEXT_LABEL_COMMENT_XML = rootPrefix + "/changelog/changelog.context-label-comment-test.xml";
     public static final String CREATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-bucket.test.xml";
     public static final String EXECUTE_QUERY_TEST_XML = rootPrefix + "/bucket/changelog.execute-query.test.xml";
     public static final String MUTATE_IN_INSERT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-insert.test.xml";
