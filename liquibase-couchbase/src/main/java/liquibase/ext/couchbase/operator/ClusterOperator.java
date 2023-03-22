@@ -9,6 +9,7 @@ import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
+import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -65,6 +67,13 @@ public class ClusterOperator {
 
     public void createPrimaryIndex(String bucket) {
         getQueryIndexes().createPrimaryIndex(bucket);
+    }
+
+    public void createPrimaryIndex(Keyspace keyspace) {
+        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
+                .scopeName(keyspace.getScope())
+                .collectionName(keyspace.getCollection());
+        getQueryIndexes().createPrimaryIndex(keyspace.getBucket(), options);
     }
 
     public void createQueryIndex(String indexName, Keyspace keyspace, List<Field> fields,
@@ -161,6 +170,10 @@ public class ClusterOperator {
                 .scope(keyspace.getScope())
                 .collection(keyspace.getCollection());
         collection.queryIndexes().dropPrimaryIndex();
+    }
+
+    public void dropPrimaryIndex(String bucket, DropPrimaryQueryIndexOptions options) {
+        cluster.queryIndexes().dropPrimaryIndex(bucket, options);
     }
 
     public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {

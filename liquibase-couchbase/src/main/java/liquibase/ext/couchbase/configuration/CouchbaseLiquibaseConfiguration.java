@@ -72,7 +72,7 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
         TRANSACTION_TIMEOUT = builder.define("lockservice.transaction.timeout", Duration.class)
                 .addAliasKey("transactionTimeout")
                 .setDescription("Transactions timeout")
-                .setDefaultValue(Duration.ofSeconds(15))
+                .setDefaultValue(Duration.ofSeconds(1500))
                 .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
                 .build();
 
