@@ -11,6 +11,7 @@ import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
+import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -91,6 +92,14 @@ public class ClusterOperator {
 
     public void dropBucket(String bucketName) {
         cluster.buckets().dropBucket(bucketName);
+    }
+
+    public void executeN1ql(TransactionAttemptContext transaction, List<String> queries) {
+        queries.forEach(transaction::query);
+    }
+
+    public void executeN1ql(List<String> queries) {
+        queries.forEach(cluster::query);
     }
 
     public QueryIndexManager getQueryIndexes() {

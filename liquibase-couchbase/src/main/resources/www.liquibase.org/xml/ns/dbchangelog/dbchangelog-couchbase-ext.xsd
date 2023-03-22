@@ -362,4 +362,14 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="n1ql">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="filePath" type="xsd:string"/>
+                <xsd:element name="transactional" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
 </xsd:schema>
