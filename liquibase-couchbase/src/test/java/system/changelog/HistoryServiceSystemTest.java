@@ -7,6 +7,8 @@ import com.couchbase.client.java.query.QueryScanConsistency;
 import common.matchers.CouchbaseCollectionAssert;
 import common.operators.TestBucketOperator;
 import common.operators.TestClusterOperator;
+import liquibase.Contexts;
+import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.exception.ValidationFailedException;
 import lombok.SneakyThrows;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_CONTEXT_LABEL_COMMENT_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_DUPLICATE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_ROLLBACK_BY_TAG_TEST_XML;
@@ -146,6 +149,21 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
 
         assertThat(serviceScope).hasDocument("liquibase/ext/couchbase/changelog/changelog.tag-test.xml::tagId1::dmitry.dashko")
                 .withTag("lastTag");
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_run_only_2_changesets_out_of_3_based_on_context_and_labels_and_check_existence_of_comments() {
+        Liquibase liquibase = liquibase(CHANGELOG_CONTEXT_LABEL_COMMENT_XML);
+
+        liquibase.update(new Contexts("dev"), new LabelExpression("label1 and label2"));
+
+        assertThat(serviceScope)
+                .documentsSizeEqualTo(2)
+                .hasDocument("liquibase/ext/couchbase/changelog/changelog.context-label-comment-test.xml::contextId1::dmitry.dashko")
+                .withComments("Some useful comment for context changeset")
+                .hasDocument("liquibase/ext/couchbase/changelog/changelog.context-label-comment-test.xml::labelId1::dmitry.dashko")
+                .withComments("Some useful comment for label changeset");
     }
 
 }

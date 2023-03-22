@@ -24,8 +24,9 @@ public class CouchbaseChangeLog {
     private ChangeSet.ExecType execType;
     private String description;
     private String comments;
-    private int orderExecuted;
     private Set<String> labels;
+    private Context context;
+    private int orderExecuted;
     private String deploymentId;
     private String liquibaseVersion;
 }
