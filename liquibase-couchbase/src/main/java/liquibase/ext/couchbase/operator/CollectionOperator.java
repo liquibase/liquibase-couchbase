@@ -44,6 +44,10 @@ public class CollectionOperator {
         collection.remove(id);
     }
 
+    public void removeDoc(Document doc) {
+        removeDoc(doc.getId());
+    }
+
     public void removeDocs(String... ids) {
         Arrays.stream(ids).forEach(collection::remove);
     }

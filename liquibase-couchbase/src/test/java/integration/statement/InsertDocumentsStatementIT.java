@@ -41,7 +41,7 @@ class InsertDocumentsStatementIT extends TransactionStatementTest {
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
         Collection collection = bucketOperator.getCollection(collectionName, scopeName);
-        assertThat(collection).containDocuments(testDocuments);
+        assertThat(collection).contains(testDocuments);
     }
 
     @Test
@@ -53,7 +53,7 @@ class InsertDocumentsStatementIT extends TransactionStatementTest {
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
         Collection collection = bucketOperator.getCollectionFromDefaultScope(TEST_COLLECTION_2);
-        assertThat(collection).containDocuments(testDocuments);
+        assertThat(collection).contains(testDocuments);
     }
 
     @Test
@@ -64,7 +64,7 @@ class InsertDocumentsStatementIT extends TransactionStatementTest {
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
         Collection collection = bucketOperator.getCollectionFromDefaultScope(DEFAULT_COLLECTION);
-        assertThat(collection).containDocuments(testDocuments);
+        assertThat(collection).contains(testDocuments);
 
     }
 
@@ -77,6 +77,6 @@ class InsertDocumentsStatementIT extends TransactionStatementTest {
                 .isThrownBy(() -> doInFailingTransaction(statement.asTransactionAction(clusterOperator)));
 
         Collection collection = bucketOperator.getCollectionFromDefaultScope(DEFAULT_COLLECTION);
-        assertThat(collection).hasNoDocuments(testDocuments);
+        assertThat(collection).doesNotContain(testDocuments);
     }
 }

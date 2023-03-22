@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.types;
 
+import com.couchbase.client.core.deps.com.fasterxml.jackson.databind.ObjectMapper;
 import liquibase.ext.couchbase.exception.IncorrectFileException;
 import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -50,6 +53,15 @@ public class File extends AbstractLiquibaseSerializable {
             return Files.lines(Paths.get(filePath));
         } catch (IOException e) {
             throw new IncorrectFileException(filePath);
+        }
+    }
+
+    public List<Map<String, Object>> readJsonList() {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readerForListOf(Map.class).readValue(Paths.get(getFilePath()).toFile());
+        } catch (IOException ex) {
+            throw new IncorrectFileException(getFilePath());
         }
     }
 }

@@ -87,7 +87,7 @@ public class CouchbaseLockServiceIT extends CouchbaseContainerizedTest {
 
         lockService.releaseLock();
 
-        assertThat(serviceCollection).hasNoDocument("liquibaseServiceBucket");
+        assertThat(serviceCollection).doesNotContainId("liquibaseServiceBucket");
     }
 
 

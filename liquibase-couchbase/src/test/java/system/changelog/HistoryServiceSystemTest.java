@@ -113,12 +113,12 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(serviceScope).documentsSizeEqualTo(3);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackCountId1", "rollbackCountId2", "rollbackCountId3");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackCountId1", "rollbackCountId2", "rollbackCountId3");
 
         liquibase.rollback(2, null);
 
         assertThat(serviceScope).documentsSizeEqualTo(1);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackCountId1");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackCountId1");
     }
 
     @Test
@@ -128,12 +128,12 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(serviceScope).documentsSizeEqualTo(4);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackTagId1", "rollbackTagId2", "rollbackTagId3");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackTagId1", "rollbackTagId2", "rollbackTagId3");
 
         liquibase.rollback("lastTag1", (String) null);
 
         assertThat(serviceScope).documentsSizeEqualTo(1);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackTagId1");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackTagId1");
     }
 
     @Test
