@@ -25,10 +25,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="tigran">
-        <ext:n1ql>
-            <ext:filePath>liquibase/ext/couchbase/collection/sql/n1ql.create-collections.sql</ext:filePath>
-            <ext:transactional>false</ext:transactional>
-        </ext:n1ql>
+        <ext:sqlFile path="liquibase/ext/couchbase/collection/sql/create-collections.sql" relative="false" transactional="false"/>
     </changeSet>
 
 </databaseChangeLog>

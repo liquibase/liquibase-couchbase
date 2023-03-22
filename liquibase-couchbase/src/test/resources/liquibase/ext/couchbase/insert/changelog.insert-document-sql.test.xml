@@ -25,10 +25,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="tigran">
-        <ext:n1ql>
-            <ext:filePath>liquibase/ext/couchbase/insert/sql/n1ql.insert-document.sql</ext:filePath>
-            <ext:transactional>true</ext:transactional>
-        </ext:n1ql>
+        <ext:sqlFile relative="true" path="./sql/insert-document.sql" transactional="true"/>
     </changeSet>
 
 </databaseChangeLog>
