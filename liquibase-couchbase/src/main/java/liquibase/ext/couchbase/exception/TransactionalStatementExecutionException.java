@@ -7,8 +7,8 @@ import static java.lang.String.format;
 
 public class TransactionalStatementExecutionException extends RuntimeException {
 
-    private static final String withClassMsg = "An error was occured in transactional statement %s execution";
-    private static final String msg = "An error was occured in transactional statement execution ";
+    private static final String withClassMsg = "An error was occurred in transactional statement %s execution";
+    private static final String msg = "An error was occurred in transactional statement execution ";
 
     public TransactionalStatementExecutionException(Class<? extends CouchbaseTransactionStatement> clz, TransactionFailedException e) {
         super(format(withClassMsg, clz.getName()), e);
