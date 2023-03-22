@@ -291,8 +291,8 @@
             <xsd:sequence>
                 <xsd:element name="path"/>
                 <xsd:choice>
-                    <xsd:element ref="value" minOccurs="0" />
-                    <xsd:element ref="values" minOccurs="0" />
+                    <xsd:element ref="value" minOccurs="0"/>
+                    <xsd:element ref="values" minOccurs="0"/>
                 </xsd:choice>
                 <xsd:element name="mutateInType">
                     <xsd:simpleType>
@@ -362,12 +362,11 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="n1ql">
+    <xsd:element name="sqlFile">
         <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="filePath" type="xsd:string"/>
-                <xsd:element name="transactional" type="xsd:boolean"/>
-            </xsd:sequence>
+            <xsd:attribute name="transactional" type="xsd:boolean"/>
+            <xsd:attribute name="path" type="xsd:string" use="required"/>
+            <xsd:attribute name="relative" type="xsd:boolean" use="required"/>
         </xsd:complexType>
     </xsd:element>
 

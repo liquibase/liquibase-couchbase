@@ -21,11 +21,11 @@ public class TestConstants {
     public static final String DEFAULT_COLLECTION = "_default";
     public static final String TRAVELS_BUCKET = "travels-bucket";
     public static final String TEST_SCOPE = "testScope";
-    public static final String TEST_SCOPE_N1QL = "n1qlScope";
+    public static final String TEST_SCOPE_SQL = "sqlScope";
     public static final String TEST_BUCKET = "testBucket";
     public static final String TEST_COLLECTION = "testCollection";
     public static final String TEST_COLLECTION_2 = "testCollection2";
-    public static final String TEST_COLLECTION_N1QL = "n1qlCollection";
+    public static final String TEST_COLLECTION_SQL = "sqlCollection";
     public static final String TEST_ID = "id";
     public static final JsonObject TEST_DOCUMENT = JsonObject.create().put("key", "value");
     public static final JsonObject TEST_DOCUMENT_2 = JsonObject.create().put("key2", "value2");
