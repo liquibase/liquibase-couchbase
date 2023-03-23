@@ -36,6 +36,7 @@ cache:
 stages:
   - build
   - test
+  - visualize
 
 build:
   stage: build
@@ -48,9 +49,12 @@ build:
 test:
   stage: test
   script:
-    - 'mvn $MAVEN_CLI_OPTS verify $INT_TEST_ENABLE'
+    - 'mvn $MAVEN_CLI_OPTS org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report $INT_TEST_ENABLE'
+  needs: ["build"]
   artifacts:
     when: always
+    paths:
+        - liquibase-couchbase/target/site/jacoco/jacoco.xml
     reports:
       junit:
         - liquibase-couchbase/target/surefire-reports/TEST-*.xml
@@ -58,3 +62,16 @@ test:
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+coverage-test:
+    stage: visualize
+    image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
+    script:
+        # convert report from jacoco to cobertura, using relative project path
+        - python /opt/cover2cover.py liquibase-couchbase/target/site/jacoco/jacoco.xml $CI_PROJECT_DIR/src/main/java/ > cobertura.xml
+    needs: ["test"]
+    artifacts:
+        reports:
+            coverage_report:
+                coverage_format: cobertura
+                path: cobertura.xml
