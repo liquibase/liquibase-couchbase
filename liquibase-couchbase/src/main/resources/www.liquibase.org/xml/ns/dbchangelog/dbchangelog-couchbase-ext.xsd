@@ -356,9 +356,22 @@
     </xsd:element>
 
     <xsd:element name="executeQuery">
+        <xsd:complexType mixed="true" >
+            <xsd:sequence>
+                <xsd:element ref="query" />
+                <xsd:element ref="params" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="query" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="params">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="query" type="xsd:string"/>
+                <xsd:element name="name" type="xsd:string"/>
+                <xsd:element name="value" />
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

@@ -22,11 +22,24 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="zorik">
         <ext:executeQuery>
-            <ext:query>CREATE COLLECTION `testBucket`._default.test1</ext:query>
+            <ext:query>INSERT INTO `testBucket`.testScope.testCollection (KEY,VALUE) VALUES ( "id",{} );</ext:query>
+        </ext:executeQuery>
+        <ext:executeQuery>
+            <ext:query>CREATE PRIMARY INDEX ON `default`:`testBucket`.`testScope`.`testCollection`</ext:query>
+        </ext:executeQuery>
+        <ext:executeQuery>
+            <ext:query>DELETE FROM `testBucket`.testScope.testCollection WHERE META().id = $id</ext:query>
+            <ext:params>
+                <ext:name>id</ext:name>
+                <ext:value>id</ext:value>
+            </ext:params>
+        </ext:executeQuery>
+        <ext:executeQuery>
+            <ext:query>DROP PRIMARY INDEX ON testBucket.testScope.testCollection</ext:query>
         </ext:executeQuery>
     </changeSet>
 
