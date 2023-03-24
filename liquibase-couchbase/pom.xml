@@ -46,6 +46,7 @@
         <groovy-all.version>2.5.19</groovy-all.version>
         <spock-core.version>1.3-groovy-2.5</spock-core.version>
         <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
+        <json-schema-validator-version>1.0.78</json-schema-validator-version>
     </properties>
 
     <dependencies>
@@ -82,6 +83,17 @@
             <version>${commons-lang-3.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${json-schema-validator-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>

@@ -1,0 +1,19 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "1",
+        "author": "tigran",
+        "updateBucket": {
+          "bucketName": "updateBucketTest",
+          "compressionMode": "PASSIVE",
+          "maxExpiryInHours": 2,
+          "numReplicas": 1,
+          "ramQuotaMB": 256,
+          "flushEnabled": false,
+          "timeoutInSeconds": 17
+        }
+      }
+    }
+  ]
+}
