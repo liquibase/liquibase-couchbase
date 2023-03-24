@@ -8,6 +8,7 @@ import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static common.constants.ChangeLogSampleFilePaths.DROP_BUCKET_TEST_JSON;
 import static common.constants.ChangeLogSampleFilePaths.DROP_BUCKET_TEST_XML;
 import static common.constants.TestConstants.NEW_TEST_BUCKET;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +33,15 @@ public class DropBucketChangeTest {
 
         assertThat(changeSet.getChanges()).map(DropBucketChange.class::cast)
             .containsExactly(dropBucketChange);
+    }
+
+    @Test
+    void Should_parse_json_changes_correctly() {
+        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET, true);
+        DatabaseChangeLog load = changeLogProvider.load(DROP_BUCKET_TEST_JSON);
+        ChangeSet changeSet = firstOf(load.getChangeSets());
+        assertThat(changeSet.getChanges()).map(DropBucketChange.class::cast)
+                .containsExactly(dropBucketChange);
     }
 
 }
