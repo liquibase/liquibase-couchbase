@@ -3,7 +3,6 @@ package liquibase.ext.couchbase.operator;
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
@@ -27,36 +26,24 @@ public class CollectionOperator {
     @Getter
     protected final Collection collection;
 
-    public void insertDoc(String id, JsonObject content) {
-        collection.insert(id, content);
-    }
-
     public void insertDoc(Document document) {
         collection.insert(document.getId(), document.getValue().mapDataToType());
+    }
+
+    public void insertDocs(Document... docs) {
+        Arrays.stream(docs).forEach(this::insertDoc);
     }
 
     public boolean docExists(String id) {
         return collection.exists(id).exists();
     }
 
-    public void removeDoc(String id) {
-        collection.remove(id);
-    }
-
     public void removeDoc(Document doc) {
-        removeDoc(doc.getId());
+        collection.remove(doc.getId());
     }
 
-    public void removeDocs(String... ids) {
-        Arrays.stream(ids).forEach(collection::remove);
-    }
-
-    public void upsertDoc(String id, JsonObject content) {
-        collection.upsert(id, content);
-    }
-
-    public void upsertDocs(Map<String, JsonObject> docs) {
-        docs.forEach(this::upsertDoc);
+    public void removeDocs(Document... docs) {
+        Arrays.stream(docs).forEach(this::removeDoc);
     }
 
     public void upsertDocsTransactionally(TransactionAttemptContext transaction, Map<String, Object> docs) {

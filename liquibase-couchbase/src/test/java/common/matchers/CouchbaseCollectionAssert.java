@@ -86,6 +86,11 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
 
         return this;
     }
+    public CouchbaseDocumentAssert containsDocument(Document doc) {
+        extractingDocument(doc.getId()).itsContentEquals(doc.getContentAsJson());
+
+        return extractingDocument(doc.getId());
+    }
 
     public CouchbaseCollectionAssert doesNotContain(Document doc) {
         doesNotContainId(doc.getId());
