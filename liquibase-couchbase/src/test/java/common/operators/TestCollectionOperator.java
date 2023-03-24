@@ -24,4 +24,12 @@ public class TestCollectionOperator extends CollectionOperator {
         }
         return Document.document(docId, new String(content.toBytes()), DataType.JSON);
     }
+
+    public static JsonObject createOneFieldJson(String id, String value) {
+        return JsonObject.create().put(id, value);
+    }
+
+    public static JsonObject createTestDocContent() {
+        return createOneFieldJson("key", "value");
+    }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 
 import static common.constants.TestConstants.TEST_DOCUMENT_3;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
+import static liquibase.ext.couchbase.types.Document.document;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -37,7 +38,8 @@ class UpsertDocumentsStatementIT extends TransactionStatementTest {
         Document doc2 = collectionOperator.generateTestDoc();
 
         List<Document> testDocuments = Lists.newArrayList(doc1, doc2);
-        collectionOperator.insertDoc(doc1.getId(), TEST_DOCUMENT_3);
+        Document existingDoc = document(doc1.getId(), TEST_DOCUMENT_3);
+        collectionOperator.insertDoc(existingDoc);
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         UpsertDocumentsStatement statement = new UpsertDocumentsStatement(keyspace, testDocuments);
 

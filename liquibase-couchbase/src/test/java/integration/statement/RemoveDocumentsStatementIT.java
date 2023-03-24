@@ -31,8 +31,7 @@ class RemoveDocumentsStatementIT extends TransactionStatementTest {
         Document doc1 = collectionOperator.generateTestDoc();
         Document doc2 = collectionOperator.generateTestDoc();
         ids = Lists.newArrayList(new Id(doc1.getId()), new Id(doc2.getId()));
-        collectionOperator.insertDoc(doc1);
-        collectionOperator.insertDoc(doc2);
+        collectionOperator.insertDocs(doc1, doc2);
     }
 
     @Test

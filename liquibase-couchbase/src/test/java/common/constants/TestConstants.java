@@ -27,8 +27,6 @@ public class TestConstants {
     public static final String TEST_COLLECTION_2 = "testCollection2";
     public static final String TEST_COLLECTION_SQL = "sqlCollection";
     public static final String TEST_ID = "id";
-    public static final JsonObject TEST_DOCUMENT = JsonObject.create().put("key", "value");
-    public static final JsonObject TEST_DOCUMENT_2 = JsonObject.create().put("key2", "value2");
     public static final JsonObject TEST_DOCUMENT_3 = JsonObject.create().put("name", "user").put("type", "customer");
     public static final String PROPERTY_FILE_NAME = "src/test/resources/test.properties";
     public static final String INDEX = "testIndex";
