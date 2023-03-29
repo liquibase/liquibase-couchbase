@@ -38,11 +38,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    public static final int VALID_DOCS_COUNT = 2;
+    private static final int VALID_DOCS_COUNT = 2;
     private final List<Document> testDocs = createDocs();
 
     private static final String QUERY_ALL_DOC_ID = "SELECT META().id " +
-            "FROM `" + TEST_BUCKET + "`.`" + TEST_SCOPE + "`.`" + collection.name() + "`";
+            "FROM `" + TEST_BUCKET + "`.`" + TEST_SCOPE + "`.`" + TEST_COLLECTION + "`";
 
     @BeforeAll
     static void setUp() {
@@ -97,7 +97,7 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     }
 
     private static void dropPrimaryIndex() {
-        clusterOperator.dropPrimaryIndex(TEST_KEYSPACE);
+        clusterOperator.dropCollectionPrimaryIndex(TEST_KEYSPACE);
     }
 
     private static boolean isDocWithCorrectUid(JsonObject doc) {

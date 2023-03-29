@@ -6,7 +6,6 @@ import liquibase.ext.couchbase.operator.BucketOperator;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.couchbase.client.java.manager.collection.CollectionSpec.create;
 import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
@@ -25,46 +24,30 @@ public class TestBucketOperator extends BucketOperator {
     }
 
     public TestCollectionOperator getCollectionOperator(String collectionName, String scopeName) {
-        return new TestCollectionOperator(
-                bucket.scope(scopeName).collection(collectionName)
-        );
-    }
-
-    public String createTestScope(String prefix) {
-        String scopeName = prefix + "_" + id.getAndIncrement();
-        bucket.collections().createScope(scopeName);
-        bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
-        return scopeName;
+        return new TestCollectionOperator(getCollection(collectionName, scopeName));
     }
 
     public String createTestScope() {
         String scopeName = TEST_SCOPE + "_" + id.getAndIncrement();
-        bucket.collections().createScope(scopeName);
+        createScope(scopeName);
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
         return scopeName;
     }
 
-    public String createTestCollection(String prefix, String scopeName) {
-        String collectionName = prefix + "_" + id.getAndIncrement();
-        bucket.collections().createCollection(create(collectionName, scopeName));
-        bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
-        return collectionName;
-    }
-
     public String createTestCollection(String scopeName) {
         String collectionName = TEST_COLLECTION + "_" + id.getAndIncrement();
-        bucket.collections().createCollection(create(collectionName, scopeName));
+        createCollection(collectionName, scopeName);
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
         return collectionName;
     }
 
     public void createDefaultTestCollection() {
-        bucket.collections().createCollection(create(TEST_COLLECTION, TEST_SCOPE));
+        createCollection(TEST_COLLECTION, TEST_SCOPE);
         bucket.waitUntilReady(CLUSTER_READY_TIMEOUT);
     }
 
     public void createDefaultTestScope() {
-        bucket.collections().createScope(TEST_SCOPE);
+        createScope(TEST_SCOPE);
     }
 
     public static Bucket getTestBucket(Cluster cluster) {

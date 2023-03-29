@@ -1,7 +1,6 @@
 package liquibase.ext.couchbase.operator;
 
 import com.couchbase.client.core.error.BucketNotFoundException;
-import com.couchbase.client.core.error.InvalidArgumentException;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -42,17 +42,93 @@ public class ClusterOperator {
 
     public BucketOperator getBucketOperator(String bucket) {
         requireBucketExists(bucket);
-        return new BucketOperator(
-                cluster.bucket(bucket)
-        );
+        return new BucketOperator(cluster.bucket(bucket));
     }
 
     protected void requireBucketExists(@NonNull String bucketName) throws BucketNotFoundException {
         cluster.buckets().getBucket(bucketName);
     }
 
+    public void createBucketWithOptionsAndSettings(BucketSettings settings, CreateBucketOptions options) {
+        cluster.buckets().createBucket(settings, options);
+    }
+
+    public void createBucket(String name) {
+        cluster.buckets().createBucket(BucketSettings.create(name));
+    }
+
+    public boolean isBucketExists(String name) {
+        try {
+            cluster.buckets().getBucket(name);
+            return true;
+        } catch (BucketNotFoundException ex) {
+            return false;
+        }
+    }
+
+    public void updateBucketWithOptionsAndSettings(BucketSettings settings, UpdateBucketOptions options) {
+        cluster.buckets().updateBucket(settings, options);
+    }
+
+    public void dropBucket(String bucketName) {
+        cluster.buckets().dropBucket(bucketName);
+    }
+
+    public QueryIndexManager getQueryIndexes() {
+        return cluster.queryIndexes();
+    }
+
+    public List<QueryIndex> getQueryIndexesForBucket(String bucketName) {
+        return getQueryIndexes().getAllIndexes(bucketName);
+    }
+
     public void createPrimaryIndex(String bucket, CreatePrimaryQueryIndexOptions options) {
         getQueryIndexes().createPrimaryIndex(bucket, options);
+    }
+
+    public void createPrimaryIndex(String bucket) {
+        getQueryIndexes().createPrimaryIndex(bucket);
+    }
+
+    public void createPrimaryIndex(Keyspace keyspace) {
+        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
+                .scopeName(keyspace.getScope())
+                .collectionName(keyspace.getCollection());
+        createPrimaryIndex(keyspace.getBucket(), options);
+    }
+
+    public boolean indexExists(String indexName, String bucketName) {
+        return getQueryIndexes().getAllIndexes(bucketName).stream()
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
+    public void dropPrimaryIndex(String bucket, DropPrimaryQueryIndexOptions options) {
+        getQueryIndexes().dropPrimaryIndex(bucket, options);
+    }
+
+    public void dropIndex(String indexName, String bucketName) {
+        getQueryIndexes().dropIndex(bucketName, indexName);
+    }
+
+    public void createCollectionQueryIndex(String indexName, Keyspace keyspace, List<Field> fieldList) {
+        createCollectionQueryIndex(indexName, keyspace, fieldList, null);
+    }
+
+    public void createCollectionQueryIndex(String indexName, Keyspace keyspace, List<Field> fields,
+                                           CreateQueryIndexOptions options) {
+        List<String> fieldList = fields.stream()
+                .map(Field::getField)
+                .collect(toList());
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+
+        if (isNull(options)) {
+            collection.queryIndexes().createIndex(indexName, fieldList);
+            return;
+        }
+        collection.queryIndexes().createIndex(indexName, fieldList, options);
     }
 
     public void createCollectionPrimaryIndex(Keyspace keyspace, CreatePrimaryQueryIndexOptions options) {
@@ -67,42 +143,27 @@ public class ClusterOperator {
         }
     }
 
-    public void createPrimaryIndex(String bucket) {
-        getQueryIndexes().createPrimaryIndex(bucket);
-    }
-
-    public void createPrimaryIndex(Keyspace keyspace) {
-        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
-                .scopeName(keyspace.getScope())
-                .collectionName(keyspace.getCollection());
-        getQueryIndexes().createPrimaryIndex(keyspace.getBucket(), options);
-    }
-
-    public void createQueryIndex(String indexName, Keyspace keyspace, List<Field> fields,
-                                 CreateQueryIndexOptions options) {
-        List<String> fieldList = fields.stream()
-                .map(Field::getField)
-                .collect(toList());
+    public void dropCollectionIndex(String indexName, Keyspace keyspace) {
         Collection collection = cluster.bucket(keyspace.getBucket())
                 .scope(keyspace.getScope())
                 .collection(keyspace.getCollection());
-        collection.queryIndexes().createIndex(indexName, fieldList, options);
+        collection.queryIndexes().dropIndex(indexName);
     }
 
-    public void createBucketWithOptionsAndSettings(BucketSettings settings, CreateBucketOptions options) {
-        cluster.buckets().createBucket(settings, options);
+    public void dropCollectionPrimaryIndex(Keyspace keyspace) {
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        collection.queryIndexes().dropPrimaryIndex();
     }
 
-    public void createBucket(String name) {
-        cluster.buckets().createBucket(BucketSettings.create(name));
-    }
-
-    public void updateBucketWithOptionsAndSettings(BucketSettings settings, UpdateBucketOptions options) {
-        cluster.buckets().updateBucket(settings, options);
-    }
-
-    public void dropBucket(String bucketName) {
-        cluster.buckets().dropBucket(bucketName);
+    public boolean collectionIndexExists(String indexName, Keyspace keyspace) {
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        return collection.queryIndexes().getAllIndexes().stream()
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
     }
 
     public List<TransactionQueryResult> executeSql(TransactionAttemptContext transaction, List<String> queries) {
@@ -113,76 +174,11 @@ public class ClusterOperator {
         return queries.stream().map(cluster::query).collect(toList());
     }
 
-    public QueryIndexManager getQueryIndexes() {
-        return cluster.queryIndexes();
-    }
-
-    public List<QueryIndex> getQueryIndexesForBucket(String bucketName) {
-        return getQueryIndexes().getAllIndexes(bucketName);
-    }
-
-    public void createIndex(String name, Keyspace keyspace, List<String> fieldList) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        collection.queryIndexes().createIndex(name, fieldList);
-    }
-
-    public void createIndex(String name, String bucket, List<String> fieldList) {
-        getQueryIndexes().createIndex(bucket, name, fieldList);
-    }
-
-    public boolean isBucketExists(String name) {
-        try {
-            cluster.buckets().getBucket(name);
-            return true;
-        } catch (BucketNotFoundException ex) {
-            return false;
-        }
-    }
-
-    public void dropIndex(String indexName, Keyspace keyspace) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        collection.queryIndexes().dropIndex(indexName);
-    }
-
-    public void dropIndex(String indexName, String bucketName) {
-        getQueryIndexes().dropIndex(bucketName, indexName);
-    }
-
-    public boolean indexExists(String indexName, String bucketName) {
-        return getQueryIndexes().getAllIndexes(bucketName).stream()
-                .map(QueryIndex::name)
-                .anyMatch(indexName::equals);
-    }
-
-    public boolean indexExists(String indexName, Keyspace keyspace) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        return collection.queryIndexes().getAllIndexes().stream()
-                .map(QueryIndex::name)
-                .anyMatch(indexName::equals);
-    }
-
-    public void dropPrimaryIndex(Keyspace keyspace) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        collection.queryIndexes().dropPrimaryIndex();
-    }
-
-    public void dropPrimaryIndex(String bucket, DropPrimaryQueryIndexOptions options) {
-        cluster.queryIndexes().dropPrimaryIndex(bucket, options);
-    }
-
     public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {
         try {
             return documents.stream()
                     .collect(toMap(Document::getId, ee -> ee.getValue().mapDataToType()));
-        } catch (InvalidArgumentException ex) {
+        } catch (Exception ex) {
             throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
         }
     }

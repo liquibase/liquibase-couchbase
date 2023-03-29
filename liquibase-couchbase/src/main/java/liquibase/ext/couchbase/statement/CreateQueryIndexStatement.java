@@ -36,7 +36,7 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        boolean exists = clusterOperator.indexExists(indexName, keyspace);
+        boolean exists = clusterOperator.collectionIndexExists(indexName, keyspace);
 
         if (ignoreIfExists && exists) {
             logger.info(format(existsMsg, indexName));
@@ -49,6 +49,6 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
         CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions()
                 .deferred(deferred)
                 .numReplicas(numReplicas);
-        clusterOperator.createQueryIndex(indexName, keyspace, fields, options);
+        clusterOperator.createCollectionQueryIndex(indexName, keyspace, fields, options);
     }
 }
