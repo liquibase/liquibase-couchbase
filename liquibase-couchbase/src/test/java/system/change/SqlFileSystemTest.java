@@ -14,8 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.couchbase.client.java.json.JsonValue.jo;
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_SQL_TEST;
