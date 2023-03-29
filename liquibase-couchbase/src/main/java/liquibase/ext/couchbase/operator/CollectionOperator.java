@@ -46,10 +46,6 @@ public class CollectionOperator {
         Arrays.stream(docs).forEach(this::removeDoc);
     }
 
-    public void upsertDocsTransactionally(TransactionAttemptContext transaction, Map<String, Object> docs) {
-        docs.forEach((key, jsonObject) -> upsertDocInTransaction(transaction, key, jsonObject));
-    }
-
     private void upsertDocInTransaction(TransactionAttemptContext transaction,
                                         String key,
                                         Object content) {
@@ -59,6 +55,10 @@ public class CollectionOperator {
         } catch (DocumentNotFoundException ex) {
             transaction.insert(collection, key, content);
         }
+    }
+
+    public void upsertDocsTransactionally(TransactionAttemptContext transaction, Map<String, Object> docs) {
+        docs.forEach((key, jsonObject) -> upsertDocInTransaction(transaction, key, jsonObject));
     }
 
     public Flux<TransactionGetResult> upsertDocsTransactionallyReactive(ReactiveTransactionAttemptContext transaction,

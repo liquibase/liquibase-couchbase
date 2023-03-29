@@ -2,6 +2,7 @@ package common.constants;
 
 import com.couchbase.client.java.json.JsonObject;
 
+import liquibase.ext.couchbase.types.Document;
 import org.testcontainers.utility.DockerImageName;
 
 import liquibase.ext.couchbase.types.Keyspace;
@@ -27,7 +28,8 @@ public class TestConstants {
     public static final String TEST_COLLECTION_2 = "testCollection2";
     public static final String TEST_COLLECTION_SQL = "sqlCollection";
     public static final String TEST_ID = "id";
-    public static final JsonObject TEST_DOCUMENT_3 = JsonObject.create().put("name", "user").put("type", "customer");
+    public static final JsonObject TEST_CONTENT = JsonObject.create().put("name", "user").put("type", "customer");
+    public static final Document TEST_DOCUMENT = Document.document(TEST_ID, TEST_CONTENT);
     public static final String PROPERTY_FILE_NAME = "src/test/resources/test.properties";
     public static final String INDEX = "testIndex";
     public static final String COMPOUND_INDEX = "testCompoundIndex";

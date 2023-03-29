@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
@@ -23,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     private List<Field> fields;
     private Document testDocument;
+    private final Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
 
     @BeforeEach
     void localSetUp() {
@@ -46,8 +46,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_ignore_index_creation_with_the_same_name() {
         String indexToCreate = clusterOperator.getTestIndexId();
-        clusterOperator.createIndex(indexToCreate, bucketName,
-                new ArrayList<>(testDocument.getContentAsJson().getNames()));
+        clusterOperator.createCollectionQueryIndex(indexToCreate, keyspace, fields);
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
 
         statement.execute(database.getConnection());
@@ -56,7 +55,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
         assertEquals(1, indexesForBucket.size());
         // check that the index target column hasn't been overridden
         String indexTargetField = getIndexTargetField(indexesForBucket);
-        assertEquals("`" + fields.get(0).getField() + "`", indexTargetField);
+        assertEquals("`" + this.fields.get(0).getField() + "`", indexTargetField);
         clusterOperator.dropIndex(indexToCreate, bucketName);
     }
 
@@ -75,7 +74,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
         statement.execute(database.getConnection());
 
         assertThat(cluster).queryIndexes(bucketName).hasQueryIndexForName(indexToCreate);
-        clusterOperator.dropIndex(indexToCreate, keyspace);
+        clusterOperator.dropCollectionIndex(indexToCreate, keyspace);
     }
 
     @Test

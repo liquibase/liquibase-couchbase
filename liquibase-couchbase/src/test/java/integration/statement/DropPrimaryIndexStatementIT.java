@@ -32,7 +32,7 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
         clusterOperator.createCollectionPrimaryIndex(keyspace, null);
 
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).doesNotHavePrimary();
     }

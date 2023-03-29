@@ -1,7 +1,6 @@
 package common.operators;
 
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.manager.bucket.BucketSettings;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,7 +21,7 @@ public class TestClusterOperator extends ClusterOperator {
 
     public TestBucketOperator getOrCreateBucketOperator(String bucketName) {
         if (!isBucketExists(bucketName)) {
-            cluster.buckets().createBucket(BucketSettings.create(bucketName));
+            createBucket(bucketName);
         }
         return this.getBucketOperator(bucketName);
     }
@@ -30,5 +29,4 @@ public class TestClusterOperator extends ClusterOperator {
     public String getTestIndexId() {
         return INDEX + "_" + id.getAndIncrement();
     }
-
 }

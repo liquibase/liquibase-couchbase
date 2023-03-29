@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static common.constants.TestConstants.TEST_DOCUMENT_3;
+import static common.constants.TestConstants.TEST_CONTENT;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.types.Document.document;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
@@ -38,7 +38,7 @@ class UpsertDocumentsStatementIT extends TransactionStatementTest {
         Document doc2 = collectionOperator.generateTestDoc();
 
         List<Document> testDocuments = Lists.newArrayList(doc1, doc2);
-        Document existingDoc = document(doc1.getId(), TEST_DOCUMENT_3);
+        Document existingDoc = document(doc1.getId(), TEST_CONTENT);
         collectionOperator.insertDoc(existingDoc);
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         UpsertDocumentsStatement statement = new UpsertDocumentsStatement(keyspace, testDocuments);

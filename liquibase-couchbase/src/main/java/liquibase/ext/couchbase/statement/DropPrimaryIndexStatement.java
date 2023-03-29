@@ -21,6 +21,6 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        clusterOperator.dropPrimaryIndex(keyspace);
+        clusterOperator.dropCollectionPrimaryIndex(keyspace);
     }
 }
