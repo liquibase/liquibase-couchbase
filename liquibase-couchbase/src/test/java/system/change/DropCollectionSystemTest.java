@@ -8,6 +8,7 @@ import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_EXISTING_COLLECTION_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.DROP_EXISTING_COLLECTION_TEST_YML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.SKIP_DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
@@ -24,6 +25,19 @@ class DropCollectionSystemTest extends LiquibaseSystemTest {
         bucketOperator.createCollection(collectionName, TEST_SCOPE);
 
         Liquibase liquibase = liquibase(DROP_EXISTING_COLLECTION_TEST_XML);
+
+        liquibase.update();
+
+        assertThat(cluster.bucket(TEST_BUCKET)).hasNoCollectionInScope(collectionName, TEST_SCOPE);
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_drop_collection_when_exists_yml() {
+        String collectionName = "dropExistingCollection";
+        bucketOperator.createCollection(collectionName, TEST_SCOPE);
+
+        Liquibase liquibase = liquibase(DROP_EXISTING_COLLECTION_TEST_YML);
 
         liquibase.update();
 
