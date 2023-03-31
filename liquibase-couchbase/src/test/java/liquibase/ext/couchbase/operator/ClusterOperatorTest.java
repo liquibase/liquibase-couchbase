@@ -20,7 +20,6 @@ import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
 import com.google.common.collect.ImmutableList;
-import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +31,6 @@ import org.mockito.quality.Strictness;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static com.couchbase.client.java.manager.bucket.CreateBucketOptions.createBucketOptions;
 import static com.couchbase.client.java.manager.bucket.UpdateBucketOptions.updateBucketOptions;
@@ -44,13 +42,10 @@ import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
-import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
-import static org.assertj.core.api.AssertionsForClassTypes.entry;
 import static org.assertj.core.api.CollectionAssert.assertThatCollection;
-import static org.assertj.core.api.MapAssert.assertThatMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -261,16 +256,6 @@ class ClusterOperatorTest {
         clusterOperator.dropCollectionPrimaryIndex(TEST_KEYSPACE);
 
         verify(collectionQueryIndexManager).dropPrimaryIndex();
-    }
-
-    @Test
-    void should_transform_docs() {
-        Document doc = Document.document(TEST_ID, TEST_CONTENT);
-        List<Document> documents = ImmutableList.of(doc);
-
-        Map<String, Object> result = clusterOperator.checkDocsAndTransformToObjects(documents);
-
-        assertThatMap(result).containsExactly(entry(TEST_ID, TEST_CONTENT));
     }
 
     @Test

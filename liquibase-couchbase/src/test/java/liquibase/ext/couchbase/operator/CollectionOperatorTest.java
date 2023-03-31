@@ -9,7 +9,7 @@ import com.couchbase.client.java.kv.MutationResult;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Id;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
+import java.util.List;
 
 import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_DOCUMENT;
@@ -45,7 +45,7 @@ class CollectionOperatorTest {
     private static final JsonObject TEST_CONTENT_2 = JsonObject.create().put("name", "user2").put("type", "customer2");
     private static final Document TEST_DOCUMENT_2 = document(TEST_ID_2, TEST_CONTENT_2);
 
-    private final Map<String, Object> documents = ImmutableMap.of(TEST_ID, TEST_CONTENT, TEST_ID_2, TEST_CONTENT_2);
+    private final List<Document> documents = ImmutableList.of(TEST_DOCUMENT, TEST_DOCUMENT_2);
 
     @Mock
     private Collection collection;
@@ -206,7 +206,7 @@ class CollectionOperatorTest {
         when(reactiveTransaction.insert(reactiveCollection, TEST_ID, TEST_CONTENT)).thenReturn(monoReactiveResult);
 
         Mono<TransactionGetResult> result =
-                collectionOperator.insertDocInTransactionReactive(reactiveTransaction, TEST_ID, TEST_CONTENT);
+                collectionOperator.insertDocInTransactionReactive(reactiveTransaction, TEST_DOCUMENT);
         result.subscribe();
 
         assertEquals(result, monoReactiveResult);

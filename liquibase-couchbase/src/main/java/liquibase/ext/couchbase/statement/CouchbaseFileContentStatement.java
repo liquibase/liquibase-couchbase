@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import liquibase.ext.couchbase.mapper.DocFileMapper;
 import liquibase.ext.couchbase.mapper.LinesMapper;
 import liquibase.ext.couchbase.mapper.ListMapper;
-import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.File;
 import liquibase.ext.couchbase.types.ImportType;
@@ -23,9 +22,7 @@ public abstract class CouchbaseFileContentStatement extends CouchbaseTransaction
             ImmutableMap.of(ImportType.LINES, new LinesMapper()
                     , ImportType.LIST, new ListMapper());
 
-    protected Map<String, Object> getDocsFromFile(File file,
-                                                  ClusterOperator clusterOperator) {
-        List<Document> docs = importTypeToMapper.get(file.getImportType()).map(file);
-        return clusterOperator.checkDocsAndTransformToObjects(docs);
+    protected List<Document> getDocsFromFile(File file) {
+        return importTypeToMapper.get(file.getImportType()).map(file);
     }
 }

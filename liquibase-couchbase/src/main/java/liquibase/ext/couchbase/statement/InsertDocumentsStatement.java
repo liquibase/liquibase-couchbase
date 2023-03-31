@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * A statement to insert many instances of a {@link Document} inside one transaction into a keyspace
@@ -31,20 +30,18 @@ public class InsertDocumentsStatement extends CouchbaseTransactionStatement {
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {
-        Map<String, Object> contentList = clusterOperator.checkDocsAndTransformToObjects(documents);
         clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
-                .insertDocsTransactionally(transaction, contentList);
+                .insertDocsTransactionally(transaction, documents);
     }
 
     @Override
     public Publisher<?> doInTransactionReactive(ReactiveTransactionAttemptContext transaction,
                                                 ClusterOperator clusterOperator) {
-        Map<String, Object> contentList = clusterOperator.checkDocsAndTransformToObjects(documents);
         CollectionOperator collectionOperator = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope());
 
-        return collectionOperator.insertDocsTransactionallyReactive(transaction, contentList);
+        return collectionOperator.insertDocsTransactionallyReactive(transaction, documents);
     }
 
 }
