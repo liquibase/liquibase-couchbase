@@ -12,6 +12,7 @@ import system.LiquibaseSystemTest;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_INVALID_CHANGELOG_TEST_JSON;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_JSON;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_YAML;
 import static common.constants.TestConstants.CREATE_BUCKET_SYSTEM_TEST_NAME;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -36,6 +37,14 @@ public class CreateBucketSystemTest extends LiquibaseSystemTest {
     @SneakyThrows
     void Bucket_should_be_created_json() {
         Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_JSON);
+        liquibase.update();
+        CouchbaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
+    }
+
+    @Test
+    @SneakyThrows
+    void Bucket_should_be_created_yaml() {
+        Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_YAML);
         liquibase.update();
         CouchbaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
     }

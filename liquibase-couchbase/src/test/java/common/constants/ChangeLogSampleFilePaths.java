@@ -10,6 +10,8 @@ public class ChangeLogSampleFilePaths {
     public static final String CREATE_COLLECTION_TEST_XML = rootPrefix + "/collection/changelog.create-collection.test.xml";
     public static final String DROP_EXISTING_COLLECTION_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-existing-collection.test.xml";
+    public static final String DROP_EXISTING_COLLECTION_TEST_YML = rootPrefix + "/collection/yaml/" +
+            "changelog.drop-existing-collection.test.yml";
     public static final String DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-collection-in-not-created-bucket.test.xml";
     public static final String DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML = rootPrefix + "/collection/" +
@@ -62,8 +64,10 @@ public class ChangeLogSampleFilePaths {
             "changelog.mutate-in-insert-with-creating-document.test.xml";
     public static final String INSERT_UPSERT_STRESS_TEST_XML = rootPrefix + "/stress/stress-test-10k-insert-5k-upsert.xml";
     public static final String DROP_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.drop-bucket.test.xml";
+    public static final String DROP_BUCKET_TEST_YML = rootPrefix + "/bucket/yaml/changelog.drop-bucket.test.yml";
     public static final String DROP_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/drop-bucket.test.json";
     public static final String CREATE_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/changelog.create-bucket.test.json";
+    public static final String CREATE_BUCKET_TEST_YAML = rootPrefix + "/bucket/yaml/changelog.create-bucket.test.yml";
     public static final String CREATE_BUCKET_INVALID_CHANGELOG_TEST_JSON = rootPrefix + "/bucket/json/changelog.create-bucket-invalid-changelog.test.json";
     public static final String UPDATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.update-bucket.test.xml";
     public static final String CREATE_COLLECTION_SQL_TEST = rootPrefix + "/collection/changelog.create-collection-sql.test.xml";
