@@ -12,11 +12,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * A statement to insert documents from file inside one transaction into a keyspace
- *
  * @link <a href="https://docs.couchbase.com/server/current/tools/cbimport-json.html"/>
  * @see Document
  * @see CouchbaseStatement
@@ -31,17 +30,17 @@ public class InsertFileContentStatement extends CouchbaseFileContentStatement {
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {
+        List<Document> docs = getDocsFromFile(file);
         CollectionOperator collectionOperator = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope());
-        Map<String, Object> docs = getDocsFromFile(file, clusterOperator);
         collectionOperator.insertDocsTransactionally(transaction, docs);
     }
 
     @Override
     public Publisher<?> doInTransactionReactive(ReactiveTransactionAttemptContext transaction, ClusterOperator clusterOperator) {
+        List<Document> docs = getDocsFromFile(file);
         CollectionOperator collectionOperator = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope());
-        Map<String, Object> docs = getDocsFromFile(file, clusterOperator);
         return collectionOperator.insertDocsTransactionallyReactive(transaction, docs);
     }
 }

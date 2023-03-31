@@ -14,7 +14,6 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
-import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.Getter;
@@ -22,12 +21,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * A part of a facade package for Couchbase Java SDK. Provides access to {@link Cluster} common operations and state checks.
@@ -172,15 +169,6 @@ public class ClusterOperator {
 
     public List<QueryResult> executeSql(List<String> queries) {
         return queries.stream().map(cluster::query).collect(toList());
-    }
-
-    public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {
-        try {
-            return documents.stream()
-                    .collect(toMap(Document::getId, ee -> ee.getValue().mapDataToType()));
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
-        }
     }
 
 }
