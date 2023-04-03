@@ -59,4 +59,26 @@ public class CouchbaseBucketAssert extends AbstractAssert<CouchbaseBucketAssert,
         return this;
     }
 
+    public CouchbaseBucketAssert hasScope(@NonNull String scopeName) {
+        if (!bucketOperator.hasScope(scopeName)) {
+            failWithMessage("Scope [%s] doesn't exist in the bucket [%s]",
+                    scopeName,
+                    actual.name()
+            );
+        }
+
+        return this;
+    }
+
+    public CouchbaseBucketAssert hasNoScope(@NonNull String scopeName) {
+        if (bucketOperator.hasScope(scopeName)) {
+            failWithMessage("Scope [%s] exists in the bucket [%s]",
+                    scopeName,
+                    actual.name()
+            );
+        }
+
+        return this;
+    }
+
 }

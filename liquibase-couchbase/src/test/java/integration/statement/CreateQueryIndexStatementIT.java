@@ -37,7 +37,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
         String indexToCreate = clusterOperator.getTestIndexId();
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
 
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).hasQueryIndexForName(indexToCreate);
         clusterOperator.dropIndex(indexToCreate, bucketName);
@@ -49,7 +49,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
         clusterOperator.createCollectionQueryIndex(indexToCreate, keyspace, fields);
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
 
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         List<QueryIndex> indexesForBucket = clusterOperator.getQueryIndexesForBucket(bucketName);
         assertEquals(1, indexesForBucket.size());
@@ -71,7 +71,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         CreateQueryIndexStatement statement = statementForKeyspace(indexToCreate, keyspace);
 
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).hasQueryIndexForName(indexToCreate);
         clusterOperator.dropCollectionIndex(indexToCreate, keyspace);
@@ -82,7 +82,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
         String indexToCreate = clusterOperator.getTestIndexId();
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
 
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).hasQueryIndexForName(indexToCreate);
         clusterOperator.dropIndex(indexToCreate, bucketName);

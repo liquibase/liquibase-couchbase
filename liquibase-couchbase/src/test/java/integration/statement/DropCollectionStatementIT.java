@@ -37,7 +37,7 @@ class DropCollectionStatementIT extends RandomizedScopeTestCase {
         DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
 
         assertThatExceptionOfType(BucketNotFoundException.class)
-                .isThrownBy(() -> statement.execute(new ClusterOperator(database.getConnection().getCluster())))
+                .isThrownBy(() -> statement.execute(new ClusterOperator(clusterOperator.getCluster())))
                 .withMessage("Bucket [%s] not found.", notCreatedBucket);
     }
 

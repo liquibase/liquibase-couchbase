@@ -12,13 +12,6 @@ import liquibase.statement.SqlStatement;
 
 public abstract class CouchbaseStatement extends NoSqlStatement {
 
-    public void execute(ClusterOperator clusterOperator) { }
-
-    /**
-     * Backward compatibility, later we will remove that
-     */
-    public void execute(CouchbaseConnection connection) {
-        execute(new ClusterOperator(connection.getCluster()));
-    }
+    public abstract void execute(ClusterOperator clusterOperator);
 
 }
