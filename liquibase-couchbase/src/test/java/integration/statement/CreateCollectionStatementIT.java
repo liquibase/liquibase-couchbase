@@ -33,7 +33,7 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
         CreateCollectionStatement statement =
                 new CreateCollectionStatement(keyspace, false);
 
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         assertThat(bucketOperator.getBucket()).hasCollectionInScope(collectionName, DEFAULT_SCOPE);
 
@@ -45,7 +45,7 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
         Collection existingCollection = bucketOperator.getCollection(collectionName, scopeName);
 
         CreateCollectionStatement statement = new CreateCollectionStatement(keyspace, true);
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
 
         // todo replace with collection assert
         Bucket bucket = bucketOperator.getBucket();
@@ -59,6 +59,6 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
                 new CreateCollectionStatement(keyspace, false);
 
         assertThatExceptionOfType(CollectionExistsException.class)
-                .isThrownBy(() -> statement.execute(database.getConnection()));
+                .isThrownBy(() -> statement.execute(clusterOperator));
     }
 }

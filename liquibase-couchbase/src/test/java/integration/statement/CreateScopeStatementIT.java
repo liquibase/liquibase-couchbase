@@ -1,25 +1,27 @@
 package integration.statement;
 
 import com.couchbase.client.core.error.ScopeExistsException;
+import com.couchbase.client.java.Bucket;
 import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.CreateScopeStatement;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
 class CreateScopeStatementIT extends RandomizedScopeTestCase {
+
+    private final String createScopeName = CreateScopeStatementIT.class.getSimpleName();
+    private final Bucket bucket = bucketOperator.getBucket();
+
     @Test
     void Should_create_scope() {
-        if (bucketOperator.hasScope(scopeName)) {
-            bucketOperator.dropScope(scopeName);
-        }
-        CreateScopeStatement createScopeStatement = new CreateScopeStatement(scopeName, bucketName);
+        CreateScopeStatement createScopeStatement = new CreateScopeStatement(createScopeName, bucketName);
 
-        createScopeStatement.execute(database.getConnection());
+        createScopeStatement.execute(clusterOperator);
 
-        assertThat(createScopeStatement.getScopeName()).isEqualTo(scopeName);
+        assertThat(bucket).hasScope(createScopeName);
     }
 
     @Test
@@ -27,7 +29,7 @@ class CreateScopeStatementIT extends RandomizedScopeTestCase {
         CreateScopeStatement statement = new CreateScopeStatement(scopeName, bucketName);
 
         assertThatExceptionOfType(ScopeExistsException.class)
-                .isThrownBy(() -> statement.execute(database.getConnection()))
+                .isThrownBy(() -> statement.execute(clusterOperator))
                 .withMessage("Scope [%s] already exists.", scopeName);
     }
 

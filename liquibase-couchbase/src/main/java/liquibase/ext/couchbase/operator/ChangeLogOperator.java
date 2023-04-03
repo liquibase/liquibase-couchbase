@@ -3,7 +3,6 @@ package liquibase.ext.couchbase.operator;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
-import com.couchbase.client.java.kv.MutateInSpec;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
@@ -15,14 +14,14 @@ import liquibase.ext.couchbase.mapper.ChangeSetMapper;
 import liquibase.ext.couchbase.provider.ContextServiceProvider;
 import liquibase.ext.couchbase.provider.ServiceProvider;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.couchbase.client.java.kv.MutateInSpec.upsert;
 import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static liquibase.ext.couchbase.provider.ServiceProvider.CHANGE_LOG_COLLECTION;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
@@ -81,13 +80,13 @@ public class ChangeLogOperator {
 
     public List<RanChangeSet> getAllChangeLogs() {
         Scope scope = serviceProvider.getScopeOfCollection(CHANGE_LOG_COLLECTION);
-
         QueryOptions queryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
-        List<CouchbaseChangeLog> changeLogs = scope.query(SELECT_ALL_CHANGELOGS_N1QL, queryOptions)
-                .rowsAs(CouchbaseChangeLog.class);
 
-        return changeLogs.stream()
-                .map(ChangeSetMapper::mapToRanChangeSet).collect(Collectors.toList());
+        return scope.query(SELECT_ALL_CHANGELOGS_N1QL, queryOptions)
+                .rowsAs(CouchbaseChangeLog.class)
+                .stream()
+                .map(ChangeSetMapper::mapToRanChangeSet)
+                .collect(toList());
     }
 
     public void removeChangeSetFromHistory(ChangeSet changeSet) {
@@ -98,9 +97,7 @@ public class ChangeLogOperator {
 
     private String generateId(String filePath, String changeSetId, String author) {
         // TODO look on key generator in future
-        StringBuilder id = new StringBuilder();
-        id.append(filePath).append("::").append(changeSetId).append("::").append(author);
-        return id.toString();
+        return format("%s::%s::%s", filePath, changeSetId, author);
     }
 
     public void tagLastChangeSet(String tagString) {

@@ -1,15 +1,18 @@
 package integration.statement;
 
 import com.couchbase.client.core.error.ScopeNotFoundException;
+import com.couchbase.client.java.Bucket;
 import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.DropScopeStatement;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 
 class DropScopeStatementIT extends RandomizedScopeTestCase {
+
+    private final Bucket bucket = clusterOperator.getBucketOperator(bucketName).getBucket();
 
     @Test
     void Should_drop_scope() {
@@ -17,7 +20,7 @@ class DropScopeStatementIT extends RandomizedScopeTestCase {
 
         dropScopeStatement.execute(clusterOperator);
 
-        assertThat(clusterOperator.getBucketOperator(bucketName).hasScope(scopeName)).isFalse();
+        assertThat(bucket).hasNoScope(scopeName);
         bucketOperator.getOrCreateScope(scopeName);
     }
 

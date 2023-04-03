@@ -38,7 +38,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_create_primary_index_when_primary_index_does_not_exist() {
         CreatePrimaryQueryIndexStatement statement =
                 new CreatePrimaryQueryIndexStatement(bucketName, createOptions());
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
         assertThat(cluster).queryIndexes(bucketName).hasPrimaryIndexForName(indexName);
     }
 
@@ -47,7 +47,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
         createPrimaryIndexManually();
         CreatePrimaryQueryIndexStatement statement =
                 new CreatePrimaryQueryIndexStatement(bucketName, createOptions());
-        statement.execute(database.getConnection());
+        statement.execute(clusterOperator);
         String indexFromClusterName = clusterOperator.getQueryIndexes().getAllIndexes(bucketName).get(0).name();
         assertEquals(MANUALLY_CREATED_INDEX, indexFromClusterName);
     }
@@ -59,7 +59,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
                 createOptions().indexName(MANUALLY_CREATED_INDEX).ignoreIfExists(false));
 
         assertThatExceptionOfType(IndexExistsException.class)
-                .isThrownBy(() -> statement.execute(database.getConnection()));
+                .isThrownBy(() -> statement.execute(clusterOperator));
     }
 
     private CreatePrimaryQueryIndexOptions createOptions() {
