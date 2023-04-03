@@ -1,5 +1,6 @@
 package integration.statement;
 
+import com.couchbase.client.java.Collection;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
@@ -32,7 +33,10 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_drop_existing_index_in_default_scope() {
         String randomIndexName = clusterOperator.getTestIndexId();
-        clusterOperator.createCollectionQueryIndex(randomIndexName, keyspace, singletonList(getFirstField(doc)));
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        clusterOperator.getCollectionOperator(collection).createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
         DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
         statement.execute(clusterOperator);
@@ -44,7 +48,10 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     void Should_drop_index_for_specific_keyspace() {
         String randomIndexName = clusterOperator.getTestIndexId();
         Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-        clusterOperator.createCollectionQueryIndex(randomIndexName, keyspace, singletonList(getFirstField(doc)));
+        Collection collection = cluster.bucket(keyspace.getBucket())
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        clusterOperator.getCollectionOperator(collection).createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
         DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
         statement.execute(clusterOperator);

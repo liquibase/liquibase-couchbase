@@ -29,11 +29,13 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
 
     @AfterEach
     void cleanUp() {
+        //TODO investigate does not work with - bucketOperator.getCollectionOperator(collectionName, scopeName).getCollection();
+        Collection collection = clusterOperator.getBucketOperator(bucketName).getBucket().defaultCollection();
         if (clusterOperator.indexExists(indexName, bucketName)) {
-            clusterOperator.dropIndex(indexName, bucketName);
+            clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
         }
         if (clusterOperator.indexExists(MANUALLY_CREATED_INDEX, bucketName)) {
-            clusterOperator.dropIndex(MANUALLY_CREATED_INDEX, bucketName);
+            clusterOperator.getCollectionOperator(collection).dropIndex(MANUALLY_CREATED_INDEX);
         }
     }
 

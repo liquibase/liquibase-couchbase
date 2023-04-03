@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.statement;
 
+import com.couchbase.client.java.Collection;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
@@ -21,6 +22,10 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        clusterOperator.dropCollectionPrimaryIndex(keyspace);
+        Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getBucket()
+                .scope(keyspace.getScope())
+                .collection(keyspace.getCollection());
+        clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
     }
 }
