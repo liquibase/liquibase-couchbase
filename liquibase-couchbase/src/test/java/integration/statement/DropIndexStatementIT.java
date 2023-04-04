@@ -33,10 +33,9 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_drop_existing_index_in_default_scope() {
         String randomIndexName = clusterOperator.getTestIndexId();
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        clusterOperator.getCollectionOperator(collection).createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
+        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+
+        testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
         DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
         statement.execute(clusterOperator);
@@ -48,10 +47,9 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     void Should_drop_index_for_specific_keyspace() {
         String randomIndexName = clusterOperator.getTestIndexId();
         Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        clusterOperator.getCollectionOperator(collection).createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
+        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+
+        testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
         DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
         statement.execute(clusterOperator);

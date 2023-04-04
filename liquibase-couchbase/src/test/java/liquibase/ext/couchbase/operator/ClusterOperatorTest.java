@@ -13,17 +13,16 @@ import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
 import com.couchbase.client.java.manager.query.CollectionQueryIndexManager;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
 import com.google.common.collect.ImmutableList;
+import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,21 +31,21 @@ import org.mockito.quality.Strictness;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static com.couchbase.client.java.manager.bucket.CreateBucketOptions.createBucketOptions;
 import static com.couchbase.client.java.manager.bucket.UpdateBucketOptions.updateBucketOptions;
 import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static com.couchbase.client.java.manager.query.CreateQueryIndexOptions.createQueryIndexOptions;
-import static com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions.dropPrimaryQueryIndexOptions;
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
-import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_KEYSPACE;
-import static common.constants.TestConstants.TEST_SCOPE;
+import static org.assertj.core.api.AssertionsForClassTypes.entry;
 import static org.assertj.core.api.CollectionAssert.assertThatCollection;
+import static org.assertj.core.api.MapAssert.assertThatMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -117,36 +116,6 @@ class ClusterOperatorTest {
         assertEquals(result.getBucket(), bucket);
     }
 
-    @Test
-    @Disabled("Correct mock")
-    void should_create_primary_index() {
-//         Collection collection = cluster.bucket(TEST_BUCKET).defaultCollection();
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
-
-        verify(queryIndexManager).createPrimaryIndex(TEST_BUCKET);
-    }
-
-    @Test
-    @Disabled("Correct mock")
-    void should_create_primary_index_for_keyspace() {
-        Collection collection = clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())
-                .getCollection(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope());
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
-
-        verify(queryIndexManager).createPrimaryIndex(eq(TEST_BUCKET), any(CreatePrimaryQueryIndexOptions.class));
-    }
-
-    @Test
-    @Disabled("Correct mock")
-    void should_create_primary_index_with_options() {
-        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
-                .indexName(MANUALLY_CREATED_INDEX);
-
-        Collection collection = clusterOperator.getBucketOperator(TEST_BUCKET).getBucket().defaultCollection();
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex(options);
-
-        verify(queryIndexManager).createPrimaryIndex(TEST_BUCKET, options);
-    }
 
     @Test
     void should_return_index_manager() {
@@ -214,16 +183,6 @@ class ClusterOperatorTest {
     }
 
     @Test
-    @Disabled("Correct mock")
-    void should_drop_bucket_query_index() {
-
-        Collection col = clusterOperator.getBucketOperator(TEST_BUCKET).bucket.defaultCollection();
-        clusterOperator.getCollectionOperator(col).dropIndex(TEST_INDEX);
-
-        verify(queryIndexManager).dropIndex(TEST_BUCKET, TEST_INDEX);
-    }
-
-    @Test
     void should_drop_collection_query_index() {
         Collection collection = cluster.bucket(TEST_KEYSPACE.getBucket())
                 .scope(TEST_KEYSPACE.getScope())
@@ -283,6 +242,16 @@ class ClusterOperatorTest {
     }
 
     @Test
+    void should_transform_docs() {
+        Document doc = Document.document(TEST_ID, TEST_CONTENT);
+        List<Document> documents = ImmutableList.of(doc);
+
+        Map<String, Object> result = clusterOperator.checkDocsAndTransformToObjects(documents);
+
+        assertThatMap(result).containsExactly(entry(TEST_ID, TEST_CONTENT));
+    }
+
+    @Test
     void should_create_bucket() {
         doNothing().when(bucketManager).createBucket(any(BucketSettings.class));
         clusterOperator.createBucket(TEST_BUCKET);
@@ -332,16 +301,6 @@ class ClusterOperatorTest {
     }
 
     @Test
-    @Disabled("Correct mock")
-    void should_drop_primary_index_with_options() {
-        DropPrimaryQueryIndexOptions options = dropPrimaryQueryIndexOptions().ignoreIfNotExists(true);
-
-        clusterOperator.getCollectionOperator(collection).dropPrimaryIndex(options);
-
-        verify(queryIndexManager).dropPrimaryIndex(TEST_BUCKET, options);
-    }
-
-    @Test
     void should_create_collection_primary_index_with_options() {
         CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions();
 
@@ -351,6 +310,5 @@ class ClusterOperatorTest {
 
         verify(collectionQueryIndexManager).createPrimaryIndex(options);
     }
-
 
 }

@@ -40,16 +40,13 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
 
     @AfterEach
     void cleanUp() {
-        //TODO investigate does not work with - bucketOperator.getCollectionOperator(collectionName, scopeName).getCollection();
-        Collection collectionDefault = clusterOperator.getBucketOperator(bucketName).getBucket().defaultCollection();
-        Collection collectionCustom = cluster.bucket(keyspaceCustom.getBucket())
-                .scope(keyspaceCustom.getScope())
-                .collection(keyspaceCustom.getCollection());
-        if (clusterOperator.getCollectionOperator(collectionCustom).collectionIndexExists(indexToCreate)) {
-            clusterOperator.getCollectionOperator(collectionCustom).dropIndex(indexToCreate);
+        TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
+        TestCollectionOperator collectionOperatorCustom = getCollectionOperator(keyspaceCustom.getBucket(), keyspaceCustom.getScope(), keyspaceCustom.getCollection());
+        if (collectionOperatorCustom.collectionIndexExists(indexToCreate)) {
+            collectionOperatorCustom.dropIndex(indexToCreate);
         }
-        if (clusterOperator.indexExists(indexToCreate, bucketName)) {
-            clusterOperator.getCollectionOperator(collectionDefault).dropIndex(indexToCreate);
+        if (collectionOperatorDefault.collectionIndexExists(indexToCreate)) {
+            collectionOperatorDefault.dropIndex(indexToCreate);
         }
 
     }
@@ -67,9 +64,9 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_ignore_index_creation_with_the_same_name() {
         indexToCreate = clusterOperator.getTestIndexId();
-        Collection collection = cluster.bucket(keyspace.getBucket()).
-                scope(keyspace.getScope()).collection(keyspace.getCollection());
-        clusterOperator.getCollectionOperator(collection).createQueryIndex(indexToCreate, fields, null);
+        TestCollectionOperator collectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+
+        collectionOperator.createQueryIndex(indexToCreate, fields, null);
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
 
         statement.execute(clusterOperator);

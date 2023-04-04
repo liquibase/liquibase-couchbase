@@ -29,12 +29,12 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
 
     @AfterEach
     void cleanUp() {
-        //TODO investigate does not work with - bucketOperator.getCollectionOperator(collectionName, scopeName).getCollection();
+        TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
         Collection collection = clusterOperator.getBucketOperator(bucketName).getBucket().defaultCollection();
-        if (clusterOperator.indexExists(indexName, bucketName)) {
+        if (collectionOperatorDefault.collectionIndexExists(indexName)) {
             clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
         }
-        if (clusterOperator.indexExists(MANUALLY_CREATED_INDEX, bucketName)) {
+        if (collectionOperatorDefault.collectionIndexExists(MANUALLY_CREATED_INDEX)) {
             clusterOperator.getCollectionOperator(collection).dropIndex(MANUALLY_CREATED_INDEX);
         }
     }
@@ -79,11 +79,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
         CreatePrimaryQueryIndexOptions options = CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(MANUALLY_CREATED_INDEX);
-        CoreScopeAndCollection scopeAndCollection = options.build().scopeAndCollection();
-        BucketOperator bucketOperator = clusterOperator.getBucketOperator(bucketName);
-        Collection collection = scopeAndCollection == null ?
-                bucketOperator.getBucket().defaultCollection() :
-                bucketOperator.getCollection(scopeAndCollection.collectionName(), scopeAndCollection.scopeName());
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex(options);
+        TestCollectionOperator collectionOperator = getCollectionOperator(bucketName, null, null);
+        collectionOperator.createPrimaryIndex(options);
     }
 }
