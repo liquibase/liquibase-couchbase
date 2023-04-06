@@ -4,4 +4,3 @@ databaseChangeLog:
           author: tigran
           dropBucket:
               bucketName: newTestBucket
-              ignoreIfNotExists: true

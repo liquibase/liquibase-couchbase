@@ -28,7 +28,7 @@ public class DropCollectionChangeTest {
 
     @Test
     void Should_parse_changes_correctly() {
-        DropCollectionChange dropCollectionChange = new DropCollectionChange(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION, true);
+        DropCollectionChange dropCollectionChange = new DropCollectionChange(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
         DatabaseChangeLog load = changeLogProvider.load(DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML);
         ChangeSet changeSet = firstOf(load.getChangeSets());
 

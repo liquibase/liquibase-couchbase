@@ -16,4 +16,3 @@ databaseChangeLog:
               replicaIndexes: false
               storageBackend: couchstore
               timeoutInSeconds: 10
-              ignoreIfExists: false

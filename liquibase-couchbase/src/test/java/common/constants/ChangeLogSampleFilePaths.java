@@ -8,12 +8,16 @@ public class ChangeLogSampleFilePaths {
     private static final String rootPrefix = "liquibase/ext/couchbase";
 
     public static final String CREATE_COLLECTION_TEST_XML = rootPrefix + "/collection/changelog.create-collection.test.xml";
+    public static final String CREATE_COLLECTION_DUPLICATE_IGNORE_TEST_XML = rootPrefix + "/collection/changelog.create-collection-duplicate-ignore.test.xml";
+    public static final String CREATE_COLLECTION_DUPLICATE_FAIL_TEST_XML = rootPrefix + "/collection/changelog.create-collection-duplicate-fail.test.xml";
     public static final String DROP_EXISTING_COLLECTION_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-existing-collection.test.xml";
     public static final String DROP_EXISTING_COLLECTION_TEST_YML = rootPrefix + "/collection/yaml/" +
             "changelog.drop-existing-collection.test.yml";
     public static final String DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-collection-in-not-created-bucket.test.xml";
+    public static final String DROP_NOT_CREATED_COLLECTION_PRECONDITION_ERROR_TEST_XML = rootPrefix + "/collection/" +
+            "changelog.drop-not-created-collection-change-precondition.test.xml";
     public static final String DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML = rootPrefix + "/collection/" +
             "changelog.drop-not-created-collection-change.test.xml";
     public static final String SKIP_DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML = rootPrefix + "/collection/" +
@@ -43,6 +47,7 @@ public class ChangeLogSampleFilePaths {
     public static final String CHANGELOG_TAG_TEST_XML = rootPrefix + "/changelog/changelog.tag-test.xml";
     public static final String CHANGELOG_CONTEXT_LABEL_COMMENT_XML = rootPrefix + "/changelog/changelog.context-label-comment-test.xml";
     public static final String CREATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-bucket.test.xml";
+    public static final String CREATE_DUPLICATE_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.create-duplicate-bucket.test.xml";
     public static final String EXECUTE_QUERY_TEST_XML = rootPrefix + "/bucket/changelog.execute-query.test.xml";
     public static final String MUTATE_IN_INSERT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-insert.test.xml";
     public static final String MUTATE_IN_ARRAY_CREATE_TEST_XML = rootPrefix + "/mutatein/changelog.create-array.test.xml";
@@ -64,6 +69,7 @@ public class ChangeLogSampleFilePaths {
             "changelog.mutate-in-insert-with-creating-document.test.xml";
     public static final String INSERT_UPSERT_STRESS_TEST_XML = rootPrefix + "/stress/stress-test-10k-insert-5k-upsert.xml";
     public static final String DROP_BUCKET_TEST_XML = rootPrefix + "/bucket/changelog.drop-bucket.test.xml";
+    public static final String DROP_BUCKET_MARK_RUN_TEST_XML = rootPrefix + "/bucket/changelog.drop-bucket-mark-run.test.xml";
     public static final String DROP_BUCKET_TEST_YML = rootPrefix + "/bucket/yaml/changelog.drop-bucket.test.yml";
     public static final String DROP_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/drop-bucket.test.json";
     public static final String CREATE_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/changelog.create-bucket.test.json";

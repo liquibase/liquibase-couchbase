@@ -25,11 +25,15 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="roman">
+        <preConditions onError="MARK_RAN">
+            <not>
+                <ext:collectionExists bucketName="testBucket" collectionName="travels" scopeName="testScope"/>
+            </not>
+        </preConditions>
         <ext:createCollection>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>travels</ext:collectionName>
             <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfExists>true</ext:skipIfExists>
         </ext:createCollection>
     </changeSet>
 

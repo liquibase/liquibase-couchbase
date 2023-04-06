@@ -24,14 +24,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="evgenii">
+    <changeSet id="1" author="tigran">
         <preConditions onFail="MARK_RAN">
             <not>
-                <ext:bucketExists bucketName="createBucketSystemTest"/>
+                <ext:bucketExists bucketName="testBucket"/>
             </not>
         </preConditions>
         <ext:createBucket>
-            <ext:bucketName>createBucketSystemTest</ext:bucketName>
+            <ext:bucketName>testBucket</ext:bucketName>
             <ext:bucketType>COUCHBASE</ext:bucketType>
             <ext:compressionMode>OFF</ext:compressionMode>
             <ext:conflictResolutionType>TIMESTAMP</ext:conflictResolutionType>

@@ -28,7 +28,7 @@ public class DropBucketChangeTest {
 
     @Test
     void Should_parse_changes_correctly() {
-        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET, true);
+        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET);
         DatabaseChangeLog load = changeLogProvider.load(DROP_BUCKET_TEST_XML);
         ChangeSet changeSet = firstOf(load.getChangeSets());
 
@@ -38,7 +38,7 @@ public class DropBucketChangeTest {
 
     @Test
     void Should_parse_json_changes_correctly() {
-        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET, true);
+        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET);
         DatabaseChangeLog load = changeLogProvider.load(DROP_BUCKET_TEST_JSON);
         ChangeSet changeSet = firstOf(load.getChangeSets());
         assertThat(changeSet.getChanges()).map(DropBucketChange.class::cast)
@@ -47,7 +47,7 @@ public class DropBucketChangeTest {
 
     @Test
     void Should_parse_yaml_changes_correctly() {
-        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET, true);
+        DropBucketChange dropBucketChange = new DropBucketChange(NEW_TEST_BUCKET);
         DatabaseChangeLog load = changeLogProvider.load(DROP_BUCKET_TEST_YML);
         ChangeSet changeSet = firstOf(load.getChangeSets());
 
