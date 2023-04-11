@@ -229,6 +229,24 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="createScope">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="dropScope">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
     <xsd:element name="updateBucket">
         <xsd:complexType>
             <xsd:all>
@@ -411,5 +429,12 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="indexExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="isPrimary" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
 
 </xsd:schema>

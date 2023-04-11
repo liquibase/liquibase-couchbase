@@ -2,7 +2,7 @@
   #%L
   Liquibase Couchbase Extension
   %%
-  Copyright (C) 2013 Weigandt Consulting GmbH
+  Copyright (C) 2023 Weigandt Consulting GmbH
   %%
   Licensed under the Apache License, Version 2.0 (the "License").
   You may not use this file except in compliance with the License.
@@ -24,11 +24,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="zorik">
-        <ext:dropScope>
+    <changeSet id="1" author="tigran">
+        <preConditions>
+           <ext:documentExists bucketName="testBucket" collectionName="testCollection" scopeName="testScope" key="newTestDoc_ID1"/>
+        </preConditions>
+        <ext:removeDocuments>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:scopeName>testScopeDelete</ext:scopeName>
-        </ext:dropScope>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:id>newTestDoc_ID1</ext:id>
+        </ext:removeDocuments>
     </changeSet>
-
 </databaseChangeLog>

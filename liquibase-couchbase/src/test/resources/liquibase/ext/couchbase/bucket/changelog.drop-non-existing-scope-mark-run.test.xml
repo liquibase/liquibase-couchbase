@@ -24,10 +24,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="zorik">
+    <changeSet id="1" author="tigran">
+        <preConditions onFail="MARK_RAN">
+            <ext:scopeExists scopeName="testScopeNotExist" bucketName="testBucket"/>
+        </preConditions>
         <ext:dropScope>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:scopeName>testScopeDelete</ext:scopeName>
+            <ext:scopeName>testScopeNotExist</ext:scopeName>
         </ext:dropScope>
     </changeSet>
 

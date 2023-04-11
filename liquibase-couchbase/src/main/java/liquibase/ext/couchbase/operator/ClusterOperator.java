@@ -85,6 +85,13 @@ public class ClusterOperator {
                 .anyMatch(indexName::equals);
     }
 
+    public boolean indexExists(String indexName, String bucketName, boolean isPrimary) {
+        return getQueryIndexes().getAllIndexes(bucketName).stream()
+                .filter(queryIndex -> queryIndex.primary() == isPrimary)
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
     public List<TransactionQueryResult> executeSql(TransactionAttemptContext transaction, List<String> queries) {
         return queries.stream().map(transaction::query).collect(toList());
     }

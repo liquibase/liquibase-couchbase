@@ -63,6 +63,12 @@
     "dropBucket": {
       "$ref": "#/$defs/dropBucket"
     },
+    "createScope": {
+      "$ref": "#/$defs/createScope"
+    },
+    "dropScope": {
+      "$ref": "#/$defs/dropScope"
+    },
     "createPrimaryQueryIndex": {
       "$ref": "#/$defs/createPrimaryQueryIndex"
     },
@@ -199,6 +205,12 @@
               },
               "dropBucket": {
                 "$ref": "#/$defs/dropBucket"
+              },
+              "createScope": {
+                "$ref": "#/$defs/createScope"
+              },
+              "dropScope": {
+                "$ref": "#/$defs/dropScope"
               },
               "createPrimaryQueryIndex": {
                 "$ref": "#/$defs/createPrimaryQueryIndex"
@@ -786,6 +798,38 @@
       "additionalProperties": false,
       "properties": {
         "bucketName": {
+          "type": "string"
+        }
+      }
+    },
+    "createScope": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "dropScope": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
           "type": "string"
         }
       }
