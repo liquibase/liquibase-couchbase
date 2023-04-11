@@ -1,9 +1,12 @@
 package integration.statement;
 
+import com.couchbase.client.core.api.manager.CoreScopeAndCollection;
 import com.couchbase.client.core.error.IndexExistsException;
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
+import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement;
 import liquibase.ext.couchbase.types.Document;
 import org.junit.jupiter.api.AfterEach;
@@ -74,6 +77,11 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
         CreatePrimaryQueryIndexOptions options = CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(MANUALLY_CREATED_INDEX);
-        clusterOperator.createPrimaryIndex(bucketName, options);
+        CoreScopeAndCollection scopeAndCollection = options.build().scopeAndCollection();
+        BucketOperator bucketOperator = clusterOperator.getBucketOperator(bucketName);
+        Collection collection = scopeAndCollection == null ?
+                bucketOperator.getBucket().defaultCollection() :
+                bucketOperator.getCollection(scopeAndCollection.collectionName(), scopeAndCollection.scopeName());
+        clusterOperator.getCollectionOperator(collection).createPrimaryIndex(options);
     }
 }

@@ -29,7 +29,7 @@ class ExecuteQueryStatementIT extends ConstantScopeTestCase {
     @BeforeAll
     static void setUp() {
         collectionOperator.insertDoc(TEST_DOCUMENT);
-        clusterOperator.createCollectionPrimaryIndex(TEST_KEYSPACE, null);
+        collectionOperator.createCollectionPrimaryIndex(null);
     }
 
     @AfterAll

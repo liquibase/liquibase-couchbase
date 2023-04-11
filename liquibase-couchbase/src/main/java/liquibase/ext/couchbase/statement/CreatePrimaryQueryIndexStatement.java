@@ -1,6 +1,9 @@
 package liquibase.ext.couchbase.statement;
 
+import com.couchbase.client.core.api.manager.CoreScopeAndCollection;
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
+import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +24,11 @@ public class CreatePrimaryQueryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        clusterOperator.createPrimaryIndex(bucketName, options);
+        CoreScopeAndCollection scopeAndCollection = options.build().scopeAndCollection();
+        BucketOperator bucketOperator = clusterOperator.getBucketOperator(bucketName);
+        Collection collection = scopeAndCollection == null ?
+                bucketOperator.getBucket().defaultCollection() :
+                bucketOperator.getCollection(scopeAndCollection.collectionName(), scopeAndCollection.scopeName());
+        clusterOperator.getCollectionOperator(collection).createPrimaryIndex(options);
     }
 }
