@@ -93,7 +93,9 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     }
 
     private static void createPrimaryIndex() {
-        clusterOperator.createPrimaryIndex(TEST_KEYSPACE);
+        Collection col = clusterOperator.getBucketOperator(TEST_BUCKET).
+                getCollection(TEST_COLLECTION, TEST_SCOPE);
+        clusterOperator.getCollectionOperator(col).createPrimaryIndex();
     }
 
     private static void dropPrimaryIndex() {

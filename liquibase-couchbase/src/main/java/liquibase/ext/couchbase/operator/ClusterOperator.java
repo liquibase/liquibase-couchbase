@@ -6,7 +6,6 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
-import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
@@ -22,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
@@ -40,6 +38,10 @@ public class ClusterOperator {
     public BucketOperator getBucketOperator(String bucket) {
         requireBucketExists(bucket);
         return new BucketOperator(cluster.bucket(bucket));
+    }
+
+    public CollectionOperator getCollectionOperator(Collection collection) {
+        return new CollectionOperator(collection);
     }
 
     protected void requireBucketExists(@NonNull String bucketName) throws BucketNotFoundException {
@@ -79,21 +81,6 @@ public class ClusterOperator {
         return getQueryIndexes().getAllIndexes(bucketName);
     }
 
-    public void createPrimaryIndex(String bucket, CreatePrimaryQueryIndexOptions options) {
-        getQueryIndexes().createPrimaryIndex(bucket, options);
-    }
-
-    public void createPrimaryIndex(String bucket) {
-        getQueryIndexes().createPrimaryIndex(bucket);
-    }
-
-    public void createPrimaryIndex(Keyspace keyspace) {
-        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
-                .scopeName(keyspace.getScope())
-                .collectionName(keyspace.getCollection());
-        createPrimaryIndex(keyspace.getBucket(), options);
-    }
-
     public boolean indexExists(String indexName, String bucketName) {
         return getQueryIndexes().getAllIndexes(bucketName).stream()
                 .map(QueryIndex::name)
@@ -126,18 +113,6 @@ public class ClusterOperator {
             return;
         }
         collection.queryIndexes().createIndex(indexName, fieldList, options);
-    }
-
-    public void createCollectionPrimaryIndex(Keyspace keyspace, CreatePrimaryQueryIndexOptions options) {
-        Collection col = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        if (options != null) {
-            col.queryIndexes().createPrimaryIndex(options);
-        }
-        else {
-            col.queryIndexes().createPrimaryIndex();
-        }
     }
 
     public void dropCollectionIndex(String indexName, Keyspace keyspace) {

@@ -1,7 +1,10 @@
 package system.change;
 
 import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import lombok.SneakyThrows;
@@ -14,7 +17,7 @@ import system.LiquibaseSystemTest;
 import java.util.concurrent.TimeUnit;
 
 import static com.couchbase.client.java.json.JsonValue.jo;
-import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_SQL_TEST;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_DOCUMENT_ROLLBACK_SQL_TEST;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_DOCUMENT_SQL_TEST;
@@ -50,7 +53,8 @@ public class SqlFileSystemTest extends LiquibaseSystemTest {
         liquibase(INSERT_DOCUMENT_SQL_TEST).update();
 
         String stmt = format("select * from `%s`.`%s`.`%s`", TEST_BUCKET, TEST_SCOPE_SQL, TEST_COLLECTION_SQL);
-        QueryResult queryResult = cluster.query(stmt);
+        QueryOptions selectQueryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
+        QueryResult queryResult = cluster.query(stmt, selectQueryOptions);
 
         assertThat(queryResult).hasSize(2).areContentsEqual(objects, TEST_COLLECTION_SQL);
     }
@@ -63,26 +67,28 @@ public class SqlFileSystemTest extends LiquibaseSystemTest {
                 .isThrownBy(liquibase::update);
 
         String stmt = format("select * from `%s`.`%s`.`%s`", TEST_BUCKET, TEST_SCOPE_SQL, TEST_COLLECTION_SQL);
-        QueryResult queryResult = cluster.query(stmt);
+        QueryOptions selectQueryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
+        QueryResult queryResult = cluster.query(stmt, selectQueryOptions);
 
         assertThat(queryResult).isEmpty();
     }
 
     /**
-     *  Sometimes we have issue with create index, so added static sleeps along with cluster.waitUntilReady
+     * Sometimes we have issue with create index, so added static sleeps along with cluster.waitUntilReady
      */
     @SneakyThrows
     @BeforeAll
     public static void prepareScopeCollection() {
         bucketOperator.createScope(TEST_SCOPE_SQL);
-        bucketOperator.createCollection(TEST_COLLECTION_SQL, TEST_SCOPE_SQL);
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
-        TimeUnit.SECONDS.sleep(2l);
-        clusterOperator.createPrimaryIndex(TEST_BUCKET, createPrimaryQueryIndexOptions()
-                .scopeName(TEST_SCOPE_SQL)
-                .collectionName(TEST_COLLECTION_SQL)
-        );
-        TimeUnit.SECONDS.sleep(2l);
+        bucketOperator.createCollection(TEST_COLLECTION_SQL, TEST_SCOPE_SQL);
+        bucketOperator.getBucket().waitUntilReady(CLUSTER_READY_TIMEOUT);
+        TimeUnit.SECONDS.sleep(2L);
+        TestCollectionOperator collectionOperator =
+                bucketOperator.getCollectionOperator(TEST_COLLECTION_SQL, TEST_SCOPE_SQL);
+        collectionOperator.getCollection().queryIndexes().createPrimaryIndex();
+        TimeUnit.SECONDS.sleep(2L);
+        //TODO investigate how to all avoid static timeouts - issue relates to tests only(waituntilready and watchindexes does not solve issue)
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
     }
 

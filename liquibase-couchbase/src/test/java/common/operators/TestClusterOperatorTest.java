@@ -95,7 +95,7 @@ class TestClusterOperatorTest {
 
     @Test
     void should_create_collection_primary_index() {
-        testClusterOperator.createCollectionPrimaryIndex(TEST_KEYSPACE, null);
+        testClusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(null);
 
         verify(collectionQueryIndexManager).createPrimaryIndex();
     }

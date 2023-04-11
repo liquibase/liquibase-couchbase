@@ -1,5 +1,6 @@
 package integration.statement;
 
+import com.couchbase.client.java.Collection;
 import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.DropPrimaryIndexStatement;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -16,7 +17,9 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_drop_Primary_index() {
-        clusterOperator.createPrimaryIndex(bucketName);
+        Collection collection = clusterOperator.getBucketOperator(bucketName)
+                        .getCollection(DEFAULT_COLLECTION, DEFAULT_SCOPE);
+        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
         keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);
 
@@ -29,7 +32,9 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_drop_primary_index_for_specific_keyspace() {
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
         keyspace = keyspace(bucketName, scopeName, collectionName);
-        clusterOperator.createCollectionPrimaryIndex(keyspace, null);
+        Collection collection = clusterOperator.getBucketOperator(bucketName)
+                        .getCollection(collectionName, scopeName);
+        clusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(null);
 
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);
         statement.execute(clusterOperator);
