@@ -6,6 +6,8 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CollectionQueryIndexManager;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
+import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
+import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
@@ -20,7 +22,9 @@ import reactor.core.publisher.Mono;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
+
 
 /**
  * Common facade on {@link Bucket} including all common operations <br > and state checks
@@ -52,7 +56,33 @@ public class CollectionOperator {
         List<String> fieldList = fields.stream()
                 .map(Field::getField)
                 .collect(toList());
+        if (isNull(options)) {
+            queryIndexManager().createIndex(indexName, fieldList);
+            return;
+        }
         queryIndexManager().createIndex(indexName, fieldList, options);
+    }
+
+    public void dropPrimaryIndex(DropPrimaryQueryIndexOptions options) {
+        queryIndexManager().dropPrimaryIndex(options);
+    }
+
+    public void dropIndex(String indexName) {
+        queryIndexManager().dropIndex(indexName);
+    }
+
+    public void dropCollectionPrimaryIndex() {
+        queryIndexManager().dropPrimaryIndex();
+    }
+
+    public void dropCollectionIndex(String indexName) {
+        queryIndexManager().dropIndex(indexName);
+    }
+
+    public boolean collectionIndexExists(String indexName) {
+        return queryIndexManager().getAllIndexes().stream()
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
     }
 
     public void insertDoc(Document document) {

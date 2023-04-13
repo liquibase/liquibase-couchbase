@@ -37,7 +37,9 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        boolean exists = clusterOperator.collectionIndexExists(indexName, keyspace);
+        Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getCollection(keyspace.getCollection(), keyspace.getScope());
+        boolean exists = clusterOperator.getCollectionOperator(collection).collectionIndexExists(indexName);
 
         if (ignoreIfExists && exists) {
             logger.info(format(existsMsg, indexName));
@@ -47,8 +49,6 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
         if (exists) {
             throw new IndexExistsException(indexName);
         }
-        Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
-                .getCollection(keyspace.getCollection(), keyspace.getScope());
         CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions()
                 .deferred(deferred)
                 .numReplicas(numReplicas);
