@@ -34,7 +34,7 @@ class ExecuteQueryStatementIT extends ConstantScopeTestCase {
 
     @AfterAll
     static void tearDown() {
-        clusterOperator.dropCollectionPrimaryIndex(TEST_KEYSPACE);
+        collectionOperator.dropCollectionPrimaryIndex();
     }
 
     @Test

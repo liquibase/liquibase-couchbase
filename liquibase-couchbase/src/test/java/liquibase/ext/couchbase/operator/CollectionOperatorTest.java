@@ -6,6 +6,9 @@ import com.couchbase.client.java.ReactiveCollection;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.ExistsResult;
 import com.couchbase.client.java.kv.MutationResult;
+import com.couchbase.client.java.manager.query.CollectionQueryIndexManager;
+import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
+import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
@@ -22,6 +25,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
+import static com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions.dropPrimaryQueryIndexOptions;
+import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_ID;
@@ -64,12 +70,16 @@ class CollectionOperatorTest {
     @Mock
     private ReactiveCollection reactiveCollection;
 
+    @Mock
+    private CollectionQueryIndexManager collectionQueryIndexManager;
+
     @InjectMocks
     private CollectionOperator collectionOperator;
 
     @BeforeEach
     void setUp() {
         when(collection.insert(anyString(), any())).thenReturn(mutationResult);
+        when(collection.queryIndexes()).thenReturn(collectionQueryIndexManager);
     }
 
     @Test
@@ -226,4 +236,37 @@ class CollectionOperatorTest {
         verify(reactiveTransaction).remove(reactiveResult);
     }
 
+    @Test
+    void should_create_primary_index() {
+        collectionOperator.createPrimaryIndex();
+
+        verify(collectionQueryIndexManager).createPrimaryIndex();
+    }
+
+    @Test
+    void should_create_primary_index_with_options() {
+        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
+                .indexName(MANUALLY_CREATED_INDEX);
+
+        collectionOperator.createPrimaryIndex(options);
+
+        verify(collectionQueryIndexManager).createPrimaryIndex(options);
+    }
+
+    @Test
+    void should_drop_bucket_query_index() {
+        String testIndex = "testIndex";
+        collectionOperator.dropIndex(testIndex);
+
+        verify(collectionQueryIndexManager).dropIndex(testIndex);
+    }
+
+    @Test
+    void should_drop_primary_index_with_options() {
+        DropPrimaryQueryIndexOptions options = dropPrimaryQueryIndexOptions().ignoreIfNotExists(true);
+
+        collectionOperator.dropPrimaryIndex(options);
+
+        verify(collectionQueryIndexManager).dropPrimaryIndex(options);
+    }
 }

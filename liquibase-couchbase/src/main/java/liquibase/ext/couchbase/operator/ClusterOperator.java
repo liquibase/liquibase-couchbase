@@ -6,23 +6,21 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
-import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
-import liquibase.ext.couchbase.types.Field;
-import liquibase.ext.couchbase.types.Keyspace;
+import liquibase.ext.couchbase.types.Document;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
-import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * A part of a facade package for Couchbase Java SDK. Provides access to {@link Cluster} common operations and state checks.
@@ -87,63 +85,21 @@ public class ClusterOperator {
                 .anyMatch(indexName::equals);
     }
 
-    public void dropPrimaryIndex(String bucket, DropPrimaryQueryIndexOptions options) {
-        getQueryIndexes().dropPrimaryIndex(bucket, options);
-    }
-
-    public void dropIndex(String indexName, String bucketName) {
-        getQueryIndexes().dropIndex(bucketName, indexName);
-    }
-
-    public void createCollectionQueryIndex(String indexName, Keyspace keyspace, List<Field> fieldList) {
-        createCollectionQueryIndex(indexName, keyspace, fieldList, null);
-    }
-
-    public void createCollectionQueryIndex(String indexName, Keyspace keyspace, List<Field> fields,
-                                           CreateQueryIndexOptions options) {
-        List<String> fieldList = fields.stream()
-                .map(Field::getField)
-                .collect(toList());
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-
-        if (isNull(options)) {
-            collection.queryIndexes().createIndex(indexName, fieldList);
-            return;
-        }
-        collection.queryIndexes().createIndex(indexName, fieldList, options);
-    }
-
-    public void dropCollectionIndex(String indexName, Keyspace keyspace) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        collection.queryIndexes().dropIndex(indexName);
-    }
-
-    public void dropCollectionPrimaryIndex(Keyspace keyspace) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        collection.queryIndexes().dropPrimaryIndex();
-    }
-
-    public boolean collectionIndexExists(String indexName, Keyspace keyspace) {
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        return collection.queryIndexes().getAllIndexes().stream()
-                .map(QueryIndex::name)
-                .anyMatch(indexName::equals);
-    }
-
     public List<TransactionQueryResult> executeSql(TransactionAttemptContext transaction, List<String> queries) {
         return queries.stream().map(transaction::query).collect(toList());
     }
 
     public List<QueryResult> executeSql(List<String> queries) {
         return queries.stream().map(cluster::query).collect(toList());
+    }
+
+    public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {
+        try {
+            return documents.stream()
+                    .collect(toMap(Document::getId, ee -> ee.getValue().mapDataToType()));
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Error parsing the document from the list provided", ex);
+        }
     }
 
 }

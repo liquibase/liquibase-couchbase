@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.statement;
 
+import com.couchbase.client.java.Collection;
 import liquibase.Scope;
 import liquibase.ext.couchbase.exception.IndexNotExistsException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
@@ -31,7 +32,9 @@ public class DropIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        boolean notExists = !clusterOperator.collectionIndexExists(indexName, keyspace);
+        Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getCollection(keyspace.getCollection(), keyspace.getScope());
+        boolean notExists = !clusterOperator.getCollectionOperator(collection).collectionIndexExists(indexName);
 
         if (ignoreIfNotExists && notExists) {
             logger.info(format(notExistsMsg, indexName));
@@ -42,6 +45,6 @@ public class DropIndexStatement extends CouchbaseStatement {
             throw new IndexNotExistsException(indexName);
         }
 
-        clusterOperator.dropCollectionIndex(indexName, keyspace);
+        clusterOperator.getCollectionOperator(collection).dropCollectionIndex(indexName);
     }
 }

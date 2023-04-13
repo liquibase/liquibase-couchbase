@@ -99,7 +99,7 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     }
 
     private static void dropPrimaryIndex() {
-        clusterOperator.dropCollectionPrimaryIndex(TEST_KEYSPACE);
+        clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
     }
 
     private static boolean isDocWithCorrectUid(JsonObject doc) {
