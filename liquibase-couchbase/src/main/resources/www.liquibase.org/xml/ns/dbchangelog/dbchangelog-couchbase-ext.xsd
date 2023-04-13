@@ -33,7 +33,6 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
-                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -47,7 +46,6 @@
                 <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element minOccurs="0" name="scopeName" type="xsd:string"/>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -60,7 +58,6 @@
                 <xsd:element name="deferred" type="xsd:boolean"/>
 
                 <xsd:element ref="fields"/>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
                 <xsd:element name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
@@ -429,10 +426,11 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="indexExists">
+    <xsd:element name="doesIndexExist">
         <xsd:complexType>
             <xsd:attribute name="bucketName" type="xsd:string"/>
             <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="indexName" type="xsd:string"/>
             <xsd:attribute name="isPrimary" type="xsd:boolean"/>
         </xsd:complexType>
     </xsd:element>

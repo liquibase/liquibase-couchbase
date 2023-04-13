@@ -15,10 +15,11 @@ public class IndexExistsStatement extends CouchbaseConditionalStatement {
 
     private final String bucketName;
     private final String indexName;
+    private final String scopeName;
     private final boolean isPrimary;
 
     public boolean isTrue(CouchbaseConnection connection) {
         ClusterOperator operator = new ClusterOperator(connection.getCluster());
-        return operator.indexExists(indexName, bucketName, isPrimary);
+        return operator.indexExists(indexName, bucketName, scopeName, isPrimary);
     }
 }

@@ -15,15 +15,16 @@ import static java.lang.String.format;
 @Getter
 public class IndexNotExistsPreconditionException extends PreconditionFailedException {
 
-    private static final String template = "Index %s(bucket name - %s, primary - %s) does not exist";
+    private static final String template = "Index %s(bucket name - %s, scope name - %s, primary - %s) does not exist";
     private final String message;
 
     public IndexNotExistsPreconditionException(String bucketName,
                                                String indexName,
+                                               String scopeName,
                                                boolean isPrimary,
                                                DatabaseChangeLog changeLog,
                                                Precondition precondition) {
-        super(format(template, indexName, bucketName, isPrimary), changeLog, precondition);
-        message = format(template, indexName, bucketName, isPrimary);
+        super(format(template, indexName, bucketName, scopeName, isPrimary), changeLog, precondition);
+        message = format(template, indexName, bucketName, scopeName, isPrimary);
     }
 }

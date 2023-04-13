@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * A precondition that checks if a bucket exists.
+ * A precondition that checks if the index exists.
  *
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
@@ -23,21 +23,22 @@ public class IndexExistsPrecondition extends AbstractCouchbasePrecondition {
 
     private String bucketName;
     private String indexName;
-    private boolean isPrimary;
+    private String scopeName;
+    private Boolean isPrimary;
 
     @Override
     public String getName() {
-        return "indexExists";
+        return "doesIndexExist"; // liquibase has indexExists flag
     }
 
     @Override
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws IndexNotExistsPreconditionException {
-        final IndexExistsStatement indexExistsStatement = new IndexExistsStatement(bucketName, indexName, isPrimary);
+        final IndexExistsStatement indexExistsStatement = new IndexExistsStatement(bucketName, indexName, scopeName, isPrimary);
 
         if (indexExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
             return;
         }
-        throw new IndexNotExistsPreconditionException(bucketName, indexName, isPrimary, changeLog, this);
+        throw new IndexNotExistsPreconditionException(bucketName, indexName, scopeName, isPrimary, changeLog, this);
     }
 
 }

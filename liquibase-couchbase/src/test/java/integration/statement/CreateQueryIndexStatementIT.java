@@ -11,6 +11,7 @@ import liquibase.ext.couchbase.types.Keyspace;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -62,6 +63,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
+    @Disabled("Not actual, flag is deleted - preconditions are used instead")
     void Should_ignore_index_creation_with_the_same_name() {
         indexToCreate = clusterOperator.getTestIndexId();
         TestCollectionOperator collectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
@@ -110,7 +112,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     }
 
     private CreateQueryIndexStatement statementForKeyspace(String indexToCreate, Keyspace keyspace) {
-        return new CreateQueryIndexStatement(indexToCreate, keyspace, true, true, 0, fields);
+        return new CreateQueryIndexStatement(indexToCreate, keyspace, true, 0, fields);
     }
 
 }

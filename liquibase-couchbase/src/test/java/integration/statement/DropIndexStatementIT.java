@@ -37,7 +37,7 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
 
         testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
-        DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
+        DropIndexStatement statement = new DropIndexStatement(randomIndexName, keyspace);
         statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).doesNotHave(randomIndexName);
@@ -51,7 +51,7 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
 
         testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
-        DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
+        DropIndexStatement statement = new DropIndexStatement(randomIndexName, keyspace);
         statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).doesNotHave(randomIndexName);

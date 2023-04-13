@@ -30,6 +30,9 @@ public class ChangeLogSampleFilePaths {
     public static final String CREATE_PRIMARY_QUERY_INDEX_TEST_XML = rootPrefix + "/index/changelog.create-primary-query-index.test.xml";
     public static final String CREATE_QUERY_INDEX_TEST_XML = rootPrefix + "/index/changelog.create-query-index.test.xml";
     public static final String DROP_INDEX_TEST_XML = rootPrefix + "/index/changelog.drop-index.test.xml";
+    public static final String DROP_INDEX_SYSTEM_TEST_XML = rootPrefix + "/index/changelog.drop-index-system.test.xml";
+    public static final String DROP_INDEX_SYSTEM_TEST_MARK_RUN_XML = rootPrefix + "/index/changelog.drop-index-system-mark-run.test.xml";
+    public static final String DROP_NON_EXISTING_INDEX_SYSTEM_TEST_ERROR_XML = rootPrefix + "/index/changelog.drop-non-existing-index-system-error.test.xml";
     public static final String INSERT_MANY_TEST_XML = rootPrefix + "/insert/changelog.insert-many.test.xml";
     public static final String REMOVE_ONE_TEST_XML = rootPrefix + "/remove/changelog.remove-one.test.xml";
     public static final String REMOVE_ONE_DOCUMENT_TEST_XML = rootPrefix + "/remove/changelog.remove-one-document.test.xml";

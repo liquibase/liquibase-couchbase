@@ -24,14 +24,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="evgenii.anishchenko">
-        <ext:createPrimaryQueryIndex>
+    <changeSet id="1" author="tigran">
+        <preConditions onFail="MARK_RAN">
+            <ext:doesIndexExist bucketName="testBucket" scopeName="testScope" indexName="doc1_index" isPrimary="false"/>
+        </preConditions>
+        <ext:dropQueryIndex>
+            <ext:isPrimary>false</ext:isPrimary>
+            <ext:indexName>doc1_index</ext:indexName>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:collectionName>sample</ext:collectionName>
-            <ext:deferred>true</ext:deferred>
-            <ext:indexName>test</ext:indexName>
-            <ext:numReplicas>1</ext:numReplicas>
-            <ext:scopeName>test</ext:scopeName>
-        </ext:createPrimaryQueryIndex>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+        </ext:dropQueryIndex>
     </changeSet>
 </databaseChangeLog>
