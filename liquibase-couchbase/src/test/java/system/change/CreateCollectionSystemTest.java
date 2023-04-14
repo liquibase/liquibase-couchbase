@@ -1,11 +1,12 @@
 package system.change;
 
+import common.matchers.CouchbaseDbAssert;
+import liquibase.Liquibase;
+import liquibase.changelog.ChangeSet;
 import liquibase.exception.LiquibaseException;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import liquibase.Liquibase;
-import lombok.SneakyThrows;
 import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_DUPLICATE_FAIL_TEST_XML;
@@ -45,6 +46,7 @@ public class CreateCollectionSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(travelsCollection, TEST_SCOPE);
+        CouchbaseDbAssert.assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
     @Test

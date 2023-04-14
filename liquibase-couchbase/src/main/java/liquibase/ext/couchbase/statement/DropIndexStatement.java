@@ -30,6 +30,6 @@ public class DropIndexStatement extends CouchbaseStatement {
     public void execute(ClusterOperator clusterOperator) {
         Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollection(keyspace.getCollection(), keyspace.getScope());
-        clusterOperator.getCollectionOperator(collection).dropCollectionIndex(indexName);
+        clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
     }
 }

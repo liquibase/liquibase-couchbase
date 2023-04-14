@@ -187,7 +187,7 @@ class ClusterOperatorTest {
         Collection collection = cluster.bucket(TEST_KEYSPACE.getBucket())
                 .scope(TEST_KEYSPACE.getScope())
                 .collection(TEST_KEYSPACE.getCollection());
-        clusterOperator.getCollectionOperator(collection).dropCollectionIndex(TEST_INDEX);
+        clusterOperator.getCollectionOperator(collection).dropIndex(TEST_INDEX);
 
         verify(collectionQueryIndexManager).dropIndex(TEST_INDEX);
     }

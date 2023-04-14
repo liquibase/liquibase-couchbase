@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class DropPrimaryIndexStatement extends CouchbaseStatement {
+    private final String indexName;
     private final Keyspace keyspace;
 
     @Override
@@ -26,6 +27,10 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
                 .getBucket()
                 .scope(keyspace.getScope())
                 .collection(keyspace.getCollection());
-        clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
+        if (indexName == null) {
+            clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
+            return;
+        }
+        clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
     }
 }

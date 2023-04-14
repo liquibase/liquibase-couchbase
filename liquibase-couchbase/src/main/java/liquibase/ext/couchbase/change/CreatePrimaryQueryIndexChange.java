@@ -50,7 +50,7 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         if (isNotBlank(getBucketName())) {
-            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(getBucketName(), createPrimaryQueryIndexOptions())};
+            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(getBucketName(), scopeName, collectionName, createPrimaryQueryIndexOptions())};
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;
     }
@@ -59,8 +59,6 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
         return CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(getIndexName())
-                .collectionName(getCollectionName())
-                .scopeName(getScopeName())
                 .deferred(getDeferred())
                 .numReplicas(getNumReplicas());
     }

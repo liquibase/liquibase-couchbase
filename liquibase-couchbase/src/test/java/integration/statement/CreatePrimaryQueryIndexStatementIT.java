@@ -1,12 +1,10 @@
 package integration.statement;
 
-import com.couchbase.client.core.api.manager.CoreScopeAndCollection;
 import com.couchbase.client.core.error.IndexExistsException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
-import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement;
 import liquibase.ext.couchbase.types.Document;
 import org.junit.jupiter.api.AfterEach;
@@ -42,7 +40,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_create_primary_index_when_primary_index_does_not_exist() {
         CreatePrimaryQueryIndexStatement statement =
-                new CreatePrimaryQueryIndexStatement(bucketName, createOptions());
+                new CreatePrimaryQueryIndexStatement(bucketName, null, null, createOptions());
         statement.execute(clusterOperator);
         assertThat(cluster).queryIndexes(bucketName).hasPrimaryIndexForName(indexName);
     }
@@ -51,7 +49,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_ignore_primary_index_creation_if_primary_index_exists() {
         createPrimaryIndexManually();
         CreatePrimaryQueryIndexStatement statement =
-                new CreatePrimaryQueryIndexStatement(bucketName, createOptions());
+                new CreatePrimaryQueryIndexStatement(bucketName, null, null, createOptions());
         statement.execute(clusterOperator);
         String indexFromClusterName = clusterOperator.getQueryIndexes().getAllIndexes(bucketName).get(0).name();
         assertEquals(MANUALLY_CREATED_INDEX, indexFromClusterName);
@@ -61,6 +59,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_throw_an_exception_when_creating_second_primary_index_in_the_same_keyspace() {
         createPrimaryIndexManually();
         CreatePrimaryQueryIndexStatement statement = new CreatePrimaryQueryIndexStatement(bucketName,
+                null, null,
                 createOptions().indexName(MANUALLY_CREATED_INDEX).ignoreIfExists(false));
 
         assertThatExceptionOfType(IndexExistsException.class)

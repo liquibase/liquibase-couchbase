@@ -3,6 +3,7 @@ package system.change;
 import common.matchers.CouchbaseClusterAssert;
 import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
+import liquibase.changelog.ChangeSet;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.types.Document;
 import lombok.SneakyThrows;
@@ -17,6 +18,7 @@ import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
+import static common.matchers.CouchbaseDbAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -56,6 +58,7 @@ public class DropIndexSystemTest extends LiquibaseSystemTest {
     void Index_should_not_be_deleted_mark_as_read_precondition() {
         Liquibase liquibase = liquibase(DROP_INDEX_SYSTEM_TEST_MARK_RUN_XML);
         assertDoesNotThrow(() -> liquibase.update());
+        assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
     @Test

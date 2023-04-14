@@ -52,7 +52,7 @@ public class RemoveDocumentsSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
-    void Collections_should_be_deleted() {
+    void Document_should_be_deleted() {
         insertTestDocuments();
         Liquibase liquibase = liquibase(REMOVE_ONE_DOCUMENT_TEST_XML);
         liquibase.update();
@@ -64,7 +64,6 @@ public class RemoveDocumentsSystemTest extends LiquibaseSystemTest {
     @SneakyThrows
     void Delete_non_existing_document_should_be_mark_as_run_precondition() {
         Liquibase liquibase = liquibase(REMOVE_NON_EXISTING_DOC_MARK_AS_READ_TEST_XML);
-        liquibase.update();
         assertDoesNotThrow(() -> liquibase.update());
     }
 

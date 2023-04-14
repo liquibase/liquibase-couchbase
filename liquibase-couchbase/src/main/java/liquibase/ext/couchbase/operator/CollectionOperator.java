@@ -75,10 +75,6 @@ public class CollectionOperator {
         queryIndexManager().dropPrimaryIndex();
     }
 
-    public void dropCollectionIndex(String indexName) {
-        queryIndexManager().dropIndex(indexName);
-    }
-
     public boolean collectionIndexExists(String indexName) {
         return queryIndexManager().getAllIndexes().stream()
                 .map(QueryIndex::name)

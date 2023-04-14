@@ -42,7 +42,7 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
-    @Disabled("Not actual, ignore flag is deleted")
+    @Disabled("Not actual, ignore flag is deleted - may be opened when flag will be added in sdk")
     void Collection_should_not_be_created_again_if_it_exists_and_skip_is_true() {
         Collection existingCollection = bucketOperator.getCollection(collectionName, scopeName);
 
@@ -56,7 +56,7 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
-    void Should_throw_exception_if_collection_exists_and_skip_is_false() {
+    void Should_throw_exception_if_collection_exists() {
         CreateCollectionStatement statement =
                 new CreateCollectionStatement(keyspace);
 

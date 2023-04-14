@@ -4,14 +4,13 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.precondition.IndexNotExistsPreconditionException;
-import liquibase.ext.couchbase.statement.IndexExistsStatement;
+import liquibase.ext.couchbase.operator.ClusterOperator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * A precondition that checks if the index exists.
- *
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
  * @see IndexNotExistsPreconditionException
@@ -33,11 +32,12 @@ public class IndexExistsPrecondition extends AbstractCouchbasePrecondition {
 
     @Override
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws IndexNotExistsPreconditionException {
-        final IndexExistsStatement indexExistsStatement = new IndexExistsStatement(bucketName, indexName, scopeName, isPrimary);
+        ClusterOperator operator = new ClusterOperator(((CouchbaseConnection) database.getConnection()).getCluster());
 
-        if (indexExistsStatement.isTrue((CouchbaseConnection) database.getConnection())) {
+        if (operator.indexExists(indexName, bucketName, scopeName, isPrimary)) {
             return;
         }
+
         throw new IndexNotExistsPreconditionException(bucketName, indexName, scopeName, isPrimary, changeLog, this);
     }
 

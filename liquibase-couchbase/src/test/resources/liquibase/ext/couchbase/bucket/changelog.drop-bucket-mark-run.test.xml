@@ -26,10 +26,10 @@
 
 	<changeSet id="1" author="tigran">
         <preConditions onFail="MARK_RAN">
-            <ext:bucketExists bucketName="newTestBucket"/>
+            <ext:bucketExists bucketName="newTestBucket_"/>
         </preConditions>
 		<ext:dropBucket>
-			<ext:bucketName>newTestBucket</ext:bucketName>
+			<ext:bucketName>newTestBucket_</ext:bucketName>
 		</ext:dropBucket>
 	</changeSet>
 

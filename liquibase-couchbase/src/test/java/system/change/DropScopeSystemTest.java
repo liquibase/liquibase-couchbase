@@ -2,6 +2,7 @@ package system.change;
 
 import common.matchers.CouchbaseClusterAssert;
 import liquibase.Liquibase;
+import liquibase.changelog.ChangeSet;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.statement.ScopeExistsStatement;
 import lombok.SneakyThrows;
@@ -14,6 +15,7 @@ import static common.constants.ChangeLogSampleFilePaths.DROP_NON_EXISTING_SCOPE_
 import static common.constants.ChangeLogSampleFilePaths.DROP_SCOPE_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE_DELETE;
+import static common.matchers.CouchbaseDbAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -41,8 +43,8 @@ public class DropScopeSystemTest extends LiquibaseSystemTest {
     @SneakyThrows
     void Delete_non_existing_scope_should_be_mark_as_run_precondition() {
         Liquibase liquibase = liquibase(DROP_NON_EXISTING_SCOPE_MARK_RUN_TEST_XML);
-        liquibase.update();
         assertDoesNotThrow(() -> liquibase.update());
+        assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
     @Test

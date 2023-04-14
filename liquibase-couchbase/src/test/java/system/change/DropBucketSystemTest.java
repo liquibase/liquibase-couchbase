@@ -2,6 +2,7 @@ package system.change;
 
 import common.matchers.CouchbaseClusterAssert;
 import liquibase.Liquibase;
+import liquibase.changelog.ChangeSet;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import system.LiquibaseSystemTest;
 import static common.constants.ChangeLogSampleFilePaths.DROP_BUCKET_MARK_RUN_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_BUCKET_TEST_XML;
 import static common.constants.TestConstants.NEW_TEST_BUCKET;
+import static common.matchers.CouchbaseDbAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class DropBucketSystemTest extends LiquibaseSystemTest {
@@ -38,8 +40,8 @@ public class DropBucketSystemTest extends LiquibaseSystemTest {
     @SneakyThrows
     void Delete_non_existing_bucket_should_be_ignored_precondition() {
         Liquibase liquibase = liquibase(DROP_BUCKET_MARK_RUN_TEST_XML);
-        liquibase.update();
         assertDoesNotThrow(() -> liquibase.update());
+        assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
 }
