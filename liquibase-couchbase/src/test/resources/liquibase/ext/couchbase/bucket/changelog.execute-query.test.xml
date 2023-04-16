@@ -25,6 +25,9 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="zorik">
+        <preConditions>
+            <ext:sqlPlusPlusCheck expectedResultJson='{"count": 1}' query="SELECT COUNT(*) as count FROM system:keyspaces WHERE name = 'testCollection'"/>
+        </preConditions>
         <ext:executeQuery>
             <ext:query>INSERT INTO `testBucket`.testScope.testCollection (KEY,VALUE) VALUES ( "id",{} );</ext:query>
         </ext:executeQuery>

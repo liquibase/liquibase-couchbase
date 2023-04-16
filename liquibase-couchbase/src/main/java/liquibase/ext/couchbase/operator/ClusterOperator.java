@@ -116,6 +116,10 @@ public class ClusterOperator {
         return queries.stream().map(cluster::query).collect(toList());
     }
 
+    public QueryResult executeSingleSql(String statement) {
+        return cluster.query(statement);
+    }
+
     public Map<String, Object> checkDocsAndTransformToObjects(List<Document> documents) {
         try {
             return documents.stream()
