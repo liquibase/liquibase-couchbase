@@ -7,6 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
+
 /**
  * A statement to drop primary index for a keyspace
  * @see CouchbaseStatement
@@ -27,7 +30,7 @@ public class DropPrimaryIndexStatement extends CouchbaseStatement {
                 .getBucket()
                 .scope(keyspace.getScope())
                 .collection(keyspace.getCollection());
-        if (indexName == null) {
+        if (isEmpty(indexName)) {
             clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
             return;
         }

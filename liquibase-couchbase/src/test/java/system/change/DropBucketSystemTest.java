@@ -41,7 +41,7 @@ public class DropBucketSystemTest extends LiquibaseSystemTest {
     void Delete_non_existing_bucket_should_be_ignored_precondition() {
         Liquibase liquibase = liquibase(DROP_BUCKET_MARK_RUN_TEST_XML);
         assertDoesNotThrow(() -> liquibase.update());
-        assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
+        assertThat(database).lastChangeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
 }

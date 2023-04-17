@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * A statement to create primary index for a keyspace
  * @see CouchbaseStatement
@@ -26,7 +28,7 @@ public class CreatePrimaryQueryIndexStatement extends CouchbaseStatement {
     @Override
     public void execute(ClusterOperator clusterOperator) {
         BucketOperator bucketOperator = clusterOperator.getBucketOperator(bucketName);
-        Collection collection = scopeName == null || collectionName == null ?
+        Collection collection = isEmpty(scopeName) || isEmpty(collectionName) ?
                 bucketOperator.getBucket().defaultCollection() :
                 bucketOperator.getCollection(collectionName, scopeName);
         clusterOperator.getCollectionOperator(collection).createPrimaryIndex(options);

@@ -58,7 +58,7 @@ public class DropIndexSystemTest extends LiquibaseSystemTest {
     void Index_should_not_be_deleted_mark_as_read_precondition() {
         Liquibase liquibase = liquibase(DROP_INDEX_SYSTEM_TEST_MARK_RUN_XML);
         assertDoesNotThrow(() -> liquibase.update());
-        assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
+        assertThat(database).lastChangeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
     @Test

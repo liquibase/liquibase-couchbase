@@ -25,7 +25,7 @@ public class CouchbaseDbAssert extends AbstractAssert<CouchbaseDbAssert, Databas
         return new CouchbaseDbAssert(database);
     }
 
-    public CouchbaseDbAssert changeLogHasExecStatus(ChangeSet.ExecType status) {
+    public CouchbaseDbAssert lastChangeLogHasExecStatus(ChangeSet.ExecType status) {
         List<RanChangeSet> changeLogs = changeLogOperator.getAllChangeLogs();
         RanChangeSet current = changeLogs.get(changeLogs.size() - 1);
         if (status != current.getExecType()) {

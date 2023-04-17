@@ -44,7 +44,7 @@ public class DropScopeSystemTest extends LiquibaseSystemTest {
     void Delete_non_existing_scope_should_be_mark_as_run_precondition() {
         Liquibase liquibase = liquibase(DROP_NON_EXISTING_SCOPE_MARK_RUN_TEST_XML);
         assertDoesNotThrow(() -> liquibase.update());
-        assertThat(database).changeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
+        assertThat(database).lastChangeLogHasExecStatus(ChangeSet.ExecType.MARK_RAN);
     }
 
     @Test
