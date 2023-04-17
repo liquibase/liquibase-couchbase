@@ -1,6 +1,5 @@
 package system.change;
 
-import common.matchers.CouchbaseDbAssert;
 import liquibase.Liquibase;
 import liquibase.changelog.ChangeSet;
 import liquibase.exception.LiquibaseException;
@@ -9,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
-import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_DUPLICATE_FAIL_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_DUPLICATE_IGNORE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;
@@ -18,6 +15,8 @@ import static common.matchers.CouchbaseBucketAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class CreateCollectionSystemTest extends LiquibaseSystemTest {
+
+    private static final String COLLECTION_NAME = "travels";
 
     private final String travelsCollection = "travels";
 
@@ -30,11 +29,14 @@ public class CreateCollectionSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
-    void Collection_should_be_created_after_liquibase_execution() {
+    void Collection_should_be_created_and_rolled_back() {
         Liquibase liquibase = liquibase(CREATE_COLLECTION_TEST_XML);
 
         liquibase.update();
+        assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(COLLECTION_NAME, TEST_SCOPE);
 
+        liquibase.rollback(1, null);
+        assertThat(cluster.bucket(TEST_BUCKET)).hasNoCollectionInScope(COLLECTION_NAME, TEST_SCOPE);
         assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(travelsCollection, TEST_SCOPE);
     }
 

@@ -33,9 +33,10 @@
                 <ext:field>id</ext:field>
                 <ext:field>country</ext:field>
             </ext:fields>
-            <ext:indexName>test</ext:indexName>
-            <ext:numReplicas>1</ext:numReplicas>
-            <ext:scopeName>test</ext:scopeName>
+            <ext:ignoreIfExists>false</ext:ignoreIfExists>
+            <ext:indexName>testTravelQueryIndex</ext:indexName>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:scopeName>testScope</ext:scopeName>
         </ext:createQueryIndex>
     </changeSet>
 </databaseChangeLog>

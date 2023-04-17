@@ -4,6 +4,7 @@ import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.manager.query.QueryIndex;
 import liquibase.ext.couchbase.lockservice.CouchbaseLock;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Id;
@@ -152,6 +153,28 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
             failWithMessage("No such lock with ID [%s]", lockId);
         }
 
+        return this;
+    }
+
+    public CouchbaseCollectionAssert hasIndex(String queryIndexName) {
+        boolean indexExists = actual.queryIndexes().getAllIndexes().stream()
+                .map(QueryIndex::name)
+                .anyMatch(queryIndexName::equals);
+        if (!indexExists) {
+            failWithMessage("[%s] index doesn't exist in `[%s].[%s].[%s]` keyspace", queryIndexName, actual.bucketName(),
+                    actual.scopeName(), actual.name());
+        }
+        return this;
+    }
+
+    public CouchbaseCollectionAssert hasNoIndex(String queryIndexName) {
+        boolean indexExists = actual.queryIndexes().getAllIndexes().stream()
+                .map(QueryIndex::name)
+                .anyMatch(queryIndexName::equals);
+        if (indexExists) {
+            failWithMessage("[%s] index exists in `[%s].[%s].[%s]` keyspace", queryIndexName, actual.bucketName(),
+                    actual.scopeName(), actual.name());
+        }
         return this;
     }
 }

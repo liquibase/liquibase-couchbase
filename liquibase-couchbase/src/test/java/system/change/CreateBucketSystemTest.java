@@ -1,6 +1,5 @@
 package system.change;
 
-import common.matchers.CouchbaseClusterAssert;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.exception.InvalidJSONException;
@@ -13,8 +12,8 @@ import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_INVALID_CH
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_JSON;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_YAML;
-import static common.constants.ChangeLogSampleFilePaths.CREATE_DUPLICATE_BUCKET_TEST_XML;
 import static common.constants.TestConstants.CREATE_BUCKET_SYSTEM_TEST_NAME;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -29,10 +28,14 @@ public class CreateBucketSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
-    void Bucket_should_be_created() {
+    void Bucket_should_be_created_and_rolled_back() {
         Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_XML);
+
         liquibase.update();
-        CouchbaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
+        assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
+
+        liquibase.rollback(1, null);
+        assertThat(cluster).hasNoBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
     }
 
     @Test
@@ -48,7 +51,7 @@ public class CreateBucketSystemTest extends LiquibaseSystemTest {
     void Bucket_should_be_created_json() {
         Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_JSON);
         liquibase.update();
-        CouchbaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
+        assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
     }
 
     @Test
@@ -56,7 +59,7 @@ public class CreateBucketSystemTest extends LiquibaseSystemTest {
     void Bucket_should_be_created_yaml() {
         Liquibase liquibase = liquibase(CREATE_BUCKET_TEST_YAML);
         liquibase.update();
-        CouchbaseClusterAssert.assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
+        assertThat(cluster).hasBucket(CREATE_BUCKET_SYSTEM_TEST_NAME);
     }
 
     @Test

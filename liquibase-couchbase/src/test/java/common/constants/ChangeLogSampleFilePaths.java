@@ -96,6 +96,7 @@ public class ChangeLogSampleFilePaths {
     public static final String INSERT_DOCUMENT_SQL_TEST = rootPrefix + "/insert/changelog.insert-document-sql.test.xml";
     public static final String INSERT_DOCUMENT_ROLLBACK_SQL_TEST = rootPrefix + "/insert/changelog.insert-document-rollback-sql.test.xml";
     public static final String UPDATE_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/changelog.update-bucket.test.json";
+    public static final String CREATE_SCOPE_TEST = rootPrefix + "/scope/changelog.create-scope.test.xml";
 
     //preconditions
     public static final String BUCKET_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.bucket-exists-precondition.test.xml";

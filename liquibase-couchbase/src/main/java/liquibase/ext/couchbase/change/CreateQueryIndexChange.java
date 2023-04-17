@@ -2,6 +2,7 @@ package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 
+import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
 import liquibase.ext.couchbase.types.Field;
@@ -61,5 +62,18 @@ public class CreateQueryIndexChange extends CouchbaseChange {
         return new SqlStatement[] {
                 new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, numReplicas, fields)
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropIndexChange inverse = new DropIndexChange();
+        inverse.setBucketName(bucketName);
+        inverse.setScopeName(scopeName);
+        inverse.setCollectionName(collectionName);
+        inverse.setIndexName(indexName);
+        inverse.setIsPrimary(false);
+        inverse.setIgnoreIfNotExists(false);
+
+        return new Change[] {inverse};
     }
 }
