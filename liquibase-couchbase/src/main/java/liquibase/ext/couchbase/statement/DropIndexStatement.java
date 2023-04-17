@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class DropIndexStatement extends CouchbaseStatement {
-    private static final String notExistsMsg = "Index %s not exists, skipping removing";
     private final Logger logger = Scope.getCurrentScope().getLog(CreateQueryIndexStatement.class);
 
     private final String indexName;

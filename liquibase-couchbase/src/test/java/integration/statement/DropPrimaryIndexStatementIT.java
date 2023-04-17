@@ -21,7 +21,7 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
                 .getCollection(DEFAULT_COLLECTION, DEFAULT_SCOPE);
         clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
         keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-        DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(null, keyspace);
+        DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);
 
         statement.execute(clusterOperator);
 
@@ -36,7 +36,7 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
                 .getCollection(collectionName, scopeName);
         clusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(null);
 
-        DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(null, keyspace);
+        DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);
         statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).doesNotHavePrimary();

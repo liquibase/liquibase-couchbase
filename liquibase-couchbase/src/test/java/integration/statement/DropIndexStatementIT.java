@@ -1,6 +1,5 @@
 package integration.statement;
 
-import com.couchbase.client.java.Collection;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
@@ -33,7 +32,8 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_drop_existing_index_in_default_scope() {
         String randomIndexName = clusterOperator.getTestIndexId();
-        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(),
+                keyspace.getCollection());
 
         testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 
@@ -47,7 +47,8 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     void Should_drop_index_for_specific_keyspace() {
         String randomIndexName = clusterOperator.getTestIndexId();
         Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(),
+                keyspace.getCollection());
 
         testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
 

@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class DropCollectionStatement extends CouchbaseStatement {
-    private static final String skipMsg = "Collection %s already absent, skipping removing";
     private final Logger logger = Scope.getCurrentScope().getLog(DropCollectionStatement.class);
 
     private final Keyspace keyspace;

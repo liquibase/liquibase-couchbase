@@ -21,6 +21,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * A part of a facade package for Couchbase Java SDK. Provides access to {@link Cluster} common operations and state checks.
@@ -88,10 +89,7 @@ public class ClusterOperator {
     public boolean indexExists(String indexName, String bucketName, String scopeName, boolean isPrimary) {
         return getQueryIndexes().getAllIndexes(bucketName).stream()
                 .filter(queryIndex -> queryIndex.primary() == isPrimary)
-                .filter(queryIndex -> {
-                    if (scopeName == null) { return true; }
-                    return queryIndex.scopeName().isPresent() && queryIndex.scopeName().get().equals(scopeName);
-                })
+                .filter(queryIndex -> isBlank(scopeName) || queryIndex.scopeName().filter(scopeName::equals).isPresent())
                 .map(QueryIndex::name)
                 .anyMatch(indexName::equals);
     }

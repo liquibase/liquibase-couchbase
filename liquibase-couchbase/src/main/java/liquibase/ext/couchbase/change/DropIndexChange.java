@@ -49,7 +49,7 @@ public class DropIndexChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
-                isPrimary ? new DropPrimaryIndexStatement(indexName, keyspace) :
+                isPrimary ? new DropPrimaryIndexStatement(keyspace) :
                         new DropIndexStatement(indexName, keyspace)
         };
     }

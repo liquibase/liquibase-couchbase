@@ -34,11 +34,9 @@ public class IndexExistsPrecondition extends AbstractCouchbasePrecondition {
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws IndexNotExistsPreconditionException {
         ClusterOperator operator = new ClusterOperator(((CouchbaseConnection) database.getConnection()).getCluster());
 
-        if (operator.indexExists(indexName, bucketName, scopeName, isPrimary)) {
-            return;
+        if (!operator.indexExists(indexName, bucketName, scopeName, isPrimary)) {
+            throw new IndexNotExistsPreconditionException(bucketName, indexName, scopeName, isPrimary, changeLog, this);
         }
-
-        throw new IndexNotExistsPreconditionException(bucketName, indexName, scopeName, isPrimary, changeLog, this);
     }
 
 }

@@ -3,6 +3,7 @@ package liquibase.ext.couchbase.change;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -50,7 +51,8 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         if (isNotBlank(getBucketName())) {
-            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(getBucketName(), scopeName, collectionName, createPrimaryQueryIndexOptions())};
+            Keyspace keyspace = Keyspace.keyspace(bucketName, scopeName, collectionName);
+            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(keyspace, createPrimaryQueryIndexOptions())};
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;
     }

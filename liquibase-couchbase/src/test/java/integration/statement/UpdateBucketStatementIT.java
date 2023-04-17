@@ -1,11 +1,11 @@
 package integration.statement;
 
+import com.couchbase.client.core.error.BucketNotFoundException;
 import common.ConstantScopeTestCase;
 import liquibase.ext.couchbase.change.CreateBucketChange;
 import liquibase.ext.couchbase.change.UpdateBucketChange;
 import liquibase.ext.couchbase.change.utils.BucketCreationMapper;
 import liquibase.ext.couchbase.change.utils.BucketUpdateMapper;
-import liquibase.ext.couchbase.exception.BucketNotExistException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.statement.UpdateBucketStatement;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,6 @@ class UpdateBucketStatementIT extends ConstantScopeTestCase {
             clusterOperator.dropBucket(UPDATE_TEST_BUCKET);
         }
     }
-
 
     @Test
     void Should_update_existing_bucket() {
@@ -56,9 +55,9 @@ class UpdateBucketStatementIT extends ConstantScopeTestCase {
         UpdateBucketStatement statement = new UpdateBucketStatement(bucketUpdateMapper.bucketOptions(),
                 bucketUpdateMapper.bucketSettings());
 
-        assertThatExceptionOfType(BucketNotExistException.class)
+        assertThatExceptionOfType(BucketNotFoundException.class)
                 .isThrownBy(() -> statement.execute(new ClusterOperator(cluster)))
-                .withMessage("Bucket [%s] not exists", UPDATE_TEST_BUCKET);
+                .withMessage("Bucket [%s] not found.", UPDATE_TEST_BUCKET);
     }
 
 

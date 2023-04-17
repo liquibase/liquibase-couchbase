@@ -1,6 +1,5 @@
 package integration.statement;
 
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
@@ -26,7 +25,8 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     private List<Field> fields;
     private Document testDocument;
     private final Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-    private final Keyspace keyspaceCustom = keyspace(bucketName, scopeName, collectionName);;
+    private final Keyspace keyspaceCustom = keyspace(bucketName, scopeName, collectionName);
+    ;
 
     private String indexToCreate = clusterOperator.getTestIndexId();
 
@@ -42,7 +42,8 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     @AfterEach
     void cleanUp() {
         TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
-        TestCollectionOperator collectionOperatorCustom = getCollectionOperator(keyspaceCustom.getBucket(), keyspaceCustom.getScope(), keyspaceCustom.getCollection());
+        TestCollectionOperator collectionOperatorCustom = getCollectionOperator(keyspaceCustom.getBucket(), keyspaceCustom.getScope(),
+                keyspaceCustom.getCollection());
         if (collectionOperatorCustom.collectionIndexExists(indexToCreate)) {
             collectionOperatorCustom.dropIndex(indexToCreate);
         }
@@ -66,7 +67,8 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Disabled("Not actual, flag is deleted - preconditions are used instead")
     void Should_ignore_index_creation_with_the_same_name() {
         indexToCreate = clusterOperator.getTestIndexId();
-        TestCollectionOperator collectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+        TestCollectionOperator collectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(),
+                keyspace.getCollection());
 
         collectionOperator.createQueryIndex(indexToCreate, fields, null);
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
