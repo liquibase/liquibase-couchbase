@@ -41,7 +41,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_create_primary_index_when_primary_index_does_not_exist() {
         CreatePrimaryQueryIndexStatement statement =
-                new CreatePrimaryQueryIndexStatement(Keyspace.keyspaceWithBucket(bucketName), createOptions());
+                new CreatePrimaryQueryIndexStatement(Keyspace.defaultKeyspace(bucketName), createOptions());
         statement.execute(clusterOperator);
         assertThat(cluster).queryIndexes(bucketName).hasPrimaryIndexForName(indexName);
     }
@@ -50,7 +50,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_ignore_primary_index_creation_if_primary_index_exists() {
         createPrimaryIndexManually();
         CreatePrimaryQueryIndexStatement statement =
-                new CreatePrimaryQueryIndexStatement(Keyspace.keyspaceWithBucket(bucketName), createOptions());
+                new CreatePrimaryQueryIndexStatement(Keyspace.defaultKeyspace(bucketName), createOptions());
         statement.execute(clusterOperator);
         String indexFromClusterName = clusterOperator.getQueryIndexes().getAllIndexes(bucketName).get(0).name();
         assertEquals(MANUALLY_CREATED_INDEX, indexFromClusterName);
@@ -59,7 +59,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_throw_an_exception_when_creating_second_primary_index_in_the_same_keyspace() {
         createPrimaryIndexManually();
-        CreatePrimaryQueryIndexStatement statement = new CreatePrimaryQueryIndexStatement(Keyspace.keyspaceWithBucket(bucketName),
+        CreatePrimaryQueryIndexStatement statement = new CreatePrimaryQueryIndexStatement(Keyspace.defaultKeyspace(bucketName),
                 createOptions().indexName(MANUALLY_CREATED_INDEX).ignoreIfExists(false));
 
         assertThatExceptionOfType(IndexExistsException.class)

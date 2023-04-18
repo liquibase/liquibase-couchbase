@@ -28,17 +28,17 @@ public class Keyspace extends AbstractLiquibaseSerializable {
         return new Keyspace(bucket, scope, collection);
     }
 
-    public static Keyspace keyspaceWithBucket(@NonNull String bucket) {
+    public static Keyspace defaultKeyspace(@NonNull String bucket) {
         return new Keyspace(bucket, DEFAULT_SCOPE, DEFAULT_COLLECTION);
     }
 
-    public static Keyspace keyspaceWithBucketAndScope(@NonNull String bucket,
-                                                      @NonNull String scope) {
+    public static Keyspace defaultCollectionKeyspace(@NonNull String bucket,
+                                                     @NonNull String scope) {
         return new Keyspace(bucket, scope, DEFAULT_COLLECTION);
     }
 
-    public static Keyspace keyspaceWithBucketAndCollection(@NonNull String bucket,
-                                                           @NonNull String collection) {
+    public static Keyspace defaultScopeKeyspace(@NonNull String bucket,
+                                                @NonNull String collection) {
         return new Keyspace(bucket, DEFAULT_SCOPE, collection);
     }
 
