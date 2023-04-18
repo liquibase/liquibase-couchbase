@@ -81,6 +81,14 @@ public class CollectionOperator {
                 .anyMatch(indexName::equals);
     }
 
+    public boolean collectionPrimaryIndexExists(String indexName) {
+        return queryIndexManager()
+                .getAllIndexes().stream()
+                .filter(QueryIndex::primary)
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
     public void insertDoc(Document document) {
         collection.insert(document.getId(), document.getValue().mapDataToType());
     }

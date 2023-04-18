@@ -11,6 +11,7 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
+import liquibase.ext.couchbase.types.BucketScope;
 import liquibase.ext.couchbase.types.Document;
 import lombok.Getter;
 import lombok.NonNull;
@@ -21,7 +22,6 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * A part of a facade package for Couchbase Java SDK. Provides access to {@link Cluster} common operations and state checks.
@@ -86,10 +86,24 @@ public class ClusterOperator {
                 .anyMatch(indexName::equals);
     }
 
-    public boolean indexExists(String indexName, String bucketName, String scopeName, boolean isPrimary) {
+    public boolean indexExists(String indexName, BucketScope bucketScope) {
+        return getQueryIndexes().getAllIndexes(bucketScope.getBucket()).stream()
+                .filter(queryIndex -> bucketScope.getScope().equals(queryIndex.scopeName().get()))
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
+    public boolean primaryIndexExists(String indexName, String bucketName) {
         return getQueryIndexes().getAllIndexes(bucketName).stream()
-                .filter(queryIndex -> queryIndex.primary() == isPrimary)
-                .filter(queryIndex -> isBlank(scopeName) || queryIndex.scopeName().filter(scopeName::equals).isPresent())
+                .filter(QueryIndex::primary)
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
+    public boolean primaryIndexExists(String indexName, BucketScope bucketScope) {
+        return getQueryIndexes().getAllIndexes(bucketScope.getBucket()).stream()
+                .filter(QueryIndex::primary)
+                .filter(queryIndex -> bucketScope.getScope().equals(queryIndex.scopeName().get()))
                 .map(QueryIndex::name)
                 .anyMatch(indexName::equals);
     }

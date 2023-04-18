@@ -3,8 +3,8 @@ package integration.precondition;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import common.ConstantScopeTestCase;
 import common.operators.TestCollectionOperator;
-import liquibase.ext.couchbase.exception.precondition.IndexNotExistsPreconditionException;
-import liquibase.ext.couchbase.precondition.IndexExistsPrecondition;
+import liquibase.ext.couchbase.exception.precondition.PrimaryIndexNotExistsPreconditionException;
+import liquibase.ext.couchbase.precondition.PrimaryIndexExistsPrecondition;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,13 +16,13 @@ import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class IndexExistsPreconditionIT extends ConstantScopeTestCase {
+class PrimaryIndexExistsPreconditionIT extends ConstantScopeTestCase {
 
     private final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE);
 
     @AfterEach
     void cleanUp() {
-        if (collectionOperator.collectionIndexExists(INDEX)) {
+        if (collectionOperator.collectionPrimaryIndexExists(INDEX)) {
             bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE).dropIndex(INDEX);
         }
     }
@@ -32,18 +32,19 @@ class IndexExistsPreconditionIT extends ConstantScopeTestCase {
         collectionOperator.createPrimaryIndex(CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(INDEX));
-        IndexExistsPrecondition precondition = new IndexExistsPrecondition(TEST_BUCKET, INDEX, TEST_SCOPE, TEST_COLLECTION);
+        PrimaryIndexExistsPrecondition precondition = new PrimaryIndexExistsPrecondition(INDEX, TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
 
         assertDoesNotThrow(() -> precondition.check(database, null, null, null));
     }
 
     @Test
     void Should_throw_when_index_doesnt_exists() {
-        IndexExistsPrecondition precondition = new IndexExistsPrecondition(TEST_BUCKET, INDEX, TEST_SCOPE, TEST_COLLECTION);
+        PrimaryIndexExistsPrecondition precondition = new PrimaryIndexExistsPrecondition(INDEX, TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
 
-        assertThatExceptionOfType(IndexNotExistsPreconditionException.class)
+        assertThatExceptionOfType(PrimaryIndexNotExistsPreconditionException.class)
                 .isThrownBy(() -> precondition.check(database, null, null, null))
-                .withMessage(format("Index %s(bucket name - %s, scope name - %s, collection - %s) does not exist", INDEX, TEST_BUCKET,
-                        TEST_SCOPE, TEST_COLLECTION));
+                .withMessage(
+                        format("Primary index %s(bucket name - %s, scope name - %s, collection - %s) does not exist", INDEX, TEST_BUCKET,
+                                TEST_SCOPE, TEST_COLLECTION));
     }
 }

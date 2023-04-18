@@ -5,6 +5,7 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.precondition.IndexNotExistsPreconditionException;
+import liquibase.ext.couchbase.exception.precondition.PrimaryIndexNotExistsPreconditionException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.BucketScope;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 
 /**
- * A precondition that checks if the index exists.
+ * A precondition that checks if the primary index exists.
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
  * @see IndexNotExistsPreconditionException
@@ -23,41 +24,42 @@ import static org.apache.commons.lang3.StringUtils.isNoneBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IndexExistsPrecondition extends AbstractCouchbasePrecondition {
+public class PrimaryIndexExistsPrecondition extends AbstractCouchbasePrecondition {
 
-    private String bucketName;
     private String indexName;
+    private String bucketName;
+
     private String scopeName;
 
     private String collectionName;
 
     @Override
     public String getName() {
-        return "doesIndexExist"; // liquibase has indexExists flag
+        return "doesPrimaryIndexExist"; // liquibase has indexExists flag
     }
 
     @Override
-    public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws IndexNotExistsPreconditionException {
+    public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws PrimaryIndexNotExistsPreconditionException {
         ClusterOperator operator = new ClusterOperator(((CouchbaseConnection) database.getConnection()).getCluster());
 
         if (!doesIndexExist(operator)) {
-            throw new IndexNotExistsPreconditionException(bucketName, indexName, scopeName, collectionName, changeLog, this);
+            throw new PrimaryIndexNotExistsPreconditionException(bucketName, indexName, scopeName, collectionName, changeLog, this);
         }
     }
 
     private boolean doesIndexExist(ClusterOperator operator) {
         if (isBlank(scopeName) && isBlank(collectionName)) {
-            return operator.indexExists(indexName, bucketName);
+            return operator.primaryIndexExists(indexName, bucketName);
         }
 
         if (isNoneBlank(scopeName) && isBlank(collectionName)) {
             BucketScope bucketScope = BucketScope.bucketScope(bucketName, scopeName);
-            return operator.indexExists(indexName, bucketScope);
+            return operator.primaryIndexExists(indexName, bucketScope);
         }
 
         Collection collection = operator.getBucketOperator(bucketName).getCollection(collectionName, scopeName);
 
-        return operator.getCollectionOperator(collection).collectionIndexExists(indexName);
+        return operator.getCollectionOperator(collection).collectionPrimaryIndexExists(indexName);
     }
 
 }

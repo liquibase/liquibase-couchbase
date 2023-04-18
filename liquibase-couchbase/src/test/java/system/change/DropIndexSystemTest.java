@@ -67,8 +67,8 @@ public class DropIndexSystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(DROP_NON_EXISTING_INDEX_SYSTEM_TEST_ERROR_XML);
         assertThatExceptionOfType(LiquibaseException.class)
                 .isThrownBy(liquibase::update)
-                .withMessageContaining("Index %s(bucket name - %s, scope name - %s, primary - %s) does not exist",
-                        docId1IndexName, TEST_BUCKET, TEST_SCOPE, false);
+                .withMessageContaining("Index %s(bucket name - %s, scope name - %s, collection - %s) does not exist",
+                        docId1IndexName, TEST_BUCKET, TEST_SCOPE, null);
     }
 
 }

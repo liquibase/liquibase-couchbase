@@ -431,7 +431,16 @@
             <xsd:attribute name="bucketName" type="xsd:string"/>
             <xsd:attribute name="scopeName" type="xsd:string"/>
             <xsd:attribute name="indexName" type="xsd:string"/>
-            <xsd:attribute name="isPrimary" type="xsd:boolean"/>
+            <xsd:attribute name="collectionName" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="doesPrimaryIndexExist">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="indexName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:boolean"/>
         </xsd:complexType>
     </xsd:element>
 

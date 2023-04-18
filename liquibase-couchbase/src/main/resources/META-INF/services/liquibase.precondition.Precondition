@@ -3,3 +3,4 @@ liquibase.ext.couchbase.precondition.ScopeExistsPrecondition
 liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
 liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
 liquibase.ext.couchbase.precondition.IndexExistsPrecondition
+liquibase.ext.couchbase.precondition.PrimaryIndexExistsPrecondition
