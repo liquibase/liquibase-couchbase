@@ -3,19 +3,22 @@ package liquibase.ext.couchbase.change.utils;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
 import liquibase.ext.couchbase.change.UpdateBucketChange;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 
-@Data
+import static com.couchbase.client.java.manager.bucket.UpdateBucketOptions.updateBucketOptions;
+
+@Builder
 @RequiredArgsConstructor
 public class BucketUpdateMapper {
+    @Getter
     private final UpdateBucketChange change;
 
     public UpdateBucketOptions bucketOptions() {
-        return UpdateBucketOptions.updateBucketOptions()
-                .timeout(Duration.ofSeconds(change.getTimeoutInSeconds()));
+        return updateBucketOptions().timeout(Duration.ofSeconds(change.getTimeoutInSeconds()));
     }
 
     public BucketSettings bucketSettings() {

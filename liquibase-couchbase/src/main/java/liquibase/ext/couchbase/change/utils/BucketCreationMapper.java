@@ -4,19 +4,22 @@ import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.StorageBackend;
 import liquibase.ext.couchbase.change.CreateBucketChange;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
 
-@Data
+import static com.couchbase.client.java.manager.bucket.CreateBucketOptions.createBucketOptions;
+
+@Builder
 @RequiredArgsConstructor
 public class BucketCreationMapper {
+    @Getter
     private final CreateBucketChange change;
 
     public CreateBucketOptions bucketOptions() {
-        return CreateBucketOptions.createBucketOptions()
-                .timeout(Duration.ofSeconds(change.getTimeoutInSeconds()));
+        return createBucketOptions().timeout(Duration.ofSeconds(change.getTimeoutInSeconds()));
     }
 
     public BucketSettings bucketSettings() {
