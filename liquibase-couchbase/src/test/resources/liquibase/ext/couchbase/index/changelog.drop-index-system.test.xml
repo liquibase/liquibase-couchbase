@@ -26,7 +26,7 @@
 
     <changeSet id="1" author="tigran">
         <preConditions>
-            <ext:doesIndexExist bucketName="testBucket" scopeName="testScope" indexName="doc1_index" isPrimary="false"/>
+            <ext:doesIndexExist bucketName="testBucket" scopeName="testScope" indexName="doc1_index"/>
         </preConditions>
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
