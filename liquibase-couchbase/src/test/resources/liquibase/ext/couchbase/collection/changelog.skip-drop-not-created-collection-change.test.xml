@@ -25,11 +25,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="tigran">
+        <preConditions onFail="MARK_RAN">
+            <ext:collectionExists bucketName="testBucket" collectionName="dropNonExistingCollection" scopeName="testScope"/>
+        </preConditions>
         <ext:dropCollection>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>dropNonExistingCollection</ext:collectionName>
             <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfNotExists>true</ext:skipIfNotExists>
         </ext:dropCollection>
     </changeSet>
 

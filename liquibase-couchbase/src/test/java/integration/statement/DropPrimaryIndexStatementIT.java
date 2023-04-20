@@ -18,7 +18,7 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_drop_Primary_index() {
         Collection collection = clusterOperator.getBucketOperator(bucketName)
-                        .getCollection(DEFAULT_COLLECTION, DEFAULT_SCOPE);
+                .getCollection(DEFAULT_COLLECTION, DEFAULT_SCOPE);
         clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
         keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);
@@ -33,7 +33,7 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
         keyspace = keyspace(bucketName, scopeName, collectionName);
         Collection collection = clusterOperator.getBucketOperator(bucketName)
-                        .getCollection(collectionName, scopeName);
+                .getCollection(collectionName, scopeName);
         clusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(null);
 
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace);

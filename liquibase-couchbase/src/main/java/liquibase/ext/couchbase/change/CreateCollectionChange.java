@@ -35,7 +35,6 @@ public class CreateCollectionChange extends CouchbaseChange {
     private String bucketName;
     private String scopeName;
     private String collectionName;
-    private Boolean skipIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -46,7 +45,7 @@ public class CreateCollectionChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
-                new CreateCollectionStatement(keyspace, skipIfExists)
+                new CreateCollectionStatement(keyspace)
         };
     }
 }

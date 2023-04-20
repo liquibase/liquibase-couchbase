@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
 import static java.lang.String.format;

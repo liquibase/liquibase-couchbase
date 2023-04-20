@@ -27,6 +27,14 @@ public class TestCollectionOperator extends CollectionOperator {
         return document(docId, content);
     }
 
+    public Document generateTestDocById(String docId) {
+        JsonObject content = JsonObject.create();
+        for (int i = 1; i < MAX_FIELDS_IN_DOC; i++) {
+            content.put("field" + i, "value" + i);
+        }
+        return document(docId, content);
+    }
+
     public static JsonObject createOneFieldJson(String id, String value) {
         return JsonObject.create().put(id, value);
     }

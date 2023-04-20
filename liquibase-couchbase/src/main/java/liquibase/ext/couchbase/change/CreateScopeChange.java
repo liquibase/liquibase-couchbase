@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.change;
 
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreateScopeStatement;
-import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
  * Part of change set package. Responsible for create scope with specified name

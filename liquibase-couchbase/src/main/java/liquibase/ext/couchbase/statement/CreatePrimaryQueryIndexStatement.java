@@ -1,10 +1,10 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.core.api.manager.CoreScopeAndCollection;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +19,13 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 public class CreatePrimaryQueryIndexStatement extends CouchbaseStatement {
-    private final String bucketName;
+    private final Keyspace keyspace;
     private final CreatePrimaryQueryIndexOptions options;
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        CoreScopeAndCollection scopeAndCollection = options.build().scopeAndCollection();
-        BucketOperator bucketOperator = clusterOperator.getBucketOperator(bucketName);
-        Collection collection = scopeAndCollection == null ?
-                bucketOperator.getBucket().defaultCollection() :
-                bucketOperator.getCollection(scopeAndCollection.collectionName(), scopeAndCollection.scopeName());
+        BucketOperator bucketOperator = clusterOperator.getBucketOperator(keyspace.getBucket());
+        Collection collection = bucketOperator.getCollection(keyspace.getCollection(), keyspace.getScope());
         clusterOperator.getCollectionOperator(collection).createPrimaryIndex(options);
     }
 }

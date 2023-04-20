@@ -6,4 +6,3 @@ databaseChangeLog:
             bucketName: testBucket
             collectionName: dropExistingCollection
             scopeName: testScope
-            skipIfNotExists: false

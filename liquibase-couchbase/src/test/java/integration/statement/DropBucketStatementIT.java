@@ -1,10 +1,11 @@
 package integration.statement;
 
+import com.couchbase.client.core.error.BucketNotFoundException;
 import common.ConstantScopeTestCase;
-import liquibase.ext.couchbase.exception.BucketNotExistException;
 import liquibase.ext.couchbase.statement.DropBucketStatement;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.CLUSTER_READY_TIMEOUT;
@@ -33,7 +34,7 @@ class DropBucketStatementIT extends ConstantScopeTestCase {
 
     @Test
     void Should_drop_existing_bucket() {
-        DropBucketStatement statement = new DropBucketStatement(DROP_BUCKET_TEST_NAME, false);
+        DropBucketStatement statement = new DropBucketStatement(DROP_BUCKET_TEST_NAME);
         statement.execute(clusterOperator);
 
         assertThat(cluster).hasNoBucket(DROP_BUCKET_TEST_NAME);
@@ -43,17 +44,18 @@ class DropBucketStatementIT extends ConstantScopeTestCase {
     @Test
     void Should_throw_error_when_delete_non_existing_bucket() {
         String notFoundBucketName = "notFoundBucket1";
-        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName, false);
+        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName);
 
-        assertThatExceptionOfType(BucketNotExistException.class)
+        assertThatExceptionOfType(BucketNotFoundException.class)
                 .isThrownBy(() -> statement.execute(clusterOperator))
-                .withMessage("Bucket [%s] not exists", notFoundBucketName);
+                .withMessage("Bucket [%s] not found.", notFoundBucketName);
     }
 
     @Test
+    @Disabled("Not actual, flag deleted")
     void Should_ignore_when_delete_non_existing_bucket() {
         String notFoundBucketName = "notFoundBucket2";
-        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName, true);
+        DropBucketStatement statement = new DropBucketStatement(notFoundBucketName);
         assertThatNoException().isThrownBy(() -> statement.execute(clusterOperator));
     }
 }

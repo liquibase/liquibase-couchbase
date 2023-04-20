@@ -25,9 +25,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
 	<changeSet id="1" author="tigran">
+        <preConditions>
+            <ext:bucketExists bucketName="newTestBucket"/>
+        </preConditions>
 		<ext:dropBucket>
 			<ext:bucketName>newTestBucket</ext:bucketName>
-			<ext:ignoreIfNotExists>true</ext:ignoreIfNotExists>
 		</ext:dropBucket>
 	</changeSet>
 

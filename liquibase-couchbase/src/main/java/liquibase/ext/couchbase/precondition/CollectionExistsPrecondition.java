@@ -6,7 +6,9 @@ import liquibase.exception.PreconditionFailedException;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.precondition.CollectionNotExistsPreconditionException;
 import liquibase.ext.couchbase.statement.CollectionExistsStatement;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * A precondition that checks if a collection exists.
@@ -16,6 +18,8 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CollectionExistsPrecondition extends AbstractCouchbasePrecondition {
 
     private String bucketName;

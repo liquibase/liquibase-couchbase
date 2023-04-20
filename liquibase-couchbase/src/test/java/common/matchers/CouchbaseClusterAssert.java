@@ -1,18 +1,18 @@
 package common.matchers;
 
+import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.manager.query.QueryIndexManager;
-
+import liquibase.ext.couchbase.types.Keyspace;
+import lombok.NonNull;
 import org.assertj.core.api.AbstractAssert;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import liquibase.ext.couchbase.types.Keyspace;
-import lombok.NonNull;
 
 public class CouchbaseClusterAssert extends AbstractAssert<CouchbaseClusterAssert, Cluster> {
 
@@ -54,6 +54,15 @@ public class CouchbaseClusterAssert extends AbstractAssert<CouchbaseClusterAsser
         Map<String, BucketSettings> allBuckets = actual.buckets().getAllBuckets();
         if (allBuckets.containsKey(bucketName)) {
             failWithMessage("Failed to delete bucket [%s]", bucketName);
+        }
+        return this;
+    }
+
+    public CouchbaseClusterAssert hasNoScope(String scopeName, String bucketName) {
+        actual.waitUntilReady(Duration.ofSeconds(5L));
+        Bucket bucket = actual.bucket(bucketName);
+        if (bucket.collections().getAllScopes().stream().anyMatch(scopeSpec -> scopeSpec.name().equals(scopeName))) {
+            failWithMessage("Failed to delete scope [%s]", scopeName);
         }
         return this;
     }
