@@ -11,7 +11,6 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
-                <xsd:element name="skipIfExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -22,7 +21,6 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
-                <xsd:element name="skipIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -35,7 +33,6 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
-                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -49,7 +46,6 @@
                 <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element minOccurs="0" name="scopeName" type="xsd:string"/>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -62,7 +58,6 @@
                 <xsd:element name="deferred" type="xsd:boolean"/>
 
                 <xsd:element ref="fields"/>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
                 <xsd:element name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
@@ -219,7 +214,6 @@
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
             </xsd:all>
         </xsd:complexType>
     </xsd:element>
@@ -228,7 +222,24 @@
         <xsd:complexType>
             <xsd:all>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="createScope">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="dropScope">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
             </xsd:all>
         </xsd:complexType>
     </xsd:element>
@@ -384,5 +395,53 @@
         </xsd:complexType>
     </xsd:element>
 
+    <!--    Pre-conditions-->
+    <xsd:element name="bucketExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="collectionExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="documentExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
+            <xsd:attribute name="key" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="scopeExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="doesIndexExist">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="indexName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="doesPrimaryIndexExist">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="indexName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
 
 </xsd:schema>

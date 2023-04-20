@@ -11,6 +11,7 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
+import liquibase.ext.couchbase.types.BucketScope;
 import liquibase.ext.couchbase.types.Document;
 import lombok.Getter;
 import lombok.NonNull;
@@ -81,6 +82,28 @@ public class ClusterOperator {
 
     public boolean indexExists(String indexName, String bucketName) {
         return getQueryIndexes().getAllIndexes(bucketName).stream()
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
+    public boolean indexExists(String indexName, BucketScope bucketScope) {
+        return getQueryIndexes().getAllIndexes(bucketScope.getBucket()).stream()
+                .filter(queryIndex -> bucketScope.getScope().equals(queryIndex.scopeName().get()))
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
+    public boolean primaryIndexExists(String indexName, String bucketName) {
+        return getQueryIndexes().getAllIndexes(bucketName).stream()
+                .filter(QueryIndex::primary)
+                .map(QueryIndex::name)
+                .anyMatch(indexName::equals);
+    }
+
+    public boolean primaryIndexExists(String indexName, BucketScope bucketScope) {
+        return getQueryIndexes().getAllIndexes(bucketScope.getBucket()).stream()
+                .filter(QueryIndex::primary)
+                .filter(queryIndex -> bucketScope.getScope().equals(queryIndex.scopeName().get()))
                 .map(QueryIndex::name)
                 .anyMatch(indexName::equals);
     }

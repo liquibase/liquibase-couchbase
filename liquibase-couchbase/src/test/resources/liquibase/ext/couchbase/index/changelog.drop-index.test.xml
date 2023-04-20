@@ -31,7 +31,6 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>_default</ext:scopeName>
             <ext:collectionName>_default</ext:collectionName>
-            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
@@ -39,7 +38,6 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>_default</ext:scopeName>
             <ext:collectionName>_default</ext:collectionName>
-            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
         <ext:dropQueryIndex>
             <ext:isPrimary>false</ext:isPrimary>
@@ -47,7 +45,6 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>travelsScope</ext:scopeName>
             <ext:collectionName>travels</ext:collectionName>
-            <ext:ignoreIfNotExists>false</ext:ignoreIfNotExists>
         </ext:dropQueryIndex>
     </changeSet>
 </databaseChangeLog>

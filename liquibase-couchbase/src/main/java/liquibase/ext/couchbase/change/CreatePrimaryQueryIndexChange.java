@@ -2,8 +2,8 @@ package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -42,7 +42,6 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     private String indexName;
     private Integer numReplicas;
     private String scopeName;
-    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -52,7 +51,8 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         if (isNotBlank(getBucketName())) {
-            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(getBucketName(), createPrimaryQueryIndexOptions())};
+            Keyspace keyspace = Keyspace.keyspace(bucketName, scopeName, collectionName);
+            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(keyspace, createPrimaryQueryIndexOptions())};
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;
     }
@@ -61,10 +61,7 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
         return CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(getIndexName())
-                .collectionName(getCollectionName())
-                .scopeName(getScopeName())
                 .deferred(getDeferred())
-                .numReplicas(getNumReplicas())
-                .ignoreIfExists(getIgnoreIfExists());
+                .numReplicas(getNumReplicas());
     }
 }

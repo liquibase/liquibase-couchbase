@@ -3,7 +3,6 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import liquibase.Scope;
-import liquibase.ext.couchbase.exception.IndexExistsException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static java.lang.String.format;
 
 /**
  * A statement to create secondary index for a keyspace
@@ -31,7 +29,6 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
     private final String indexName;
     private final Keyspace keyspace;
     private final boolean deferred;
-    private final boolean ignoreIfExists;
     private final int numReplicas;
     private final List<Field> fields;
 
@@ -39,16 +36,6 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
     public void execute(ClusterOperator clusterOperator) {
         Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollection(keyspace.getCollection(), keyspace.getScope());
-        boolean exists = clusterOperator.getCollectionOperator(collection).collectionIndexExists(indexName);
-
-        if (ignoreIfExists && exists) {
-            logger.info(format(existsMsg, indexName));
-            return;
-        }
-
-        if (exists) {
-            throw new IndexExistsException(indexName);
-        }
         CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions()
                 .deferred(deferred)
                 .numReplicas(numReplicas);

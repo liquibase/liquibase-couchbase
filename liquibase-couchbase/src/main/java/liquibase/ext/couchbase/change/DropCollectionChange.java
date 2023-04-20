@@ -30,8 +30,6 @@ public class DropCollectionChange extends CouchbaseChange {
     private String scopeName;
     private String collectionName;
 
-    private Boolean skipIfNotExists;
-
     @Override
     public String getConfirmationMessage() {
         return String.format("%s has been successfully dropped", collectionName);
@@ -40,6 +38,6 @@ public class DropCollectionChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[] {new DropCollectionStatement(keyspace, skipIfNotExists)};
+        return new SqlStatement[] {new DropCollectionStatement(keyspace)};
     }
 }

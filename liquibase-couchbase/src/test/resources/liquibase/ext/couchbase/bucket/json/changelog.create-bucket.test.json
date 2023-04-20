@@ -17,8 +17,7 @@
           "ramQuotaMB": 128,
           "replicaIndexes": false,
           "storageBackend": "couchstore",
-          "timeoutInSeconds": 10,
-          "ignoreIfExists": false
+          "timeoutInSeconds": 10
         }
       }
     }

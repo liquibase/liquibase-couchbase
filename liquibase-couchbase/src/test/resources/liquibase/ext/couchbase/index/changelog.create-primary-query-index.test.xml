@@ -32,7 +32,6 @@
             <ext:indexName>test</ext:indexName>
             <ext:numReplicas>1</ext:numReplicas>
             <ext:scopeName>test</ext:scopeName>
-            <ext:ignoreIfExists>true</ext:ignoreIfExists>
         </ext:createPrimaryQueryIndex>
     </changeSet>
 </databaseChangeLog>

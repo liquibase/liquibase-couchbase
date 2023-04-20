@@ -63,6 +63,12 @@
     "dropBucket": {
       "$ref": "#/$defs/dropBucket"
     },
+    "createScope": {
+      "$ref": "#/$defs/createScope"
+    },
+    "dropScope": {
+      "$ref": "#/$defs/dropScope"
+    },
     "createPrimaryQueryIndex": {
       "$ref": "#/$defs/createPrimaryQueryIndex"
     },
@@ -199,6 +205,12 @@
               },
               "dropBucket": {
                 "$ref": "#/$defs/dropBucket"
+              },
+              "createScope": {
+                "$ref": "#/$defs/createScope"
+              },
+              "dropScope": {
+                "$ref": "#/$defs/dropScope"
               },
               "createPrimaryQueryIndex": {
                 "$ref": "#/$defs/createPrimaryQueryIndex"
@@ -352,8 +364,7 @@
         "conflictResolutionType",
         "evictionPolicy",
         "minimumDurabilityLevel",
-        "storageBackend",
-        "ignoreIfExists"
+        "storageBackend"
       ],
       "additionalProperties": false,
       "properties": {
@@ -426,9 +437,6 @@
             "couchstore",
             "magma"
           ]
-        },
-        "ignoreIfExists": {
-          "type": "boolean"
         }
       }
     },
@@ -630,8 +638,7 @@
       "required": [
         "bucketName",
         "collectionName",
-        "scopeName",
-        "skipIfNotExists"
+        "scopeName"
       ],
       "additionalProperties": false,
       "properties": {
@@ -643,9 +650,6 @@
         },
         "scopeName": {
           "type": "string"
-        },
-        "skipIfNotExists": {
-          "type": "boolean"
         }
       }
     },
@@ -678,7 +682,6 @@
         "collectionName",
         "deferred",
         "fields",
-        "ignoreIfExists",
         "indexName",
         "numReplicas",
         "scopeName"
@@ -696,9 +699,6 @@
         },
         "fields": {
           "$ref": "#/$defs/fields"
-        },
-        "ignoreIfExists": {
-          "type": "boolean"
         },
         "indexName": {
           "type": "string"
@@ -769,8 +769,7 @@
         "indexName",
         "bucketName",
         "scopeName",
-        "collectionName",
-        "ignoreIfNotExists"
+        "collectionName"
       ],
       "additionalProperties": false,
       "properties": {
@@ -788,25 +787,50 @@
         },
         "collectionName": {
           "type": "string"
-        },
-        "ignoreIfNotExists": {
-          "type": "boolean"
         }
       }
     },
     "dropBucket": {
       "type": "object",
       "required": [
+        "bucketName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        }
+      }
+    },
+    "createScope": {
+      "type": "object",
+      "required": [
         "bucketName",
-        "ignoreIfNotExists"
+        "scopeName"
       ],
       "additionalProperties": false,
       "properties": {
         "bucketName": {
           "type": "string"
         },
-        "ignoreIfNotExists": {
-          "type": "boolean"
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "dropScope": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
         }
       }
     },
@@ -814,8 +838,7 @@
       "type": "object",
       "required": [
         "deferred",
-        "numReplicas",
-        "ignoreIfExists"
+        "numReplicas"
       ],
       "additionalProperties": false,
       "properties": {
@@ -836,9 +859,6 @@
         },
         "scopeName": {
           "type": "string"
-        },
-        "ignoreIfExists": {
-          "type": "boolean"
         }
       }
     },
@@ -847,8 +867,7 @@
       "required": [
         "bucketName",
         "collectionName",
-        "scopeName",
-        "skipIfExists"
+        "scopeName"
       ],
       "additionalProperties": false,
       "properties": {
@@ -860,9 +879,6 @@
         },
         "scopeName": {
           "type": "string"
-        },
-        "skipIfExists": {
-          "type": "boolean"
         }
       }
     }

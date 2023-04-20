@@ -26,22 +26,29 @@
 
     <changeSet id="1" author="dmitry">
 
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <ext:collectionExists bucketName="testBucket" collectionName="historyTest1" scopeName="testScope"/>
+            </not>
+        </preConditions>
         <ext:createCollection>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>historyTest1</ext:collectionName>
             <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfExists>false</ext:skipIfExists>
         </ext:createCollection>
 
     </changeSet>
 
     <changeSet id="2" author="dmitry">
-
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <ext:collectionExists bucketName="testBucket" collectionName="historyTest2" scopeName="testScope"/>
+            </not>
+        </preConditions>
         <ext:createCollection>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>historyTest2</ext:collectionName>
             <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfExists>false</ext:skipIfExists>
         </ext:createCollection>
 
     </changeSet>

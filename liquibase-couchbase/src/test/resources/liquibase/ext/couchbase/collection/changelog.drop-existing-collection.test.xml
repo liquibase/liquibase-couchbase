@@ -25,11 +25,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="dmitry">
+        <preConditions>
+            <ext:collectionExists scopeName="testScope" bucketName="testBucket" collectionName="dropExistingCollection"/>
+        </preConditions>
         <ext:dropCollection>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>dropExistingCollection</ext:collectionName>
             <ext:scopeName>testScope</ext:scopeName>
-            <ext:skipIfNotExists>false</ext:skipIfNotExists>
         </ext:dropCollection>
     </changeSet>
 

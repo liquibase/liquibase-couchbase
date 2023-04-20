@@ -38,7 +38,7 @@ public class CreateCollectionChangeTest {
     @Test
     void Expects_confirmation_message_is_create_collection() {
         CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
-                TEST_SCOPE, collectionName, false);
+                TEST_SCOPE, collectionName);
 
         String msg = change.getConfirmationMessage();
 
@@ -48,12 +48,12 @@ public class CreateCollectionChangeTest {
     @Test
     void Should_return_only_CreateCollectionStatement() {
         CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
-                TEST_SCOPE, collectionName, false);
+                TEST_SCOPE, collectionName);
         Keyspace keyspace = keyspace(TEST_BUCKET, TEST_SCOPE, collectionName);
 
         SqlStatement[] sqlStatements = change.generateStatements();
 
-        assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(keyspace, false));
+        assertThat(sqlStatements).containsExactly(new CreateCollectionStatement(keyspace));
     }
 
 
@@ -75,7 +75,7 @@ public class CreateCollectionChangeTest {
 
     @Test
     void Create_collection_change_generates_right_checksum() {
-        String checkSum = "8:e883f6f8fb99b3427644c6dfe2b610a2";
+        String checkSum = "8:86d32bba95c9dea97bd37fa172af47ff";
         assertThat(changeLog.getChangeSets()).first()
                 .returns(checkSum, it -> it.generateCheckSum().toString());
     }

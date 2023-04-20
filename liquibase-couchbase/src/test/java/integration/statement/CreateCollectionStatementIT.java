@@ -1,12 +1,13 @@
 package integration.statement;
 
-import com.couchbase.client.core.error.CollectionExistsException;
+import com.couchbase.client.core.error.ScopeExistsException;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Collection;
 import common.RandomizedScopeTestCase;
 import liquibase.ext.couchbase.statement.CreateCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.DEFAULT_SCOPE;
@@ -31,7 +32,7 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
     void Collection_should_be_created_if_it_does_not_exists() {
         Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, collectionName);
         CreateCollectionStatement statement =
-                new CreateCollectionStatement(keyspace, false);
+                new CreateCollectionStatement(keyspace);
 
         statement.execute(clusterOperator);
 
@@ -41,10 +42,11 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
+    @Disabled("Not actual, ignore flag is deleted - may be opened when flag will be added in sdk")
     void Collection_should_not_be_created_again_if_it_exists_and_skip_is_true() {
         Collection existingCollection = bucketOperator.getCollection(collectionName, scopeName);
 
-        CreateCollectionStatement statement = new CreateCollectionStatement(keyspace, true);
+        CreateCollectionStatement statement = new CreateCollectionStatement(keyspace);
         statement.execute(clusterOperator);
 
         // todo replace with collection assert
@@ -54,11 +56,11 @@ class CreateCollectionStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
-    void Should_throw_exception_if_collection_exists_and_skip_is_false() {
+    void Should_throw_exception_if_collection_exists() {
         CreateCollectionStatement statement =
-                new CreateCollectionStatement(keyspace, false);
+                new CreateCollectionStatement(keyspace);
 
-        assertThatExceptionOfType(CollectionExistsException.class)
+        assertThatExceptionOfType(ScopeExistsException.class)
                 .isThrownBy(() -> statement.execute(clusterOperator));
     }
 }

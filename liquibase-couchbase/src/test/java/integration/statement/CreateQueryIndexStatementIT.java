@@ -1,6 +1,5 @@
 package integration.statement;
 
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
@@ -11,6 +10,7 @@ import liquibase.ext.couchbase.types.Keyspace;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +25,8 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     private List<Field> fields;
     private Document testDocument;
     private final Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-    private final Keyspace keyspaceCustom = keyspace(bucketName, scopeName, collectionName);;
+    private final Keyspace keyspaceCustom = keyspace(bucketName, scopeName, collectionName);
+    ;
 
     private String indexToCreate = clusterOperator.getTestIndexId();
 
@@ -41,7 +42,8 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     @AfterEach
     void cleanUp() {
         TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
-        TestCollectionOperator collectionOperatorCustom = getCollectionOperator(keyspaceCustom.getBucket(), keyspaceCustom.getScope(), keyspaceCustom.getCollection());
+        TestCollectionOperator collectionOperatorCustom = getCollectionOperator(keyspaceCustom.getBucket(), keyspaceCustom.getScope(),
+                keyspaceCustom.getCollection());
         if (collectionOperatorCustom.collectionIndexExists(indexToCreate)) {
             collectionOperatorCustom.dropIndex(indexToCreate);
         }
@@ -62,9 +64,11 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     }
 
     @Test
+    @Disabled("Not actual, flag is deleted - preconditions are used instead")
     void Should_ignore_index_creation_with_the_same_name() {
         indexToCreate = clusterOperator.getTestIndexId();
-        TestCollectionOperator collectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+        TestCollectionOperator collectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(),
+                keyspace.getCollection());
 
         collectionOperator.createQueryIndex(indexToCreate, fields, null);
         CreateQueryIndexStatement statement = statementForBucket(indexToCreate, bucketName);
@@ -110,7 +114,7 @@ class CreateQueryIndexStatementIT extends RandomizedScopeTestCase {
     }
 
     private CreateQueryIndexStatement statementForKeyspace(String indexToCreate, Keyspace keyspace) {
-        return new CreateQueryIndexStatement(indexToCreate, keyspace, true, true, 0, fields);
+        return new CreateQueryIndexStatement(indexToCreate, keyspace, true, 0, fields);
     }
 
 }

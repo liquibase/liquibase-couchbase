@@ -27,7 +27,7 @@
     <changeSet id="1" author="zorik">
         <ext:dropScope>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:scopeName>testScopeName</ext:scopeName>
+            <ext:scopeName>testScopeDelete</ext:scopeName>
         </ext:dropScope>
     </changeSet>
 

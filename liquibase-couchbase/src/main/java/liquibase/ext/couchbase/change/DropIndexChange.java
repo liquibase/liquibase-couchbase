@@ -34,8 +34,6 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 public class DropIndexChange extends CouchbaseChange {
 
     private Boolean isPrimary;
-    private Boolean ignoreIfNotExists;
-
     private String indexName;
     private String bucketName;
     private String collectionName;
@@ -52,7 +50,7 @@ public class DropIndexChange extends CouchbaseChange {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
                 isPrimary ? new DropPrimaryIndexStatement(keyspace) :
-                        new DropIndexStatement(ignoreIfNotExists, indexName, keyspace)
+                        new DropIndexStatement(indexName, keyspace)
         };
     }
 

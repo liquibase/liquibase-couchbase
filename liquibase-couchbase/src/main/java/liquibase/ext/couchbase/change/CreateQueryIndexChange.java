@@ -49,7 +49,6 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     private String scopeName;
     private Boolean deferred;
     private Integer numReplicas;
-    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -60,7 +59,7 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
-                new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, ignoreIfExists, numReplicas, fields)
+                new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, numReplicas, fields)
         };
     }
 }

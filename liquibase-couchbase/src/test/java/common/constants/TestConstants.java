@@ -23,6 +23,7 @@ public class TestConstants {
     public static final String TRAVELS_BUCKET = "travels-bucket";
     public static final String TEST_SCOPE = "testScope";
     public static final String TEST_SCOPE_SQL = "sqlScope";
+    public static final String TEST_SCOPE_DELETE = "testScopeDelete";
     public static final String TEST_BUCKET = "testBucket";
     public static final String TEST_COLLECTION = "testCollection";
     public static final String TEST_COLLECTION_2 = "testCollection2";
