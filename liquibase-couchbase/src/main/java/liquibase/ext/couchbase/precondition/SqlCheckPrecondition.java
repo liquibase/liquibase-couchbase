@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.precondition;
 
+import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryResult;
 import liquibase.changelog.DatabaseChangeLog;
@@ -32,18 +33,29 @@ public class SqlCheckPrecondition extends AbstractCouchbasePrecondition {
 
     @Override
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws SqlCheckPreconditionException {
-        if (isQueryHaveExpectedResult((CouchbaseConnection) database.getConnection())) {
-            return;
+        if (!isQueryHaveExpectedResult((CouchbaseConnection) database.getConnection())) {
+            throw new SqlCheckPreconditionException(query, expectedResultJson, changeLog, this);
         }
-        throw new SqlCheckPreconditionException(query, expectedResultJson, changeLog, this);
     }
 
     public boolean isQueryHaveExpectedResult(CouchbaseConnection connection) {
         ClusterOperator operator = new ClusterOperator(connection.getCluster());
         QueryResult result = operator.executeSingleSql(query);
-        JsonObject expected = JsonObject.fromJson(expectedResultJson);
-        List<JsonObject> rows = result.rowsAsObject();
-        return rows.get(0).equals(expected);
+        JsonArray expected = JsonArray.fromJson(expectedResultJson);
+        List<JsonObject> actual = result.rowsAsObject();
+        return areJsonArraysEqual(expected, actual);
+    }
+
+    private boolean areJsonArraysEqual(JsonArray expected, List<JsonObject> actual) {
+        if (expected.size() != actual.size()) {
+            return false;
+        }
+        for (Object current : expected) {
+            if (!actual.contains((JsonObject) current)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

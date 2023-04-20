@@ -14,14 +14,14 @@ class SqlCheckPreconditionIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_not_throw_when_sql_precondition_result_as_expected() {
-        SqlCheckPrecondition sqlCheckPrecondition = createPreconditionWithParams("{\"count\": 1}", TEST_BUCKET);
+        SqlCheckPrecondition sqlCheckPrecondition = createPreconditionWithParams("[{\"count\": 1}]", TEST_BUCKET);
 
         assertDoesNotThrow(() -> sqlCheckPrecondition.check(database, null, null, null));
     }
 
     @Test
     void Should_throw_when_sql_precondition_result_unexpected() {
-        String expectedJsonWrong = "{\"ab\" : \"15\"}";
+        String expectedJsonWrong = "[{\"ab\" : \"15\"}]";
         SqlCheckPrecondition sqlCheckPrecondition = createPreconditionWithParams(expectedJsonWrong, TEST_BUCKET);
 
         assertThatExceptionOfType(SqlCheckPreconditionException.class)
