@@ -444,4 +444,11 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="sqlPlusPlusCheck">
+        <xsd:complexType>
+            <xsd:attribute name="expectedResultJson" type="xsd:string" use="required"/>
+            <xsd:attribute name="query" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>
