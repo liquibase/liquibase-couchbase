@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_BUCKET_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_EXISTING_COLLECTION_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_EXISTING_COLLECTION_TEST_YML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_NOT_CREATED_COLLECTION_CHANGE_TEST_XML;
@@ -59,11 +60,11 @@ class DropCollectionSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Should_throw_error_when_scope_not_exists() {
-        // Temporary disabled because of bug
-//         Liquibase liquibase = liquibase(DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML);
-//
-//         assertThatExceptionOfType(LiquibaseException.class)
-//                 .isThrownBy(liquibase::update);
+        //TODO: remove this comment if test is running correctly in CI/CD pipeline
+        Liquibase liquibase = liquibase(DROP_COLLECTION_IN_NOT_CREATED_SCOPE_TEST_XML);
+
+        assertThatExceptionOfType(LiquibaseException.class)
+                .isThrownBy(liquibase::update);
     }
 
     @Test
