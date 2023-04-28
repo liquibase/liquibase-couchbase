@@ -67,6 +67,15 @@ public class QueryIndexAssert extends AbstractAssert<QueryIndexAssert, QueryInde
         return this;
     }
 
+    public QueryIndexAssert hasNoPrimaryIndexForName(String indexName) {
+        long count = actual.getAllIndexes(bucketName).stream()
+                .filter(index -> index.name().equals(indexName) && index.primary()).count();
+        if (count != 0) {
+            failWithMessage("Primary index with the name [%s] exists", indexName);
+        }
+        return this;
+    }
+
     public QueryIndexAssert hasQueryIndexForName(String indexName) {
         long count = actual.getAllIndexes(bucketName).stream().filter(index -> index.name().equals(indexName)
                 && !index.primary()).count();

@@ -21,12 +21,18 @@ import lombok.RequiredArgsConstructor;
 public class DropPrimaryIndexStatement extends CouchbaseStatement {
     private final Keyspace keyspace;
 
+    private final String indexName;
+
     @Override
     public void execute(ClusterOperator clusterOperator) {
         Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getBucket()
                 .scope(keyspace.getScope())
                 .collection(keyspace.getCollection());
+        if (indexName != null) {
+            clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
+            return;
+        }
         clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
     }
 }

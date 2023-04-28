@@ -1,5 +1,6 @@
 package system.change;
 
+import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import common.matchers.CouchbaseClusterAssert;
 import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
@@ -11,9 +12,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
+import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static common.constants.ChangeLogSampleFilePaths.DROP_INDEX_SYSTEM_TEST_MARK_RUN_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_INDEX_SYSTEM_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.DROP_NON_EXISTING_INDEX_SYSTEM_TEST_ERROR_XML;
+import static common.constants.ChangeLogSampleFilePaths.DROP_PRIMARY_INDEX_BY_NAME_SYSTEM_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.DROP_PRIMARY_INDEX_SYSTEM_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_KEYSPACE;
@@ -44,11 +48,37 @@ public class DropIndexSystemTest extends LiquibaseSystemTest {
         collectionOperator.createQueryIndex(docId1IndexName, doc1.getFields(), null);
     }
 
+    private void createDeletingPrimaryIndex(CreatePrimaryQueryIndexOptions options) {
+        if (options == null) {
+            collectionOperator.createPrimaryIndex();
+            return;
+        }
+        collectionOperator.createPrimaryIndex(options);
+    }
+
     @Test
     @SneakyThrows
     void Index_should_be_deleted() {
         createDeletingIndex();
         Liquibase liquibase = liquibase(DROP_INDEX_SYSTEM_TEST_XML);
+        liquibase.update();
+        CouchbaseClusterAssert.assertThat(cluster).queryIndexes(TEST_KEYSPACE).doesNotHave(docId1IndexName);
+    }
+
+    @Test
+    @SneakyThrows
+    void Primary_index_should_be_deleted() {
+        createDeletingPrimaryIndex(null);
+        Liquibase liquibase = liquibase(DROP_PRIMARY_INDEX_SYSTEM_TEST_XML);
+        liquibase.update();
+        CouchbaseClusterAssert.assertThat(cluster).queryIndexes(TEST_KEYSPACE).doesNotHave(docId1IndexName);
+    }
+
+    @Test
+    @SneakyThrows
+    void Primary_index_should_be_deleted_by_name() {
+        createDeletingPrimaryIndex(createPrimaryQueryIndexOptions().indexName(docId1IndexName));
+        Liquibase liquibase = liquibase(DROP_PRIMARY_INDEX_BY_NAME_SYSTEM_TEST_XML);
         liquibase.update();
         CouchbaseClusterAssert.assertThat(cluster).queryIndexes(TEST_KEYSPACE).doesNotHave(docId1IndexName);
     }
