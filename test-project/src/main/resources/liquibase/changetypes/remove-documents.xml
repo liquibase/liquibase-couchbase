@@ -1,0 +1,27 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="remove-one-document" author="dmitry.dashko">
+        <ext:removeDocuments>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>newId1</ext:id>
+        </ext:removeDocuments>
+    </changeSet>
+
+    <changeSet id="remove-documents" author="dmitry.dashko">
+        <ext:removeDocuments>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>newId2</ext:id>
+            <ext:id>newId3</ext:id>
+        </ext:removeDocuments>
+    </changeSet>
+
+</databaseChangeLog>

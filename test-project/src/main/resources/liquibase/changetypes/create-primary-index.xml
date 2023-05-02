@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="1" author="dmitry.dashko">
+        <ext:createPrimaryQueryIndex>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:deferred>false</ext:deferred>
+            <ext:indexName>primaryIndexName</ext:indexName>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:scopeName>scopeName</ext:scopeName>
+        </ext:createPrimaryQueryIndex>
+    </changeSet>
+
+</databaseChangeLog>
