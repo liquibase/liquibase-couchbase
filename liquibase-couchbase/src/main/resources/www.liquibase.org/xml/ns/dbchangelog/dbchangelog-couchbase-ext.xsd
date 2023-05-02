@@ -431,7 +431,7 @@
             <xsd:attribute name="bucketName" type="xsd:string"/>
             <xsd:attribute name="scopeName" type="xsd:string"/>
             <xsd:attribute name="indexName" type="xsd:string"/>
-            <xsd:attribute name="collectionName" type="xsd:boolean"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
         </xsd:complexType>
     </xsd:element>
 
@@ -440,7 +440,7 @@
             <xsd:attribute name="bucketName" type="xsd:string"/>
             <xsd:attribute name="scopeName" type="xsd:string"/>
             <xsd:attribute name="indexName" type="xsd:string"/>
-            <xsd:attribute name="collectionName" type="xsd:boolean"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
         </xsd:complexType>
     </xsd:element>
 
