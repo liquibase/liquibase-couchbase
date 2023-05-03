@@ -64,7 +64,7 @@ class CreateQueryIndexChangeTest {
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:8d95e26c4350e71d7e5a872bdb57607e";
+        String checkSum = "8:15ff1eafac2404f08f2ad2189d41bc3e";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }
