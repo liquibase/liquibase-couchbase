@@ -148,6 +148,7 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy-all.version}</version>
+            <scope>test</scope>
             <type>pom</type>
         </dependency>
         <dependency>
