@@ -12,9 +12,10 @@ import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_INVALID_CH
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_JSON;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_BUCKET_TEST_YAML;
+import static common.constants.ChangeLogSampleFilePaths.CREATE_DUPLICATE_BUCKET_TEST_XML;
 import static common.constants.TestConstants.CREATE_BUCKET_SYSTEM_TEST_NAME;
-import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static common.constants.TestConstants.TEST_BUCKET;
+import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class CreateBucketSystemTest extends LiquibaseSystemTest {
@@ -43,7 +44,7 @@ public class CreateBucketSystemTest extends LiquibaseSystemTest {
     void Bucket_create_changelog_should_be_ignored_when_exist() {
         Liquibase liquibase = liquibase(CREATE_DUPLICATE_BUCKET_TEST_XML);
         liquibase.update();
-        CouchbaseClusterAssert.assertThat(cluster).hasBucket(TEST_BUCKET);
+        assertThat(cluster).hasBucket(TEST_BUCKET);
     }
 
     @Test

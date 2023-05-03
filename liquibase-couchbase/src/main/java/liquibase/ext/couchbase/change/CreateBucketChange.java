@@ -76,7 +76,6 @@ public class CreateBucketChange extends CouchbaseChange {
     protected Change[] createInverses() {
         DropBucketChange inverse = new DropBucketChange();
         inverse.setBucketName(bucketName);
-        inverse.setIgnoreIfNotExists(false);
 
         return new Change[] {inverse};
     }

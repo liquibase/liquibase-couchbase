@@ -56,7 +56,6 @@ public class CreateCollectionChange extends CouchbaseChange {
         inverse.setBucketName(bucketName);
         inverse.setScopeName(scopeName);
         inverse.setCollectionName(collectionName);
-        inverse.setSkipIfNotExists(false);
 
         return new Change[] {inverse};
     }

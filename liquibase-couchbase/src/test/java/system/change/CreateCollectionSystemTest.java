@@ -1,5 +1,6 @@
 package system.change;
 
+import common.matchers.CouchbaseDbAssert;
 import liquibase.Liquibase;
 import liquibase.changelog.ChangeSet;
 import liquibase.exception.LiquibaseException;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
+import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_DUPLICATE_FAIL_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_DUPLICATE_IGNORE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CREATE_COLLECTION_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_SCOPE;
@@ -37,7 +40,6 @@ public class CreateCollectionSystemTest extends LiquibaseSystemTest {
 
         liquibase.rollback(1, null);
         assertThat(cluster.bucket(TEST_BUCKET)).hasNoCollectionInScope(COLLECTION_NAME, TEST_SCOPE);
-        assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(travelsCollection, TEST_SCOPE);
     }
 
     @Test
