@@ -8,5 +8,8 @@ import lombok.Data;
 public class CouchbaseLiquibaseProperties {
 
     private String changeLog = "classpath:/db/changelog/db.changelog-master.yaml";
+    private String url;
+    private String password;
+    private String username;
 
 }

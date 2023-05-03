@@ -16,11 +16,11 @@ import static common.constants.TestConstants.CB_IMAGE_NAME;
 public class ContainerizedTestUtil {
 
     public static CouchbaseLiquibaseDatabase createDatabase(CouchbaseContainer container) {
-        return new CouchbaseLiquibaseDatabase(new ConnectionData(
+        return new CouchbaseLiquibaseDatabase(
                 container.getUsername(),
                 container.getPassword(),
                 container.getConnectionString()
-        ));
+        );
     }
 
     public static CouchbaseContainer createContainer(String testBucket) {

@@ -13,9 +13,6 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
 
     public static final ConfigurationDefinition<String> SERVICE_BUCKET_NAME;
     public static final ConfigurationDefinition<String> CHANGELOG_LOCK_COLLECTION_NAME;
-    public static final ConfigurationDefinition<String> COUCHBASE_URL;
-    public static final ConfigurationDefinition<String> COUCHBASE_USERNAME;
-    public static final ConfigurationDefinition<String> COUCHBASE_PASSWORD;
 
     public static final ConfigurationDefinition<Duration> CHANGELOG_WAIT_TIME;
     public static final ConfigurationDefinition<Duration> CHANGELOG_RECHECK_TIME;
@@ -93,25 +90,6 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .addAliasKey("transactionReactiveThreads")
                 .setDescription("Number of parallel threads for executing statements in reactive transaction")
                 .setDefaultValue(16)
-                .build();
-
-        COUCHBASE_URL = builder.define("url", String.class)
-                .addAliasKey("url")
-                .setDescription("Liquibase url")
-                .setDefaultValue("couchbase://127.0.0.1")
-                .build();
-
-        COUCHBASE_USERNAME = builder.define("username", String.class)
-                .addAliasKey("username")
-                .setDescription("Liquibase connection username")
-                .setDefaultValue("Administrator")
-                .build();
-
-
-        COUCHBASE_PASSWORD = builder.define("password", String.class)
-                .addAliasKey("password")
-                .setDescription("Liquibase connection password")
-                .setDefaultValue("password")
                 .build();
     }
 
