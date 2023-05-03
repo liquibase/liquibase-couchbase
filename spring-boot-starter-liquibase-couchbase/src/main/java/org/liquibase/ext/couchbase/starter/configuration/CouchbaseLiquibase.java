@@ -22,6 +22,10 @@ public class CouchbaseLiquibase implements InitializingBean, BeanNameAware, Reso
     private ResourceLoader resourceLoader;
     private String beanName;
     private String changeLog;
+    private String userName;
+    private String password;
+    private String url;
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -33,14 +37,14 @@ public class CouchbaseLiquibase implements InitializingBean, BeanNameAware, Reso
         }
 
         try (Liquibase liquibase = createLiquibase()) {
-            liquibase.update(changeLog);
+            liquibase.update();
         }
     }
 
     private Liquibase createLiquibase() {
         SpringResourceAccessor resourceOpener = createResourceOpener();
-        Database db = new CouchbaseLiquibaseDatabase();
-        return new Liquibase("classpath:config/liquibase/master.xml", resourceOpener, db);
+        Database db = new CouchbaseLiquibaseDatabase(userName, password, url);
+        return new Liquibase(changeLog, resourceOpener, db);
     }
 
     protected SpringResourceAccessor createResourceOpener() {

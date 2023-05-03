@@ -61,6 +61,7 @@
         <module>liquibase-couchbase</module>
         <module>test-project</module>
         <module>spring-boot-starter-liquibase-couchbase</module>
+        <module>spring-boot-starter-liquibase-couchbase-test</module>
     </modules>
 
     <scm>
