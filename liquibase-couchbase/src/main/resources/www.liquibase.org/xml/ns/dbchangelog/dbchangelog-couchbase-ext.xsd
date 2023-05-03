@@ -29,7 +29,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="isPrimary" type="xsd:boolean"/>
-                <xsd:element name="indexName" type="xsd:string"/>
+                <xsd:element name="indexName" type="xsd:string" minOccurs="0"/><!-- TODO temporary solution/hotfix to be able to remove primary index by name -->
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
