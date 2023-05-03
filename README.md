@@ -93,12 +93,12 @@ Now you can import Liquibase class and execute liquibase commands in your code. 
 
 ```java
     DatabaseFactory factory=DatabaseFactory.getInstance();
-        ClassLoaderResourceAccessor resourceAccessor=new ClassLoaderResourceAccessor();
-        Database db=factory.openDatabase("url","username","password",
-        null,resourceAccessor);
-        try(Liquibase liquibase=new Liquibase("config/liquibase/master.xml",resourceAccessor,db)){
+    ClassLoaderResourceAccessor resourceAccessor=new ClassLoaderResourceAccessor();
+    Database db=factory.openDatabase("url","username","password",
+            null,resourceAccessor);
+    try(Liquibase liquibase=new Liquibase("config/liquibase/master.xml",resourceAccessor,db)) {
         liquibase.update();
-        }
+    }
 ```
 
 ## ChangeType list

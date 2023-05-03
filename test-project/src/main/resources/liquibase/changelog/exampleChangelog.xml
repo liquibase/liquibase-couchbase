@@ -1,0 +1,125 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="1" author="dmitry.dashko">
+        <ext:createBucket>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:bucketType>COUCHBASE</ext:bucketType>
+            <ext:compressionMode>OFF</ext:compressionMode>
+            <ext:conflictResolutionType>TIMESTAMP</ext:conflictResolutionType>
+            <ext:evictionPolicy>FULL</ext:evictionPolicy>
+            <ext:flushEnabled>true</ext:flushEnabled>
+            <ext:minimumDurabilityLevel>NONE</ext:minimumDurabilityLevel>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:maxExpiryInHours>1</ext:maxExpiryInHours>
+            <ext:ramQuotaMB>128</ext:ramQuotaMB>
+            <ext:replicaIndexes>0</ext:replicaIndexes>
+            <ext:storageBackend>couchstore</ext:storageBackend>
+            <ext:timeoutInSeconds>10</ext:timeoutInSeconds>
+        </ext:createBucket>
+    </changeSet>
+
+    <changeSet id="2" author="dmitry.dashko">
+        <ext:createScope>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:scopeName>travel</ext:scopeName>
+        </ext:createScope>
+    </changeSet>
+
+    <changeSet id="3" author="dmitry.dashko">
+        <ext:createCollection>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:collectionName>hotels</ext:collectionName>
+            <ext:scopeName>travel</ext:scopeName>
+        </ext:createCollection>
+    </changeSet>
+
+    <changeSet id="4" author="dmitry.dashko">
+        <ext:createPrimaryQueryIndex>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:collectionName>hotels</ext:collectionName>
+            <ext:deferred>false</ext:deferred>
+            <ext:indexName>hotelsPrimaryIndex</ext:indexName>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:scopeName>travel</ext:scopeName>
+        </ext:createPrimaryQueryIndex>
+    </changeSet>
+
+
+    <changeSet id="5" author="dmitry.dashko">
+        <ext:insertDocuments>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:scopeName>travel</ext:scopeName>
+            <ext:collectionName>hotels</ext:collectionName>
+            <ext:documents>
+                <ext:document>
+                    <ext:id>1</ext:id>
+                    <ext:value>
+                        <ext:data>{"name":"HotelName1", "stars": 4, "active": true}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+                <ext:document>
+                    <ext:id>2</ext:id>
+                    <ext:value>
+                        <ext:data>{"name":"HotelName2", "stars": 5, "active": true}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+                <ext:document>
+                    <ext:id>3</ext:id>
+                    <ext:value>
+                        <ext:data>{"name":"HotelName3", "stars": 3, "active": true}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+            </ext:documents>
+        </ext:insertDocuments>
+    </changeSet>
+
+    <changeSet id="6" author="dmitry.dashko">
+        <comment>Remove hotel because we don't need it anymore :D</comment>
+        <ext:removeDocuments>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:scopeName>travel</ext:scopeName>
+            <ext:collectionName>hotels</ext:collectionName>
+            <ext:id>2</ext:id>
+        </ext:removeDocuments>
+    </changeSet>
+
+    <changeSet id="7" author="dmitry.dashko">
+        <comment>Update number of stars for hotel with id 1 :D</comment>
+        <ext:mutateIn>
+            <ext:bucketName>exampleBucket</ext:bucketName>
+            <ext:scopeName>travel</ext:scopeName>
+            <ext:collectionName>hotels</ext:collectionName>
+            <ext:id>1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>stars</ext:path>
+                    <ext:value>
+                        <ext:data>5</ext:data>
+                        <ext:type>Long</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>UPSERT</ext:mutateInType>
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="8" author="dmitry.dashko">
+        <comment>Temporary make inactive all hotels</comment>
+        <ext:executeQuery>
+            <ext:query>
+                UPDATE exampleBucket.travel.hotels SET active = false WHERE active IS NOT MISSING
+            </ext:query>
+        </ext:executeQuery>
+    </changeSet>
+
+    <!-- For all type of examples/changes please read README (section: ChangeType list) -->
+
+</databaseChangeLog>
