@@ -39,6 +39,9 @@
     "mutateIn": {
       "$ref": "#/$defs/mutateIn"
     },
+    "mutateInQuery": {
+      "$ref": "#/$defs/mutateInQuery"
+    },
     "insertDocuments": {
       "$ref": "#/$defs/insertDocuments"
     },
@@ -241,6 +244,11 @@
               {
                 "required": [
                   "mutateIn"
+                ]
+              },
+              {
+                "required": [
+                  "mutateInQuery"
                 ]
               },
               {
@@ -594,6 +602,49 @@
           ]
         },
         "id": {
+          "type": "string"
+        },
+        "mutateInSpecs": {
+          "$ref": "#/$defs/mutateInSpecs"
+        }
+      }
+    },
+    "mutateInQuery": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName",
+        "collectionName",
+        "whereCondition",
+        "mutateInSpecs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "expiry": {
+          "type": "string"
+        },
+        "preserveExpiry": {
+          "type": "boolean"
+        },
+        "storeSemantics": {
+          "type": "string",
+          "enum": [
+            "REPLACE",
+            "UPSERT",
+            "INSERT",
+            "REVIVE"
+          ]
+        },
+        "whereCondition": {
           "type": "string"
         },
         "mutateInSpecs": {
