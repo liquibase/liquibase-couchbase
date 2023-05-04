@@ -20,6 +20,7 @@ import liquibase.ext.couchbase.types.subdoc.MutateInType;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INSERT_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_COLLECTION_3;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static java.util.Arrays.asList;
@@ -39,13 +40,14 @@ public class MutateInChangeTest {
     }
 
     @Test
-    void Should_parse_mutateIn_correctly() {
+    void Should_parse_mutateIn_id_correctly() {
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
 
         assertThat(changeSet.getChanges())
                 .map(MutateInChange.class::cast)
                 .containsExactly(
-                        change(asList(spec("user.age", "29", DataType.STRING, MutateInType.INSERT)))
+                        changeWithId(asList(spec("user.age", "29", DataType.STRING, MutateInType.INSERT))),
+                        changeWithWhereClause(asList(spec("adoc", "{\"newDocumentField\": \"newDocumentValue\"}", DataType.JSON, MutateInType.REPLACE)))
                 );
     }
 
@@ -62,15 +64,30 @@ public class MutateInChangeTest {
         return new LiquibaseMutateInSpec(path, new Value(value, dataType), type);
     }
 
-    private MutateInChange change(List<LiquibaseMutateInSpec> specs) {
+    private MutateInChange changeWithId(List<LiquibaseMutateInSpec> specs) {
         return new MutateInChange(
                 TEST_ID,
+                null,
                 TEST_BUCKET,
                 TEST_SCOPE,
                 TEST_COLLECTION,
                 "PT1H",
                 true,
                 StoreSemantics.INSERT,
+                specs
+        );
+    }
+
+    private MutateInChange changeWithWhereClause(List<LiquibaseMutateInSpec> specs) {
+        return new MutateInChange(
+                null,
+                "aKey=\"avalue\"",
+                TEST_BUCKET,
+                TEST_SCOPE,
+                TEST_COLLECTION_3,
+                "PT1H",
+                true,
+                StoreSemantics.REPLACE,
                 specs
         );
     }

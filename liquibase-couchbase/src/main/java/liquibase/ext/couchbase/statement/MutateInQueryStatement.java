@@ -21,8 +21,6 @@ import static java.lang.String.format;
 @EqualsAndHashCode(callSuper = true)
 public class MutateInQueryStatement extends CouchbaseStatement {
 
-    private static final String RETRIEVE_DOCUMENT_IDS_QUERY_TEMPLATE = "SELECT meta().id FROM %s WHERE %s";
-    private static final String COLLECTION_PATH_TEMPLATE = "`%s`.`%s`.`%s`";
     private final MutateIn mutate;
     private final MutateInOptions mutateInOptions;
     private final String whereClause;
@@ -32,18 +30,9 @@ public class MutateInQueryStatement extends CouchbaseStatement {
         Keyspace keyspace = mutate.getKeyspace();
         BucketOperator bucketOperator = clusterOperator.getBucketOperator(keyspace.getBucket());
         Collection collection = bucketOperator.getCollection(keyspace.getCollection(), keyspace.getScope());
-        retrieveDocumentIds(keyspace, clusterOperator)
+        clusterOperator.retrieveDocumentIdsByWhereClause(keyspace, whereClause)
                 .forEach(documentId -> collection.mutateIn(documentId, mutate.getSpecs(), mutateInOptions));
     }
 
-    private List<String> retrieveDocumentIds(Keyspace keyspace, ClusterOperator clusterOperator) {
-        String collectionPath = format(COLLECTION_PATH_TEMPLATE, keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
-        String documentIdRetrieveQuery = format(RETRIEVE_DOCUMENT_IDS_QUERY_TEMPLATE, collectionPath, whereClause);
-        QueryResult documentIdsResult = clusterOperator.executeSingleSql(documentIdRetrieveQuery);
-        return documentIdsResult.rowsAsObject()
-                .stream()
-                .map(jsonObject -> jsonObject.getString("id"))
-                .collect(Collectors.toList());
-    }
 }
 

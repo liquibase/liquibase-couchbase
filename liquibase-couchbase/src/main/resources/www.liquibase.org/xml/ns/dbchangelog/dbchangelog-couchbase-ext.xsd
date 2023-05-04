@@ -284,31 +284,10 @@
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="id" type="xsd:string"/>
-                <xsd:element ref="mutateInSpecs"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
-    <xsd:element name="mutateInQuery">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="whereCondition" type="xsd:string"/>
-                <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="scopeName" type="xsd:string"/>
-                <xsd:element name="collectionName" type="xsd:string"/>
-                <xsd:element name="expiry" minOccurs="0" type="xsd:string"/>
-                <xsd:element name="preserveExpiry" minOccurs="0" type="xsd:boolean"/>
-                <xsd:element name="storeSemantics" minOccurs="0">
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:string">
-                            <xsd:enumeration value="REPLACE"/>
-                            <xsd:enumeration value="UPSERT"/>
-                            <xsd:enumeration value="INSERT"/>
-                            <xsd:enumeration value="REVIVE"/>
-                        </xsd:restriction>
-                    </xsd:simpleType>
-                </xsd:element>
+                <xsd:choice>
+                    <xsd:element name="id" type="xsd:string"/>
+                    <xsd:element name="whereCondition" type="xsd:string"/>
+                </xsd:choice>
                 <xsd:element ref="mutateInSpecs"/>
             </xsd:sequence>
         </xsd:complexType>
