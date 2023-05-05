@@ -1,7 +1,6 @@
 package integration.statement;
 
 import com.couchbase.client.core.error.IndexExistsException;
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
@@ -12,6 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static common.constants.TestConstants.DEFAULT_COLLECTION;
+import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -29,12 +30,15 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     @AfterEach
     void cleanUp() {
         TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
-        Collection collection = clusterOperator.getBucketOperator(bucketName).getBucket().defaultCollection();
         if (collectionOperatorDefault.collectionIndexExists(indexName)) {
-            clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
+            clusterOperator.getBucketOperator(bucketName)
+                    .getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE)
+                    .dropIndex(indexName);
         }
         if (collectionOperatorDefault.collectionIndexExists(MANUALLY_CREATED_INDEX)) {
-            clusterOperator.getCollectionOperator(collection).dropIndex(MANUALLY_CREATED_INDEX);
+            clusterOperator.getBucketOperator(bucketName)
+                    .getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE)
+                    .dropIndex(MANUALLY_CREATED_INDEX);
         }
     }
 

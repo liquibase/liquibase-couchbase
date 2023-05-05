@@ -20,7 +20,8 @@ import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import static common.constants.TestConstants.TEST_BUCKET;
-import static common.constants.TestConstants.TEST_KEYSPACE;
+import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_SCOPE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -95,7 +96,9 @@ class TestClusterOperatorTest {
 
     @Test
     void should_create_collection_primary_index() {
-        testClusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(null);
+        testClusterOperator.getBucketOperator(TEST_BUCKET)
+                .getCollectionOperator(TEST_COLLECTION, TEST_SCOPE)
+                .createCollectionPrimaryIndex(null);
 
         verify(collectionQueryIndexManager).createPrimaryIndex();
     }

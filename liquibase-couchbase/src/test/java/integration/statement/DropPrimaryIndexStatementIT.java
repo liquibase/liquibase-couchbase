@@ -1,6 +1,5 @@
 package integration.statement;
 
-import com.couchbase.client.java.Collection;
 import common.RandomizedScopeTestCase;
 
 import java.util.UUID;
@@ -21,9 +20,9 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_drop_Primary_index() {
-        Collection collection = clusterOperator.getBucketOperator(bucketName)
-                .getCollection(DEFAULT_COLLECTION, DEFAULT_SCOPE);
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
+        clusterOperator.getBucketOperator(bucketName)
+                .getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE)
+                .createPrimaryIndex();
         keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace, null);
 
@@ -35,9 +34,9 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_drop_Primary_index_by_name() {
         String indexName = UUID.randomUUID().toString();
-        Collection collection = clusterOperator.getBucketOperator(bucketName)
-                .getCollection(DEFAULT_COLLECTION, DEFAULT_SCOPE);
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex(createPrimaryQueryIndexOptions().indexName(indexName));
+        clusterOperator.getBucketOperator(bucketName)
+                .getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE)
+                .createPrimaryIndex(createPrimaryQueryIndexOptions().indexName(indexName));
         keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace, indexName);
 
@@ -50,9 +49,9 @@ class DropPrimaryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_drop_primary_index_for_specific_keyspace() {
         cluster.waitUntilReady(CLUSTER_READY_TIMEOUT);
         keyspace = keyspace(bucketName, scopeName, collectionName);
-        Collection collection = clusterOperator.getBucketOperator(bucketName)
-                .getCollection(collectionName, scopeName);
-        clusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(null);
+        clusterOperator.getBucketOperator(bucketName)
+                .getCollectionOperator(collectionName, scopeName)
+                .createCollectionPrimaryIndex(null);
 
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(keyspace, null);
         statement.execute(clusterOperator);

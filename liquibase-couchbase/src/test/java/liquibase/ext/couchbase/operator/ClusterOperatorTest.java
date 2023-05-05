@@ -40,9 +40,11 @@ import static com.couchbase.client.java.manager.query.CreateQueryIndexOptions.cr
 import static common.constants.TestConstants.DEFAULT_COLLECTION;
 import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_KEYSPACE;
+import static common.constants.TestConstants.TEST_SCOPE;
 import static org.assertj.core.api.AssertionsForClassTypes.entry;
 import static org.assertj.core.api.CollectionAssert.assertThatCollection;
 import static org.assertj.core.api.MapAssert.assertThatMap;
@@ -128,10 +130,9 @@ class ClusterOperatorTest {
     void should_create_query_index() {
         List<Field> fields = ImmutableList.of(new Field(TEST_ID));
         Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-        Collection collection = cluster.bucket(keyspace.getBucket())
-                .scope(keyspace.getScope())
-                .collection(keyspace.getCollection());
-        clusterOperator.getCollectionOperator(collection).createQueryIndex(TEST_INDEX, fields, null);
+        clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
+                .createQueryIndex(TEST_INDEX, fields, null);
 
         verify(collectionQueryIndexManager).createIndex(eq(TEST_INDEX), anyCollection());
     }
@@ -144,7 +145,9 @@ class ClusterOperatorTest {
                 .collection(TEST_KEYSPACE.getCollection());
         CreateQueryIndexOptions options = createQueryIndexOptions();
 
-        clusterOperator.getCollectionOperator(collection).createQueryIndex(TEST_INDEX, fields, options);
+        clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())
+                .getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())
+                .createQueryIndex(TEST_INDEX, fields, options);
 
         verify(collectionQueryIndexManager).createIndex(eq(TEST_INDEX), anyList(), eq(options));
     }
@@ -184,10 +187,9 @@ class ClusterOperatorTest {
 
     @Test
     void should_drop_collection_query_index() {
-        Collection collection = cluster.bucket(TEST_KEYSPACE.getBucket())
-                .scope(TEST_KEYSPACE.getScope())
-                .collection(TEST_KEYSPACE.getCollection());
-        clusterOperator.getCollectionOperator(collection).dropIndex(TEST_INDEX);
+        clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())
+                .getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())
+                .dropIndex(TEST_INDEX);
 
         verify(collectionQueryIndexManager).dropIndex(TEST_INDEX);
     }
@@ -216,7 +218,10 @@ class ClusterOperatorTest {
         when(collectionQueryIndexManager.getAllIndexes()).thenReturn(Collections.singletonList(queryIndex));
         when(queryIndex.name()).thenReturn(TEST_INDEX);
 
-        boolean result = clusterOperator.getCollectionOperator(collection).collectionIndexExists(TEST_INDEX);
+        boolean result = clusterOperator
+                .getBucketOperator(TEST_BUCKET)
+                .getCollectionOperator(TEST_COLLECTION, TEST_SCOPE)
+                .collectionIndexExists(TEST_INDEX);
 
         assertTrue(result);
     }
@@ -225,7 +230,9 @@ class ClusterOperatorTest {
     void should_return_false_if_collection_index_not_exist() {
         when(collectionQueryIndexManager.getAllIndexes()).thenReturn(Collections.emptyList());
 
-        boolean result = clusterOperator.getCollectionOperator(collection).collectionIndexExists(TEST_INDEX);
+        boolean result = clusterOperator.getBucketOperator(TEST_BUCKET)
+                .getCollectionOperator(TEST_COLLECTION, TEST_SCOPE)
+                .collectionIndexExists(TEST_INDEX);
 
         assertFalse(result);
     }
@@ -234,9 +241,9 @@ class ClusterOperatorTest {
     void should_drop_primary_index() {
         when(collectionQueryIndexManager.getAllIndexes()).thenReturn(Collections.emptyList());
 
-        Collection col = cluster.bucket(TEST_BUCKET).scope(TEST_KEYSPACE.getScope())
-                .collection(TEST_KEYSPACE.getCollection());
-        clusterOperator.getCollectionOperator(col).dropCollectionPrimaryIndex();
+        clusterOperator.getBucketOperator(TEST_BUCKET)
+                .getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())
+                .dropCollectionPrimaryIndex();
 
         verify(collectionQueryIndexManager).dropPrimaryIndex();
     }
@@ -304,9 +311,9 @@ class ClusterOperatorTest {
     void should_create_collection_primary_index_with_options() {
         CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions();
 
-        Collection collection = clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())
-                .getCollection(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope());
-        clusterOperator.getCollectionOperator(collection).createCollectionPrimaryIndex(options);
+        clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())
+                .getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())
+                .createCollectionPrimaryIndex(options);
 
         verify(collectionQueryIndexManager).createPrimaryIndex(options);
     }
