@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.java.Collection;
 import liquibase.Scope;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -27,8 +26,8 @@ public class DropIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
-                .getCollection(keyspace.getCollection(), keyspace.getScope());
-        clusterOperator.getCollectionOperator(collection).dropIndex(indexName);
+        clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
+                .dropIndex(indexName);
     }
 }

@@ -57,9 +57,9 @@ public class PrimaryIndexExistsPrecondition extends AbstractCouchbasePreconditio
             return operator.primaryIndexExists(indexName, bucketScope);
         }
 
-        Collection collection = operator.getBucketOperator(bucketName).getCollection(collectionName, scopeName);
-
-        return operator.getCollectionOperator(collection).collectionPrimaryIndexExists(indexName);
+        return operator.getBucketOperator(bucketName)
+                .getCollectionOperator(collectionName, scopeName)
+                .collectionPrimaryIndexExists(indexName);
     }
 
 }

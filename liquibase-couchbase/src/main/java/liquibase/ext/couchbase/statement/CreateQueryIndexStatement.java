@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
 import liquibase.Scope;
 import liquibase.ext.couchbase.operator.ClusterOperator;
@@ -34,11 +33,11 @@ public class CreateQueryIndexStatement extends CouchbaseStatement {
 
     @Override
     public void execute(ClusterOperator clusterOperator) {
-        Collection collection = clusterOperator.getBucketOperator(keyspace.getBucket())
-                .getCollection(keyspace.getCollection(), keyspace.getScope());
         CreateQueryIndexOptions options = CreateQueryIndexOptions.createQueryIndexOptions()
                 .deferred(deferred)
                 .numReplicas(numReplicas);
-        clusterOperator.getCollectionOperator(collection).createQueryIndex(indexName, fields, options);
+        clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
+                .createQueryIndex(indexName, fields, options);
     }
 }
