@@ -36,7 +36,6 @@ import static java.util.stream.Collectors.toMap;
 public class ClusterOperator {
 
     private static final String RETRIEVE_DOCUMENT_IDS_QUERY_TEMPLATE = "SELECT meta().id FROM %s WHERE %s";
-    private static final String COLLECTION_PATH_TEMPLATE = "`%s`.`%s`.`%s`";
 
     protected final Cluster cluster;
 
@@ -87,7 +86,7 @@ public class ClusterOperator {
     }
 
     public List<String> retrieveDocumentIdsByWhereClause(Keyspace keyspace, String whereClause) {
-        String collectionPath = format(COLLECTION_PATH_TEMPLATE, keyspace.getBucket(), keyspace.getScope(), keyspace.getCollection());
+        String collectionPath = keyspace.getFullPath();
         String documentIdRetrieveQuery = format(RETRIEVE_DOCUMENT_IDS_QUERY_TEMPLATE, collectionPath, whereClause);
         QueryResult documentIdsResult = executeSingleSql(documentIdRetrieveQuery);
         return documentIdsResult.rowsAsObject()

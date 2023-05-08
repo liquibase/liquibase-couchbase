@@ -72,7 +72,7 @@ public class MutateInChange extends CouchbaseChange {
     @Override
     public String getConfirmationMessage() {
         int opCount = mutateInSpecs.size();
-        return format("MutateIn %s operations has been successfully fulfilled", opCount);
+        return format("MutateIn %s operations has been successfully executed", opCount);
     }
 
     private MutateInOptions buildOptions(String expiry, Boolean preserveExpiry, StoreSemantics storeSemantics) {

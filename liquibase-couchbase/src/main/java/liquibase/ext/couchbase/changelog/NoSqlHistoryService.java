@@ -78,9 +78,9 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
             log.info("Create Change Log Collection");
 
             Keyspace keyspace = keyspace(SERVICE_BUCKET_NAME, DEFAULT_SERVICE_SCOPE, CHANGE_LOG_COLLECTION);
-            log.info(format(CREATING_TEMPLATE, keyspace.getKeyspace()));
+            log.info(format(CREATING_TEMPLATE, keyspace.getFullPath()));
             createRepository();
-            log.info(format(CREATED_TEMPLATE, keyspace.getKeyspace()));
+            log.info(format(CREATED_TEMPLATE, keyspace.getFullPath()));
         }
         initialized = true;
     }

@@ -57,7 +57,7 @@ public class MutateInChangeTest {
         Change change = firstOf(changeSet.getChanges());
 
         assertThat(change.getConfirmationMessage())
-                .isEqualTo("MutateIn %s operations has been successfully fulfilled", 1);
+                .isEqualTo("MutateIn %s operations has been successfully executed", 1);
     }
 
     private LiquibaseMutateInSpec spec(String path, String value, DataType dataType, MutateInType type) {
