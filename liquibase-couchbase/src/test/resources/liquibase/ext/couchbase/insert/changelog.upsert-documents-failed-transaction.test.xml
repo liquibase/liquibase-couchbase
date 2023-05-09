@@ -29,23 +29,29 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testLines.json</ext:filePath>
-                <ext:importType>LINES</ext:importType>
-                <ext:keyProviderType>DEFAULT</ext:keyProviderType>
-                <ext:keyProviderExpression>id</ext:keyProviderExpression>
-            </ext:file>
-        </ext:upsertDocuments>
-        <ext:upsertDocuments>
-            <ext:bucketName>testBucket</ext:bucketName>
-            <ext:scopeName>testScope</ext:scopeName>
-            <ext:collectionName>testCollection</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testList.json</ext:filePath>
-                <ext:importType>LIST</ext:importType>
-                <ext:keyProviderType>DEFAULT</ext:keyProviderType>
-                <ext:keyProviderExpression>id</ext:keyProviderExpression>
-            </ext:file>
+            <ext:documents>
+                <ext:document>
+                    <ext:id>id1</ext:id>
+                    <ext:value>
+                        <ext:data>{"key":"value1"}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+                <ext:document>
+                    <ext:id></ext:id>
+                    <ext:value>
+                        <ext:data>{"key":"value2"}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+                <ext:document>
+                    <ext:id>id3</ext:id>
+                    <ext:value>
+                        <ext:data>{"key":"value3"}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+            </ext:documents>
         </ext:upsertDocuments>
     </changeSet>
 </databaseChangeLog>

@@ -22,32 +22,19 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="dmitry.dashko">
-        <ext:insertOne>
+        <ext:upsertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:document>
-                <ext:id>existingKey</ext:id>
-                <ext:value>
-                    <ext:data>{"name":"Name", "age": 99}</ext:data>
-                    <ext:type>Json</ext:type>
-                </ext:value>
-            </ext:document>
-        </ext:insertOne>
-        <ext:insertOne>
-            <ext:bucketName>testBucket</ext:bucketName>
-            <ext:scopeName>testScope</ext:scopeName>
-            <ext:collectionName>testCollection</ext:collectionName>
-            <ext:document>
-                <ext:id>newKey</ext:id>
-                <ext:value>
-                    <ext:data>{"name":"Name", "age": 99}</ext:data>
-                    <ext:type>Json</ext:type>
-                </ext:value>
-            </ext:document>
-        </ext:insertOne>
+            <ext:file>
+                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testUidKey.json</ext:filePath>
+                <ext:importType>LINES</ext:importType>
+                <ext:keyProviderType>EXPRESSION</ext:keyProviderType>
+                <ext:keyProviderExpression>testKey::%value%::#MONO_INCR#</ext:keyProviderExpression>
+            </ext:file>
+        </ext:upsertDocuments>
     </changeSet>
 </databaseChangeLog>

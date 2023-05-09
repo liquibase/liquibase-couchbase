@@ -53,8 +53,8 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
 
         new MutateInStatement(mutate, mutateInOptions().timeout(Duration.ofSeconds(2))).execute(clusterOperator);
         Collection collection = collectionOperator.getCollection();
-        assertThat(collection).extractingDocument(doc2.getId()).hasNoField("age");
-        assertThat(collection).extractingDocument(doc1.getId()).hasField("age");
+        assertThat(collection).extractingDocument(doc2.getId()).jsonHasNoField("age");
+        assertThat(collection).extractingDocument(doc1.getId()).jsonHasField("age");
     }
 
     @Test
