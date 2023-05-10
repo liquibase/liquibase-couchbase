@@ -85,6 +85,10 @@ all necessary files and plugins to run.
 
 ### Spring Boot application
 
+The guide how you can run liquibase using spring boot starter you can see in the [spring-boot-test-project](spring-boot-starter-liquibase-couchbase-test) directory. This project contains all necessary files to run.
+
+**Spring boot version supports only liquibase update command.**
+
 ### Directly as a library jar file (create object from dependency and invoke commands)
 
 Add extension dependency from ... and add to your project.
