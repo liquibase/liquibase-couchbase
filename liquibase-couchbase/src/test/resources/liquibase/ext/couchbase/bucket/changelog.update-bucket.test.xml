@@ -30,7 +30,7 @@
             <ext:compressionMode>PASSIVE</ext:compressionMode>
             <ext:maxExpiryInHours>2</ext:maxExpiryInHours>
             <ext:numReplicas>1</ext:numReplicas>
-            <ext:ramQuotaMB>256</ext:ramQuotaMB>
+            <ext:ramQuotaMB>100</ext:ramQuotaMB>
             <ext:flushEnabled>false</ext:flushEnabled>
             <ext:timeoutInSeconds>18</ext:timeoutInSeconds>
         </ext:updateBucket>
