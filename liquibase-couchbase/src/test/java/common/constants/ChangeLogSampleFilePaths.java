@@ -97,4 +97,16 @@ public class ChangeLogSampleFilePaths {
     public static final String INSERT_DOCUMENT_ROLLBACK_SQL_TEST = rootPrefix + "/insert/changelog.insert-document-rollback-sql.test.xml";
     public static final String UPDATE_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/changelog.update-bucket.test.json";
 
+    //preconditions
+    public static final String BUCKET_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.bucket-exists-precondition.test.xml";
+    public static final String BUCKET_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.bucket-exists-precondition-failed.test.xml";
+    public static final String SCOPE_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.scope-exists-precondition.test.xml";
+    public static final String SCOPE_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.scope-exists-precondition-failed.test.xml";
+    public static final String COLLECTION_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.collection-exists-precondition.test.xml";
+    public static final String COLLECTION_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.collection-exists-precondition-failed.test.xml";
+    public static final String DOCUMENT_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.document-exists-precondition.test.xml";
+    public static final String DOCUMENT_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.document-exists-precondition-failed.test.xml";
+    public static final String INDEX_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.index-exists-precondition.test.xml";
+    public static final String INDEX_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.index-exists-precondition-failed.test.xml";
+
 }
