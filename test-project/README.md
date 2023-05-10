@@ -11,7 +11,7 @@ The test-project module contains **Maven plugin** to run changelog files.
    - At first, you need to choose branch from which you want to create dependency and put to local repository for test purpose. When you chose the branch create jar (dependency) of it <br/>
    To do this, **execute** `mvn clean install` command in the root of the **liquibase-couchbase** module through CLI or using IDE.
    Make sure that in `pom.xml` of **test-project** the `liquibase-maven-plugin` has the correct version of our created dependency.
-2) Change the properties (URL, username, password for the Couchbase database) in the `src\main\resources\liquibase.liquibase.properties`.
+2) Change the properties (URL, username, password for the Couchbase database) in the `src\main\resources\liquibase.properties`.
 3) Write changelog files into the `src\main\resources\liquibase\changelog` directory.
 4) Run the update command (apply all new changes). We can do this:
    - In the root of the **test-project** invoke the `mvn liquibase:update` command;
