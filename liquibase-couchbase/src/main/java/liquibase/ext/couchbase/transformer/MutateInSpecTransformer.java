@@ -1,20 +1,20 @@
 package liquibase.ext.couchbase.transformer;
 
 import com.couchbase.client.java.kv.MutateInSpec;
-import com.google.common.collect.Sets;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import liquibase.Scope;
 import liquibase.ext.couchbase.types.Value;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
 import liquibase.ext.couchbase.validator.MutateInValidator;
 import liquibase.ext.couchbase.validator.MutateInValidatorRegistry;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static java.util.Optional.ofNullable;
 import static liquibase.ext.couchbase.types.subdoc.MutateInType.ARRAY_APPEND;
 import static liquibase.ext.couchbase.types.subdoc.MutateInType.ARRAY_CREATE;
@@ -27,8 +27,9 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public class MutateInSpecTransformer {
 
-    private static final Set<MutateInType> multipleValueMutateInTypes = Sets.newHashSet(ARRAY_PREPEND, ARRAY_APPEND, ARRAY_CREATE,
-            ARRAY_INSERT);
+    private static final Set<MutateInType> multipleValueMutateInTypes = new HashSet<>(
+            Arrays.asList(ARRAY_PREPEND, ARRAY_APPEND, ARRAY_CREATE,
+                    ARRAY_INSERT));
 
     private final MutateInValidatorRegistry validatorRegistry = Scope.getCurrentScope()
             .getSingleton(MutateInValidatorRegistry.class);
