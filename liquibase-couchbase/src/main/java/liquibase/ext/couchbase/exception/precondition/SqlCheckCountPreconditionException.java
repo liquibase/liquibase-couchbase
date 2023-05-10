@@ -15,7 +15,7 @@ import static java.lang.String.format;
 @Getter
 public class SqlCheckCountPreconditionException extends PreconditionFailedException {
 
-    private static final String template = "Sql precondition query[%s] result is different then expected count[%d]";
+    private static final String template = "Sql precondition query [%s] result is different then expected count [%d]";
     private final String message;
 
     public SqlCheckCountPreconditionException(String query, Integer count,

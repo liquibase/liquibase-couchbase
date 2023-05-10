@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * A precondition that checks sql query returns expected count. The sql++ query need to be written by select ... as count template in order
+ * A precondition that checks sql query returns expected count. The sql++ query need to be written by [select ... as] count template in order
  * to be able to extract count from json. Otherwise result may be not as expected
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition
@@ -25,6 +25,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SqlCheckCountPrecondition extends AbstractCouchbasePrecondition {
+
+    private static final String QUERY_RESULT_COUNT_PARAMETER = "count";
 
     private Integer count;
 
@@ -38,15 +40,15 @@ public class SqlCheckCountPrecondition extends AbstractCouchbasePrecondition {
 
     @Override
     public void executeAndCheckStatement(Database database, DatabaseChangeLog changeLog) throws SqlCheckCountPreconditionException {
-        if (!doesQueryHaveExpectedResult((CouchbaseConnection) database.getConnection())) {
+        if (!queryHaveExpectedResult((CouchbaseConnection) database.getConnection())) {
             throw new SqlCheckCountPreconditionException(query, count, changeLog, this);
         }
     }
 
-    public boolean doesQueryHaveExpectedResult(CouchbaseConnection connection) {
+    public boolean queryHaveExpectedResult(CouchbaseConnection connection) {
         ClusterOperator operator = new ClusterOperator(connection.getCluster());
         QueryResult result = operator.executeSingleSql(query);
         List<JsonObject> rows = result.rowsAsObject();
-        return rows.get(0).getInt("count").equals(count);
+        return rows.get(0).getInt(QUERY_RESULT_COUNT_PARAMETER).equals(count);
     }
 }

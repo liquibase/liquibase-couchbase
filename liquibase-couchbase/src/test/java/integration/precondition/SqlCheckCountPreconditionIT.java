@@ -26,7 +26,7 @@ public class SqlCheckCountPreconditionIT extends RandomizedScopeTestCase {
 
         assertThatExceptionOfType(SqlCheckCountPreconditionException.class)
                 .isThrownBy(() -> sqlCheckPrecondition.check(database, null, null, null))
-                .withMessage("Sql precondition query[%s] result is different then expected count[%d]", sqlCheckPrecondition.getQuery(),
+                .withMessage("Sql precondition query [%s] result is different then expected count [%d]", sqlCheckPrecondition.getQuery(),
                         expectedWrongResult);
     }
 
