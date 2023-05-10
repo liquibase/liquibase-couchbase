@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.statement;
 
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.kv.MutateInOptions;
-import com.couchbase.client.java.query.QueryResult;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -10,11 +9,6 @@ import liquibase.ext.couchbase.types.subdoc.MutateIn;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.lang.String.format;
 
 @Getter
 @RequiredArgsConstructor

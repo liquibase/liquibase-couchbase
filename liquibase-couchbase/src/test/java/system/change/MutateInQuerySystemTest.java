@@ -58,12 +58,12 @@ public class MutateInQuerySystemTest extends LiquibaseSystemTest {
     @SneakyThrows
     void Should_replace_document() {
         Document doc = document(documentIds[0], createOneFieldJson("aKey", "avalue"));
+        Document expected = document(doc.getId(), expectedReplaceContent);
         testCollectionOperator.insertDoc(doc);
 
         Liquibase liquibase = liquibase(MUTATE_QUERY_FILTER_IN_REPLACE_DOCUMENT_TEST_XML);
         liquibase.update();
 
-        Document expected = document(doc.getId(), expectedReplaceContent);
         assertThat(testCollectionOperator.getCollection()).contains(expected);
     }
 
@@ -73,17 +73,15 @@ public class MutateInQuerySystemTest extends LiquibaseSystemTest {
         Document doc1 = document(documentIds[0], createOneFieldJson("aKey1", "avalue"));
         Document doc2 = document(documentIds[1], createOneFieldJson("aKey1", "avalue"));
         Document doc3 = document(documentIds[2], createOneFieldJson("aKey1", "avalue5"));
+        Document expected1 = document(doc1.getId(), expectedReplaceContent);
+        Document expected2 = document(doc2.getId(), expectedReplaceContent);
         testCollectionOperator.insertDocs(doc1, doc2, doc3);
 
         Liquibase liquibase = liquibase(MUTATE_QUERY_FILTER_IN_REPLACE_DOCUMENTS_TEST_XML);
         liquibase.update();
 
-        Document expected1 = document(doc1.getId(), expectedReplaceContent);
         assertThat(testCollectionOperator.getCollection()).contains(expected1);
-
-        Document expected2 = document(doc2.getId(), expectedReplaceContent);
         assertThat(testCollectionOperator.getCollection()).contains(expected2);
-
         assertThat(testCollectionOperator.getCollection()).contains(doc3);
     }
 
