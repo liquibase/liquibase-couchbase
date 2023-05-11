@@ -1,7 +1,6 @@
 package system.precondition;
 
 import com.couchbase.client.java.Collection;
-import common.matchers.CouchbaseCollectionAssert;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import lombok.SneakyThrows;
@@ -12,6 +11,7 @@ import static common.constants.ChangeLogSampleFilePaths.BUCKET_EXISTS_FAILED_PRE
 import static common.constants.ChangeLogSampleFilePaths.BUCKET_EXISTS_PRECONDITION;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
+import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class BucketExistsPreconditionSystemTest extends LiquibaseSystemTest {
@@ -25,7 +25,7 @@ public class BucketExistsPreconditionSystemTest extends LiquibaseSystemTest {
 
         liquibase.update();
 
-        CouchbaseCollectionAssert.assertThat(collection).containsId(DOCUMENT_ID);
+        assertThat(collection).containsId(DOCUMENT_ID);
         collection.remove(DOCUMENT_ID);
     }
 
@@ -37,6 +37,6 @@ public class BucketExistsPreconditionSystemTest extends LiquibaseSystemTest {
         assertThatExceptionOfType(LiquibaseException.class)
                 .isThrownBy(liquibase::update);
 
-        CouchbaseCollectionAssert.assertThat(collection).doesNotContainId(DOCUMENT_ID);
+        assertThat(collection).doesNotContainId(DOCUMENT_ID);
     }
 }

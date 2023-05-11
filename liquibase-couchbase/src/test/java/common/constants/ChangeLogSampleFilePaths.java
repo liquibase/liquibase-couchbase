@@ -108,5 +108,9 @@ public class ChangeLogSampleFilePaths {
     public static final String DOCUMENT_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.document-exists-precondition-failed.test.xml";
     public static final String INDEX_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.index-exists-precondition.test.xml";
     public static final String INDEX_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.index-exists-precondition-failed.test.xml";
+    public static final String PRIMARY_INDEX_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.primary-index-exists-precondition.test.xml";
+    public static final String PRIMARY_INDEX_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.primary-index-exists-precondition-failed.test.xml";
+    public static final String SQL_CHECK_PRECONDITION = rootPrefix + "/precondition/changelog.sql-check-precondition.test.xml";
+    public static final String SQL_CHECK_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.sql-check-precondition-failed.test.xml";
 
 }
