@@ -257,42 +257,46 @@
                             </formats>
                         </configuration>
                     </execution>
-<!--                    TODO Uncomment when code coverage will be improved to match threshold-->
-<!--                    <execution>-->
-<!--                        <id>default-check</id>-->
-<!--                        <goals>-->
-<!--                            <goal>check</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <rules>-->
-<!--                                <rule>-->
-<!--                                    <element>BUNDLE</element>-->
-<!--                                    <limits>-->
-<!--                                        <limit>-->
-<!--                                            <counter>COMPLEXITY</counter>-->
-<!--                                            <value>COVEREDRATIO</value>-->
-<!--                                            <minimum>0.60</minimum>-->
-<!--                                        </limit>-->
-<!--                                    </limits>-->
-<!--                                </rule>-->
-<!--                            </rules>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
+                    <!--                    TODO Uncomment when code coverage will be improved to match threshold-->
+                    <!--                    <execution>-->
+                    <!--                        <id>default-check</id>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>check</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <rules>-->
+                    <!--                                <rule>-->
+                    <!--                                    <element>BUNDLE</element>-->
+                    <!--                                    <limits>-->
+                    <!--                                        <limit>-->
+                    <!--                                            <counter>COMPLEXITY</counter>-->
+                    <!--                                            <value>COVEREDRATIO</value>-->
+                    <!--                                            <minimum>0.60</minimum>-->
+                    <!--                                        </limit>-->
+                    <!--                                    </limits>-->
+                    <!--                                </rule>-->
+                    <!--                            </rules>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
                 </executions>
             </plugin>
-            <!-- Generate jar with dependencies(assembly:single goal), mvn clean compile assembly:single -->
+            <!-- Generate jar with dependencies -> mvn clean package shade:shade -->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>fully.qualified.MainClass</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

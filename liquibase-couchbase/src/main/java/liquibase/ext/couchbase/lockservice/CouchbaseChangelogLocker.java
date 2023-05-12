@@ -2,6 +2,7 @@ package liquibase.ext.couchbase.lockservice;
 
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.core.error.DocumentExistsException;
+import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.kv.InsertOptions;
 import liquibase.Scope;
@@ -60,11 +61,16 @@ public class CouchbaseChangelogLocker {
      * @throws LockException if it doesn't have ownership
      */
     public void release(String lockId, String owner) throws LockException {
-        if (!isHeldBy(lockId, owner)) {
-            throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
+        try {
+            if (!isHeldBy(lockId, owner)) {
+                throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
+            }
+            collection.remove(lockId);
+            log.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", lockId, owner));
+        } catch (DocumentNotFoundException e) {
+            log.info(format("Lock on the bucket [%s] is already released", lockId));
         }
 
-        collection.remove(lockId);
     }
 
     /**
@@ -78,6 +84,8 @@ public class CouchbaseChangelogLocker {
                     .contentAs(CouchbaseLock.class)
                     .getOwner();
             return currentOwner.equals(owner);
+        } catch (DocumentNotFoundException e) {
+            throw e;
         } catch (CouchbaseException e) {
             return false;
         }
