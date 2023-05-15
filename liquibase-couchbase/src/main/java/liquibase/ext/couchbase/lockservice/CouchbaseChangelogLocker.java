@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.lockservice;
 
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.core.error.DocumentExistsException;
-import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.kv.InsertOptions;
 import liquibase.Scope;
@@ -18,6 +17,9 @@ import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
 import static java.lang.String.format;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL_PROLONGATION;
+import static liquibase.ext.couchbase.lockservice.LockStatus.LOCKED_BY_ANOTHER_SERVICE;
+import static liquibase.ext.couchbase.lockservice.LockStatus.LOCKED_BY_SERVICE;
+import static liquibase.ext.couchbase.lockservice.LockStatus.NO_LOCK;
 
 /**
  * Collection based locker for {@link com.couchbase.client.java.Bucket Bucket} Operates with documents in Liquibase service
@@ -61,14 +63,19 @@ public class CouchbaseChangelogLocker {
      * @throws LockException if it doesn't have ownership
      */
     public void release(String lockId, String owner) throws LockException {
-        try {
-            if (!isHeldBy(lockId, owner)) {
+        LockStatus lockStatus = getLockStatus(lockId, owner);
+        switch (lockStatus) {
+            case LOCKED_BY_ANOTHER_SERVICE:
                 throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
-            }
-            collection.remove(lockId);
-            log.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", lockId, owner));
-        } catch (DocumentNotFoundException e) {
-            log.info(format("Lock on the bucket [%s] is already released", lockId));
+            case LOCKED_BY_SERVICE:
+                collection.remove(lockId);
+                log.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", lockId, owner));
+                return;
+            case NO_LOCK:
+                log.info(format("Lock on the bucket [%s] is already released", lockId));
+                return;
+            default:
+                log.warning(format("Unknown status of lock [%s]", lockId));
         }
 
     }
@@ -78,16 +85,15 @@ public class CouchbaseChangelogLocker {
      * @param lockId specific bucket name which we try to lock
      * @param owner  unique liquibase app service id
      */
-    public boolean isHeldBy(String lockId, String owner) {
+    public LockStatus getLockStatus(String lockId, String owner) {
         try {
             String currentOwner = collection.get(lockId)
                     .contentAs(CouchbaseLock.class)
                     .getOwner();
-            return currentOwner.equals(owner);
-        } catch (DocumentNotFoundException e) {
-            throw e;
+
+            return currentOwner.equals(owner) ? LOCKED_BY_SERVICE : LOCKED_BY_ANOTHER_SERVICE;
         } catch (CouchbaseException e) {
-            return false;
+            return NO_LOCK;
         }
     }
 
