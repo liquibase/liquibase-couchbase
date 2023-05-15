@@ -1,5 +1,6 @@
 package system.change;
 
+import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
 import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;

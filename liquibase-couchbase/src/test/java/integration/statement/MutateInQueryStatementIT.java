@@ -32,16 +32,24 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class MutateInQueryStatementIT extends RandomizedScopeTestCase {
+
+    private static final String DOC_FIELD_NAME = "field1";
+    private static final String DOC_FIELD_Value = "val1";
+    private static final String AGE_KEY = "age";
     private final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(collectionName,
             scopeName);
     private final MutateInSpecTransformer mutateInSpecTransformer = new MutateInSpecTransformer();
-    private final Document doc1 = collectionOperator.generateTestDocByBody(JsonObject.create().put("field1", "val1"));
-    private final Document doc2 = collectionOperator.generateTestDocByBody(JsonObject.create().put("field1", "val1"));
-    private final Document doc3 = collectionOperator.generateTestDocByBody(JsonObject.create().put("field1", "val5"));
+
+    private Document doc1;
+    private Document doc2;
+    private Document doc3;
     private Keyspace keyspace;
 
     @BeforeEach
     void setUp() throws InterruptedException {
+        doc1 = collectionOperator.generateTestDocByBody(JsonObject.create().put(DOC_FIELD_NAME, DOC_FIELD_Value));
+        doc2 = collectionOperator.generateTestDocByBody(JsonObject.create().put(DOC_FIELD_NAME, DOC_FIELD_Value));
+        doc3 = collectionOperator.generateTestDocByBody(JsonObject.create().put(DOC_FIELD_NAME, "val5"));
         collectionOperator.insertDocs(doc1, doc2, doc3);
         collectionOperator.createPrimaryIndex(CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
         TimeUnit.SECONDS.sleep(2L);
@@ -57,19 +65,19 @@ class MutateInQueryStatementIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_insert_property_by_provided_path_for_specific_query() {
-        List<MutateInSpec> specs = getInsertSpec("age", "30");
+        List<MutateInSpec> specs = getInsertSpec(AGE_KEY, "30");
         MutateIn mutate = MutateIn.builder().keyspace(keyspace).specs(specs).build();
 
         new MutateInQueryStatement(mutate, mutateInOptions().timeout(Duration.ofSeconds(2)), "field1=\"val1\"").execute(clusterOperator);
         Collection collection = collectionOperator.getCollection();
-        assertThat(collection).extractingDocument(doc3.getId()).hasNoField("age");
-        assertThat(collection).extractingDocument(doc1.getId()).hasField("age");
-        assertThat(collection).extractingDocument(doc2.getId()).hasField("age");
+        assertThat(collection).extractingDocument(doc3.getId()).hasNoField(AGE_KEY);
+        assertThat(collection).extractingDocument(doc1.getId()).hasField(AGE_KEY);
+        assertThat(collection).extractingDocument(doc2.getId()).hasField(AGE_KEY);
     }
 
     @Test
     void Should_fail_if_specified_document_by_query_already_has_such_field() {
-        List<MutateInSpec> specs = getInsertSpec("field1", "value1");
+        List<MutateInSpec> specs = getInsertSpec(DOC_FIELD_NAME, DOC_FIELD_Value);
         MutateIn mutate = MutateIn.builder().keyspace(keyspace).specs(specs).build();
 
         assertThatExceptionOfType(PathExistsException.class).isThrownBy(

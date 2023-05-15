@@ -31,7 +31,7 @@ public class MutateInQuerySystemTest extends LiquibaseSystemTest {
     private static final String[] documentIds = {"replaceDocument1", "replaceDocument2", "replaceDocument3"};
 
     @BeforeEach
-    void cleanUpd() {
+    void setUp() {
         for (String docId : documentIds) {
             if (testCollectionOperator.docExists(docId)) {
                 testCollectionOperator.getCollection().remove(docId);

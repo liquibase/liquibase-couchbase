@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
@@ -92,7 +91,7 @@ public class ClusterOperator {
         return documentIdsResult.rowsAsObject()
                 .stream()
                 .map(jsonObject -> jsonObject.getString("id"))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public boolean indexExists(String indexName, String bucketName) {
