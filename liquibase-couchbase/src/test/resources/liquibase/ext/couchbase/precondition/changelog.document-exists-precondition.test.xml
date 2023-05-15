@@ -26,7 +26,7 @@
 
     <changeSet id="1" author="dmitry.dashko">
         <preConditions>
-            <ext:documentExists bucketName="testBucket" scopeName="testScope" collectionName="testCollection" key="existedId"/>
+            <ext:documentExists bucketName="testBucket" scopeName="testScope" collectionName="testCollection" key="existingId"/>
         </preConditions>
         <ext:insertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>

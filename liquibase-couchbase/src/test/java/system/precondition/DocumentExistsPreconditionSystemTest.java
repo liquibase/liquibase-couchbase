@@ -21,14 +21,14 @@ public class DocumentExistsPreconditionSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Should_insert_document_when_document_exists() {
-        collection.insert("existedId", "content");
+        collection.insert("existingId", "content");
         Liquibase liquibase = liquibase(DOCUMENT_EXISTS_PRECONDITION);
 
         liquibase.update();
 
         assertThat(collection).containsId(DOCUMENT_ID);
         collection.remove(DOCUMENT_ID);
-        collection.remove("existedId");
+        collection.remove("existingId");
     }
 
     @Test

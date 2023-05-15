@@ -5,6 +5,7 @@ import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class SqlCheckPreconditionSystemTest extends LiquibaseSystemTest {
@@ -61,9 +63,9 @@ public class SqlCheckPreconditionSystemTest extends LiquibaseSystemTest {
     }
 
     private void insertMockDocuments() {
-        collection.insert("id1", "");
-        collection.insert("id2", "");
-        collection.insert("id3", "");
+        collection.insert("id1", EMPTY);
+        collection.insert("id2", EMPTY);
+        collection.insert("id3", EMPTY);
     }
 
     private void removeMockDocuments() {

@@ -43,7 +43,15 @@ public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAss
         return this;
     }
 
-    public CouchbaseDocumentAssert jsonHasNoField(@NonNull String name) {
+    public CouchbaseDocumentAssert isJson() {
+        if (!(actual instanceof JsonObject)) {
+            failWithMessage("Object [%s] is not json", actual);
+            return this;
+        }
+        return this;
+    }
+
+    public CouchbaseDocumentAssert hasNoField(@NonNull String name) {
         if (((JsonObject) actual).containsKey(name)) {
             failWithMessage("JsonObject [%s] should not contain key [%s], but it does",
                     actual,
@@ -53,7 +61,7 @@ public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAss
         return this;
     }
 
-    public CouchbaseDocumentAssert jsonHasField(@NonNull String name) {
+    public CouchbaseDocumentAssert hasField(@NonNull String name) {
         if (!((JsonObject) actual).containsKey(name)) {
             failWithMessage("JsonObject [%s] should contain key [%s], but it doesn't",
                     actual,

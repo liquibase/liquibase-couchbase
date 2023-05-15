@@ -42,9 +42,7 @@ public class InsertDocumentsSystemTest extends LiquibaseSystemTest {
     }
 
     private static void createPrimaryIndex() {
-        Collection col = clusterOperator.getBucketOperator(TEST_BUCKET).
-                getCollection(TEST_COLLECTION, TEST_SCOPE);
-        clusterOperator.getCollectionOperator(col).createPrimaryIndex();
+        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
     }
 
     private static void dropPrimaryIndex() {

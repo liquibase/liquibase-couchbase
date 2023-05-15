@@ -63,7 +63,6 @@ public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
         collectionOperator.removeAllDocuments(scope);
     }
 
-
     @Test
     @SneakyThrows
     void Should_insert_documents() {
@@ -103,9 +102,7 @@ public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
     }
 
     private static void createPrimaryIndex() {
-        Collection col = clusterOperator.getBucketOperator(TEST_BUCKET).
-                getCollection(TEST_COLLECTION, TEST_SCOPE);
-        clusterOperator.getCollectionOperator(col).createPrimaryIndex();
+        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
     }
 
     private static void dropPrimaryIndex() {
@@ -159,7 +156,7 @@ public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML);
 
         Assertions.assertThatNoException().isThrownBy(liquibase::update);
-        assertThat(collection).extractingDocument("testKey::id1::0").jsonHasField("extraField");
-        assertThat(collection).extractingDocument("testKey::id2::1").jsonHasField("extraField");
+        assertThat(collection).extractingDocument("testKey::id1::0").hasField("extraField");
+        assertThat(collection).extractingDocument("testKey::id2::1").hasField("extraField");
     }
 }

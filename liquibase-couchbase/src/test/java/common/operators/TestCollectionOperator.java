@@ -11,6 +11,7 @@ import liquibase.ext.couchbase.types.Document;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+import static com.couchbase.client.java.query.QueryScanConsistency.REQUEST_PLUS;
 import static java.lang.String.format;
 import static liquibase.ext.couchbase.types.Document.document;
 
@@ -49,7 +50,7 @@ public class TestCollectionOperator extends CollectionOperator {
     }
 
     public void removeAllDocuments(Scope scope) {
-        QueryOptions queryOptions = queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS);
+        QueryOptions queryOptions = queryOptions().scanConsistency(REQUEST_PLUS);
         scope.query(format("DELETE FROM %s.%s.%s", collection.bucketName(), collection.scopeName(), collection.name()), queryOptions);
     }
 }
