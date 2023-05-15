@@ -47,6 +47,7 @@
         <spock-core.version>1.3-groovy-2.5</spock-core.version>
         <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
         <json-schema-validator-version>1.0.78</json-schema-validator-version>
+        <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
     </properties>
 
     <dependencies>
@@ -284,7 +285,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>${maven-shade-plugin-version}</version>
                 <executions>
                     <execution>
                         <configuration>
