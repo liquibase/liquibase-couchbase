@@ -43,6 +43,7 @@ public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
     private static final Scope scope = cluster.bucket(collection.bucketName()).scope(collection.scopeName());
     private static final TestCollectionOperator collectionOperator = new TestCollectionOperator(collection);
     private static final int VALID_DOCS_COUNT = 2;
+    private static final String EXTRA_FIELD = "extraField";
     private final List<Document> testDocs = createDocs();
 
     private static final String QUERY_ALL_DOC_ID = "SELECT META().id " +
@@ -156,7 +157,7 @@ public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML);
 
         Assertions.assertThatNoException().isThrownBy(liquibase::update);
-        assertThat(collection).extractingDocument("testKey::id1::0").isJson().hasField("extraField");
-        assertThat(collection).extractingDocument("testKey::id2::1").isJson().hasField("extraField");
+        assertThat(collection).extractingDocument("testKey::id1::0").isJson().hasField(EXTRA_FIELD);
+        assertThat(collection).extractingDocument("testKey::id2::1").isJson().hasField(EXTRA_FIELD);
     }
 }
