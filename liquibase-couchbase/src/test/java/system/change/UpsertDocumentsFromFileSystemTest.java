@@ -1,13 +1,12 @@
 package system.change;
 
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
-import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.CollectionAssert;
@@ -40,10 +39,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UpsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final Scope scope = cluster.bucket(collection.bucketName()).scope(collection.scopeName());
-    private static final TestCollectionOperator collectionOperator = new TestCollectionOperator(collection);
+    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     private static final int VALID_DOCS_COUNT = 2;
     private static final String extraField = "extraField";
+
 
     private final List<Document> testDocs = createDocs();
 
@@ -62,7 +61,7 @@ public class UpsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
 
     @AfterEach
     void clean() {
-        collectionOperator.removeAllDocuments(scope);
+        clusterOperator.removeAllDocuments(keyspace);
     }
 
     @Test

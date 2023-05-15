@@ -49,8 +49,4 @@ public class TestCollectionOperator extends CollectionOperator {
         return createOneFieldJson("key", "value");
     }
 
-    public void removeAllDocuments(Scope scope) {
-        QueryOptions queryOptions = queryOptions().scanConsistency(REQUEST_PLUS);
-        scope.query(format("DELETE FROM %s.%s.%s", collection.bucketName(), collection.scopeName(), collection.name()), queryOptions);
-    }
 }

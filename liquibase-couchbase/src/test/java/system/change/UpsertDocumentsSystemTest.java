@@ -1,12 +1,12 @@
 package system.change;
 
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
 import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class UpsertDocumentsSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final Scope scope = cluster.bucket(collection.bucketName()).scope(collection.scopeName());
     private static final TestCollectionOperator collectionOperator = new TestCollectionOperator(collection);
+    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
 
     @BeforeAll
     static void setUp() {
@@ -59,7 +59,7 @@ public class UpsertDocumentsSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(collection).contains(expectedDocuments);
-        collectionOperator.removeAllDocuments(scope);
+        clusterOperator.removeAllDocuments(keyspace);
     }
 
     private void prepareDocuments() {

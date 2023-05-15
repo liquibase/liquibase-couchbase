@@ -1,13 +1,12 @@
 package system.change;
 
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
-import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.CollectionAssert;
@@ -25,8 +24,8 @@ import java.util.stream.IntStream;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.INSERT_INCREMENT_KEY_GENERATOR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_FROM_FILE_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_INCREMENT_KEY_GENERATOR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_UID_KEY_GENERATOR_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
@@ -40,10 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final Scope scope = cluster.bucket(collection.bucketName()).scope(collection.scopeName());
-    private static final TestCollectionOperator collectionOperator = new TestCollectionOperator(collection);
     private static final int VALID_DOCS_COUNT = 2;
     private static final String EXTRA_FIELD = "extraField";
+    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     private final List<Document> testDocs = createDocs();
 
     private static final String QUERY_ALL_DOC_ID = "SELECT META().id " +
@@ -61,7 +59,7 @@ public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
 
     @AfterEach
     void clean() {
-        collectionOperator.removeAllDocuments(scope);
+        clusterOperator.removeAllDocuments(keyspace);
     }
 
     @Test

@@ -1,11 +1,10 @@
 package system.precondition;
 
 import com.couchbase.client.java.Collection;
-import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class SqlCheckPreconditionSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final TestCollectionOperator collectionOperator = new TestCollectionOperator(collection);
+    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     private static final String DOCUMENT_ID = "sqlCheckIndexTestPreconditionId1";
 
     @BeforeAll
     static void setUp() {
         collection.queryIndexes().createPrimaryIndex();
-        collectionOperator.removeAllDocuments(cluster.bucket(TEST_BUCKET).scope(TEST_SCOPE));
+        clusterOperator.removeAllDocuments(keyspace);
     }
 
     @AfterAll
