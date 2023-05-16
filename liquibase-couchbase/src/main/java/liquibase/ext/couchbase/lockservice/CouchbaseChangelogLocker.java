@@ -17,9 +17,9 @@ import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
 import static java.lang.String.format;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL_PROLONGATION;
-import static liquibase.ext.couchbase.lockservice.LockStatus.LOCKED_BY_ANOTHER_SERVICE;
-import static liquibase.ext.couchbase.lockservice.LockStatus.LOCKED_BY_SERVICE;
-import static liquibase.ext.couchbase.lockservice.LockStatus.NO_LOCK;
+import static liquibase.ext.couchbase.lockservice.LockStatus.NOT_OWNER;
+import static liquibase.ext.couchbase.lockservice.LockStatus.OWNER;
+import static liquibase.ext.couchbase.lockservice.LockStatus.FREE;
 
 /**
  * Collection based locker for {@link com.couchbase.client.java.Bucket Bucket} Operates with documents in Liquibase service
@@ -65,13 +65,13 @@ public class CouchbaseChangelogLocker {
     public void release(String lockId, String owner) throws LockException {
         LockStatus lockStatus = getLockStatus(lockId, owner);
         switch (lockStatus) {
-            case LOCKED_BY_ANOTHER_SERVICE:
+            case NOT_OWNER:
                 throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
-            case LOCKED_BY_SERVICE:
+            case OWNER:
                 collection.remove(lockId);
                 log.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", lockId, owner));
                 return;
-            case NO_LOCK:
+            case FREE:
                 log.info(format("Lock on the bucket [%s] is already released", lockId));
                 return;
             default:
@@ -91,9 +91,9 @@ public class CouchbaseChangelogLocker {
                     .contentAs(CouchbaseLock.class)
                     .getOwner();
 
-            return currentOwner.equals(owner) ? LOCKED_BY_SERVICE : LOCKED_BY_ANOTHER_SERVICE;
+            return currentOwner.equals(owner) ? OWNER : NOT_OWNER;
         } catch (CouchbaseException e) {
-            return NO_LOCK;
+            return FREE;
         }
     }
 
