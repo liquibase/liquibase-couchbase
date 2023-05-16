@@ -3,7 +3,6 @@ package system.precondition;
 import com.couchbase.client.java.Collection;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
-import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,8 +11,8 @@ import system.LiquibaseSystemTest;
 
 import static common.constants.ChangeLogSampleFilePaths.SQL_CHECK_FAILED_PRECONDITION;
 import static common.constants.ChangeLogSampleFilePaths.SQL_CHECK_PRECONDITION;
-import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -21,13 +20,12 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class SqlCheckPreconditionSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     private static final String DOCUMENT_ID = "sqlCheckIndexTestPreconditionId1";
 
     @BeforeAll
     static void setUp() {
         collection.queryIndexes().createPrimaryIndex();
-        clusterOperator.removeAllDocuments(keyspace);
+        clusterOperator.removeAllDocuments(TEST_KEYSPACE);
     }
 
     @AfterAll

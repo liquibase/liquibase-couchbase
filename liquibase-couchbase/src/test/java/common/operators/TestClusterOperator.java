@@ -1,7 +1,6 @@
 package common.operators;
 
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.query.QueryOptions;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.types.Keyspace;

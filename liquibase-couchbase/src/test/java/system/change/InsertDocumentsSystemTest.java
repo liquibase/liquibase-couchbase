@@ -1,13 +1,10 @@
 package system.change;
 
 import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
-import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,8 +16,8 @@ import java.util.List;
 
 import static common.constants.ChangeLogSampleFilePaths.INSERT_DOCUMENTS_FAILED_TRANSACTION_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_DOCUMENTS_TEST_XML;
-import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.types.Document.document;
@@ -29,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class InsertDocumentsSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
 
     @BeforeAll
     static void setUp() {
@@ -58,7 +54,7 @@ public class InsertDocumentsSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(collection).contains(expectedDocuments);
-        clusterOperator.removeAllDocuments(keyspace);
+        clusterOperator.removeAllDocuments(TEST_KEYSPACE);
     }
 
     private List<Document> createExpectedDocumentsWithDifferentTypes() {

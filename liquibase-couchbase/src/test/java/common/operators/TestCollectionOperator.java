@@ -10,8 +10,6 @@ import liquibase.ext.couchbase.types.Document;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-import static com.couchbase.client.java.query.QueryScanConsistency.REQUEST_PLUS;
 import static java.lang.String.format;
 import static liquibase.ext.couchbase.types.Document.document;
 

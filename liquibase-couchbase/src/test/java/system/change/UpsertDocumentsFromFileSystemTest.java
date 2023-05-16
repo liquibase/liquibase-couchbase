@@ -6,7 +6,6 @@ import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import liquibase.Liquibase;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.Keyspace;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.CollectionAssert;
@@ -29,6 +28,7 @@ import static common.constants.ChangeLogSampleFilePaths.UPSERT_INCREMENT_KEY_GEN
 import static common.constants.ChangeLogSampleFilePaths.UPSERT_UID_KEY_GENERATOR_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static java.util.stream.Collectors.toList;
@@ -39,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UpsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
-    private static final Keyspace keyspace = Keyspace.keyspace(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
     private static final int VALID_DOCS_COUNT = 2;
     private static final String extraField = "extraField";
 
@@ -61,7 +60,7 @@ public class UpsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
 
     @AfterEach
     void clean() {
-        clusterOperator.removeAllDocuments(keyspace);
+        clusterOperator.removeAllDocuments(TEST_KEYSPACE);
     }
 
     @Test
