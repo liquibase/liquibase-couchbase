@@ -564,7 +564,6 @@
         "bucketName",
         "scopeName",
         "collectionName",
-        "id",
         "mutateInSpecs"
       ],
       "additionalProperties": false,
@@ -594,6 +593,9 @@
           ]
         },
         "id": {
+          "type": "string"
+        },
+        "whereCondition": {
           "type": "string"
         },
         "mutateInSpecs": {

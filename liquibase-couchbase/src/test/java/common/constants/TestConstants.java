@@ -27,6 +27,7 @@ public class TestConstants {
     public static final String TEST_BUCKET = "testBucket";
     public static final String TEST_COLLECTION = "testCollection";
     public static final String TEST_COLLECTION_2 = "testCollection2";
+    public static final String TEST_COLLECTION_3 = "testCollection3";
     public static final String TEST_COLLECTION_SQL = "sqlCollection";
     public static final String TEST_ID = "id";
     public static final JsonObject TEST_CONTENT = JsonObject.create().put("name", "user").put("type", "customer");

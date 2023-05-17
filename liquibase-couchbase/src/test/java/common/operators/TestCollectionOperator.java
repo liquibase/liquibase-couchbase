@@ -5,6 +5,7 @@ import com.couchbase.client.java.json.JsonObject;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.types.Document;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static liquibase.ext.couchbase.types.Document.document;
@@ -33,6 +34,10 @@ public class TestCollectionOperator extends CollectionOperator {
             content.put("field" + i, "value" + i);
         }
         return document(docId, content);
+    }
+
+    public Document generateTestDocByBody(JsonObject jsonObject) {
+        return document(UUID.randomUUID().toString(), jsonObject);
     }
 
     public static JsonObject createOneFieldJson(String id, String value) {
