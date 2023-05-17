@@ -41,7 +41,11 @@ stages:
 deploy:
   stage: deploy
   script:
-    - 'mvn test'
+    - echo "Deploy to staging server"
+  environment:
+    name: staging
+    url: https://staging.example.com
+
 
 build:
   stage: build
