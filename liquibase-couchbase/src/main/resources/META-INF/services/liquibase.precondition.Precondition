@@ -5,3 +5,4 @@ liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
 liquibase.ext.couchbase.precondition.IndexExistsPrecondition
 liquibase.ext.couchbase.precondition.PrimaryIndexExistsPrecondition
 liquibase.ext.couchbase.precondition.SqlCheckPrecondition
+liquibase.ext.couchbase.precondition.SqlCheckCountPrecondition
