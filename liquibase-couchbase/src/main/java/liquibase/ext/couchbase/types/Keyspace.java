@@ -43,7 +43,7 @@ public class Keyspace extends AbstractLiquibaseSerializable {
     }
 
 
-    public String getKeyspace() {
+    public String getFullPath() {
         return String.format("`%s`.`%s`.`%s`", bucket, scope, collection);
     }
 

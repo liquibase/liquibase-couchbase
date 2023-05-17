@@ -1,10 +1,13 @@
 package liquibase.ext.couchbase.transformer;
 
+import com.couchbase.client.java.kv.MutateInOptions;
 import com.couchbase.client.java.kv.MutateInSpec;
+import com.couchbase.client.java.kv.StoreSemantics;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +18,10 @@ import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
 import liquibase.ext.couchbase.validator.MutateInValidator;
 import liquibase.ext.couchbase.validator.MutateInValidatorRegistry;
+
+import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
 import static java.util.Optional.ofNullable;
+import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.MUTATE_IN_TIMEOUT;
 import static liquibase.ext.couchbase.types.subdoc.MutateInType.ARRAY_APPEND;
 import static liquibase.ext.couchbase.types.subdoc.MutateInType.ARRAY_CREATE;
 import static liquibase.ext.couchbase.types.subdoc.MutateInType.ARRAY_INSERT;
