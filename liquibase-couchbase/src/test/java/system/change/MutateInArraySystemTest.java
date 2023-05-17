@@ -40,7 +40,7 @@ public class MutateInArraySystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_CREATE_TEST_XML);
         liquibase.update();
         Document expected = document(doc.getId(), expectedAddToExistingDoc());
-        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).hasField(ARR);
+        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).isJson().hasField(ARR);
 
         testCollectionOperator.removeDoc(doc);
     }
@@ -55,7 +55,7 @@ public class MutateInArraySystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         Document expected = document(doc.getId(), expectedAddValueToEnd());
-        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).hasField(ARR);
+        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).isJson().hasField(ARR);
 
         testCollectionOperator.removeDoc(doc);
     }
@@ -69,7 +69,7 @@ public class MutateInArraySystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(MUTATE_IN_ARRAY_PREPEND_TEST_XML);
         liquibase.update();
         Document expected = document(doc.getId(), expectedAddToBeginOfArray());
-        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).hasField(ARR);
+        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).isJson().hasField(ARR);
 
         testCollectionOperator.removeDoc(doc);
     }
@@ -84,7 +84,7 @@ public class MutateInArraySystemTest extends LiquibaseSystemTest {
         liquibase.update();
         Document expected = document(doc.getId(), expectedNoExistContent());
 
-        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).hasField(ARR);
+        assertThat(testCollectionOperator.getCollection()).containsDocument(expected).isJson().hasField(ARR);
 
         testCollectionOperator.removeDoc(doc);
     }

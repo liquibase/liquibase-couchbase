@@ -2,7 +2,7 @@
   #%L
   Liquibase Couchbase Extension
   %%
-  Copyright (C) 2013 Weigandt Consulting GmbH
+  Copyright (C) 2023 Weigandt Consulting GmbH
   %%
   Licensed under the Apache License, Version 2.0 (the "License").
   You may not use this file except in compliance with the License.
@@ -22,18 +22,19 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="1" author="tigran">
-        <ext:updateBucket>
-            <ext:bucketName>updateBucketTest</ext:bucketName>
-            <ext:compressionMode>PASSIVE</ext:compressionMode>
-            <ext:maxExpiryInHours>2</ext:maxExpiryInHours>
-            <ext:numReplicas>1</ext:numReplicas>
-            <ext:ramQuotaMB>100</ext:ramQuotaMB>
-            <ext:flushEnabled>false</ext:flushEnabled>
-            <ext:timeoutInSeconds>18</ext:timeoutInSeconds>
-        </ext:updateBucket>
+    <changeSet id="1" author="dmitry.dashko">
+        <ext:upsertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:file>
+                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testUidKey.json</ext:filePath>
+                <ext:importType>LINES</ext:importType>
+                <ext:keyProviderType>EXPRESSION</ext:keyProviderType>
+                <ext:keyProviderExpression>testKey::%value%::#MONO_INCR#</ext:keyProviderExpression>
+            </ext:file>
+        </ext:upsertDocuments>
     </changeSet>
-
 </databaseChangeLog>

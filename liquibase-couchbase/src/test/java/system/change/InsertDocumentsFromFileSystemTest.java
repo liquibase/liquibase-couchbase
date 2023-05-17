@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.CollectionAssert;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
@@ -21,10 +22,10 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
-import static common.constants.ChangeLogSampleFilePaths.EXPRESSION_KEY_GENERATOR_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.INCREMENT_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_FROM_FILE_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.UID_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_INCREMENT_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_UID_KEY_GENERATOR_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_KEYSPACE;
@@ -36,9 +37,10 @@ import static org.apache.commons.lang3.BooleanUtils.isFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class InsertFromFileSystemTest extends LiquibaseSystemTest {
+public class InsertDocumentsFromFileSystemTest extends LiquibaseSystemTest {
     private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
     private static final int VALID_DOCS_COUNT = 2;
+    private static final String EXTRA_FIELD = "extraField";
     private final List<Document> testDocs = createDocs();
 
     private static final String QUERY_ALL_DOC_ID = "SELECT META().id " +
@@ -52,6 +54,11 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     @AfterAll
     static void tearDown() {
         dropPrimaryIndex();
+    }
+
+    @AfterEach
+    void clean() {
+        clusterOperator.removeAllDocuments(TEST_KEYSPACE);
     }
 
     @Test
@@ -77,11 +84,11 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Should_generate_uid_key() {
-        Liquibase liquibase = liquibase(UID_KEY_GENERATOR_TEST_XML);
+        Liquibase liquibase = liquibase(INSERT_UID_KEY_GENERATOR_TEST_XML);
 
         Assertions.assertThatNoException().isThrownBy(liquibase::update);
 
-        List<JsonObject> validDocs = selectValidDocs(InsertFromFileSystemTest::isDocWithCorrectUid);
+        List<JsonObject> validDocs = selectValidDocs(InsertDocumentsFromFileSystemTest::isDocWithCorrectUid);
 
         CollectionAssert.assertThatCollection(validDocs).hasSize(VALID_DOCS_COUNT);
     }
@@ -93,9 +100,7 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     }
 
     private static void createPrimaryIndex() {
-        Collection col = clusterOperator.getBucketOperator(TEST_BUCKET).
-                getCollection(TEST_COLLECTION, TEST_SCOPE);
-        clusterOperator.getCollectionOperator(col).createPrimaryIndex();
+        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
     }
 
     private static void dropPrimaryIndex() {
@@ -129,10 +134,10 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Should_generate_incremental_key() {
-        Liquibase liquibase = liquibase(INCREMENT_KEY_GENERATOR_TEST_XML);
+        Liquibase liquibase = liquibase(INSERT_INCREMENT_KEY_GENERATOR_TEST_XML);
 
         Assertions.assertThatNoException().isThrownBy(liquibase::update);
-        List<JsonObject> validDocs = selectValidDocs(InsertFromFileSystemTest::isDocWithNumberId);
+        List<JsonObject> validDocs = selectValidDocs(InsertDocumentsFromFileSystemTest::isDocWithNumberId);
 
         validDocs.sort(Comparator.comparing(doc -> new Long(getDocId(doc))));
         CollectionAssert.assertThatCollection(validDocs).hasSize(VALID_DOCS_COUNT);
@@ -146,10 +151,10 @@ public class InsertFromFileSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Should_generate_expression_key() {
-        Liquibase liquibase = liquibase(EXPRESSION_KEY_GENERATOR_TEST_XML);
+        Liquibase liquibase = liquibase(INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML);
 
         Assertions.assertThatNoException().isThrownBy(liquibase::update);
-        assertThat(collection).extractingDocument("testKey::id1::0").hasField("extraField");
-        assertThat(collection).extractingDocument("testKey::id2::1").hasField("extraField");
+        assertThat(collection).extractingDocument("testKey::id1::0").isJson().hasField(EXTRA_FIELD);
+        assertThat(collection).extractingDocument("testKey::id2::1").isJson().hasField(EXTRA_FIELD);
     }
 }

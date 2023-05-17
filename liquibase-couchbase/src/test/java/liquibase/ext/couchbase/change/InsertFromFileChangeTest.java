@@ -10,10 +10,10 @@ import liquibase.ext.couchbase.types.ImportType;
 import liquibase.ext.couchbase.types.KeyProviderType;
 import org.junit.jupiter.api.Test;
 
-import static common.constants.ChangeLogSampleFilePaths.EXPRESSION_KEY_GENERATOR_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.INCREMENT_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_INCREMENT_KEY_GENERATOR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.INSERT_FROM_FILE_TEST_XML;
-import static common.constants.ChangeLogSampleFilePaths.UID_KEY_GENERATOR_TEST_XML;
+import static common.constants.ChangeLogSampleFilePaths.INSERT_UID_KEY_GENERATOR_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
@@ -46,7 +46,7 @@ class InsertFromFileChangeTest {
 
     @Test
     void Should_contains_uid_key_provider() {
-        DatabaseChangeLog changeLog = changeLogProvider.load(UID_KEY_GENERATOR_TEST_XML);
+        DatabaseChangeLog changeLog = changeLogProvider.load(INSERT_UID_KEY_GENERATOR_TEST_XML);
 
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         InsertDocumentsChange change = (InsertDocumentsChange) firstOf(changeSet.getChanges());
@@ -67,7 +67,7 @@ class InsertFromFileChangeTest {
     }
     @Test
     void Should_contains_incremental_key_provider() {
-        DatabaseChangeLog changeLog = changeLogProvider.load(INCREMENT_KEY_GENERATOR_TEST_XML);
+        DatabaseChangeLog changeLog = changeLogProvider.load(INSERT_INCREMENT_KEY_GENERATOR_TEST_XML);
 
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         InsertDocumentsChange change = (InsertDocumentsChange) firstOf(changeSet.getChanges());
@@ -78,7 +78,7 @@ class InsertFromFileChangeTest {
 
     @Test
     void Should_contains_expression_key_provider() {
-        DatabaseChangeLog changeLog = changeLogProvider.load(EXPRESSION_KEY_GENERATOR_TEST_XML);
+        DatabaseChangeLog changeLog = changeLogProvider.load(INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML);
 
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         InsertDocumentsChange change = (InsertDocumentsChange) firstOf(changeSet.getChanges());

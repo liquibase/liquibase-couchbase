@@ -2,7 +2,7 @@
   #%L
   Liquibase Couchbase Extension
   %%
-  Copyright (C) 2013 Weigandt Consulting GmbH
+  Copyright (C) 2023 Weigandt Consulting GmbH
   %%
   Licensed under the Apache License, Version 2.0 (the "License").
   You may not use this file except in compliance with the License.
@@ -24,16 +24,21 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="tigran">
-        <ext:updateBucket>
-            <ext:bucketName>updateBucketTest</ext:bucketName>
-            <ext:compressionMode>PASSIVE</ext:compressionMode>
-            <ext:maxExpiryInHours>2</ext:maxExpiryInHours>
-            <ext:numReplicas>1</ext:numReplicas>
-            <ext:ramQuotaMB>100</ext:ramQuotaMB>
-            <ext:flushEnabled>false</ext:flushEnabled>
-            <ext:timeoutInSeconds>18</ext:timeoutInSeconds>
-        </ext:updateBucket>
+    <changeSet id="1" author="dmitry.dashko">
+        <preConditions>
+            <ext:scopeExists bucketName="testBucket" scopeName="notCreatedScope"/>
+        </preConditions>
+        <ext:insertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:document>
+                <ext:id>scopeTestPreconditionId1</ext:id>
+                <ext:value>
+                    <ext:data>{"key":"value"}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
+        </ext:insertDocuments>
     </changeSet>
-
 </databaseChangeLog>

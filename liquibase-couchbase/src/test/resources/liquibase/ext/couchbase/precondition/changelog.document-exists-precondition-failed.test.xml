@@ -25,29 +25,20 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="dmitry.dashko">
-        <ext:insertOne>
+        <preConditions>
+            <ext:documentExists bucketName="testBucket" scopeName="testScope" collectionName="testCollection" key="notExistedId"/>
+        </preConditions>
+        <ext:insertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
             <ext:document>
-                <ext:id>existingKey</ext:id>
+                <ext:id>documentTestPreconditionId1</ext:id>
                 <ext:value>
-                    <ext:data>{"name":"Name", "age": 99}</ext:data>
+                    <ext:data>{"key":"value"}</ext:data>
                     <ext:type>Json</ext:type>
                 </ext:value>
             </ext:document>
-        </ext:insertOne>
-        <ext:insertOne>
-            <ext:bucketName>testBucket</ext:bucketName>
-            <ext:scopeName>testScope</ext:scopeName>
-            <ext:collectionName>testCollection</ext:collectionName>
-            <ext:document>
-                <ext:id>newKey</ext:id>
-                <ext:value>
-                    <ext:data>{"name":"Name", "age": 99}</ext:data>
-                    <ext:type>Json</ext:type>
-                </ext:value>
-            </ext:document>
-        </ext:insertOne>
+        </ext:insertDocuments>
     </changeSet>
 </databaseChangeLog>

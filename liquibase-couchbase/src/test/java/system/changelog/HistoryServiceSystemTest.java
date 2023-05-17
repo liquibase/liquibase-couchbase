@@ -10,6 +10,7 @@ import common.operators.TestClusterOperator;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
+import liquibase.exception.CommandExecutionException;
 import liquibase.exception.ValidationFailedException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
@@ -102,7 +103,8 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(CHANGELOG_DUPLICATE_TEST_XML);
 
         assertThatExceptionOfType(ValidationFailedException.class).isThrownBy(liquibase::update).withMessage(
-                "Validation Failed:%s" + "     1 changesets had duplicate identifiers%s" + "          " + "liquibase" + "/ext/couchbase" +
+                "Validation Failed:%s" + "     1 changesets had duplicate identifiers%s"
+                        + "          " + "liquibase" + "/ext/couchbase" +
                         "/changelog/changelog" + ".changelog-duplicate-test.xml::3::dmitry%s",
                 separator, separator, separator);
 
