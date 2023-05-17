@@ -37,6 +37,12 @@ stages:
   - build
   - test
   - visualize
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - 'mvn test'
 
 build:
   stage: build
