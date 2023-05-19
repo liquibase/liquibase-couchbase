@@ -11,7 +11,6 @@ import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.exception.CommandExecutionException;
-import liquibase.exception.ValidationFailedException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,9 +101,8 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
     void Should_throw_duplicate_error_when_changesets_are_equal_and_check_that_collection_exists() {
         Liquibase liquibase = liquibase(CHANGELOG_DUPLICATE_TEST_XML);
 
-        assertThatExceptionOfType(ValidationFailedException.class).isThrownBy(liquibase::update).withMessage(
-                "Validation Failed:%s" + "     1 changesets had duplicate identifiers%s"
-                        + "          " + "liquibase" + "/ext/couchbase" +
+        assertThatExceptionOfType(CommandExecutionException.class).isThrownBy(liquibase::update).withMessage(
+                "liquibase.exception.ValidationFailedException: Validation Failed:%s" + "     1 changesets had duplicate identifiers%s" + "          " + "liquibase" + "/ext/couchbase" +
                         "/changelog/changelog" + ".changelog-duplicate-test.xml::3::dmitry%s",
                 separator, separator, separator);
 
