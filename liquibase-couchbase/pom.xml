@@ -234,10 +234,6 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <excludes>
-                                <exclude>*hashCode()</exclude>
-                                <exclude>*equals()</exclude>
-                            </excludes>
                             <formats>
                                 <format>HTML</format>
                             </formats>
@@ -249,10 +245,6 @@
                             <goal>report-integration</goal>
                         </goals>
                         <configuration>
-                            <excludes>
-                                <exclude>*hashCode()</exclude>
-                                <exclude>*equals()</exclude>
-                            </excludes>
                             <formats>
                                 <format>HTML</format>
                             </formats>
