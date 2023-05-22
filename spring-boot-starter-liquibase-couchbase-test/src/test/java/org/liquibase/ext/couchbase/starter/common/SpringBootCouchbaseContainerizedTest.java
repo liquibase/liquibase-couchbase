@@ -3,11 +3,9 @@ package org.liquibase.ext.couchbase.starter.common;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
@@ -21,7 +19,6 @@ import static com.couchbase.client.java.manager.collection.CollectionSpec.create
 /**
  * Basis for Couchbase interacting tests Data will not be cleared automatically, it's your care to clean up
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class SpringBootCouchbaseContainerizedTest {
 

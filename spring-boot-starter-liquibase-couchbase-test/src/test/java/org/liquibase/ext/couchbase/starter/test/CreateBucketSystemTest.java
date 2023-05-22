@@ -1,6 +1,7 @@
 package org.liquibase.ext.couchbase.starter.test;
 
-import org.junit.Test;
+import liquibase.ext.couchbase.operator.ClusterOperator;
+import org.junit.jupiter.api.Test;
 import org.liquibase.ext.couchbase.starter.common.SpringBootCouchbaseContainerizedTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CreateBucketSystemTest extends SpringBootCouchbaseContainerizedTest {
 
     private static final String BUCKET_NAME = "createBucketName";
+    private static final ClusterOperator clusterOperator = new ClusterOperator(cluster);
 
     @DynamicPropertySource
     static void overrideUrlProperty(DynamicPropertyRegistry registry) {
@@ -18,11 +20,8 @@ public class CreateBucketSystemTest extends SpringBootCouchbaseContainerizedTest
 
     @Test
     public void Should_create_new_bucket() {
-        assertTrue(isBucketExists());
+        assertTrue(clusterOperator.isBucketExists(BUCKET_NAME));
         cluster.buckets().dropBucket(BUCKET_NAME);
     }
 
-    private static boolean isBucketExists() {
-        return cluster.buckets().getBucket(BUCKET_NAME) != null;
-    }
 }

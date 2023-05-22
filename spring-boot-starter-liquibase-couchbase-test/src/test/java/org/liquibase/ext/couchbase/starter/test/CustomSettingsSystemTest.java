@@ -1,6 +1,6 @@
 package org.liquibase.ext.couchbase.starter.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.liquibase.ext.couchbase.starter.common.SpringBootCouchbaseContainerizedTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
