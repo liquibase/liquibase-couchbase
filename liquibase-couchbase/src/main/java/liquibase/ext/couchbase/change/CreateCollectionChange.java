@@ -52,10 +52,11 @@ public class CreateCollectionChange extends CouchbaseChange {
 
     @Override
     protected Change[] createInverses() {
-        DropCollectionChange inverse = new DropCollectionChange();
-        inverse.setBucketName(bucketName);
-        inverse.setScopeName(scopeName);
-        inverse.setCollectionName(collectionName);
+        DropCollectionChange inverse = DropCollectionChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .collectionName(collectionName)
+                .build();
 
         return new Change[] {inverse};
     }

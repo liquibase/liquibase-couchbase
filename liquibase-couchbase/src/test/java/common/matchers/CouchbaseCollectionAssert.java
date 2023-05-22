@@ -156,12 +156,12 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchbaseCollectionAssert hasIndex(String queryIndexName) {
+    public CouchbaseCollectionAssert hasIndex(String name) {
         boolean indexExists = actual.queryIndexes().getAllIndexes().stream()
                 .map(QueryIndex::name)
-                .anyMatch(queryIndexName::equals);
+                .anyMatch(name::equals);
         if (!indexExists) {
-            failWithMessage("[%s] index doesn't exist in `[%s].[%s].[%s]` keyspace", queryIndexName, actual.bucketName(),
+            failWithMessage("[%s] index doesn't exist in `[%s].[%s].[%s]` keyspace", name, actual.bucketName(),
                     actual.scopeName(), actual.name());
         }
         return this;

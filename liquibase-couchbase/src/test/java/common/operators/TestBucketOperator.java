@@ -2,6 +2,7 @@ package common.operators;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.Collection;
 import liquibase.ext.couchbase.operator.BucketOperator;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,6 +53,13 @@ public class TestBucketOperator extends BucketOperator {
 
     public static Bucket getTestBucket(Cluster cluster) {
         return cluster.bucket(TEST_BUCKET);
+    }
+
+    public Collection createOrGetCollection(String collectionName, String scopeName) {
+        if (!hasCollectionInScope(collectionName, scopeName)) {
+            createCollection(collectionName, scopeName);
+        }
+        return getCollection(collectionName, scopeName);
     }
 
 }

@@ -19,8 +19,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class CreateCollectionSystemTest extends LiquibaseSystemTest {
 
-    private static final String COLLECTION_NAME = "travels";
-
     private final String travelsCollection = "travels";
 
     @BeforeEach
@@ -36,10 +34,10 @@ public class CreateCollectionSystemTest extends LiquibaseSystemTest {
         Liquibase liquibase = liquibase(CREATE_COLLECTION_TEST_XML);
 
         liquibase.update();
-        assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(COLLECTION_NAME, TEST_SCOPE);
+        assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(travelsCollection, TEST_SCOPE);
 
         liquibase.rollback(1, null);
-        assertThat(cluster.bucket(TEST_BUCKET)).hasNoCollectionInScope(COLLECTION_NAME, TEST_SCOPE);
+        assertThat(cluster.bucket(TEST_BUCKET)).hasNoCollectionInScope(travelsCollection, TEST_SCOPE);
     }
 
     @Test

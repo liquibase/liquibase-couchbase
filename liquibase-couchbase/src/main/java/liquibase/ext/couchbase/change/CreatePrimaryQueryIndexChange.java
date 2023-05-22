@@ -68,12 +68,13 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
 
     @Override
     protected Change[] createInverses() {
-        DropIndexChange inverse = new DropIndexChange();
-        inverse.setBucketName(bucketName);
-        inverse.setScopeName(scopeName);
-        inverse.setCollectionName(collectionName);
-        inverse.setIndexName(indexName);
-        inverse.setIsPrimary(true);
+        DropIndexChange inverse = DropIndexChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .collectionName(collectionName)
+                .indexName(indexName)
+                .isPrimary(true)
+                .build();
 
         return new Change[] {inverse};
     }

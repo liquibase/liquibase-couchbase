@@ -5,6 +5,7 @@ import liquibase.ext.couchbase.statement.DropBucketStatement;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
                         "-bucket.html#dropping-a-bucket",
                 priority = PrioritizedService.PRIORITY_DATABASE,
                 appliesTo = {"database"})
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

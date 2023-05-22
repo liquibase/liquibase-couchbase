@@ -46,9 +46,10 @@ public class CreateScopeChange extends CouchbaseChange {
 
     @Override
     protected Change[] createInverses() {
-        DropScopeChange inverse = new DropScopeChange();
-        inverse.setBucketName(bucketName);
-        inverse.setScopeName(scopeName);
+        DropScopeChange inverse = DropScopeChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .build();
 
         return new Change[] {inverse};
     }

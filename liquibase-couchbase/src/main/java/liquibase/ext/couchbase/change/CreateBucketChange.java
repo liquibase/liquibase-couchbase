@@ -74,8 +74,9 @@ public class CreateBucketChange extends CouchbaseChange {
 
     @Override
     protected Change[] createInverses() {
-        DropBucketChange inverse = new DropBucketChange();
-        inverse.setBucketName(bucketName);
+        DropBucketChange inverse = DropBucketChange.builder()
+                .bucketName(bucketName)
+                .build();
 
         return new Change[] {inverse};
     }
