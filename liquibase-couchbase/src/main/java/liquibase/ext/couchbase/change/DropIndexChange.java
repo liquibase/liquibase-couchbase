@@ -7,6 +7,7 @@ import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
         priority = PrioritizedService.PRIORITY_DATABASE,
         appliesTo = {"database", "keyspace"}
 )
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

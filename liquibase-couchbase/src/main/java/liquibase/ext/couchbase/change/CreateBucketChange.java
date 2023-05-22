@@ -7,6 +7,7 @@ import com.couchbase.client.java.manager.bucket.CompressionMode;
 import com.couchbase.client.java.manager.bucket.ConflictResolutionType;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.EvictionPolicyType;
+import liquibase.change.Change;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.change.utils.BucketCreationMapper;
@@ -69,6 +70,15 @@ public class CreateBucketChange extends CouchbaseChange {
         return new SqlStatement[] {
                 new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings())
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropBucketChange inverse = DropBucketChange.builder()
+                .bucketName(bucketName)
+                .build();
+
+        return new Change[] {inverse};
     }
 
 }

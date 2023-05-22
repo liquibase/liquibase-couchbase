@@ -24,14 +24,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="evgenii.anishchenko">
-        <ext:createPrimaryQueryIndex>
+    <changeSet id="1" author="dmitry.dashko">
+        <ext:createScope>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:collectionName>travel-sample</ext:collectionName>
-            <ext:deferred>true</ext:deferred>
-            <ext:indexName>testTravelPrimaryIndex</ext:indexName>
-            <ext:numReplicas>0</ext:numReplicas>
-            <ext:scopeName>testScope</ext:scopeName>
-        </ext:createPrimaryQueryIndex>
+            <ext:scopeName>scopeToRollback</ext:scopeName>
+        </ext:createScope>
     </changeSet>
+
 </databaseChangeLog>

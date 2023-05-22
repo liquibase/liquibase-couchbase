@@ -6,6 +6,7 @@ import liquibase.ext.couchbase.statement.DropCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
         priority = ChangeMetaData.PRIORITY_DEFAULT,
         appliesTo = {"bucket"}
 )
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DropCollectionChange extends CouchbaseChange {

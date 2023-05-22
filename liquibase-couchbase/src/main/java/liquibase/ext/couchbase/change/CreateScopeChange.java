@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.change;
 
+import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreateScopeStatement;
 import liquibase.servicelocator.PrioritizedService;
@@ -41,6 +42,16 @@ public class CreateScopeChange extends CouchbaseChange {
         return new SqlStatement[] {
                 new CreateScopeStatement(scopeName, bucketName)
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropScopeChange inverse = DropScopeChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .build();
+
+        return new Change[] {inverse};
     }
 
 }
