@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static common.constants.ChangeLogSampleFilePaths.REMOVE_BY_QUERY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_MANY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_ONE_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,5 +66,17 @@ class RemoveDocumentsChangeTest {
         assertThat(changes).hasSize(1);
         assertThat(((RemoveDocumentsChange) changes.get(0)).getIds()).hasSize(1);
     }
+
+    @Test
+    void Should_contain_where_clause() {
+        DatabaseChangeLog changeLog = changeLogProvider.load(REMOVE_BY_QUERY_TEST_XML);
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        List<Change> changes = changeSet.getChanges();
+        assertThat(changes).hasSize(1);
+        RemoveDocumentsChange removeDocumentsChange = (RemoveDocumentsChange) changes.get(0);
+        assertThat(removeDocumentsChange.getIds()).hasSize(0);
+        assertThat(removeDocumentsChange.getWhereCondition()).isEqualTo("test=\"test\"");
+    }
+
 }
 

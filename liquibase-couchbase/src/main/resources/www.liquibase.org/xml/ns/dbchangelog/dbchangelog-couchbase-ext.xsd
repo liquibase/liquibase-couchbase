@@ -364,7 +364,10 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
-                <xsd:element name="id" maxOccurs="unbounded" type="xsd:string"/>
+                <xsd:choice>
+                    <xsd:element name="id" maxOccurs="unbounded" type="xsd:string"/>
+                    <xsd:element name="whereCondition" type="xsd:string"/>
+                </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

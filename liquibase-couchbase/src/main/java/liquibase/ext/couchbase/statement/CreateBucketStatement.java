@@ -3,14 +3,12 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import liquibase.Scope;
-import liquibase.ext.couchbase.exception.BucketExistsException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.logging.Logger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
-import static java.lang.String.format;
 
 @Data
 @RequiredArgsConstructor
