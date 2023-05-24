@@ -22,7 +22,7 @@ import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class ExecuteQueryStatementIT extends ConstantScopeTestCase {
-    private static final String DELETE_QUERY = String.format("DELETE FROM %s WHERE META().id=$id", TEST_KEYSPACE.getKeyspace());
+    private static final String DELETE_QUERY = String.format("DELETE FROM %s WHERE META().id=$id", TEST_KEYSPACE.getFullPath());
     private final List<Param> params = ImmutableList.of(new Param(TEST_ID, TEST_ID));
     private static final CollectionOperator collectionOperator = bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE);
 

@@ -284,7 +284,10 @@
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="id" type="xsd:string"/>
+                <xsd:choice>
+                    <xsd:element name="id" type="xsd:string"/>
+                    <xsd:element name="whereCondition" type="xsd:string"/>
+                </xsd:choice>
                 <xsd:element ref="mutateInSpecs"/>
             </xsd:sequence>
         </xsd:complexType>

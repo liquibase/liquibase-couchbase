@@ -13,6 +13,7 @@ import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
 import liquibase.ext.couchbase.types.BucketScope;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -31,6 +33,8 @@ import static java.util.stream.Collectors.toMap;
 @Getter
 @RequiredArgsConstructor
 public class ClusterOperator {
+
+    private static final String RETRIEVE_DOCUMENT_IDS_QUERY_TEMPLATE = "SELECT meta().id FROM %s WHERE %s";
 
     protected final Cluster cluster;
 
@@ -78,6 +82,16 @@ public class ClusterOperator {
 
     public List<QueryIndex> getQueryIndexesForBucket(String bucketName) {
         return getQueryIndexes().getAllIndexes(bucketName);
+    }
+
+    public List<String> retrieveDocumentIdsByWhereClause(Keyspace keyspace, String whereClause) {
+        String collectionPath = keyspace.getFullPath();
+        String documentIdRetrieveQuery = format(RETRIEVE_DOCUMENT_IDS_QUERY_TEMPLATE, collectionPath, whereClause);
+        QueryResult documentIdsResult = executeSingleSql(documentIdRetrieveQuery);
+        return documentIdsResult.rowsAsObject()
+                .stream()
+                .map(jsonObject -> jsonObject.getString("id"))
+                .collect(toList());
     }
 
     public boolean indexExists(String indexName, String bucketName) {
