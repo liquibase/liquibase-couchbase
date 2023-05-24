@@ -13,6 +13,7 @@ import lombok.NonNull;
 import org.assertj.core.api.AbstractAssert;
 
 import java.util.List;
+import java.util.Set;
 
 public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectionAssert, Collection> {
 
@@ -62,14 +63,14 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
         return this;
     }
 
-    public CouchbaseCollectionAssert doesNotContainIds(@NonNull List<Id> ids) {
+    public CouchbaseCollectionAssert doesNotContainIds(@NonNull Set<Id> ids) {
         for (Id id : ids) {
             doesNotContainId(id.getId());
         }
         return this;
     }
 
-    public CouchbaseCollectionAssert containsAnyId(@NonNull List<Id> ids) {
+    public CouchbaseCollectionAssert containsAnyId(@NonNull Set<Id> ids) {
         if (ids.stream().noneMatch(id -> actual.exists(id.getId()).exists())) {
             failWithMessage("Collection [%s] in the scope [%s] doesn't contain any documents from list [%s]",
                     actual.name(),
