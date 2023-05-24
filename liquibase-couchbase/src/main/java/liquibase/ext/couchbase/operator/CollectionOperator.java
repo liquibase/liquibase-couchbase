@@ -11,6 +11,9 @@ import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
+
+import java.util.Set;
+
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Id;
@@ -159,7 +162,7 @@ public class CollectionOperator {
         return transaction.insert(collection.reactive(), document.getId(), document.getContentAsObject());
     }
 
-    public void removeDocsTransactionally(TransactionAttemptContext transaction, List<Id> idList) {
+    public void removeDocsTransactionally(TransactionAttemptContext transaction, Set<Id> idList) {
         idList.forEach(id -> removeDocTransactionally(transaction, id.getId()));
     }
 
@@ -169,7 +172,7 @@ public class CollectionOperator {
     }
 
     public Flux<TransactionGetResult> removeDocsTransactionallyReactive(ReactiveTransactionAttemptContext transaction,
-                                                                        List<Id> idList) {
+                                                                        Set<Id> idList) {
         return Flux.fromIterable(idList)
                 .flatMap(id -> removeDocTransactionallyReactive(transaction, id.getId()));
     }
