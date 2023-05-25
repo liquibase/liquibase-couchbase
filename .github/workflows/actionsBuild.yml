@@ -21,10 +21,10 @@ jobs:
         cache: maven
         
     - name: Build with Maven
-      run: mvn package --file luquibase-couchbase/pom.xml -DskipTests
+      run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
     
     - name: Test with Maven
-      run: mvn clean test --file luquibase-couchbase/pom.xml
+      run: mvn clean test --file liquibase-couchbase/pom.xml
 
 #     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
 #     - name: Update dependency graph
