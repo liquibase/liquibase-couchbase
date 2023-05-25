@@ -9,28 +9,34 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
+import java.util.concurrent.TimeUnit;
+
 import static common.constants.ChangeLogSampleFilePaths.SQL_CHECK_FAILED_PRECONDITION;
 import static common.constants.ChangeLogSampleFilePaths.SQL_CHECK_PRECONDITION;
-import static common.constants.TestConstants.TEST_COLLECTION;
-import static common.constants.TestConstants.TEST_KEYSPACE;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class SqlCheckPreconditionSystemTest extends LiquibaseSystemTest {
-    private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
+    private static final String COLLECTION_NAME = "SqlCheckPreconditionSystemTestCollection";
     private static final String DOCUMENT_ID = "sqlCheckIndexTestPreconditionId1";
+    private static Collection collection;
 
     @BeforeAll
+    @SneakyThrows
     static void setUp() {
+        bucketOperator.createCollection(COLLECTION_NAME, TEST_SCOPE);
+        TimeUnit.SECONDS.sleep(3L);
+        collection = bucketOperator.getCollection(COLLECTION_NAME, TEST_SCOPE);
         collection.queryIndexes().createPrimaryIndex();
-        clusterOperator.removeAllDocuments(TEST_KEYSPACE);
+        TimeUnit.SECONDS.sleep(3L);
     }
 
     @AfterAll
     static void cleanUp() {
         collection.queryIndexes().dropPrimaryIndex();
+        bucketOperator.dropCollection(COLLECTION_NAME, TEST_SCOPE);
     }
 
     @Test

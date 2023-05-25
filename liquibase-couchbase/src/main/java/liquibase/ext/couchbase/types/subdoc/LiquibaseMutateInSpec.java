@@ -23,15 +23,8 @@ import java.util.List;
 public class LiquibaseMutateInSpec extends AbstractLiquibaseSerializable {
 
     private String path;
-    private Value value;
     private List<Value> values = new ArrayList<>();
     private MutateInType mutateInType;
-
-    public LiquibaseMutateInSpec(String path, Value value, MutateInType mutateInType) {
-        this.path = path;
-        this.value = value;
-        this.mutateInType = mutateInType;
-    }
 
     @Override
     public String getSerializedObjectName() {

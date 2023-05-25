@@ -15,9 +15,8 @@ public class MutateInReplaceValidator extends MutateInValidator {
     }
 
     @Override
-    public void validate(String path, Value value, List<Value> values) {
-        validateValuePresence(value);
-        validateNoMultipleValues(values);
+    public void validate(String path, List<Value> values) {
+        validateSingleValuePresence(values);
     }
 
 
