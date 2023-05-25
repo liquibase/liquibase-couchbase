@@ -37,6 +37,6 @@ public class TestClusterOperator extends ClusterOperator {
 
     public void removeAllDocuments(Keyspace keyspace) {
         QueryOptions queryOptions = queryOptions().scanConsistency(REQUEST_PLUS);
-        cluster.query(format("DELETE FROM %s", keyspace.getKeyspace()), queryOptions);
+        cluster.query(format("DELETE FROM %s", keyspace.getFullPath()), queryOptions);
     }
 }
