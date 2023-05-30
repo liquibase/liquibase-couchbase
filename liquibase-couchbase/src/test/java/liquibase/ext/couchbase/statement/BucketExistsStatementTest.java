@@ -42,6 +42,6 @@ public class BucketExistsStatementTest {
 
         when(bucketManager.getBucket(TEST_BUCKET)).thenThrow(new BucketNotFoundException(TEST_BUCKET));
 
-        assertThat(statement.isTrue(connection)).isTrue();
+        assertThat(statement.isTrue(connection)).isFalse();
     }
 }
