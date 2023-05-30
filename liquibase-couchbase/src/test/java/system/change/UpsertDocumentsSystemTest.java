@@ -40,11 +40,11 @@ public class UpsertDocumentsSystemTest extends LiquibaseSystemTest {
     }
 
     private static void createPrimaryIndex() {
-        clusterOperator.getCollectionOperator(collection).createPrimaryIndex();
+        bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE).createPrimaryIndex();
     }
 
     private static void dropPrimaryIndex() {
-        clusterOperator.getCollectionOperator(collection).dropCollectionPrimaryIndex();
+        bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE).dropCollectionPrimaryIndex();
     }
 
     @Test

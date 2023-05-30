@@ -55,9 +55,9 @@ public class IndexExistsPrecondition extends AbstractCouchbasePrecondition {
             return operator.indexExists(indexName, bucketScope);
         }
 
-        Collection collection = operator.getBucketOperator(bucketName).getCollection(collectionName, scopeName);
-
-        return operator.getCollectionOperator(collection).collectionIndexExists(indexName);
+        return operator.getBucketOperator(bucketName)
+                .getCollectionOperator(collectionName, scopeName)
+                .collectionIndexExists(indexName);
     }
 
 }
