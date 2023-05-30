@@ -33,7 +33,6 @@
         <mockito.junit.version>4.11.0</mockito.junit.version>
         <assertj.version>3.24.2</assertj.version>
         <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
-        <slf4j.version>2.0.6</slf4j.version>
         <lombok.version>1.18.26</lombok.version>
         <couchbase.java.client.version>3.4.3</couchbase.java.client.version>
         <google.guava.version>31.1-jre</google.guava.version>

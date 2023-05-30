@@ -1,0 +1,22 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="upsert doc upsertId1" author="tigran">
+        <ext:insertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:document>
+                <ext:id>upsertId1</ext:id>
+                <ext:value>
+                    <ext:data>Data</ext:data>
+                    <ext:type>String</ext:type>
+                </ext:value>
+            </ext:document>
+        </ext:insertDocuments>
+    </changeSet>
+</databaseChangeLog>
