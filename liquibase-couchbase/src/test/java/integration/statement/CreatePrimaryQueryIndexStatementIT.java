@@ -31,14 +31,10 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     void cleanUp() {
         TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
         if (collectionOperatorDefault.collectionIndexExists(indexName)) {
-            clusterOperator.getBucketOperator(bucketName)
-                    .getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE)
-                    .dropIndex(indexName);
+           getDefaultCollectionOperator().dropIndex(indexName);
         }
         if (collectionOperatorDefault.collectionIndexExists(MANUALLY_CREATED_INDEX)) {
-            clusterOperator.getBucketOperator(bucketName)
-                    .getCollectionOperator(DEFAULT_COLLECTION, DEFAULT_SCOPE)
-                    .dropIndex(MANUALLY_CREATED_INDEX);
+            getDefaultCollectionOperator().dropIndex(MANUALLY_CREATED_INDEX);
         }
     }
 

@@ -98,7 +98,7 @@ class TestClusterOperatorTest {
     void should_create_collection_primary_index() {
         testClusterOperator.getBucketOperator(TEST_BUCKET)
                 .getCollectionOperator(TEST_COLLECTION, TEST_SCOPE)
-                .createCollectionPrimaryIndex(null);
+                .createPrimaryIndex();
 
         verify(collectionQueryIndexManager).createPrimaryIndex();
     }
