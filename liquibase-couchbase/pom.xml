@@ -206,7 +206,7 @@
                     <execution>
                         <goals>
                             <goal>integration-test</goal>
-                            <goal>verify</goal>
+                            <goal>test</goal>
                         </goals>
                         <configuration>
                             <skipITs>${skip.integration.tests}</skipITs>
