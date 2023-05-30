@@ -2,12 +2,12 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "*" ]
 
 jobs:
-  build:
+  build-test:
 
     runs-on: ubuntu-latest
 
@@ -19,12 +19,20 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
         cache: maven
-        
+
     - name: Build with Maven
       run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
-    
+
     - name: Test with Maven
-      run: mvn clean test --file liquibase-couchbase/pom.xml
+      run: mvn clean --file liquibase-couchbase/pom.xml org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report -Dskip.integration.tests=false
+      
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Test report
+        path: liquibase-couchbase/target/surefire-reports/TEST-*.xml,liquibase-couchbase/target/failsafe-reports/TEST-*.xml
+        reporter: java-junit
 
 #     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
 #     - name: Update dependency graph

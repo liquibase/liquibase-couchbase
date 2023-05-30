@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/wdt-dev/couchbase-liquibase/actions/workflows/actionsBuild.yml/badge.svg?branch=COS-260_github_actions)](https://github.com/wdt-dev/couchbase-liquibase/actions/workflows/actionsBuild.yml)
+
 # Couchbase Extension for Liquibase
 
 The Couchbase extension for Liquibase allows you to use migrate your database schema using Liquibase and store your changelogs in a

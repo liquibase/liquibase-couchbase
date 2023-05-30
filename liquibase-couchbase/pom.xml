@@ -48,6 +48,7 @@
         <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
         <json-schema-validator-version>1.0.78</json-schema-validator-version>
         <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
+        <junit-platform-reporting.version>1.9.1</junit-platform-reporting.version>
     </properties>
 
     <dependencies>
@@ -107,6 +108,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-reporting</artifactId>
+            <version>${junit-platform-reporting.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -185,7 +192,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.maven.plugin.version}</version>
                 <configuration>
-                    <goal>test</goal>
+                    <goal>verify</goal>
                     <includes>
                         <include>**/liquibase/ext/couchbase/**</include>
                     </includes>
