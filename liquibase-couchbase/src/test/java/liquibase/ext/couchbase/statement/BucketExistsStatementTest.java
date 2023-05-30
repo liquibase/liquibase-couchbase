@@ -28,7 +28,7 @@ public class BucketExistsStatementTest {
 
     @Test
     void Should_return_true_if_bucket_exists() {
-        BucketExistsStatement statement = new BucketExistsStatement(NEW_TEST_BUCKET);
+        BucketExistsStatement statement = new BucketExistsStatement(TEST_BUCKET);
 
         BucketSettings bucketSettings = mock(BucketSettings.class);
         when(bucketManager.getBucket(TEST_BUCKET)).thenReturn(bucketSettings);
@@ -38,9 +38,9 @@ public class BucketExistsStatementTest {
 
     @Test
     void Should_return_false_if_bucket_not_found() {
-        BucketExistsStatement statement = new BucketExistsStatement(NEW_TEST_BUCKET);
+        BucketExistsStatement statement = new BucketExistsStatement(TEST_BUCKET);
 
-        when(bucketManager.getBucket(TEST_BUCKET)).thenThrow(new BucketNotFoundException(NEW_TEST_BUCKET));
+        when(bucketManager.getBucket(TEST_BUCKET)).thenThrow(new BucketNotFoundException(TEST_BUCKET));
 
         assertThat(statement.isTrue(connection)).isTrue();
     }
