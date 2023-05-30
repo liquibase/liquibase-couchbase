@@ -158,7 +158,6 @@ public class CouchbaseLockService implements LockService {
         logger.info(format("Releasing lock on the bucket [%s] from the service [%s]", bucketName, serviceId));
         locker.release(bucketName, serviceId);
         hasLock.set(false);
-        logger.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", bucketName, serviceId));
     }
 
     @Override

@@ -55,9 +55,7 @@ public class MutateInChange extends CouchbaseChange {
     private String expiry;
     private Boolean preserveExpiry;
     private StoreSemantics storeSemantics;
-
     private List<LiquibaseMutateInSpec> mutateInSpecs = new ArrayList<>();
-
     private static final MutateInSpecTransformer mutateInSpecTransformer = new MutateInSpecTransformer();
 
     @Override

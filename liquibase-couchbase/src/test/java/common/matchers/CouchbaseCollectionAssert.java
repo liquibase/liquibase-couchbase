@@ -2,9 +2,13 @@ package common.matchers;
 
 import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.manager.query.QueryIndex;
 import liquibase.ext.couchbase.lockservice.CouchbaseLock;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Id;
+import liquibase.ext.couchbase.types.Value;
 import lombok.NonNull;
 import org.assertj.core.api.AbstractAssert;
 
@@ -82,14 +86,34 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
     }
 
     public CouchbaseCollectionAssert contains(Document doc) {
-        extractingDocument(doc.getId()).itsContentEquals(doc.getContentAsJson());
+        extractingDocument(doc.getId(), getClassName(doc.getValue())).itsContentEquals(doc.getValue());
 
         return this;
     }
-    public CouchbaseDocumentAssert containsDocument(Document doc) {
-        extractingDocument(doc.getId()).itsContentEquals(doc.getContentAsJson());
 
-        return extractingDocument(doc.getId());
+    public CouchbaseDocumentAssert containsDocument(Document doc) {
+        extractingDocument(doc.getId(), getClassName(doc.getValue())).itsContentEquals(doc.getContentAsJson());
+
+        return extractingDocument(doc.getId(), getClassName(doc.getValue()));
+    }
+
+    private Class getClassName(Value value) {
+        switch (value.getType()) {
+            case JSON:
+                return JsonObject.class;
+            case JSON_ARRAY:
+                return JsonArray.class;
+            case STRING:
+                return String.class;
+            case LONG:
+                return Long.class;
+            case DOUBLE:
+                return Double.class;
+            case BOOLEAN:
+                return Boolean.class;
+            default:
+                throw new RuntimeException("Class not found");
+        }
     }
 
     public CouchbaseCollectionAssert doesNotContain(Document doc) {
@@ -103,6 +127,12 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
             doesNotContainId(doc.getId());
         }
         return this;
+    }
+
+    public CouchbaseDocumentAssert extractingDocument(@NonNull String id, @NonNull Class clazz) {
+        containsId(id);
+
+        return new CouchbaseDocumentAssert(actual.get(id).contentAs(clazz));
     }
 
     public CouchbaseDocumentAssert extractingDocument(@NonNull String id) {
@@ -123,6 +153,28 @@ public class CouchbaseCollectionAssert extends AbstractAssert<CouchbaseCollectio
             failWithMessage("No such lock with ID [%s]", lockId);
         }
 
+        return this;
+    }
+
+    public CouchbaseCollectionAssert hasIndex(String name) {
+        boolean indexExists = actual.queryIndexes().getAllIndexes().stream()
+                .map(QueryIndex::name)
+                .anyMatch(name::equals);
+        if (!indexExists) {
+            failWithMessage("[%s] index doesn't exist in `[%s].[%s].[%s]` keyspace", name, actual.bucketName(),
+                    actual.scopeName(), actual.name());
+        }
+        return this;
+    }
+
+    public CouchbaseCollectionAssert hasNoIndex(String queryIndexName) {
+        boolean indexExists = actual.queryIndexes().getAllIndexes().stream()
+                .map(QueryIndex::name)
+                .anyMatch(queryIndexName::equals);
+        if (indexExists) {
+            failWithMessage("[%s] index exists in `[%s].[%s].[%s]` keyspace", queryIndexName, actual.bucketName(),
+                    actual.scopeName(), actual.name());
+        }
         return this;
     }
 }

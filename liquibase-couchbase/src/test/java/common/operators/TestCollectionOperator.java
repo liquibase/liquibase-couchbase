@@ -1,13 +1,17 @@
 package common.operators;
 
 import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.query.QueryOptions;
+import com.couchbase.client.java.query.QueryScanConsistency;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.types.Document;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static java.lang.String.format;
 import static liquibase.ext.couchbase.types.Document.document;
 
 public class TestCollectionOperator extends CollectionOperator {
@@ -47,4 +51,5 @@ public class TestCollectionOperator extends CollectionOperator {
     public static JsonObject createTestDocContent() {
         return createOneFieldJson("key", "value");
     }
+
 }

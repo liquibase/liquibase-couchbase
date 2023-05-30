@@ -7,9 +7,9 @@ import org.assertj.core.api.AbstractAssert;
 
 import lombok.NonNull;
 
-public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAssert, JsonObject> {
+public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAssert, Object> {
 
-    CouchbaseDocumentAssert(JsonObject document) {
+    CouchbaseDocumentAssert(Object document) {
         super(document, CouchbaseDocumentAssert.class);
     }
 
@@ -43,8 +43,16 @@ public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAss
         return this;
     }
 
+    public CouchbaseDocumentAssert isJson() {
+        if (!(actual instanceof JsonObject)) {
+            failWithMessage("Object [%s] is not json", actual);
+            return this;
+        }
+        return this;
+    }
+
     public CouchbaseDocumentAssert hasNoField(@NonNull String name) {
-        if (actual.containsKey(name)) {
+        if (((JsonObject) actual).containsKey(name)) {
             failWithMessage("JsonObject [%s] should not contain key [%s], but it does",
                     actual,
                     name
@@ -54,7 +62,7 @@ public class CouchbaseDocumentAssert extends AbstractAssert<CouchbaseDocumentAss
     }
 
     public CouchbaseDocumentAssert hasField(@NonNull String name) {
-        if (!actual.containsKey(name)) {
+        if (!((JsonObject) actual).containsKey(name)) {
             failWithMessage("JsonObject [%s] should contain key [%s], but it doesn't",
                     actual,
                     name

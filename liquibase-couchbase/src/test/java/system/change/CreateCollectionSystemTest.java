@@ -30,12 +30,14 @@ public class CreateCollectionSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
-    void Collection_should_be_created_after_liquibase_execution() {
+    void Collection_should_be_created_and_rolled_back() {
         Liquibase liquibase = liquibase(CREATE_COLLECTION_TEST_XML);
 
         liquibase.update();
-
         assertThat(cluster.bucket(TEST_BUCKET)).hasCollectionInScope(travelsCollection, TEST_SCOPE);
+
+        liquibase.rollback(1, null);
+        assertThat(cluster.bucket(TEST_BUCKET)).hasNoCollectionInScope(travelsCollection, TEST_SCOPE);
     }
 
     @Test

@@ -69,7 +69,7 @@ public class RemoveDocumentsSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
-    void Delete_non_existing_collection_should_throw_exception_precondition() {
+    void Delete_non_existing_document_should_throw_exception_precondition() {
         Liquibase liquibase = liquibase(REMOVE_NON_EXISTING_DOC_ERROR_TEST_XML);
         assertThatExceptionOfType(LiquibaseException.class)
                 .isThrownBy(liquibase::update)

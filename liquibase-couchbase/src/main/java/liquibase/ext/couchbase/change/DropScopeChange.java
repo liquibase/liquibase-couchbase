@@ -5,6 +5,7 @@ import liquibase.ext.couchbase.statement.DropScopeStatement;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import lombok.Setter;
         priority = PrioritizedService.PRIORITY_DATABASE,
         appliesTo = {"database"}
 )
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

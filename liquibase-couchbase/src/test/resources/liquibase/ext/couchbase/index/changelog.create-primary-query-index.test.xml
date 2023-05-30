@@ -27,11 +27,11 @@
     <changeSet id="1" author="evgenii.anishchenko">
         <ext:createPrimaryQueryIndex>
             <ext:bucketName>testBucket</ext:bucketName>
-            <ext:collectionName>sample</ext:collectionName>
+            <ext:collectionName>travel-sample</ext:collectionName>
             <ext:deferred>true</ext:deferred>
-            <ext:indexName>test</ext:indexName>
-            <ext:numReplicas>1</ext:numReplicas>
-            <ext:scopeName>test</ext:scopeName>
+            <ext:indexName>testTravelPrimaryIndex</ext:indexName>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:scopeName>testScope</ext:scopeName>
         </ext:createPrimaryQueryIndex>
     </changeSet>
 </databaseChangeLog>

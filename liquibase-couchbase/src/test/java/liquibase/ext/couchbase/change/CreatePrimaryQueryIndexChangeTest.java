@@ -53,13 +53,13 @@ class CreatePrimaryQueryIndexChangeTest {
     void Change_should_have_right_properties() {
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         CreatePrimaryQueryIndexChange change = (CreatePrimaryQueryIndexChange) firstOf(changeSet.getChanges());
-        assertThat(change.getCollectionName()).isEqualTo("sample");
+        assertThat(change.getCollectionName()).isEqualTo("travel-sample");
         assertThat(change.getDeferred()).isTrue();
     }
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:1986781cf7b9bf3f25da635e885e1a30";
+        String checkSum = "8:74f679f1be9caf4a748faa3b62114cfe";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }

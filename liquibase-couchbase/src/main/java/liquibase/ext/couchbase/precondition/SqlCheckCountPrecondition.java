@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * A precondition that checks sql query returns expected count. The sql++ query need to be written by [select ... as count] template in order
+ * A precondition that checks sql query returns expected count. The sql++ query need to be written by [select ... as] count template in order
  * to be able to extract count from json. Otherwise result may be not as expected
  * @see AbstractCouchbasePrecondition
  * @see liquibase.precondition.AbstractPrecondition

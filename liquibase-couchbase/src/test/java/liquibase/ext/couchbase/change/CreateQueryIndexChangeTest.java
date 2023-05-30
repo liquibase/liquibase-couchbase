@@ -32,7 +32,7 @@ class CreateQueryIndexChangeTest {
     @Test
     void Should_return_correct_confirmation_message() {
         CreateQueryIndexChange change = new CreateQueryIndexChange();
-        String indexName = "test";
+        String indexName = "testTravelQueryIndex";
         change.setIndexName(indexName);
         assertEquals("Query index \"" + indexName + "\" has been created",
                 change.getConfirmationMessage(), "confirmation message doesn't match");
@@ -64,7 +64,7 @@ class CreateQueryIndexChangeTest {
 
     @Test
     void Should_generate_correct_checksum() {
-        String checkSum = "8:c4098d393d66bf10c449eaedad53eace";
+        String checkSum = "8:15ff1eafac2404f08f2ad2189d41bc3e";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 }

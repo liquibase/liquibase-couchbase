@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
@@ -42,6 +41,10 @@ public class ClusterOperator {
     public BucketOperator getBucketOperator(String bucket) {
         requireBucketExists(bucket);
         return new BucketOperator(cluster.bucket(bucket));
+    }
+
+    public CollectionOperator getCollectionOperator(Collection collection) {
+        return new CollectionOperator(collection);
     }
 
     protected void requireBucketExists(@NonNull String bucketName) throws BucketNotFoundException {
@@ -88,7 +91,7 @@ public class ClusterOperator {
         return documentIdsResult.rowsAsObject()
                 .stream()
                 .map(jsonObject -> jsonObject.getString("id"))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public boolean indexExists(String indexName, String bucketName) {

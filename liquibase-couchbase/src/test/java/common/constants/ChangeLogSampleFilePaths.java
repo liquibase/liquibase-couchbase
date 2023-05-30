@@ -42,15 +42,20 @@ public class ChangeLogSampleFilePaths {
     public static final String REMOVE_NON_EXISTING_DOC_ERROR_TEST_XML = rootPrefix + "/remove/changelog.remove-non-existing-doc-error.test.xml";
     public static final String REMOVE_MANY_TEST_XML = rootPrefix + "/remove/changelog.remove-many.test.xml";
     public static final String INSERT_FROM_FILE_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file.test.xml";
-    public static final String UID_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file-uid-key.test.xml";
-    public static final String INCREMENT_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file-increment-key.test.xml";
-    public static final String EXPRESSION_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file-expression-key.test.xml";
-    public static final String INSERT_ONE_BROKEN_TEST_XML = rootPrefix + "/insert/changelog.insert-one-broken.test.xml";
-    public static final String INSERT_ONE_2_CHANGESETS_ONE_SUCCESSFULL_TEST_XML = rootPrefix + "/insert/" +
-            "changelog.insert-one-2-changesets-with-one-broken.test.xml";
+    public static final String INSERT_DOCUMENTS_TEST_XML = rootPrefix + "/insert/changelog.insert-documents.test.xml";
+    public static final String INSERT_DOCUMENTS_FAILED_TRANSACTION_TEST_XML = rootPrefix + "/insert/changelog.insert-documents-failed-transaction.test.xml";
+    public static final String INSERT_UID_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file-uid-key.test.xml";
+    public static final String INSERT_INCREMENT_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file-increment-key.test.xml";
+    public static final String INSERT_EXPRESSION_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.insert-from-file-expression-key.test.xml";
     public static final String UPSERT_MANY_TEST_XML = rootPrefix + "/insert/changelog.upsert-many.test.xml";
-    public static final String UPSERT_ONE_TEST_XML = rootPrefix + "/insert/changelog.upsert-one.test.xml";
     public static final String UPSERT_FROM_FILE_TEST_XML = rootPrefix + "/insert/changelog.upsert-from-file.test.xml";
+    public static final String UPSERT_UID_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.upsert-from-file-uid-key.test.xml";
+
+    public static final String UPSERT_INCREMENT_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.upsert-from-file-increment-key.test.xml";
+
+    public static final String UPSERT_EXPRESSION_KEY_GENERATOR_TEST_XML = rootPrefix + "/insert/changelog.upsert-from-file-expression-key.test.xml";
+    public static final String UPSERT_DOCUMENTS_TEST_XML = rootPrefix + "/insert/changelog.upsert-documents.test.xml";
+    public static final String UPSERT_DOCUMENTS_FAILED_TRANSACTION_TEST_XML = rootPrefix + "/insert/changelog.upsert-documents-failed-transaction.test.xml";
     public static final String CHANGELOG_TEST_XML = rootPrefix + "/changelog/changelog.changelog-test.xml";
     public static final String CHANGELOG_DUPLICATE_TEST_XML = rootPrefix + "/changelog/changelog.changelog-duplicate-test.xml";
     public static final String CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML = rootPrefix + "/changelog/changelog.rollback-by-count-test.xml";
@@ -93,5 +98,22 @@ public class ChangeLogSampleFilePaths {
     public static final String INSERT_DOCUMENT_SQL_TEST = rootPrefix + "/insert/changelog.insert-document-sql.test.xml";
     public static final String INSERT_DOCUMENT_ROLLBACK_SQL_TEST = rootPrefix + "/insert/changelog.insert-document-rollback-sql.test.xml";
     public static final String UPDATE_BUCKET_TEST_JSON = rootPrefix + "/bucket/json/changelog.update-bucket.test.json";
+    public static final String CREATE_SCOPE_TEST = rootPrefix + "/scope/changelog.create-scope.test.xml";
+
+    //preconditions
+    public static final String BUCKET_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.bucket-exists-precondition.test.xml";
+    public static final String BUCKET_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.bucket-exists-precondition-failed.test.xml";
+    public static final String SCOPE_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.scope-exists-precondition.test.xml";
+    public static final String SCOPE_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.scope-exists-precondition-failed.test.xml";
+    public static final String COLLECTION_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.collection-exists-precondition.test.xml";
+    public static final String COLLECTION_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.collection-exists-precondition-failed.test.xml";
+    public static final String DOCUMENT_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.document-exists-precondition.test.xml";
+    public static final String DOCUMENT_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.document-exists-precondition-failed.test.xml";
+    public static final String INDEX_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.index-exists-precondition.test.xml";
+    public static final String INDEX_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.index-exists-precondition-failed.test.xml";
+    public static final String PRIMARY_INDEX_EXISTS_PRECONDITION = rootPrefix + "/precondition/changelog.primary-index-exists-precondition.test.xml";
+    public static final String PRIMARY_INDEX_EXISTS_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.primary-index-exists-precondition-failed.test.xml";
+    public static final String SQL_CHECK_PRECONDITION = rootPrefix + "/precondition/changelog.sql-check-precondition.test.xml";
+    public static final String SQL_CHECK_FAILED_PRECONDITION = rootPrefix + "/precondition/changelog.sql-check-precondition-failed.test.xml";
 
 }

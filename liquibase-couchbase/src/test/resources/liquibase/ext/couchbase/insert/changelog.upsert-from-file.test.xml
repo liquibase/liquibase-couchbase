@@ -24,7 +24,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
-    <changeSet id="1" author="konstantin.umanets">
+    <changeSet id="1" author="dmitry.dashko">
         <ext:upsertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
@@ -32,6 +32,17 @@
             <ext:file>
                 <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testLines.json</ext:filePath>
                 <ext:importType>LINES</ext:importType>
+                <ext:keyProviderType>DEFAULT</ext:keyProviderType>
+                <ext:keyProviderExpression>id</ext:keyProviderExpression>
+            </ext:file>
+        </ext:upsertDocuments>
+        <ext:upsertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:file>
+                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testList.json</ext:filePath>
+                <ext:importType>LIST</ext:importType>
                 <ext:keyProviderType>DEFAULT</ext:keyProviderType>
                 <ext:keyProviderExpression>id</ext:keyProviderExpression>
             </ext:file>
