@@ -192,7 +192,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.maven.plugin.version}</version>
                 <configuration>
-                    <goal>verify</goal>
+                    <goal>test</goal>
                     <includes>
                         <include>**/liquibase/ext/couchbase/**</include>
                     </includes>
@@ -206,7 +206,7 @@
                     <execution>
                         <goals>
                             <goal>integration-test</goal>
-                            <goal>test</goal>
+                            <goal>verify</goal>
                         </goals>
                         <configuration>
                             <skipITs>${skip.integration.tests}</skipITs>
