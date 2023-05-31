@@ -141,10 +141,10 @@ class HarnessCouchbaseCompatibility extends HarnessContainerizedSpecification {
     }
 
     private static int getResultDocuments() {
-        def selectNumberOfDocumentsQuery = "SELECT COUNT(*) as size FROM ${keyspace.getKeyspace()}"
+        def selectNumberOfDocumentsQuery = "SELECT COUNT(*) as size FROM ${keyspace.getFullPath()}"
         def rows = cluster.query(selectNumberOfDocumentsQuery).rowsAsObject()
         if (rows.isEmpty()) {
-            throw new RuntimeException("Not documents in ${keyspace.getKeyspace()}")
+            throw new RuntimeException("Not documents in ${keyspace.getFullPath()}")
         }
         return rows.get(0).getInt("size")
     }
