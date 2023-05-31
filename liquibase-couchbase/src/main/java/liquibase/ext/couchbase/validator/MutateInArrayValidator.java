@@ -16,9 +16,9 @@ public class MutateInArrayValidator extends MutateInValidator {
     }
 
     @Override
-    public void validate(String path, Value value, List<Value> values) {
+    public void validate(String path, List<Value> values) {
         validatePathPresence(path);
-        if (isValueEmpty(value) && values.isEmpty()) {
+        if (values.isEmpty()) {
             throw new MutateInNoValueException(mutateInType);
         }
     }

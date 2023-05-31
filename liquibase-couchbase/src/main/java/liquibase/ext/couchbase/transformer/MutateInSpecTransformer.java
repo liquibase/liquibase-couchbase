@@ -38,33 +38,29 @@ public class MutateInSpecTransformer {
     public MutateInSpec toSpec(LiquibaseMutateInSpec liquibaseMutateInSpec) {
         // empty value can be used to replace or remove the whole document
         String path = ofNullable(liquibaseMutateInSpec.getPath()).orElse(StringUtils.EMPTY);
-        Value value = liquibaseMutateInSpec.getValue();
         List<Value> values = liquibaseMutateInSpec.getValues();
         MutateInType mutateInType = liquibaseMutateInSpec.getMutateInType();
 
         MutateInValidator mutateInValidator = validatorRegistry.get(mutateInType);
-        mutateInValidator.validate(path, value, values);
+        mutateInValidator.validate(path, values);
 
         if (multipleValueMutateInTypes.contains(mutateInType)) {
-            return toMultipleValueSpec(path, value, values, mutateInType);
+            return toMultipleValueSpec(path, values, mutateInType);
         }
 
-        Object mappedValue = ofNullable(value)
-                .map(Value::mapDataToType)
-                .orElse(null);
+        // only one value in array
+        Object mappedValue = values.isEmpty() ? null : values.get(0).mapDataToType();
+
         return mutateInType.toMutateInSpec(path, mappedValue);
     }
 
 
-    private MutateInSpec toMultipleValueSpec(String path, Value value, List<Value> values, MutateInType mutateInType) {
+    private MutateInSpec toMultipleValueSpec(String path, List<Value> values, MutateInType mutateInType) {
         List<Object> valuesToSave = values.stream()
                 .filter(valueToSave -> isNotEmpty(valueToSave.getData()))
                 .map(Value::mapDataToType)
                 .collect(Collectors.toList());
 
-        if (valuesToSave.isEmpty()) {
-            valuesToSave.add(value.mapDataToType());
-        }
         return mutateInType.toMutateInSpec(path, valuesToSave);
     }
 
