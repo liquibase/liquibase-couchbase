@@ -21,7 +21,7 @@ public abstract class MutateInValidator {
 
     protected MutateInType mutateInType;
 
-    public abstract void validate(String path, Value value, List<Value> values);
+    public abstract void validate(String path, List<Value> values);
 
     protected void validatePathPresence(String path) {
         if (isEmpty(path)) {
@@ -29,8 +29,16 @@ public abstract class MutateInValidator {
         }
     }
 
-    protected void validateValuePresence(Value value) {
-        if (isValueEmpty(value)) {
+    protected void validateSingleValuePresence(List<Value> values) {
+        if(values == null || values.isEmpty()) {
+            throw new MutateInNoValueException(mutateInType);
+        }
+
+        if (values.size() != 1) {
+            throw new MutateInMultipleValuesNotAllowedException(mutateInType);
+        }
+
+        if (isValueEmpty(values.get(0))) {
             throw new MutateInNoValueException(mutateInType);
         }
     }
@@ -40,12 +48,6 @@ public abstract class MutateInValidator {
             .map(Value::getData)
             .filter(StringUtils::isNotBlank)
             .isPresent();
-    }
-
-    protected void validateNoMultipleValues(List<Value> values) {
-        if (!values.isEmpty()) {
-            throw new MutateInMultipleValuesNotAllowedException(mutateInType);
-        }
     }
 
 }

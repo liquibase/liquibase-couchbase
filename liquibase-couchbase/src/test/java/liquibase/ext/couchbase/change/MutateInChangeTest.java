@@ -6,6 +6,7 @@ import liquibase.ext.couchbase.types.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import common.TestChangeLogProvider;
@@ -61,7 +62,7 @@ public class MutateInChangeTest {
     }
 
     private LiquibaseMutateInSpec spec(String path, String value, DataType dataType, MutateInType type) {
-        return new LiquibaseMutateInSpec(path, new Value(value, dataType), type);
+        return new LiquibaseMutateInSpec(path, Arrays.asList(new Value(value, dataType)), type);
     }
 
     private MutateInChange changeWithId(List<LiquibaseMutateInSpec> specs) {
