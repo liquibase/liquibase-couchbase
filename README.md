@@ -19,6 +19,10 @@ Couchbase bucket.
 As it uses latest Couchbase SDK, extension supports fully qualified keyspaces `Bucket.Scope.Collection ` <br/>
 Which are incompatible with < **7.0** Cluster version <br />
 
+#### Enterprise and Community versions
+
+We support both Enterprise and Community couchbase versions. The only difference in `createBucket` changeType - in community version we shouldn't pass `compressionMode`, `conflictResolutionType`, or `maxExpiryInHours` options.
+
 ## About Liquibase
 
 Liquibase is a tool that helps developers manage and track changes to a database's structure over time. It provides an easy way to version
