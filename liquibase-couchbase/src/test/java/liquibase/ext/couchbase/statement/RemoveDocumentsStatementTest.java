@@ -53,7 +53,7 @@ public class RemoveDocumentsStatementTest {
         List<Id> ids = new ArrayList<>();
         ids.add(new Id("id"));
         RemoveDocumentsStatement statement = new RemoveDocumentsStatement(TEST_KEYSPACE, ids);
-        Flux<TransactionGetResult> mockedPublisher = mock(Flux.class);
+        Flux<TransactionGetResult> mockedPublisher = Flux.empty();
         when(collectionOperator.removeDocsTransactionallyReactive(reactiveTransactionAttemptContext, ids)).thenReturn(
                 mockedPublisher);
 

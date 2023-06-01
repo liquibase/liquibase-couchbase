@@ -4,7 +4,6 @@ import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import org.junit.jupiter.api.Test;
 
-import static common.constants.TestConstants.TEST_BUCKET;
 import static common.constants.TestConstants.TEST_KEYSPACE;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
