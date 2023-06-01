@@ -1,8 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Collection;
-import com.couchbase.client.java.Scope;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.operator.CollectionOperator;
@@ -18,9 +15,6 @@ public class DropPrimaryIndexStatementTest {
     private final ClusterOperator clusterOperator = mock(ClusterOperator.class);
     private final BucketOperator bucketOperator = mock(BucketOperator.class);
     private final CollectionOperator collectionOperator = mock(CollectionOperator.class);
-    private final Bucket bucket = mock(Bucket.class);
-    private final Scope scope = mock(Scope.class);
-    private final Collection collection = mock(Collection.class);
 
     @Test
     void Should_call_dropIndex_if_indexName_exists() {
@@ -29,11 +23,8 @@ public class DropPrimaryIndexStatementTest {
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(TEST_KEYSPACE, indexName);
 
         when(clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())).thenReturn(bucketOperator);
-        when(bucketOperator.getBucket()).thenReturn(bucket);
-        when(bucket.scope(TEST_KEYSPACE.getScope())).thenReturn(scope);
-        when(scope.collection(TEST_KEYSPACE.getCollection())).thenReturn(collection);
-
-        when(clusterOperator.getCollectionOperator(collection)).thenReturn(collectionOperator);
+        when(bucketOperator.getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
+                collectionOperator);
 
         statement.execute(clusterOperator);
 
@@ -47,11 +38,8 @@ public class DropPrimaryIndexStatementTest {
         DropPrimaryIndexStatement statement = new DropPrimaryIndexStatement(TEST_KEYSPACE, indexName);
 
         when(clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())).thenReturn(bucketOperator);
-        when(bucketOperator.getBucket()).thenReturn(bucket);
-        when(bucket.scope(TEST_KEYSPACE.getScope())).thenReturn(scope);
-        when(scope.collection(TEST_KEYSPACE.getCollection())).thenReturn(collection);
-
-        when(clusterOperator.getCollectionOperator(collection)).thenReturn(collectionOperator);
+        when(bucketOperator.getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
+                collectionOperator);
 
         statement.execute(clusterOperator);
 

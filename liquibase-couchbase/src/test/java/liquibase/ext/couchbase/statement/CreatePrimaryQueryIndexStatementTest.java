@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.statement;
 
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
@@ -17,7 +16,6 @@ public class CreatePrimaryQueryIndexStatementTest {
     private final CreatePrimaryQueryIndexOptions createPrimaryQueryIndexOptions =
             mock(CreatePrimaryQueryIndexOptions.class);
     private final ClusterOperator clusterOperator = mock(ClusterOperator.class);
-    private final Collection collection = mock(Collection.class);
     private final BucketOperator bucketOperator = mock(BucketOperator.class);
     private final CollectionOperator collectionOperator = mock(CollectionOperator.class);
 
@@ -28,9 +26,8 @@ public class CreatePrimaryQueryIndexStatementTest {
                 new CreatePrimaryQueryIndexStatement(TEST_KEYSPACE, createPrimaryQueryIndexOptions);
 
         when(clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())).thenReturn(bucketOperator);
-        when(bucketOperator.getCollection(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
-                collection);
-        when(clusterOperator.getCollectionOperator(collection)).thenReturn(collectionOperator);
+        when(bucketOperator.getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
+                collectionOperator);
 
         statement.execute(clusterOperator);
 

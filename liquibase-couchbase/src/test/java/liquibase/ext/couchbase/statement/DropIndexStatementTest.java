@@ -25,9 +25,8 @@ public class DropIndexStatementTest {
         DropIndexStatement statement = new DropIndexStatement(indexName, TEST_KEYSPACE);
 
         when(clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())).thenReturn(bucketOperator);
-        when(bucketOperator.getCollection(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
-                collection);
-        when(clusterOperator.getCollectionOperator(collection)).thenReturn(collectionOperator);
+        when(bucketOperator.getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
+                collectionOperator);
 
         statement.execute(clusterOperator);
 
