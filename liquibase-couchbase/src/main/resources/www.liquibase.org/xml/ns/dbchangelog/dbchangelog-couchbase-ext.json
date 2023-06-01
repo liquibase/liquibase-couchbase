@@ -505,8 +505,10 @@
           "additionalItems": false,
           "items": {
             "type": "string"
-          },
-          "minItems": 1
+          }
+        },
+        "whereCondition": {
+          "type": "string"
         }
       }
     },
