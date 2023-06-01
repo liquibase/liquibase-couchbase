@@ -55,7 +55,7 @@ public class InsertFileContentStatementTest {
     @Test
     void Should_execute_in_transaction_reactive() {
         InsertFileContentStatement statement = new InsertFileContentStatement(TEST_KEYSPACE, file);
-        Flux<TransactionGetResult> mockedPublisher = mock(Flux.class);
+        Flux<TransactionGetResult> mockedPublisher = Flux.empty();
         when(collectionOperator.insertDocsTransactionallyReactive(eq(reactiveTransactionAttemptContext),
                 anyList())).thenReturn(mockedPublisher);
 

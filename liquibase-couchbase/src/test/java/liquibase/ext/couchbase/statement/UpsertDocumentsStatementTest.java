@@ -51,7 +51,7 @@ public class UpsertDocumentsStatementTest {
     @Test
     void Should_execute_in_transaction_reactive() {
         UpsertDocumentsStatement statement = new UpsertDocumentsStatement(TEST_KEYSPACE, documents);
-        Flux<TransactionGetResult> mockedPublisher = mock(Flux.class);
+        Flux<TransactionGetResult> mockedPublisher = Flux.empty();
         when(collectionOperator.upsertDocsTransactionallyReactive(reactiveTransactionAttemptContext,
                 documents)).thenReturn(mockedPublisher);
 
