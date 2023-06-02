@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+
+  couchbase:
+    platform: linux/x86_64
+    image: couchbase
+    ports:
+      - "8091-8097:8091-8097"
+      - "9123:9123"
+      - "11207:11207"
+      - "11210:11210"
+      - "11280:11280"
+      - "18091-18097:18091-18097"
+    restart: always
+    environment:
+      COUCHBASE_USERNAME: Administrator
+      COUCHBASE_PASSWORD: password
+    volumes:
+      - "./couchbase-init.sh:/couchbase-init.sh"
