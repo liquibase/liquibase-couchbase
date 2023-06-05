@@ -12,8 +12,9 @@ jobs:
     build:
         name: Build & Package
         runs-on: ubuntu-latest
-        env:
-            working-directory: ./liquibase-couchbase
+        defaults:
+            run:
+                working-directory: ./liquibase-couchbase
         steps:
             - uses: actions/checkout@v3
 
@@ -25,16 +26,13 @@ jobs:
                   cache: 'maven'
 
             - name: Build and Package
-              working-directory: ${{env.working-directory}}
               run: mvn -B dependency:go-offline clean package -DskipTests=true
 
             - name: Get Artifact ID
               id: get-artifact-id
-              working-directory: ${{env.working-directory}}
               run: echo "::set-output name=artifact_id::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
 
             - name: Save Artifacts
-              working-directory: ${{env.working-directory}}
               uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
@@ -58,14 +56,14 @@ jobs:
                 os: [ ubuntu-latest, windows-latest ]
         name: Test Java ${{ matrix.java }} - ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                working-directory: ./liquibase-couchbase
         needs: build
-        env:
-            working-directory: ./liquibase-couchbase
         steps:
             - uses: actions/checkout@v3
 
             - name: Set up JDK ${{ matrix.java }}
-              working-directory: ${{env.working-directory}}
               uses: actions/setup-java@v3
               with:
                   java-version: ${{ matrix.java }}
@@ -78,11 +76,9 @@ jobs:
                   path: ./target
 
             - name: Run Tests
-              working-directory: ${{env.working-directory}}
               run: mvn -B jacoco:prepare-agent surefire:test
 
             - name: Archive Test Results - ${{ matrix.os }}
-              working-directory: ${{env.working-directory}}
               if: ${{ always() }}
               uses: actions/upload-artifact@v3
               with:
