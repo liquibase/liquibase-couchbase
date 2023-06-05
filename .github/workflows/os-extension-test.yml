@@ -25,14 +25,17 @@ jobs:
                   cache: 'maven'
 
             - name: Build and Package
+              working-directory: ${{env.working-directory}}
               run: mvn -B dependency:go-offline clean package -DskipTests=true
 
             - name: Get Artifact ID
               id: get-artifact-id
+              working-directory: ${{env.working-directory}}
               run: echo "::set-output name=artifact_id::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
 
             - name: Save Artifacts
               uses: actions/upload-artifact@v3
+              working-directory: ${{env.working-directory}}
               with:
                   name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
                   path: |
@@ -69,14 +72,17 @@ jobs:
                   cache: 'maven'
 
             - uses: actions/download-artifact@v3
+              working-directory: ${{env.working-directory}}
               with:
                   name: ${{needs.build.outputs.artifact_id}}-artifacts
                   path: ./target
 
             - name: Run Tests
+              working-directory: ${{env.working-directory}}
               run: mvn -B jacoco:prepare-agent surefire:test
 
             - name: Archive Test Results - ${{ matrix.os }}
+              working-directory: ${{env.working-directory}}
               if: ${{ always() }}
               uses: actions/upload-artifact@v3
               with:
