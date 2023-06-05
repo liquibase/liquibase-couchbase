@@ -41,7 +41,7 @@ public class DropCollectionChangeTest {
     }
 
     @Test
-    void Expects_confirmation_message_is_create_correctly() {
+    void Expects_confirmation_message_is_created_correctly() {
         DropCollectionChange change = new DropCollectionChange(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION);
 
         String msg = change.getConfirmationMessage();

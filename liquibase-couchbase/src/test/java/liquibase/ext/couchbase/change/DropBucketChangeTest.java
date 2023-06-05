@@ -40,7 +40,7 @@ public class DropBucketChangeTest {
     }
 
     @Test
-    void Expects_confirmation_message_is_create_correctly() {
+    void Expects_confirmation_message_is_created_correctly() {
         DropBucketChange change = new DropBucketChange(TEST_BUCKET);
 
         String msg = change.getConfirmationMessage();

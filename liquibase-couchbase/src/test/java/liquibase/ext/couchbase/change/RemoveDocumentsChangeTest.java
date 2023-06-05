@@ -1,19 +1,25 @@
 package liquibase.ext.couchbase.change;
 
+import com.google.common.collect.Lists;
 import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
 import liquibase.ext.couchbase.types.Id;
+import liquibase.statement.SqlStatement;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static common.constants.ChangeLogSampleFilePaths.REMOVE_BY_QUERY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_MANY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_ONE_TEST_XML;
+import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_SCOPE;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
@@ -76,6 +82,41 @@ class RemoveDocumentsChangeTest {
         RemoveDocumentsChange removeDocumentsChange = (RemoveDocumentsChange) changes.get(0);
         assertThat(removeDocumentsChange.getIds()).hasSize(0);
         assertThat(removeDocumentsChange.getWhereCondition()).isEqualTo("test=\"test\"");
+    }
+
+    @Test
+    void Expects_confirmation_message_is_created_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChange();
+
+        String msg = change.getConfirmationMessage();
+
+        assertThat(msg).isEqualTo("Documents removed from collection %s", change.getCollectionName());
+    }
+
+    @Test
+    void Should_generate_statement_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChange();
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(RemoveDocumentsStatement.class);
+
+        RemoveDocumentsStatement actualStatement = (RemoveDocumentsStatement) statements[0];
+        assertThat(actualStatement.getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
+        assertThat(actualStatement.getIds()).isEqualTo(change.getIds());
+
+    }
+
+    private RemoveDocumentsChange createRemoveDocumentChange() {
+        RemoveDocumentsChange change = new RemoveDocumentsChange();
+        change.setBucketName(TEST_BUCKET);
+        change.setScopeName(TEST_SCOPE);
+        change.setCollectionName(TEST_COLLECTION);
+        change.setIds(Lists.newArrayList(new Id("id1"), new Id("id2")));
+
+        return change;
     }
 
 }

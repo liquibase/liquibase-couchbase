@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.change;
 
+import liquibase.change.Change;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -71,6 +72,22 @@ public class CreateCollectionChangeTest {
         CreateCollectionChange change = (CreateCollectionChange) firstOf(changeSet.getChanges());
 
         assertThat(change.getCollectionName()).isEqualTo("travels");
+    }
+
+    @Test
+    void Should_generate_inverse_correctly() {
+        CreateCollectionChange change = new CreateCollectionChange(TEST_BUCKET,
+                TEST_SCOPE, collectionName);
+
+        Change[] inverses = change.createInverses();
+
+        assertThat(inverses).hasSize(1);
+        assertThat(inverses[0]).isInstanceOf(DropCollectionChange.class);
+
+        DropCollectionChange inverseChange = (DropCollectionChange) inverses[0];
+        assertThat(inverseChange.getScopeName()).isEqualTo(change.getScopeName());
+        assertThat(inverseChange.getBucketName()).isEqualTo(change.getBucketName());
+        assertThat(inverseChange.getCollectionName()).isEqualTo(change.getCollectionName());
     }
 
     @Test

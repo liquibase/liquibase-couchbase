@@ -1,22 +1,25 @@
 package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.kv.StoreSemantics;
-import liquibase.ext.couchbase.types.DataType;
-import liquibase.ext.couchbase.types.Value;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.ext.couchbase.changelog.ChangeLogProvider;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.statement.MutateInQueryStatement;
+import liquibase.ext.couchbase.statement.MutateInStatement;
+import liquibase.ext.couchbase.types.DataType;
+import liquibase.ext.couchbase.types.Value;
 import liquibase.ext.couchbase.types.subdoc.LiquibaseMutateInSpec;
 import liquibase.ext.couchbase.types.subdoc.MutateInType;
+import liquibase.statement.SqlStatement;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INSERT_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
@@ -25,6 +28,7 @@ import static common.constants.TestConstants.TEST_COLLECTION_3;
 import static common.constants.TestConstants.TEST_ID;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static java.util.Arrays.asList;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
@@ -59,6 +63,40 @@ public class MutateInChangeTest {
 
         assertThat(change.getConfirmationMessage())
                 .isEqualTo("MutateIn %s operations has been successfully executed", 1);
+    }
+
+    @Test
+    void Should_generate_statement_correctly_with_id() {
+        MutateInChange change = changeWithId(Lists.newArrayList(
+                new LiquibaseMutateInSpec("test", Lists.newArrayList(new Value("data", DataType.STRING)), MutateInType.INSERT)));
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(MutateInStatement.class);
+
+        MutateInStatement actualStatement = (MutateInStatement) statements[0];
+        assertThat(actualStatement.getMutate().getId()).isEqualTo(change.getId());
+        assertThat(actualStatement.getMutate().getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
+    }
+
+    @Test
+    void Should_generate_statement_correctly_with_where() {
+        MutateInChange change = changeWithWhereClause(Lists.newArrayList(
+                new LiquibaseMutateInSpec("test", Lists.newArrayList(new Value("data", DataType.STRING)), MutateInType.INSERT)));
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(MutateInQueryStatement.class);
+
+        MutateInQueryStatement actualStatement = (MutateInQueryStatement) statements[0];
+
+        assertThat(actualStatement.getWhereClause()).isEqualTo(change.getWhereCondition());
+        assertThat(actualStatement.getMutate().getId()).isEqualTo(change.getId());
+        assertThat(actualStatement.getMutate().getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
     }
 
     private LiquibaseMutateInSpec spec(String path, String value, DataType dataType, MutateInType type) {

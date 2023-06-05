@@ -48,7 +48,7 @@ class DropIndexChangeTest {
     }
 
     @Test
-    void Expects_confirmation_message_is_create_correctly_non_primary() {
+    void Expects_confirmation_message_is_created_correctly_non_primary() {
         DropIndexChange change = DropIndexChange.builder().indexName(INDEX).bucketName(TEST_BUCKET)
                 .scopeName(TEST_SCOPE).collectionName(TEST_COLLECTION).isPrimary(false).build();
 
@@ -58,7 +58,7 @@ class DropIndexChangeTest {
     }
 
     @Test
-    void Expects_confirmation_message_is_create_correctly_primary() {
+    void Expects_confirmation_message_is_created_correctly_primary() {
         DropIndexChange change = new DropIndexChange(true, INDEX, TEST_BUCKET, TEST_COLLECTION, TEST_SCOPE);
 
         String msg = change.getConfirmationMessage();

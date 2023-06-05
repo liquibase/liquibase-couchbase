@@ -62,6 +62,15 @@ public class SqlFileChangeTest {
         assertThat(stmt.isTransactional()).isTrue();
     }
 
+    @Test
+    void Expects_confirmation_message_is_created_correctly() {
+        SqlFileChange change = parseSqlFileChange(INSERT_DOCUMENT_SQL_TEST);
+
+        String msg = change.getConfirmationMessage();
+
+        assertThat(msg).isEqualTo("The queries located in %s file has been executed successfully", change.getPath());
+    }
+
     private SqlFileChange parseSqlFileChange(String path) {
         DatabaseChangeLog load = changeLogProvider.load(path);
         ChangeSet changeSet = firstOf(load.getChangeSets());
