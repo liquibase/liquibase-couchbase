@@ -34,7 +34,7 @@
         <assertj.version>3.24.2</assertj.version>
         <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
         <lombok.version>1.18.26</lombok.version>
-        <couchbase.java.client.version>3.4.3</couchbase.java.client.version>
+        <couchbase.java.client.version>3.4.5</couchbase.java.client.version>
         <google.guava.version>31.1-jre</google.guava.version>
         <sonar.maven.plugin.version>3.9.1.2184</sonar.maven.plugin.version>
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
@@ -282,8 +282,7 @@
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
-                                <transformer implementation=
-                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                 </transformer>
                             </transformers>
                         </configuration>
