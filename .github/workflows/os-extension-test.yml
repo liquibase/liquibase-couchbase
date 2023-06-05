@@ -34,8 +34,8 @@ jobs:
               run: echo "::set-output name=artifact_id::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
 
             - name: Save Artifacts
-              uses: actions/upload-artifact@v3
               working-directory: ${{env.working-directory}}
+              uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
                   path: |
