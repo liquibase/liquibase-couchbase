@@ -32,7 +32,7 @@ class RemoveDocumentsQueryStatementIT extends TransactionStatementTest {
     private static final String DOC_FIELD_VALUE = "val";
     private static final String testCollection = UUID.randomUUID().toString();
     private static final String testScope = UUID.randomUUID().toString();
-    private static final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(testCollection, testScope);
+    private static TestCollectionOperator collectionOperator;
     private static Collection collection;
 
     private Set<Id> ids;
@@ -48,6 +48,7 @@ class RemoveDocumentsQueryStatementIT extends TransactionStatementTest {
         TimeUnit.SECONDS.sleep(2L);
         bucketOperator.createCollection(testCollection, testScope);
         TimeUnit.SECONDS.sleep(2L);
+        collectionOperator = bucketOperator.getCollectionOperator(testCollection, testScope);
         collectionOperator.createPrimaryIndex(CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(INDEX));
@@ -72,6 +73,7 @@ class RemoveDocumentsQueryStatementIT extends TransactionStatementTest {
         doc3 = collectionOperator.generateTestDocByBody(JsonObject.create().put(DOC_FIELD_NAME, "val5"));
         ids = Sets.newHashSet(new Id(doc3.getId()));
         collectionOperator.insertDocs(doc1, doc2, doc3);
+        TimeUnit.SECONDS.sleep(3L);
     }
 
     @AfterEach
