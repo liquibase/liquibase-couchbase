@@ -15,10 +15,9 @@ public class MutateInInsertUpsertUniqueValidator extends MutateInValidator {
     }
 
     @Override
-    public void validate(String path, Value value, List<Value> values) {
+    public void validate(String path, List<Value> values) {
         validatePathPresence(path);
-        validateValuePresence(value);
-        validateNoMultipleValues(values);
+        validateSingleValuePresence(values);
     }
 
 

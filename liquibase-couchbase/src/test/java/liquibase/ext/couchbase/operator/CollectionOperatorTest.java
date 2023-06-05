@@ -13,6 +13,7 @@ import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Id;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,6 @@ import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_ID;
-import static java.util.Collections.singletonList;
 import static liquibase.ext.couchbase.types.Document.document;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -204,7 +204,7 @@ class CollectionOperatorTest {
         doNothing().when(transaction).remove(getResult);
         Id testId = new Id(TEST_ID);
 
-        collectionOperator.removeDocsTransactionally(transaction, singletonList(testId));
+        collectionOperator.removeDocsTransactionally(transaction, Sets.newHashSet(testId));
 
         verify(transaction).get(collection, TEST_ID);
         verify(transaction).remove(getResult);

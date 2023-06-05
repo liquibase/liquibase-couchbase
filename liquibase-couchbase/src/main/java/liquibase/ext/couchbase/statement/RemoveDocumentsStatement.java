@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor
@@ -18,7 +18,7 @@ import java.util.List;
 public class RemoveDocumentsStatement extends CouchbaseTransactionStatement {
 
     private final Keyspace keyspace;
-    private final List<Id> ids;
+    private final Set<Id> ids;
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {

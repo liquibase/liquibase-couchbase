@@ -43,10 +43,6 @@ public class ClusterOperator {
         return new BucketOperator(cluster.bucket(bucket));
     }
 
-    public CollectionOperator getCollectionOperator(Collection collection) {
-        return new CollectionOperator(collection);
-    }
-
     protected void requireBucketExists(@NonNull String bucketName) throws BucketNotFoundException {
         cluster.buckets().getBucket(bucketName);
     }

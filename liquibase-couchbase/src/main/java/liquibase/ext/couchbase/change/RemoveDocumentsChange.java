@@ -3,6 +3,7 @@ package liquibase.ext.couchbase.change;
 
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
+import liquibase.ext.couchbase.statement.RemoveDocumentsQueryStatement;
 import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
 import liquibase.ext.couchbase.types.Id;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -12,13 +13,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
- * Removes document(-s) by id(-s) or id range
+ * Removes document(-s) by id(-s) / id range or by document filter(in 'whereCondition' field only condition need to be provided, e.g. fieldName="test")
  * @link <a href="https://docs.couchbase.com/java-sdk/3.3/howtos/kv-operations.html#insert">Reference documentation</a>
  * @see RemoveDocumentsStatement
  * @see Keyspace
@@ -39,7 +41,8 @@ public class RemoveDocumentsChange extends CouchbaseChange {
     private String bucketName;
     private String scopeName;
     private String collectionName;
-    private List<Id> ids = new ArrayList<>();
+    private Set<Id> ids = new HashSet<>();
+    private String whereCondition;
 
     @Override
     public String getConfirmationMessage() {
@@ -50,7 +53,8 @@ public class RemoveDocumentsChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
-                new RemoveDocumentsStatement(keyspace, ids)
+                isNotBlank(whereCondition) ? new RemoveDocumentsQueryStatement(keyspace, ids, whereCondition) :
+                        new RemoveDocumentsStatement(keyspace, ids)
         };
     }
 

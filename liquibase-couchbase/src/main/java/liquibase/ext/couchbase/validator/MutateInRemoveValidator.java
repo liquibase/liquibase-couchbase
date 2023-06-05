@@ -16,8 +16,8 @@ public class MutateInRemoveValidator extends MutateInValidator {
     }
 
     @Override
-    public void validate(String path, Value value, List<Value> values) {
-        if (value != null || !values.isEmpty()) {
+    public void validate(String path, List<Value> values) {
+        if (!values.isEmpty()) {
             throw new MutateInValueNotAllowedException(mutateInType);
         }
     }

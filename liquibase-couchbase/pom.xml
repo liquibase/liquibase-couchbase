@@ -163,6 +163,7 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <version>${spock-core.version}</version>
+            <scope>test</scope>
         </dependency>
 
 

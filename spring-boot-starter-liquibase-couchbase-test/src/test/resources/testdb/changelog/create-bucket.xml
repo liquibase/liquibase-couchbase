@@ -1,0 +1,26 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="1" author="dmitry.dashko">
+        <ext:createBucket>
+            <ext:bucketName>createBucketName</ext:bucketName>
+            <ext:bucketType>COUCHBASE</ext:bucketType>
+            <ext:compressionMode>OFF</ext:compressionMode>
+            <ext:conflictResolutionType>TIMESTAMP</ext:conflictResolutionType>
+            <ext:evictionPolicy>FULL</ext:evictionPolicy>
+            <ext:flushEnabled>true</ext:flushEnabled>
+            <ext:minimumDurabilityLevel>NONE</ext:minimumDurabilityLevel>
+            <ext:numReplicas>0</ext:numReplicas>
+            <ext:maxExpiryInHours>1</ext:maxExpiryInHours>
+            <ext:ramQuotaMB>128</ext:ramQuotaMB>
+            <ext:replicaIndexes>0</ext:replicaIndexes>
+            <ext:storageBackend>couchstore</ext:storageBackend>
+            <ext:timeoutInSeconds>10</ext:timeoutInSeconds>
+        </ext:createBucket>
+    </changeSet>
+
+</databaseChangeLog>

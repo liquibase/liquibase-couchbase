@@ -88,7 +88,7 @@ class MutateInQueryStatementIT extends RandomizedScopeTestCase {
 
     private List<MutateInSpec> getInsertSpec(String path, String value) {
         return Arrays.asList(mutateInSpecTransformer.toSpec(
-                new LiquibaseMutateInSpec(path, new Value(value, DataType.STRING), MutateInType.INSERT)));
+                new LiquibaseMutateInSpec(path, Arrays.asList(new Value(value, DataType.STRING)), MutateInType.INSERT)));
     }
 
 }

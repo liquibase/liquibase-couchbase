@@ -17,12 +17,12 @@ public class MutateInLongValueValidator extends MutateInValidator {
     }
 
     @Override
-    public void validate(String path, Value value, List<Value> values) {
+    public void validate(String path, List<Value> values) {
         validatePathPresence(path);
-        validateValuePresence(value);
-        validateNoMultipleValues(values);
-        if (value.getType() != DataType.LONG) {
-            throw new MutateInDataTypeNotAllowedException(value.getType(), mutateInType);
+        validateSingleValuePresence(values);
+
+        if (values.get(0).getType() != DataType.LONG) {
+            throw new MutateInDataTypeNotAllowedException(values.get(0).getType(), mutateInType);
         }
     }
 
