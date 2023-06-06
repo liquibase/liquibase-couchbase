@@ -1,6 +1,6 @@
 package liquibase.ext.couchbase.change;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static common.constants.ChangeLogSampleFilePaths.REMOVE_BY_QUERY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_MANY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_ONE_TEST_XML;
 import static common.constants.TestConstants.TEST_BUCKET;
@@ -114,7 +115,7 @@ class RemoveDocumentsChangeTest {
         change.setBucketName(TEST_BUCKET);
         change.setScopeName(TEST_SCOPE);
         change.setCollectionName(TEST_COLLECTION);
-        change.setIds(Lists.newArrayList(new Id("id1"), new Id("id2")));
+        change.setIds(Sets.newHashSet(new Id("id1"), new Id("id2")));
 
         return change;
     }
