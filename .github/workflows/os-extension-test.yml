@@ -44,12 +44,12 @@ jobs:
         outputs:
             artifact_id: ${{ steps.get-artifact-id.outputs.artifact_id }}
 
-    unit-test:
+    unit-and-it-test-ubuntu:
         strategy:
             fail-fast: false
             matrix:
                 java: [ 8, 11, 17, 18 ]
-                os: [ ubuntu-latest, windows-latest ]
+                os: [ ubuntu-latest ]
         name: Test Java ${{ matrix.java }} - ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         needs: build
@@ -70,6 +70,43 @@ jobs:
 
             - name: Run Tests
               run: mvn --file liquibase-couchbase/pom.xml -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report "-Dskip.integration.tests=false"
+
+            - name: Archive Test Results - ${{ matrix.os }}
+              if: ${{ always() }}
+              uses: actions/upload-artifact@v3
+              with:
+                  name: test-reports-jdk-${{ matrix.java }}-${{ matrix.os }}
+                  path: |
+                      **/target/surefire-reports
+                      **/target/jacoco.exec
+                      
+                      
+    unit-test-windows:
+        strategy:
+            fail-fast: false
+            matrix:
+                java: [ 8, 11, 17, 18 ]
+                os: [ windows-latest ]
+        name: Test Java ${{ matrix.java }} - ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        needs: build
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up JDK ${{ matrix.java }}
+              uses: actions/setup-java@v3
+              with:
+                  java-version: ${{ matrix.java }}
+                  distribution: 'temurin'
+                  cache: 'maven'
+
+            - uses: actions/download-artifact@v3
+              with:
+                  name: ${{needs.build.outputs.artifact_id}}-artifacts
+                  path: liquibase-couchbase/target
+
+            - name: Run Tests
+              run: mvn --file liquibase-couchbase/pom.xml -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report "-Dskip.integration.tests=true"
 
             - name: Archive Test Results - ${{ matrix.os }}
               if: ${{ always() }}
