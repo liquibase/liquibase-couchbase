@@ -73,12 +73,9 @@ jobs:
               with:
                   name: ${{needs.build.outputs.artifact_id}}-artifacts
                   path: liquibase-couchbase/target
-                  
-            - name: Show folders
-              run: ls -a 
 
             - name: Run Tests
-              run: mvn -B jacoco:prepare-agent surefire:test
+              run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report -Dskip.integration.tests=false
 
             - name: Archive Test Results - ${{ matrix.os }}
               if: ${{ always() }}
