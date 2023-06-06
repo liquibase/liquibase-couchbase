@@ -31,16 +31,12 @@ jobs:
             - name: Get Artifact ID
               id: get-artifact-id
               run: echo "::set-output name=artifact_id::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
-              
-            - name: Folders
-              run: ls -a target
 
             - name: Save Artifacts
               uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
-                  path: |
-                      target/*
+                  path: target/
 
             - name: Save Event File
               uses: actions/upload-artifact@v3
