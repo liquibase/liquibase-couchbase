@@ -36,7 +36,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
-                  path: target/
+                  path: liquibase-couchbase/target/*
 
             - name: Save Event File
               uses: actions/upload-artifact@v3
