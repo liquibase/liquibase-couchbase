@@ -12,9 +12,6 @@ jobs:
     build:
         name: Build & Package
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./liquibase-couchbase
         steps:
             - uses: actions/checkout@v3
 
@@ -26,7 +23,7 @@ jobs:
                   cache: 'maven'
 
             - name: Build and Package
-              run: mvn -B dependency:go-offline clean package -DskipTests=true
+              run: mvn --file liquibase-couchbase/pom.xml -B dependency:go-offline clean package -DskipTests=true
 
             - name: Get Artifact ID
               id: get-artifact-id
@@ -55,9 +52,6 @@ jobs:
                 os: [ ubuntu-latest, windows-latest ]
         name: Test Java ${{ matrix.java }} - ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
-        defaults:
-            run:
-                working-directory: ./liquibase-couchbase
         needs: build
         steps:
             - uses: actions/checkout@v3
@@ -75,7 +69,7 @@ jobs:
                   path: liquibase-couchbase/target
 
             - name: Run Tests
-              run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report -Dskip.integration.tests=false
+              run: mvn --file liquibase-couchbase/pom.xml -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report -Dskip.integration.tests=false
 
             - name: Archive Test Results - ${{ matrix.os }}
               if: ${{ always() }}
