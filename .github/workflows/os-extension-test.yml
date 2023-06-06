@@ -68,14 +68,14 @@ jobs:
                   java-version: ${{ matrix.java }}
                   distribution: 'temurin'
                   cache: 'maven'
-                  
-            - name: Show folders
-              run: ls -a 
 
             - uses: actions/download-artifact@v3
               with:
                   name: ${{needs.build.outputs.artifact_id}}-artifacts
-                  path: ./target
+                  path: liquibase-couchbase/target
+                  
+            - name: Show folders
+              run: ls -a 
 
             - name: Run Tests
               run: mvn -B jacoco:prepare-agent surefire:test
