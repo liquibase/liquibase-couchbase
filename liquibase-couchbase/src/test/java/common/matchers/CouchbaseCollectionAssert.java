@@ -4,6 +4,7 @@ import com.couchbase.client.core.error.CouchbaseException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonArray;
 import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.ExistsOptions;
 import com.couchbase.client.java.manager.query.QueryIndex;
 import liquibase.ext.couchbase.lockservice.CouchbaseLock;
 import liquibase.ext.couchbase.types.Document;

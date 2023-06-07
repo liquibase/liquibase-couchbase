@@ -11,9 +11,6 @@ import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
-
-import java.util.Set;
-
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Id;
@@ -24,6 +21,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -123,7 +121,7 @@ public class CollectionOperator {
     }
 
     public void upsertDocsTransactionally(TransactionAttemptContext transaction, List<Document> docs) {
-        docs.forEach(doc -> upsertDocInTransaction(transaction,doc));
+        docs.forEach(doc -> upsertDocInTransaction(transaction, doc));
     }
 
     public Flux<TransactionGetResult> upsertDocsTransactionallyReactive(ReactiveTransactionAttemptContext transaction,

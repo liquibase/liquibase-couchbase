@@ -26,6 +26,19 @@
             <artifactId>liquibase-couchbase</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

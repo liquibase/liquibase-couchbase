@@ -49,6 +49,7 @@
         <json-schema-validator-version>1.0.81</json-schema-validator-version>
         <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
         <junit-platform-reporting.version>1.9.1</junit-platform-reporting.version>
+        <reactor-test.version>3.5.6</reactor-test.version>
     </properties>
 
     <dependencies>
@@ -118,7 +119,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <artifactId>mockito-inline</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
@@ -164,6 +165,12 @@
             <artifactId>spock-core</artifactId>
             <version>${spock-core.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+            <version>${reactor-test.version}</version>
         </dependency>
 
 

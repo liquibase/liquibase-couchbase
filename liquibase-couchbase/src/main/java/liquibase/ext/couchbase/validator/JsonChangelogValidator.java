@@ -2,6 +2,7 @@ package liquibase.ext.couchbase.validator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.VisibleForTesting;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
@@ -21,8 +22,18 @@ import java.util.Set;
 public class JsonChangelogValidator implements SingletonObject {
 
     private final Logger log = Scope.getCurrentScope().getLog(getClass());
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909);
+    private final ObjectMapper objectMapper;
+    private final JsonSchemaFactory schemaFactory;
+
+    public JsonChangelogValidator() {
+        this(new ObjectMapper(), JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909));
+    }
+
+    @VisibleForTesting
+    JsonChangelogValidator(ObjectMapper objectMapper, JsonSchemaFactory schemaFactory) {
+        this.objectMapper = objectMapper;
+        this.schemaFactory = schemaFactory;
+    }
 
     @SneakyThrows
     public void validateChangeLogFile(String fileLocation, String schemaLocation) {

@@ -26,6 +26,7 @@
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <junit-platform-surefire-provider.version>1.0.3</junit-platform-surefire-provider.version>
         <junit-jupiter-engine.version>5.0.3</junit-jupiter-engine.version>
+        <spring-boot-maven-plugin.version>3.1.0</spring-boot-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -79,6 +80,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>

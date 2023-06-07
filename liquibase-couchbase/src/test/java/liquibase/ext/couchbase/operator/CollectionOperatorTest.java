@@ -9,6 +9,7 @@ import com.couchbase.client.java.kv.MutationResult;
 import com.couchbase.client.java.manager.query.CollectionQueryIndexManager;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions;
+import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
@@ -22,9 +23,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions;
 import static com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions.dropPrimaryQueryIndexOptions;
@@ -32,6 +38,7 @@ import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.constants.TestConstants.TEST_CONTENT;
 import static common.constants.TestConstants.TEST_DOCUMENT;
 import static common.constants.TestConstants.TEST_ID;
+import static java.util.Collections.singletonList;
 import static liquibase.ext.couchbase.types.Document.document;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -41,6 +48,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -69,9 +77,10 @@ class CollectionOperatorTest {
     private ReactiveTransactionAttemptContext reactiveTransaction;
     @Mock
     private ReactiveCollection reactiveCollection;
-
     @Mock
     private CollectionQueryIndexManager collectionQueryIndexManager;
+    @Mock
+    private QueryIndex queryIndex;
 
     @InjectMocks
     private CollectionOperator collectionOperator;
@@ -83,7 +92,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_insert_document_object() {
+    void Should_insert_document_object() {
         Document document = document(TEST_ID, TEST_CONTENT);
 
         collectionOperator.insertDoc(document);
@@ -92,7 +101,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_return_true_if_document_exist() {
+    void Should_return_true_if_document_exist() {
         ExistsResult existResult = mock(ExistsResult.class);
         when(collection.exists(TEST_ID)).thenReturn(existResult);
         when(existResult.exists()).thenReturn(true);
@@ -103,7 +112,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_return_false_if_document_not_exist() {
+    void Should_return_false_if_document_not_exist() {
         ExistsResult existResult = mock(ExistsResult.class);
         when(collection.exists(TEST_ID)).thenReturn(existResult);
         when(existResult.exists()).thenReturn(false);
@@ -114,7 +123,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_remove_document_by_id() {
+    void Should_remove_document_by_id() {
         when(collection.remove(TEST_ID)).thenReturn(mutationResult);
 
         collectionOperator.removeDoc(TEST_DOCUMENT);
@@ -123,7 +132,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_remove_document() {
+    void Should_remove_document() {
         Document document = document(TEST_ID, TEST_CONTENT);
 
         collectionOperator.removeDoc(document);
@@ -132,7 +141,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_remove_documents_by_id() {
+    void Should_remove_documents_by_id() {
         when(collection.remove(TEST_ID)).thenReturn(mutationResult);
         when(collection.remove(TEST_ID_2)).thenReturn(mutationResult);
 
@@ -142,19 +151,9 @@ class CollectionOperatorTest {
         verify(collection).remove(TEST_ID_2);
     }
 
-//     @Test
-//     void should_upsert_document() {
-//         when(collection.upsert(TEST_ID, TEST_DOCUMENT)).thenReturn(mutationResult);
-//
-//         collectionOperator.upsertDoc(TEST_ID, TEST_DOCUMENT);
-//
-//         verify(collection).upsert(TEST_ID, TEST_DOCUMENT);
-//     }
-
     @Test
-    void should_insert_document_in_transaction() {
+    void Should_insert_document_in_transaction() {
         when(transaction.insert(collection, TEST_ID, TEST_CONTENT)).thenReturn(getResult);
-        ;
 
         collectionOperator.insertDocInTransaction(transaction, TEST_ID, TEST_CONTENT);
 
@@ -162,7 +161,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_insert_documents_in_transaction() {
+    void Should_insert_documents_in_transaction() {
         when(transaction.insert(collection, TEST_ID, TEST_CONTENT)).thenReturn(getResult);
         when(transaction.insert(collection, TEST_ID_2, TEST_CONTENT_2)).thenReturn(getResult);
 
@@ -173,7 +172,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_upsert_document_in_transaction() {
+    void Should_upsert_document_in_transaction() {
         when(transaction.get(eq(collection), anyString())).thenReturn(getResult);
         when(transaction.replace(eq(getResult), any(JsonObject.class))).thenReturn(getResult);
 
@@ -186,7 +185,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_upsert_document_if_not_exist() {
+    void Should_upsert_document_if_not_exist() {
         when(transaction.get(eq(collection), anyString())).thenThrow(DocumentNotFoundException.class);
         when(transaction.insert(eq(collection), anyString(), any(JsonObject.class))).thenReturn(getResult);
 
@@ -199,7 +198,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_remove_documents_in_transaction() {
+    void Should_remove_documents_in_transaction() {
         when(transaction.get(collection, TEST_ID)).thenReturn(getResult);
         doNothing().when(transaction).remove(getResult);
         Id testId = new Id(TEST_ID);
@@ -211,7 +210,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_insert_document_in_reactive_transaction() {
+    void Should_insert_document_in_reactive_transaction() {
         when(collection.reactive()).thenReturn(reactiveCollection);
         when(reactiveTransaction.insert(reactiveCollection, TEST_ID, TEST_CONTENT)).thenReturn(monoReactiveResult);
 
@@ -223,7 +222,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_remove_document_in_reactive_transaction() {
+    void Should_remove_document_in_reactive_transaction() {
         when(collection.reactive()).thenReturn(reactiveCollection);
         when(reactiveTransaction.get(reactiveCollection, TEST_ID)).thenReturn(Mono.just(reactiveResult));
         when(reactiveTransaction.remove(reactiveResult)).thenReturn(Mono.empty());
@@ -237,14 +236,14 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_create_primary_index() {
+    void Should_create_primary_index() {
         collectionOperator.createPrimaryIndex();
 
         verify(collectionQueryIndexManager).createPrimaryIndex();
     }
 
     @Test
-    void should_create_primary_index_with_options() {
+    void Should_create_primary_index_with_options() {
         CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions()
                 .indexName(MANUALLY_CREATED_INDEX);
 
@@ -254,7 +253,7 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_drop_bucket_query_index() {
+    void Should_drop_bucket_query_index() {
         String testIndex = "testIndex";
         collectionOperator.dropIndex(testIndex);
 
@@ -262,11 +261,163 @@ class CollectionOperatorTest {
     }
 
     @Test
-    void should_drop_primary_index_with_options() {
+    void Should_drop_primary_index_with_options() {
         DropPrimaryQueryIndexOptions options = dropPrimaryQueryIndexOptions().ignoreIfNotExists(true);
 
         collectionOperator.dropPrimaryIndex(options);
 
         verify(collectionQueryIndexManager).dropPrimaryIndex(options);
+    }
+
+    @Test
+    void Should_create_collection_primary_index() {
+        CreatePrimaryQueryIndexOptions options = createPrimaryQueryIndexOptions();
+
+        collectionOperator.createCollectionPrimaryIndex(options);
+
+        verify(collectionQueryIndexManager).createPrimaryIndex(options);
+    }
+
+    @Test
+    void Should_create_collection_primary_index_when_options_not_provided() {
+        collectionOperator.createCollectionPrimaryIndex(null);
+
+        verify(collectionQueryIndexManager).createPrimaryIndex();
+    }
+
+    @Test
+    void Should_return_that_primary_index_exists() {
+        String indexName = "somePrimaryIndex";
+        List<QueryIndex> queryIndices = singletonList(queryIndex);
+
+        when(collectionQueryIndexManager.getAllIndexes()).thenReturn(queryIndices);
+        when(queryIndex.primary()).thenReturn(true);
+        when(queryIndex.name()).thenReturn(indexName);
+
+        assertTrue(collectionOperator.collectionPrimaryIndexExists(indexName));
+    }
+
+    @Test
+    void Should_return_that_primary_not_index_exists() {
+        String indexName = "somePrimaryIndex";
+        List<QueryIndex> queryIndices = singletonList(queryIndex);
+
+        when(collectionQueryIndexManager.getAllIndexes()).thenReturn(queryIndices);
+        when(queryIndex.primary()).thenReturn(true);
+        when(queryIndex.name()).thenReturn("anotherIndexName");
+
+        assertFalse(collectionOperator.collectionPrimaryIndexExists(indexName));
+    }
+
+    @Test
+    void Should_insert_documents() {
+        Document[] documents = {TEST_DOCUMENT, TEST_DOCUMENT_2};
+
+        collectionOperator.insertDocs(documents);
+        verify(collection).insert(TEST_DOCUMENT.getId(), TEST_DOCUMENT.getValue().mapDataToType());
+        verify(collection).insert(TEST_DOCUMENT_2.getId(), TEST_DOCUMENT_2.getValue().mapDataToType());
+    }
+
+    @Test
+    void Should_upsert_new_documents_transactionally_reactive() {
+        List<Document> documents = Arrays.asList(TEST_DOCUMENT, TEST_DOCUMENT_2);
+
+        TransactionGetResult mockedResult1 = mock(TransactionGetResult.class);
+        TransactionGetResult mockedResult2 = mock(TransactionGetResult.class);
+
+        when(collection.reactive()).thenReturn(reactiveCollection);
+        when(reactiveTransaction.get(reactiveCollection, TEST_DOCUMENT.getId())).thenReturn(
+                Mono.error(new DocumentNotFoundException(null)));
+        when(reactiveTransaction.get(reactiveCollection, TEST_DOCUMENT_2.getId())).thenReturn(
+                Mono.error(new DocumentNotFoundException(null)));
+        when(reactiveTransaction.insert(reactiveCollection, TEST_DOCUMENT.getId(), TEST_DOCUMENT.getContentAsObject()))
+                .thenReturn(Mono.just(mockedResult1));
+        when(reactiveTransaction.insert(reactiveCollection, TEST_DOCUMENT_2.getId(), TEST_DOCUMENT_2.getContentAsObject()))
+                .thenReturn(Mono.just(mockedResult2));
+
+        Flux<TransactionGetResult> returnedResult = collectionOperator.upsertDocsTransactionallyReactive(reactiveTransaction,
+                documents);
+
+        StepVerifier.create(returnedResult)
+                .expectNext(mockedResult1)
+                .expectNext(mockedResult2)
+                .expectComplete()
+                .verify();
+        verify(reactiveTransaction).insert(reactiveCollection, TEST_DOCUMENT.getId(), TEST_DOCUMENT.getContentAsObject());
+        verify(reactiveTransaction).insert(reactiveCollection, TEST_DOCUMENT_2.getId(), TEST_DOCUMENT_2.getContentAsObject());
+    }
+
+    @Test
+    void Should_upsert_existing_documents_transactionally_reactive() {
+        List<Document> documents = Arrays.asList(TEST_DOCUMENT, TEST_DOCUMENT_2);
+
+        TransactionGetResult mockedResult1 = mock(TransactionGetResult.class);
+        TransactionGetResult mockedResult2 = mock(TransactionGetResult.class);
+
+        when(collection.reactive()).thenReturn(reactiveCollection);
+        when(reactiveTransaction.get(reactiveCollection, TEST_DOCUMENT.getId())).thenReturn(Mono.just(mockedResult1));
+        when(reactiveTransaction.get(reactiveCollection, TEST_DOCUMENT_2.getId())).thenReturn(Mono.just(mockedResult2));
+        when(reactiveTransaction.replace(mockedResult1, TEST_DOCUMENT.getContentAsObject()))
+                .thenReturn(Mono.just(mockedResult1));
+        when(reactiveTransaction.replace(mockedResult2, TEST_DOCUMENT_2.getContentAsObject()))
+                .thenReturn(Mono.just(mockedResult2));
+
+        Flux<TransactionGetResult> returnedResult = collectionOperator.upsertDocsTransactionallyReactive(reactiveTransaction,
+                documents);
+
+        StepVerifier.create(returnedResult)
+                .expectNext(mockedResult1)
+                .expectNext(mockedResult2)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void Should_insert_documents_transactionally_reactive() {
+        List<Document> documents = Arrays.asList(TEST_DOCUMENT, TEST_DOCUMENT_2);
+
+        TransactionGetResult mockedResult1 = mock(TransactionGetResult.class);
+        TransactionGetResult mockedResult2 = mock(TransactionGetResult.class);
+
+        when(collection.reactive()).thenReturn(reactiveCollection);
+        when(reactiveTransaction.insert(reactiveCollection, TEST_DOCUMENT.getId(), TEST_DOCUMENT.getContentAsObject()))
+                .thenReturn(Mono.just(mockedResult1));
+        when(reactiveTransaction.insert(reactiveCollection, TEST_DOCUMENT_2.getId(), TEST_DOCUMENT_2.getContentAsObject()))
+                .thenReturn(Mono.just(mockedResult2));
+
+        Flux<TransactionGetResult> returnedResult = collectionOperator.insertDocsTransactionallyReactive(reactiveTransaction,
+                documents);
+
+        StepVerifier.create(returnedResult)
+                .expectNext(mockedResult1)
+                .expectNext(mockedResult2)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void Should_remove_documents_transactionally_reactive() {
+        Set<Id> ids = new HashSet<>();
+        ids.add(new Id(TEST_DOCUMENT.getId()));
+        ids.add(new Id(TEST_DOCUMENT_2.getId()));
+
+        TransactionGetResult mockedResult1 = mock(TransactionGetResult.class);
+        TransactionGetResult mockedResult2 = mock(TransactionGetResult.class);
+
+        when(collection.reactive()).thenReturn(reactiveCollection);
+        when(reactiveTransaction.get(reactiveCollection, TEST_DOCUMENT.getId())).thenReturn(Mono.just(mockedResult1));
+        when(reactiveTransaction.get(reactiveCollection, TEST_DOCUMENT_2.getId())).thenReturn(Mono.just(mockedResult2));
+        when(reactiveTransaction.remove(mockedResult1)).thenReturn(Mono.empty());
+        when(reactiveTransaction.remove(mockedResult2)).thenReturn(Mono.empty());
+
+        Flux<TransactionGetResult> returnedResult = collectionOperator.removeDocsTransactionallyReactive(reactiveTransaction, ids);
+
+        StepVerifier.create(returnedResult)
+                .expectNext(mockedResult1)
+                .expectNext(mockedResult2)
+                .expectComplete()
+                .verify();
+        verify(reactiveTransaction).remove(mockedResult1);
+        verify(reactiveTransaction).remove(mockedResult2);
     }
 }
