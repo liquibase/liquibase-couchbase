@@ -7,6 +7,7 @@ import liquibase.ext.couchbase.provider.generator.IncrementalKeyGenerator;
 import liquibase.ext.couchbase.provider.generator.UidKeyGenerator;
 import liquibase.ext.couchbase.types.GeneratorType;
 import liquibase.ext.couchbase.types.TokenType;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -28,7 +29,11 @@ import static org.apache.commons.lang3.StringUtils.substringsBetween;
 public class ExpressionDocumentKeyProvider implements DocumentKeyProvider {
     private static final String NO_FIELD_PATTERN = "Document doesn't contain field [%s]";
     private static final String NO_GENERATOR_PATTERN = "Unknown generator type [%s]";
+
+    @Getter
     private final String expression;
+
+    @Getter
     private final Map<String, TokenType> expTokens;
     private final Map<GeneratorType, Supplier<String>> generators =
             ImmutableMap.of(MONO_INCR, new IncrementalKeyGenerator()::generate,

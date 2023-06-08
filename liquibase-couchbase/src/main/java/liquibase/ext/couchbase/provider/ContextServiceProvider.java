@@ -82,7 +82,9 @@ public class ContextServiceProvider implements ServiceProvider {
                 .getAllIndexes(bucket.name(), getAllIndexesOptions)
                 .stream()
                 .anyMatch(index -> Objects.equals(index.keyspace(), collectionName) && index.primary());
-        if (indexExists) { return; }
+        if (indexExists) {
+            return;
+        }
         CreatePrimaryQueryIndexOptions createIndexOptions = CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions()
                 .indexName(INDEX_NAME)
                 .scopeName(DEFAULT_SERVICE_SCOPE)

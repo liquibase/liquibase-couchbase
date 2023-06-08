@@ -1,10 +1,5 @@
 package liquibase.ext.couchbase.mapper;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import liquibase.ContextExpression;
 import liquibase.Labels;
 import liquibase.change.CheckSum;
@@ -15,11 +10,18 @@ import liquibase.ext.couchbase.changelog.CouchbaseChangeLog;
 import liquibase.util.LiquibaseUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoSettings;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class ChangeSetMapperTest {
+@MockitoSettings
+class ChangeSetMapperTest {
 
     @Test
     void Should_map_to_ran_change_set() {
