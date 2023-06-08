@@ -34,7 +34,7 @@ public class DropCollectionChange extends CouchbaseChange {
 
     @Override
     public String getConfirmationMessage() {
-        return String.format("%s has been successfully dropped", collectionName);
+        return String.format("Collection %s has been successfully dropped", collectionName);
     }
 
     @Override

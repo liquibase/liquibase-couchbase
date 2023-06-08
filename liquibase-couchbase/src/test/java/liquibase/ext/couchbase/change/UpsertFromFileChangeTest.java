@@ -3,25 +3,27 @@ package liquibase.ext.couchbase.change;
 import common.TestChangeLogProvider;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
-import liquibase.ext.couchbase.changelog.ChangeLogProvider;
-import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
 import liquibase.ext.couchbase.types.ImportType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import static common.constants.ChangeLogSampleFilePaths.UPSERT_FROM_FILE_TEST_XML;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 
+@MockitoSettings(strictness = Strictness.LENIENT)
 class UpsertFromFileChangeTest {
     private static final String TEST_FILE_NAME = "testLines.json";
+    @InjectMocks
+    private TestChangeLogProvider changeLogProvider;
+
     private DatabaseChangeLog changeLog;
 
     @BeforeEach
     void setUp() {
-        CouchbaseLiquibaseDatabase database = mock(CouchbaseLiquibaseDatabase.class);
-        ChangeLogProvider changeLogProvider = new TestChangeLogProvider(database);
         changeLog = changeLogProvider.load(UPSERT_FROM_FILE_TEST_XML);
     }
 

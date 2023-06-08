@@ -1,29 +1,37 @@
 package liquibase.ext.couchbase.change;
 
+import com.google.common.collect.Sets;
 import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
-import liquibase.ext.couchbase.changelog.ChangeLogProvider;
-import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
 import liquibase.ext.couchbase.types.Id;
+import liquibase.statement.SqlStatement;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.List;
 
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_BY_QUERY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_MANY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_ONE_TEST_XML;
+import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_SCOPE;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 
+@MockitoSettings(strictness = Strictness.LENIENT)
 class RemoveDocumentsChangeTest {
     private final Id ID_1 = new Id("id1");
     private final Id ID_2 = new Id("id2");
 
-    private final CouchbaseLiquibaseDatabase database = mock(CouchbaseLiquibaseDatabase.class);
-    private final ChangeLogProvider changeLogProvider = new TestChangeLogProvider(database);
+    @InjectMocks
+    private TestChangeLogProvider changeLogProvider;
 
     @Test
     void Should_have_correct_change_type() {
@@ -76,6 +84,37 @@ class RemoveDocumentsChangeTest {
         RemoveDocumentsChange removeDocumentsChange = (RemoveDocumentsChange) changes.get(0);
         assertThat(removeDocumentsChange.getIds()).hasSize(0);
         assertThat(removeDocumentsChange.getWhereCondition()).isEqualTo("test=\"test\"");
+    }
+
+    @Test
+    void Expects_confirmation_message_is_created_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChange();
+
+        String msg = change.getConfirmationMessage();
+
+        assertThat(msg).isEqualTo("Documents removed from collection %s", change.getCollectionName());
+    }
+
+    @Test
+    void Should_generate_statement_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChange();
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(RemoveDocumentsStatement.class);
+
+        RemoveDocumentsStatement actualStatement = (RemoveDocumentsStatement) statements[0];
+        assertThat(actualStatement.getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
+        assertThat(actualStatement.getIds()).isEqualTo(change.getIds());
+
+    }
+
+    private RemoveDocumentsChange createRemoveDocumentChange() {
+        return RemoveDocumentsChange.builder().bucketName(TEST_BUCKET)
+                .scopeName(TEST_SCOPE).collectionName(TEST_COLLECTION)
+                .ids(Sets.newHashSet(new Id("id1"), new Id("id2"))).build();
     }
 
 }

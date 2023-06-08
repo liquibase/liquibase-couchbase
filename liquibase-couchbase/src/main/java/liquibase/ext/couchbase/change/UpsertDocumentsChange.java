@@ -4,9 +4,15 @@ import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.UpsertDocumentsStatement;
 import liquibase.ext.couchbase.statement.UpsertFileContentStatement;
+import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.File;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
@@ -24,6 +30,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
         priority = ChangeMetaData.PRIORITY_DEFAULT,
         appliesTo = {"collection", "database"}
 )
+@NoArgsConstructor
 public class UpsertDocumentsChange extends DocumentsChange {
 
     @Override
@@ -39,6 +46,13 @@ public class UpsertDocumentsChange extends DocumentsChange {
                 : new UpsertDocumentsStatement(keyspace, documents);
 
         return new SqlStatement[] {sqlStatement};
+    }
+
+    @Builder
+    public UpsertDocumentsChange(String bucketName, String scopeName, String collectionName,
+                                 File file,
+                                 List<Document> documents) {
+        super(bucketName, scopeName, collectionName, file, documents);
     }
 }
 

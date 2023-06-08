@@ -5,9 +5,15 @@ import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.InsertDocumentsStatement;
 import liquibase.ext.couchbase.statement.InsertFileContentStatement;
+import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.File;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
@@ -25,6 +31,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
         priority = ChangeMetaData.PRIORITY_DEFAULT,
         appliesTo = {"collection", "database"}
 )
+@NoArgsConstructor
 public class InsertDocumentsChange extends DocumentsChange {
 
     @Override
@@ -41,4 +48,10 @@ public class InsertDocumentsChange extends DocumentsChange {
         return String.format("Documents inserted into collection %s", collectionName);
     }
 
+    @Builder
+    public InsertDocumentsChange(String bucketName, String scopeName, String collectionName,
+                                 File file,
+                                 List<Document> documents) {
+        super(bucketName, scopeName, collectionName, file, documents);
+    }
 }
