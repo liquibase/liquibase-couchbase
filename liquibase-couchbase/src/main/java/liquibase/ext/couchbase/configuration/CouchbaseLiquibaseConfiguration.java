@@ -93,6 +93,14 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .build();
     }
 
+    public static Duration getChangelogWaitTime() {
+        return CHANGELOG_WAIT_TIME.getCurrentValue();
+    }
+
+    public static Duration getChangelogRecheckTime() {
+        return CHANGELOG_RECHECK_TIME.getCurrentValue();
+    }
+
     private static Duration durationExtract(Object value) {
         return Optional.ofNullable(value)
                 .map(String::valueOf)
