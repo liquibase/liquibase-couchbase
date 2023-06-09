@@ -9,7 +9,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import java.time.Duration;
 
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.CHANGELOG_LOCK_COLLECTION_NAME;
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.IS_REACTIVE_TRANSACTIONS;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL_PROLONGATION;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.MUTATE_IN_TIMEOUT;
@@ -39,7 +38,7 @@ public class CustomSettingsSystemTest extends SpringBootCouchbaseContainerizedTe
         assertEquals(Duration.ofSeconds(26), TRANSACTION_TIMEOUT.getCurrentValue());
         assertEquals(Duration.ofSeconds(26), MUTATE_IN_TIMEOUT.getCurrentValue());
         assertEquals(9, REACTIVE_TRANSACTION_PARALLEL_THREADS.getCurrentValue());
-        assertTrue(IS_REACTIVE_TRANSACTIONS.getCurrentValue());
+        assertTrue(CouchbaseLiquibaseConfiguration.isReactiveTransactions());
         assertEquals("customLockCollectionName", CHANGELOG_LOCK_COLLECTION_NAME.getCurrentValue());
         assertEquals("customBucketName", SERVICE_BUCKET_NAME.getCurrentValue());
     }

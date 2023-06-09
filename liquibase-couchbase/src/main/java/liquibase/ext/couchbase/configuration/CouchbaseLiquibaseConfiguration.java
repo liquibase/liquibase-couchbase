@@ -93,6 +93,10 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .build();
     }
 
+    public static boolean isReactiveTransactions() {
+        return IS_REACTIVE_TRANSACTIONS.getCurrentValue();
+    }
+
     public static Duration getChangelogWaitTime() {
         return CHANGELOG_WAIT_TIME.getCurrentValue();
     }
