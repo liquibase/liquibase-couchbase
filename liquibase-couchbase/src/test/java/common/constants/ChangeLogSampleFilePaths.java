@@ -85,6 +85,7 @@ public class ChangeLogSampleFilePaths {
             ".mutate-in-upsert-replace-remove.test.xml";
     public static final String MUTATE_IN_REPLACE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-replace-document.test.xml";
     public static final String MUTATE_QUERY_FILTER_IN_REPLACE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-replace-document-query-filter.test.xml";
+    public static final String MUTATE_IN_SQL_PLUS_PLUS_FILTER_REPLACE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-replace-document-sql++-filter.test.xml";
     public static final String MUTATE_QUERY_FILTER_IN_REPLACE_DOCUMENTS_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-replace-documents-query-filter.test.xml";
     public static final String MUTATE_IN_REMOVE_DOCUMENT_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-in-remove-document.test.xml";
     public static final String MUTATE_IN_INSERT_NO_PATH_ERROR_TEST_XML = rootPrefix + "/mutatein/changelog.mutate-insert-no-path-error" +

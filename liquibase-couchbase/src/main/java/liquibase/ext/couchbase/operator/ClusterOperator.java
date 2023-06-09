@@ -90,6 +90,14 @@ public class ClusterOperator {
                 .collect(toList());
     }
 
+    public List<String> retrieveDocumentIdsBySqlPlusPlusQuery(String sqlPlusPlusQuery) {
+        QueryResult documentIdsResult = executeSingleSql(sqlPlusPlusQuery);
+        return documentIdsResult.rowsAsObject()
+                .stream()
+                .map(jsonObject -> jsonObject.getString("id"))
+                .collect(toList());
+    }
+
     public boolean indexExists(String indexName, String bucketName) {
         return getQueryIndexes().getAllIndexes(bucketName).stream()
                 .map(QueryIndex::name)

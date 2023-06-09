@@ -47,8 +47,8 @@ public class MutateInChangeTest {
                 .map(MutateInChange.class::cast)
                 .containsExactly(
                         changeWithId(asList(spec("user.age", "29", DataType.STRING, MutateInType.INSERT))),
-                        changeWithWhereClause(
-                                asList(spec("adoc", "{\"newDocumentField\": \"newDocumentValue\"}", DataType.JSON, MutateInType.REPLACE)))
+                        changeWithWhereClause(asList(spec("adoc", "{\"newDocumentField\": \"newDocumentValue\"}", DataType.JSON, MutateInType.REPLACE))),
+                        changeWithSqlPlusPlusQuery(asList(spec("user.age", "50", DataType.STRING, MutateInType.INSERT)))
                 );
     }
 
@@ -104,6 +104,7 @@ public class MutateInChangeTest {
         return new MutateInChange(
                 TEST_ID,
                 null,
+                null,
                 TEST_BUCKET,
                 TEST_SCOPE,
                 TEST_COLLECTION,
@@ -118,12 +119,28 @@ public class MutateInChangeTest {
         return new MutateInChange(
                 null,
                 "aKey=\"avalue\"",
+                null,
                 TEST_BUCKET,
                 TEST_SCOPE,
                 TEST_COLLECTION_3,
                 "PT1H",
                 true,
                 StoreSemantics.REPLACE,
+                specs
+        );
+    }
+
+    private MutateInChange changeWithSqlPlusPlusQuery(List<LiquibaseMutateInSpec> specs) {
+        return new MutateInChange(
+                null,
+                null,
+                "SELECT meta().id FROM `testBucket`.`testScope`.`testCollection`",
+                TEST_BUCKET,
+                TEST_SCOPE,
+                TEST_COLLECTION,
+                "PT1H",
+                true,
+                StoreSemantics.INSERT,
                 specs
         );
     }

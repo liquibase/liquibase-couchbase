@@ -15,6 +15,7 @@ import system.LiquibaseSystemTest;
 import java.util.concurrent.TimeUnit;
 
 import static com.couchbase.client.java.manager.query.DropPrimaryQueryIndexOptions.dropPrimaryQueryIndexOptions;
+import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_SQL_PLUS_PLUS_FILTER_REPLACE_DOCUMENT_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_QUERY_FILTER_IN_REPLACE_DOCUMENTS_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.MUTATE_QUERY_FILTER_IN_REPLACE_DOCUMENT_TEST_XML;
 import static common.constants.TestConstants.TEST_COLLECTION_3;
@@ -83,6 +84,19 @@ public class MutateInQuerySystemTest extends LiquibaseSystemTest {
         assertThat(testCollectionOperator.getCollection()).contains(expected1);
         assertThat(testCollectionOperator.getCollection()).contains(expected2);
         assertThat(testCollectionOperator.getCollection()).contains(doc3);
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_replace_document_sqlPlusPlus_query() {
+        Document doc = document(documentIds[0], createOneFieldJson("aKey", "avalue"));
+        Document expected = document(doc.getId(), expectedReplaceContent);
+        testCollectionOperator.insertDoc(doc);
+
+        Liquibase liquibase = liquibase(MUTATE_IN_SQL_PLUS_PLUS_FILTER_REPLACE_DOCUMENT_TEST_XML);
+        liquibase.update();
+
+        assertThat(testCollectionOperator.getCollection()).contains(expected);
     }
 
 }

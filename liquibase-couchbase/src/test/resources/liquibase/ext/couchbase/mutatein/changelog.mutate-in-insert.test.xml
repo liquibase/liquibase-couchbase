@@ -63,5 +63,24 @@
                 </ext:mutateInSpec>
             </ext:mutateInSpecs>
         </ext:mutateIn>
+        <ext:mutateIn>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:expiry>PT1H</ext:expiry>
+            <ext:preserveExpiry>true</ext:preserveExpiry>
+            <ext:storeSemantics>INSERT</ext:storeSemantics>
+            <ext:sqlPlusPlusQuery>SELECT meta().id FROM `testBucket`.`testScope`.`testCollection`</ext:sqlPlusPlusQuery>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>user.age</ext:path>
+                    <ext:value>
+                        <ext:data>50</ext:data>
+                        <ext:type>String</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>INSERT</ext:mutateInType>
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
     </changeSet>
 </databaseChangeLog>
