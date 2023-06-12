@@ -11,6 +11,11 @@
     <description>Liquibase extension for Couchbase</description>
     <url>https://docs.liquibase.com</url>
 
+    <organization>
+        <name>Liquibase.org</name>
+        <url>http://www.liquibase.org</url>
+    </organization>
+
     <licenses>
         <license>
             <name>Liquibase EULA</name>
