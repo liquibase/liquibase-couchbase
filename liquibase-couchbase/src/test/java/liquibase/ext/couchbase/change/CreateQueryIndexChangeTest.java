@@ -114,7 +114,7 @@ class CreateQueryIndexChangeTest {
     @Test
     void Should_generate_correct_checksum() {
         DatabaseChangeLog changeLog = changeLogProvider.load(CREATE_QUERY_INDEX_TEST_XML);
-        String checkSum = "8:15ff1eafac2404f08f2ad2189d41bc3e";
+        String checkSum = "9:e7e5b478edaf881385d9a7c4cee0219d";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 

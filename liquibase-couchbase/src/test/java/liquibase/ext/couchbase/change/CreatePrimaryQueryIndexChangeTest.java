@@ -103,7 +103,7 @@ class CreatePrimaryQueryIndexChangeTest {
     @Test
     void Should_generate_correct_checksum() {
         DatabaseChangeLog changeLog = changeLogProvider.load(CREATE_PRIMARY_QUERY_INDEX_TEST_XML);
-        String checkSum = "8:74f679f1be9caf4a748faa3b62114cfe";
+        String checkSum = "9:cf016463fa6deb2250793f8c8638a6c6";
         assertThat(changeLog.getChangeSets()).first().returns(checkSum, it -> it.generateCheckSum().toString());
     }
 

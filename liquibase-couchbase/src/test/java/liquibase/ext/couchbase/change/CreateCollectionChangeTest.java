@@ -87,7 +87,7 @@ public class CreateCollectionChangeTest {
     @Test
     void Create_collection_change_generates_right_checksum() {
         DatabaseChangeLog changeLog = changeLogProvider.load(CREATE_COLLECTION_TEST_XML);
-        String checkSum = "8:86d32bba95c9dea97bd37fa172af47ff";
+        String checkSum = "9:94d6436240c000bf7bed7f02624b597a";
         assertThat(changeLog.getChangeSets()).first()
                 .returns(checkSum, it -> it.generateCheckSum().toString());
     }

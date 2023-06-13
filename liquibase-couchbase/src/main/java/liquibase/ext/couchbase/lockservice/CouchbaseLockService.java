@@ -154,19 +154,23 @@ public class CouchbaseLockService implements LockService {
 
     @Override
     public void releaseLock() throws LockException {
-        logger.info(format("Releasing lock on the bucket [%s] from the service [%s]", bucketName, serviceId));
-        locker.release(bucketName, serviceId);
-        hasLock.set(false);
+        if (isInitialized) {
+            logger.info(format("Releasing lock on the bucket [%s] from the service [%s]", bucketName, serviceId));
+            locker.release(bucketName, serviceId);
+            hasLock.set(false);
+        }
     }
 
     @Override
     public void forceReleaseLock() throws LockException {
-        try {
-            cleanTimer();
-            locker.forceRelease(bucketName);
-            hasLock.set(false);
-        } catch (Exception e) {
-            throw new LockException(e);
+        if (isInitialized) {
+            try {
+                cleanTimer();
+                locker.forceRelease(bucketName);
+                hasLock.set(false);
+            } catch (Exception e) {
+                throw new LockException(e);
+            }
         }
     }
 
@@ -188,7 +192,6 @@ public class CouchbaseLockService implements LockService {
     @Override
     public void reset() {
         logger.info("Resetting CouchbaseLockService");
-        isInitialized = false;
         try {
             cleanTimer();
             if (hasChangeLogLock()) {
@@ -197,6 +200,7 @@ public class CouchbaseLockService implements LockService {
         } catch (Exception e) {
             logger.severe("Could not release a lock during the reset");
         }
+        isInitialized = false;
     }
 
     private void cleanTimer() {
