@@ -5,6 +5,7 @@ import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
+import liquibase.ext.couchbase.statement.RemoveDocumentsQueryStatement;
 import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
 import liquibase.ext.couchbase.types.Id;
 import liquibase.statement.SqlStatement;
@@ -111,10 +112,34 @@ class RemoveDocumentsChangeTest {
 
     }
 
+    @Test
+    void Should_generate_statement_with_where_clause_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChangeWithWhereClause();
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(RemoveDocumentsQueryStatement.class);
+
+        RemoveDocumentsQueryStatement actualStatement = (RemoveDocumentsQueryStatement) statements[0];
+        assertThat(actualStatement.getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
+        assertThat(actualStatement.getIds()).isEqualTo(change.getIds());
+        assertThat(actualStatement.getWhereCondition()).isEqualTo(change.getWhereCondition());
+    }
+
     private RemoveDocumentsChange createRemoveDocumentChange() {
         return RemoveDocumentsChange.builder().bucketName(TEST_BUCKET)
                 .scopeName(TEST_SCOPE).collectionName(TEST_COLLECTION)
-                .ids(Sets.newHashSet(new Id("id1"), new Id("id2"))).build();
+                .ids(Sets.newHashSet(ID_1, ID_2)).build();
+    }
+
+    private RemoveDocumentsChange createRemoveDocumentChangeWithWhereClause() {
+        return RemoveDocumentsChange.builder().bucketName(TEST_BUCKET)
+                .scopeName(TEST_SCOPE).collectionName(TEST_COLLECTION)
+                .ids(Sets.newHashSet(ID_1, ID_2))
+                .whereCondition("whereClause")
+                .build();
     }
 
 }

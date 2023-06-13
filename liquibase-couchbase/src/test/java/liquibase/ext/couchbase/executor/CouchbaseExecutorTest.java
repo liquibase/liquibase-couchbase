@@ -1,6 +1,7 @@
 package liquibase.ext.couchbase.executor;
 
 import com.couchbase.client.java.Cluster;
+import liquibase.Scope;
 import liquibase.exception.DatabaseException;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
@@ -8,16 +9,23 @@ import liquibase.ext.couchbase.exception.StatementExecutionException;
 import liquibase.ext.couchbase.executor.service.TransactionExecutorService;
 import liquibase.ext.couchbase.statement.CouchbaseStatement;
 import liquibase.ext.couchbase.statement.CouchbaseTransactionStatement;
+import liquibase.logging.Logger;
 import liquibase.statement.SqlStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoSettings;
 
+import static liquibase.ext.couchbase.executor.CouchbaseExecutor.EXECUTOR_NAME;
+import static liquibase.plugin.Plugin.PRIORITY_SPECIALIZED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -88,5 +96,35 @@ class CouchbaseExecutorTest {
 
         assertThatExceptionOfType(StatementExecutionException.class)
                 .isThrownBy(() -> couchbaseExecutor.execute(couchbaseStatement));
+    }
+
+    @Test
+    void Should_send_comment_to_log() {
+        try (MockedStatic<Scope> mockedStatic = Mockito.mockStatic(Scope.class)) {
+            String comment = "comment";
+            Scope currentScope = mock(Scope.class);
+            try (Logger logger = mock(Logger.class)) {
+                mockedStatic.when(Scope::getCurrentScope).thenReturn(currentScope);
+                when(currentScope.getLog(any())).thenReturn(logger);
+                couchbaseExecutor = new CouchbaseExecutor();
+                couchbaseExecutor.setDatabase(database);
+
+                assertThatCode(() -> couchbaseExecutor.comment(comment)).doesNotThrowAnyException();
+
+                verify(logger).info(comment);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Test
+    void Verify_priority() {
+        assertThat(couchbaseExecutor.getPriority()).isEqualTo(PRIORITY_SPECIALIZED);
+    }
+
+    @Test
+    void Verify_name() {
+        assertThat(couchbaseExecutor.getName()).isEqualTo(EXECUTOR_NAME);
     }
 }

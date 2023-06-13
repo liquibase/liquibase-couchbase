@@ -25,11 +25,6 @@ public class BucketScope extends AbstractLiquibaseSerializable {
         return new BucketScope(bucket, scope);
     }
 
-    public static BucketScope defaultScopeBucketScope(String bucket) {
-        return new BucketScope(bucket, DEFAULT_SCOPE);
-    }
-
-
     @Override
     public String getSerializedObjectName() {
         return "bucketScope";

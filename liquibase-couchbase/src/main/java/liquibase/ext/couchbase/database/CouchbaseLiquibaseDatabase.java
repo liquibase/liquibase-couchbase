@@ -3,6 +3,7 @@ package liquibase.ext.couchbase.database;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -19,19 +20,16 @@ import static liquibase.ext.couchbase.database.Constants.DEFAULT_PORT;
 /**
  * Represents instance of {@link com.couchbase.client.java.Cluster}.<br><br>
  */
+// TODO for tests, without default constructor unable to run system tests(investigate reason)
+// liquibase.exception.UnexpectedLiquibaseException: java.lang.ClassCastException:
+// liquibase.database.core.UnsupportedDatabase cannot be cast to liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase
+@NoArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
     private ConnectionData connectionData;
 
     @Setter(onMethod = @__( {@Override}))
     private DatabaseConnection connection;
-
-    // TODO for tests, without default constructor unable to run system tests(investigate reason)
-    // liquibase.exception.UnexpectedLiquibaseException: java.lang.ClassCastException:
-    // liquibase.database.core.UnsupportedDatabase cannot be cast to liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase
-    public CouchbaseLiquibaseDatabase() {
-
-    }
 
     public CouchbaseLiquibaseDatabase(@NonNull String userName,
                                       @NonNull String password,

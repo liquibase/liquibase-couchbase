@@ -4,10 +4,13 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
+import liquibase.ext.couchbase.executor.service.TransactionExecutorService;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.sql.Driver;
 import java.util.Properties;
@@ -17,8 +20,11 @@ import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.servicelocator.PrioritizedService.PRIORITY_DEFAULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class CouchbaseConnectionTest {
@@ -40,9 +46,7 @@ class CouchbaseConnectionTest {
     @Test
     @SneakyThrows
     void Should_open_connection_correctly() {
-        Properties driverProperties = new Properties();
-        driverProperties.setProperty("user", "user");
-        driverProperties.setProperty("password", "password");
+        Properties driverProperties = buildDriverProperties();
 
         connection.open(DB_URL, driver, driverProperties);
 
@@ -61,10 +65,25 @@ class CouchbaseConnectionTest {
 
     @Test
     @SneakyThrows
+    void Should_open_connection_on_bucket() {
+        try (MockedStatic<Cluster> mockedStatic = Mockito.mockStatic(Cluster.class)) {
+            String bucketName = "bucket";
+
+            mockedStatic.when(() -> Cluster.connect(anyString(), any())).thenReturn(cluster);
+
+            Properties driverProperties = buildDriverProperties();
+            driverProperties.setProperty("bucket", bucketName);
+
+            connection.open(DB_URL, driver, driverProperties);
+
+            verify(cluster).bucket(bucketName);
+        }
+    }
+
+    @Test
+    @SneakyThrows
     void Should_close_connection_correctly() {
-        Properties driverProperties = new Properties();
-        driverProperties.setProperty("user", "user");
-        driverProperties.setProperty("password", "password");
+        Properties driverProperties = buildDriverProperties();
 
         connection.open(DB_URL, driver, driverProperties);
 
@@ -84,4 +103,88 @@ class CouchbaseConnectionTest {
                 .withMessage("Could not open connection to database: %s", DB_URL);
     }
 
+    @Test
+    @SneakyThrows
+    void Should_catch_and_wrap_exception_when_cluster_cant_connect() {
+        try (MockedStatic<Cluster> mockedStatic = Mockito.mockStatic(Cluster.class)) {
+            mockedStatic.when(() -> Cluster.connect(anyString(), any()))
+                    .thenThrow(new RuntimeException("Mocked"));
+            Properties driverProperties = buildDriverProperties();
+
+            assertThatExceptionOfType(DatabaseException.class)
+                    .isThrownBy(() -> connection.open(DB_URL, driver, driverProperties))
+                    .withMessage("Could not open connection to database: %s", DB_URL);
+
+            mockedStatic.verify(() -> Cluster.connect(anyString(), any()));
+        }
+    }
+
+    @Test
+    void Should_support_correct_url() {
+        assertThat(connection.supports("couchbase://127.0.0.1")).isTrue();
+    }
+
+    @Test
+    void Should_not_support_incorrect_url() {
+        assertThat(connection.supports("NOT_COUCHBASE://127.0.0.1")).isFalse();
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_rollback_transaction_using_transaction_executor() {
+        try (MockedStatic<Cluster> mockedCluster = Mockito.mockStatic(Cluster.class)) {
+            try (MockedStatic<TransactionExecutorService> mockedTransactionExecutorService = Mockito.mockStatic(
+                    TransactionExecutorService.class)) {
+                TransactionExecutorService transactionExecutorService = mock(TransactionExecutorService.class);
+
+                String bucketName = "bucket";
+
+                mockedCluster.when(() -> Cluster.connect(anyString(), any())).thenReturn(cluster);
+                mockedTransactionExecutorService.when(() -> TransactionExecutorService.getExecutor(cluster)).thenReturn(
+                        transactionExecutorService);
+
+                Properties driverProperties = buildDriverProperties();
+                driverProperties.setProperty("bucket", bucketName);
+
+                connection.open(DB_URL, driver, driverProperties);
+
+                connection.rollback();
+
+                verify(transactionExecutorService).clearStatementsQueue();
+            }
+        }
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_commit_transaction_using_transaction_executor() {
+        try (MockedStatic<Cluster> mockedCluster = Mockito.mockStatic(Cluster.class)) {
+            try (MockedStatic<TransactionExecutorService> mockedTransactionExecutorService = Mockito.mockStatic(
+                    TransactionExecutorService.class)) {
+                TransactionExecutorService transactionExecutorService = mock(TransactionExecutorService.class);
+
+                String bucketName = "bucket";
+
+                mockedCluster.when(() -> Cluster.connect(anyString(), any())).thenReturn(cluster);
+                mockedTransactionExecutorService.when(() -> TransactionExecutorService.getExecutor(cluster)).thenReturn(
+                        transactionExecutorService);
+
+                Properties driverProperties = buildDriverProperties();
+                driverProperties.setProperty("bucket", bucketName);
+
+                connection.open(DB_URL, driver, driverProperties);
+
+                connection.commit();
+
+                verify(transactionExecutorService).executeStatementsInTransaction();
+            }
+        }
+    }
+
+    private Properties buildDriverProperties() {
+        Properties driverProperties = new Properties();
+        driverProperties.setProperty("user", "user");
+        driverProperties.setProperty("password", "password");
+        return driverProperties;
+    }
 }

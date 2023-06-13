@@ -50,9 +50,9 @@ public class File extends AbstractLiquibaseSerializable {
 
     public Stream<String> lines() {
         try {
-            return Files.lines(Paths.get(filePath));
+            return Files.lines(Paths.get(getFilePath()));
         } catch (IOException e) {
-            throw new IncorrectFileException(filePath);
+            throw new IncorrectFileException(getFilePath());
         }
     }
 
