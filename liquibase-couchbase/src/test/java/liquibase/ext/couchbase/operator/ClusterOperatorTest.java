@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.operator;
 
+import com.couchbase.client.core.deps.com.google.common.collect.ImmutableList;
 import com.couchbase.client.core.error.BucketNotFoundException;
 import com.couchbase.client.core.retry.FailFastRetryStrategy;
 import com.couchbase.client.java.Bucket;
@@ -19,7 +20,6 @@ import com.couchbase.client.java.manager.query.QueryIndexManager;
 import com.couchbase.client.java.query.QueryResult;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionQueryResult;
-import com.google.common.collect.ImmutableList;
 import liquibase.ext.couchbase.types.BucketScope;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Field;

@@ -1,6 +1,6 @@
 package liquibase.ext.couchbase.reader;
 
-import com.google.common.base.Splitter;
+import com.couchbase.client.core.deps.com.google.common.base.Splitter;
 import liquibase.SingletonObject;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.resource.Resource;
@@ -52,7 +52,7 @@ public class SqlFileReader implements SingletonObject {
     private List<String> retrieveQueries(String fileContent) {
         String withoutComments = removeCommentsPattern.matcher(fileContent).replaceAll("");
 
-        return statementsSplitter.splitToStream(withoutComments)
+        return statementsSplitter.splitToList(withoutComments).stream()
                 .filter(StringUtils::isNotBlank)
                 .collect(toList());
     }

@@ -1,6 +1,6 @@
 package liquibase.ext.couchbase.statement;
 
-import com.google.common.collect.ImmutableMap;
+import com.couchbase.client.core.deps.com.google.common.collect.ImmutableMap;
 import liquibase.ext.couchbase.mapper.DocFileMapper;
 import liquibase.ext.couchbase.mapper.LinesMapper;
 import liquibase.ext.couchbase.mapper.ListMapper;

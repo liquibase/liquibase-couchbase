@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.provider;
 
+import com.couchbase.client.core.deps.com.google.common.collect.ImmutableMap;
 import com.couchbase.client.java.json.JsonObject;
-import com.google.common.collect.ImmutableMap;
 import liquibase.ext.couchbase.exception.ProvideKeyFailedException;
 import liquibase.ext.couchbase.provider.generator.IncrementalKeyGenerator;
 import liquibase.ext.couchbase.provider.generator.UidKeyGenerator;

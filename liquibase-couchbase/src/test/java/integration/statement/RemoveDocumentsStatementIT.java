@@ -1,8 +1,8 @@
 package integration.statement;
 
+import com.couchbase.client.core.deps.com.google.common.collect.Sets;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.transactions.error.TransactionFailedException;
-import com.google.common.collect.Sets;
 import common.TransactionStatementTest;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;

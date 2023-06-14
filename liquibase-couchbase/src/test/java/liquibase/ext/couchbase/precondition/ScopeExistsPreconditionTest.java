@@ -1,11 +1,11 @@
 package liquibase.ext.couchbase.precondition;
 
+import com.couchbase.client.core.deps.com.google.common.collect.Lists;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.manager.bucket.BucketManager;
 import com.couchbase.client.java.manager.collection.CollectionManager;
 import com.couchbase.client.java.manager.collection.ScopeSpec;
-import com.google.common.collect.Lists;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.precondition.ScopeNotExistsPreconditionException;

@@ -2,11 +2,11 @@ package liquibase.ext.couchbase.precondition;
 
 import com.couchbase.client.core.api.query.CoreQueryResult;
 import com.couchbase.client.core.classic.query.ClassicCoreQueryResult;
+import com.couchbase.client.core.deps.com.google.common.collect.Lists;
 import com.couchbase.client.core.msg.query.QueryChunkRow;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.codec.JacksonJsonSerializer;
 import com.couchbase.client.java.query.QueryResult;
-import com.google.common.collect.Lists;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.database.CouchbaseConnection;
 import liquibase.ext.couchbase.exception.precondition.SqlCheckPreconditionException;
