@@ -1,7 +1,9 @@
 name: Release Extension to Sonatype
 
 on:
-    workflow_call:
+    workflow_dispatch:
+    release:
+        types: [published]
         secrets:
             SONATYPE_USERNAME:
                 description: 'SONATYPE_USERNAME from the caller workflow'

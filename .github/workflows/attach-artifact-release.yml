@@ -1,7 +1,7 @@
 name: Attach Artifact to Release
 
 on:
-    workflow_call:
+    workflow_dispatch:
         secrets:
             BOT_TOKEN:
                 description: 'BOT_TOKEN from the caller workflow'
