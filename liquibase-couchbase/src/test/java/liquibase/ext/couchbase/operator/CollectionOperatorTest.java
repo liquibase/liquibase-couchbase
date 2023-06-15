@@ -1,5 +1,7 @@
 package liquibase.ext.couchbase.operator;
 
+import com.couchbase.client.core.deps.com.google.common.collect.ImmutableList;
+import com.couchbase.client.core.deps.com.google.common.collect.Sets;
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.ReactiveCollection;
@@ -13,8 +15,6 @@ import com.couchbase.client.java.manager.query.QueryIndex;
 import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionGetResult;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Id;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

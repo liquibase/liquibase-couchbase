@@ -36,7 +36,6 @@
         <slf4j.version>2.0.7</slf4j.version>
         <lombok.version>1.18.26</lombok.version>
         <couchbase.java.client.version>3.4.6</couchbase.java.client.version>
-        <google.guava.version>31.1-jre</google.guava.version>
         <sonar.maven.plugin.version>3.9.1.2184</sonar.maven.plugin.version>
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
         <failsafe.maven.plugin.version>3.0.0-M9</failsafe.maven.plugin.version>
@@ -69,11 +68,6 @@
             <groupId>com.couchbase.client</groupId>
             <artifactId>java-client</artifactId>
             <version>${couchbase.java.client.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${google.guava.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -288,19 +282,30 @@
                     <!--                    </execution>-->
                 </executions>
             </plugin>
-            <!-- Generate jar with dependencies -> mvn clean package shade:shade -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>${maven-shade-plugin-version}</version>
                 <executions>
                     <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
                         <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <outputFile>${project.basedir}/target/${project.artifactId}-${project.version}.jar</outputFile>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                 </transformer>
                             </transformers>
+                            <!-- Generate jar with all dependencies -> comment <artifactSet> and execute: mvn clean package shade:shade -->
+                            <artifactSet>
+                                <includes>
+                                    <include>commons-io:commons-io</include>
+                                    <include>org.apache.commons:commons-lang3</include>
+                                </includes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>

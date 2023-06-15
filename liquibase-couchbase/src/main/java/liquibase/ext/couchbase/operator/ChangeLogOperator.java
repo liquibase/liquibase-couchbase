@@ -1,12 +1,12 @@
 package liquibase.ext.couchbase.operator;
 
+import com.couchbase.client.core.deps.com.google.common.annotations.VisibleForTesting;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
 import com.couchbase.client.java.query.QueryOptions;
 import com.couchbase.client.java.query.QueryScanConsistency;
-import com.google.common.annotations.VisibleForTesting;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.RanChangeSet;
 import liquibase.ext.couchbase.changelog.CouchbaseChangeLog;

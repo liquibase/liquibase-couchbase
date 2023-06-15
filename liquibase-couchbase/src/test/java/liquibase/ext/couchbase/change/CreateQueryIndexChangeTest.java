@@ -1,6 +1,6 @@
 package liquibase.ext.couchbase.change;
 
-import com.google.common.collect.Lists;
+import com.couchbase.client.core.deps.com.google.common.collect.Lists;
 import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;

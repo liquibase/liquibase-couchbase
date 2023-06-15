@@ -1,8 +1,8 @@
 package liquibase.ext.couchbase.validator;
 
+import com.couchbase.client.core.deps.com.google.common.annotations.VisibleForTesting;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.annotations.VisibleForTesting;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
