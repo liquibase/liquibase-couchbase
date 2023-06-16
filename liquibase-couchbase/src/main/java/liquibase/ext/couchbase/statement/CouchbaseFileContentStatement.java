@@ -5,7 +5,7 @@ import liquibase.ext.couchbase.mapper.DocFileMapper;
 import liquibase.ext.couchbase.mapper.LinesMapper;
 import liquibase.ext.couchbase.mapper.ListMapper;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import liquibase.ext.couchbase.types.ImportType;
 import lombok.Getter;
 
@@ -22,7 +22,7 @@ public abstract class CouchbaseFileContentStatement extends CouchbaseTransaction
             ImmutableMap.of(ImportType.LINES, new LinesMapper()
                     , ImportType.LIST, new ListMapper());
 
-    protected List<Document> getDocsFromFile(File file) {
-        return importTypeToMapper.get(file.getImportType()).map(file);
+    protected List<Document> getDocsFromFile(ImportFile importFile) {
+        return importTypeToMapper.get(importFile.getImportType()).map(importFile);
     }
 }

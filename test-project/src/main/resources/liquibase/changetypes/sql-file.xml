@@ -6,7 +6,11 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
 
     <changeSet id="1" author="dmitry.dashko">
-        <ext:sqlFile relative="false" path="src/main/resources/documents/insert-document.sql" transactional="true"/>
+        <ext:sqlFile transactional="false">
+            <ext:file>
+                <ext:filePath>src/main/resources/documents/insert-document.sql</ext:filePath>
+            </ext:file>
+        </ext:sqlFile>
     </changeSet>
 
 </databaseChangeLog>

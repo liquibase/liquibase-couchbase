@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.change;
 
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +21,10 @@ public abstract class DocumentsChange extends CouchbaseChange {
     protected String scopeName;
     protected String collectionName;
 
-    protected File file;
+    protected ImportFile importFile;
     protected List<Document> documents = new ArrayList<>();
 
     public boolean isFileChange() {
-        return file != null;
+        return importFile != null;
     }
 }

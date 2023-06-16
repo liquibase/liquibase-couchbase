@@ -6,7 +6,7 @@ import com.couchbase.client.java.transactions.TransactionGetResult;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.operator.CollectionOperator;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import liquibase.ext.couchbase.types.ImportType;
 import liquibase.ext.couchbase.types.KeyProviderType;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public class UpsertFileContentStatementTest {
     private final BucketOperator bucketOperator = mock(BucketOperator.class);
     private final CollectionOperator collectionOperator = mock(CollectionOperator.class);
 
-    private final File file = mock(File.class);
+    private final ImportFile importFile = mock(ImportFile.class);
 
     @BeforeEach
     public void configure() {
@@ -39,13 +39,13 @@ public class UpsertFileContentStatementTest {
         when(bucketOperator.getCollectionOperator(TEST_KEYSPACE.getCollection(), TEST_KEYSPACE.getScope())).thenReturn(
                 collectionOperator);
 
-        when(file.getImportType()).thenReturn(ImportType.LIST);
-        when(file.getKeyProviderType()).thenReturn(KeyProviderType.DEFAULT);
+        when(importFile.getImportType()).thenReturn(ImportType.LIST);
+        when(importFile.getKeyProviderType()).thenReturn(KeyProviderType.DEFAULT);
     }
 
     @Test
     void Should_execute_in_transaction() {
-        UpsertFileContentStatement statement = new UpsertFileContentStatement(TEST_KEYSPACE, file);
+        UpsertFileContentStatement statement = new UpsertFileContentStatement(TEST_KEYSPACE, importFile);
 
         statement.doInTransaction(transaction, clusterOperator);
 
@@ -54,7 +54,7 @@ public class UpsertFileContentStatementTest {
 
     @Test
     void Should_execute_in_transaction_reactive() {
-        UpsertFileContentStatement statement = new UpsertFileContentStatement(TEST_KEYSPACE, file);
+        UpsertFileContentStatement statement = new UpsertFileContentStatement(TEST_KEYSPACE, importFile);
         Flux<TransactionGetResult> mockedPublisher = Flux.empty();
         when(collectionOperator.upsertDocsTransactionallyReactive(eq(reactiveTransactionAttemptContext),
                 anyList())).thenReturn(mockedPublisher);

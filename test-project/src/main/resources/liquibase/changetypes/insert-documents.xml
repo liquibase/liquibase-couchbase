@@ -49,12 +49,14 @@
             <ext:bucketName>bucketName</ext:bucketName>
             <ext:scopeName>scopeName</ext:scopeName>
             <ext:collectionName>collectionName</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/main/resources/documents/documents-as-lines.json</ext:filePath>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/main/resources/documents/documents-as-lines.json</ext:filePath>
+                </ext:file>
                 <ext:importType>LINES</ext:importType>
                 <ext:keyProviderType>DEFAULT</ext:keyProviderType>
                 <ext:keyProviderExpression>id</ext:keyProviderExpression>
-            </ext:file>
+            </ext:importFile>
         </ext:insertDocuments>
     </changeSet>
 
@@ -63,12 +65,14 @@
             <ext:bucketName>bucketName</ext:bucketName>
             <ext:scopeName>scopeName</ext:scopeName>
             <ext:collectionName>collectionName</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/main/resources/documents/documents-as-list.json</ext:filePath>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/main/resources/documents/documents-as-list.json</ext:filePath>
+                </ext:file>
                 <ext:importType>LIST</ext:importType>
                 <ext:keyProviderType>DEFAULT</ext:keyProviderType>
                 <ext:keyProviderExpression>id</ext:keyProviderExpression>
-            </ext:file>
+            </ext:importFile>
         </ext:insertDocuments>
     </changeSet>
 

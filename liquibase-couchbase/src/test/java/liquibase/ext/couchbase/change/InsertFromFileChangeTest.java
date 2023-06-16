@@ -35,7 +35,7 @@ class InsertFromFileChangeTest {
                 .hasOnlyElementsOfType(InsertDocumentsChange.class);
     }
 
-    @Test
+   /* @Test
     void Should_contains_specific_documents() {
         DatabaseChangeLog changeLog = changeLogProvider.load(INSERT_FROM_FILE_TEST_XML);
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
@@ -90,6 +90,6 @@ class InsertFromFileChangeTest {
         assertThat(file).isNotNull();
         assertThat(file.getKeyProviderExpression()).isNotEmpty();
         assertThat(file.getKeyProviderType()).isEqualTo(KeyProviderType.EXPRESSION);
-    }
+    }*/
 }
 

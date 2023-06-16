@@ -4,7 +4,7 @@ import liquibase.ext.couchbase.provider.ExpressionDocumentKeyProvider;
 import liquibase.ext.couchbase.provider.FieldDocumentKeyProvider;
 import liquibase.ext.couchbase.provider.IncrementalDocumentKeyProvider;
 import liquibase.ext.couchbase.provider.UidDocumentKeyProvider;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -21,40 +21,36 @@ import static org.mockito.Mockito.when;
 class DocumentKeyProviderFactoryTest {
 
     @Mock
-    private final File file = mock(File.class);
+    private final ImportFile importFile = mock(ImportFile.class);
     private final DocumentKeyProviderFactory documentKeyProviderFactory = new DocumentKeyProviderFactory();
 
     @Test
     void Should_return_default() {
-        when(file.getKeyProviderType()).thenReturn(DEFAULT);
+        when(importFile.getKeyProviderType()).thenReturn(DEFAULT);
 
-        assertThat(documentKeyProviderFactory.getKeyProvider(file)).isInstanceOf(
-                FieldDocumentKeyProvider.class);
+        assertThat(documentKeyProviderFactory.getKeyProvider(importFile)).isInstanceOf(FieldDocumentKeyProvider.class);
     }
 
     @Test
     void Should_return_uid() {
-        when(file.getKeyProviderType()).thenReturn(UID);
+        when(importFile.getKeyProviderType()).thenReturn(UID);
 
-        assertThat(documentKeyProviderFactory.getKeyProvider(file)).isInstanceOf(
-                UidDocumentKeyProvider.class);
+        assertThat(documentKeyProviderFactory.getKeyProvider(importFile)).isInstanceOf(UidDocumentKeyProvider.class);
     }
 
     @Test
     void Should_return_incremental() {
-        when(file.getKeyProviderType()).thenReturn(INCREMENT);
+        when(importFile.getKeyProviderType()).thenReturn(INCREMENT);
 
-        assertThat(documentKeyProviderFactory.getKeyProvider(file)).isInstanceOf(
-                IncrementalDocumentKeyProvider.class);
+        assertThat(documentKeyProviderFactory.getKeyProvider(importFile)).isInstanceOf(IncrementalDocumentKeyProvider.class);
     }
 
     @Test
     void Should_return_expression() {
-        when(file.getKeyProviderType()).thenReturn(EXPRESSION);
-        when(file.getKeyProviderExpression()).thenReturn("#a, #b");
+        when(importFile.getKeyProviderType()).thenReturn(EXPRESSION);
+        when(importFile.getKeyProviderExpression()).thenReturn("#a, #b");
 
-        assertThat(documentKeyProviderFactory.getKeyProvider(file)).isInstanceOf(
-                ExpressionDocumentKeyProvider.class);
+        assertThat(documentKeyProviderFactory.getKeyProvider(importFile)).isInstanceOf(ExpressionDocumentKeyProvider.class);
     }
 
 }

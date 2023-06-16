@@ -5,7 +5,7 @@ import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,7 +24,7 @@ import org.reactivestreams.Publisher;
 @EqualsAndHashCode(callSuper = true)
 public class UpsertFileContentStatement extends CouchbaseFileContentStatement {
     private final Keyspace keyspace;
-    private final File file;
+    private final ImportFile file;
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {

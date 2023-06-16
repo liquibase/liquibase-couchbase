@@ -39,8 +39,9 @@ class UpsertFromFileChangeTest {
         ChangeSet changeSet = firstOf(changeLog.getChangeSets());
         UpsertDocumentsChange change = (UpsertDocumentsChange) firstOf(changeSet.getChanges());
         assertThat(change.getDocuments()).isEmpty();
-        assertThat(change.getFile()).isNotNull();
-        assertThat(change.getFile().getFilePath()).contains(TEST_FILE_NAME);
-        assertThat(change.getFile().getImportType()).isEqualTo(ImportType.LINES);
+        assertThat(change.getImportFile()).isNotNull();
+        assertThat(change.getImportFile().getFile()).isNotNull();
+        assertThat(change.getImportFile().getFile().getFilePath()).contains(TEST_FILE_NAME);
+        assertThat(change.getImportFile().getImportType()).isEqualTo(ImportType.LINES);
     }
 }

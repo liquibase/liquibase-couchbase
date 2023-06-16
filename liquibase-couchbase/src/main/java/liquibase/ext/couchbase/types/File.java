@@ -1,7 +1,8 @@
 package liquibase.ext.couchbase.types;
 
-import com.couchbase.client.core.deps.com.fasterxml.jackson.databind.ObjectMapper;
 import liquibase.ext.couchbase.exception.IncorrectFileException;
+import liquibase.resource.Resource;
+import liquibase.resource.ResourceAccessor;
 import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+
+import static liquibase.Scope.getCurrentScope;
 
 /**
  * File to import
@@ -28,10 +26,8 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = false)
 public class File extends AbstractLiquibaseSerializable {
 
+    private Boolean relative;
     private String filePath;
-    private ImportType importType;
-    private KeyProviderType keyProviderType;
-    private String keyProviderExpression;
 
     @Override
     public String getSerializedObjectName() {
@@ -48,18 +44,12 @@ public class File extends AbstractLiquibaseSerializable {
         return SerializationType.DIRECT_VALUE;
     }
 
-    public Stream<String> lines() {
+    public Resource getAsResource(String changeSetPath) {
         try {
-            return Files.lines(Paths.get(getFilePath()));
-        } catch (IOException e) {
-            throw new IncorrectFileException(getFilePath());
-        }
-    }
-
-    public List<Map<String, Object>> readJsonList() {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readerForListOf(Map.class).readValue(Paths.get(getFilePath()).toFile());
+            ResourceAccessor resourceAccessor = getCurrentScope().getResourceAccessor();
+            return (relative != null && relative)
+                    ? resourceAccessor.get(changeSetPath).resolveSibling(getFilePath())
+                    : resourceAccessor.get(getFilePath());
         } catch (IOException ex) {
             throw new IncorrectFileException(getFilePath());
         }

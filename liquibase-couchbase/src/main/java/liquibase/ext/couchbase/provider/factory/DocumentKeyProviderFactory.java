@@ -7,25 +7,25 @@ import liquibase.ext.couchbase.provider.ExpressionDocumentKeyProvider;
 import liquibase.ext.couchbase.provider.FieldDocumentKeyProvider;
 import liquibase.ext.couchbase.provider.IncrementalDocumentKeyProvider;
 import liquibase.ext.couchbase.provider.UidDocumentKeyProvider;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 
 /**
  * Factory of Couchbase document key's providers.
  */
 public class DocumentKeyProviderFactory implements SingletonObject {
 
-    public DocumentKeyProvider getKeyProvider(File file) {
-        switch (file.getKeyProviderType()) {
+    public DocumentKeyProvider getKeyProvider(ImportFile importFile) {
+        switch (importFile.getKeyProviderType()) {
             case DEFAULT:
-                return new FieldDocumentKeyProvider(file.getKeyProviderExpression());
+                return new FieldDocumentKeyProvider(importFile.getKeyProviderExpression());
             case UID:
                 return new UidDocumentKeyProvider();
             case INCREMENT:
                 return new IncrementalDocumentKeyProvider();
             case EXPRESSION:
-                return new ExpressionDocumentKeyProvider(file.getKeyProviderExpression());
+                return new ExpressionDocumentKeyProvider(importFile.getKeyProviderExpression());
             default:
-                throw new KeyProviderNotFoundException(file.getKeyProviderType());
+                throw new KeyProviderNotFoundException(importFile.getKeyProviderType());
         }
     }
 }

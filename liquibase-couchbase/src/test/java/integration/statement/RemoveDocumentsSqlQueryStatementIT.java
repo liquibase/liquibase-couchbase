@@ -36,11 +36,12 @@ class RemoveDocumentsSqlQueryStatementIT extends TransactionStatementTest {
     private Document doc1;
     private Document doc2;
     private Document doc3;
-    private Keyspace keyspace = keyspace(bucketName, testScope, testCollection);
+    private final Keyspace keyspace = keyspace(bucketName, testScope, testCollection);
 
     @BeforeAll
     @SneakyThrows
     static void beforeClass() {
+        TimeUnit.SECONDS.sleep(1L);
         collectionOperator = bucketOperator.getCollectionOperator(testCollection, testScope);
         collectionOperator.createPrimaryIndex(CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()

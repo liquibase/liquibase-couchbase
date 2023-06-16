@@ -29,7 +29,8 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="isPrimary" type="xsd:boolean"/>
-                <xsd:element name="indexName" type="xsd:string" minOccurs="0"/><!-- TODO temporary solution/hotfix to be able to remove primary index by name -->
+                <xsd:element name="indexName" type="xsd:string"
+                             minOccurs="0"/><!-- TODO temporary solution/hotfix to be able to remove primary index by name -->
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
@@ -82,7 +83,7 @@
                 <xsd:choice>
                     <xsd:element ref="document"/>
                     <xsd:element ref="documents"/>
-                    <xsd:element ref="file"/>
+                    <xsd:element ref="importFile"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
@@ -114,7 +115,7 @@
                 <xsd:choice>
                     <xsd:element ref="document"/>
                     <xsd:element ref="documents"/>
-                    <xsd:element ref="file"/>
+                    <xsd:element ref="importFile"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
@@ -124,6 +125,15 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="filePath" type="xsd:string"/>
+            </xsd:sequence>
+            <xsd:attribute name="relative" type="xsd:boolean" default="false"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="importFile">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="file"/>
                 <xsd:element name="importType">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
@@ -334,7 +344,7 @@
     <xsd:element name="values">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="value" minOccurs="1" maxOccurs="unbounded"/>
+                <xsd:element ref="value" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -375,9 +385,9 @@
     </xsd:element>
 
     <xsd:element name="executeQuery">
-        <xsd:complexType mixed="true" >
+        <xsd:complexType mixed="true">
             <xsd:sequence>
-                <xsd:element ref="query" />
+                <xsd:element ref="query"/>
                 <xsd:element ref="params" minOccurs="0" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -390,16 +400,17 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="name" type="xsd:string"/>
-                <xsd:element name="value" />
+                <xsd:element name="value"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:element name="sqlFile">
         <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="file"/>
+            </xsd:sequence>
             <xsd:attribute name="transactional" type="xsd:boolean"/>
-            <xsd:attribute name="path" type="xsd:string" use="required"/>
-            <xsd:attribute name="relative" type="xsd:boolean" use="required"/>
         </xsd:complexType>
     </xsd:element>
 

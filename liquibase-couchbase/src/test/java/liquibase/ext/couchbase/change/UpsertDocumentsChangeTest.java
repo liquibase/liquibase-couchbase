@@ -9,6 +9,7 @@ import liquibase.ext.couchbase.statement.UpsertFileContentStatement;
 import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import liquibase.ext.couchbase.types.ImportType;
 import liquibase.statement.SqlStatement;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ class UpsertDocumentsChangeTest {
 
     @Test
     void Expects_confirmation_message_is_created_correctly() {
-        UpsertDocumentsChange change = createUpsertDocumentChange(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION, Lists.newArrayList(DOC_1),
+        UpsertDocumentsChange change = createUpsertDocumentChange(Lists.newArrayList(DOC_1),
                 null);
 
         String msg = change.getConfirmationMessage();
@@ -62,7 +63,7 @@ class UpsertDocumentsChangeTest {
 
     @Test
     void Should_generate_statement_correctly_documents_list() {
-        UpsertDocumentsChange change = createUpsertDocumentChange(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION, Lists.newArrayList(DOC_1),
+        UpsertDocumentsChange change = createUpsertDocumentChange(Lists.newArrayList(DOC_1),
                 null);
 
         SqlStatement[] statements = change.generateStatements();
@@ -78,8 +79,11 @@ class UpsertDocumentsChangeTest {
 
     @Test
     void Should_generate_statement_correctly_file() {
-        File file = File.builder().filePath("test").importType(ImportType.SAMPLE).build();
-        UpsertDocumentsChange change = createUpsertDocumentChange(TEST_BUCKET, TEST_SCOPE, TEST_COLLECTION, null, file);
+        File file = File.builder().filePath("test").build();
+        ImportFile importFile = ImportFile.builder()
+                .file(file)
+                .importType(ImportType.SAMPLE).build();
+        UpsertDocumentsChange change = createUpsertDocumentChange(null, importFile);
 
         SqlStatement[] statements = change.generateStatements();
 
@@ -89,13 +93,16 @@ class UpsertDocumentsChangeTest {
         UpsertFileContentStatement actualStatement = (UpsertFileContentStatement) statements[0];
         assertThat(actualStatement.getKeyspace()).isEqualTo(
                 keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
-        assertThat(actualStatement.getFile()).isEqualTo(change.file);
+        assertThat(actualStatement.getFile()).isEqualTo(change.importFile);
     }
 
-    private UpsertDocumentsChange createUpsertDocumentChange(String bucketName, String scopeName, String collectionName,
-                                                             List<Document> documents, File file) {
+    private UpsertDocumentsChange createUpsertDocumentChange(List<Document> documents, ImportFile importFile) {
         return UpsertDocumentsChange.builder()
-                .bucketName(bucketName).scopeName(scopeName).collectionName(collectionName)
-                .documents(documents).file(file).build();
+                .bucketName(TEST_BUCKET)
+                .scopeName(TEST_SCOPE)
+                .collectionName(TEST_COLLECTION)
+                .documents(documents)
+                .importFile(importFile)
+                .build();
     }
 }

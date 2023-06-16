@@ -1,34 +1,23 @@
 package liquibase.ext.couchbase.types;
 
-import com.couchbase.client.core.deps.com.fasterxml.jackson.databind.ObjectMapper;
-import com.couchbase.client.core.deps.com.fasterxml.jackson.databind.ObjectReader;
+import liquibase.Scope;
 import liquibase.ext.couchbase.exception.IncorrectFileException;
+import liquibase.resource.Resource;
+import liquibase.resource.ResourceAccessor;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoSettings;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static liquibase.serializer.LiquibaseSerializable.STANDARD_CHANGELOG_NAMESPACE;
 import static liquibase.serializer.LiquibaseSerializable.SerializationType.DIRECT_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @MockitoSettings
@@ -37,9 +26,14 @@ class FileTest {
     private static final String FILE_PATH = "filePath";
 
     @Mock
-    private Path path;
+    private Scope scope;
+    @Mock
+    private ResourceAccessor resourceAccessor;
+    @Mock
+    private Resource resource;
 
     private final File file = File.builder()
+            .relative(false)
             .filePath(FILE_PATH)
             .build();
 
@@ -59,84 +53,61 @@ class FileTest {
     }
 
     @Test
-    void Should_return_expected_lines() {
-        List<String> expected = new ArrayList<>();
-        expected.add("test1");
-        expected.add("test2");
+    @SneakyThrows
+    void Should_return_resource_by_file_path() {
+        try (MockedStatic<Scope> mockedStaticScope = Mockito.mockStatic(Scope.class)) {
+            mockedStaticScope.when(Scope::getCurrentScope).thenReturn(scope);
 
-        try (MockedStatic<Paths> mockedStaticPaths = Mockito.mockStatic(Paths.class)) {
-            mockedStaticPaths.when(() -> Paths.get(anyString())).thenReturn(path);
+            when(scope.getResourceAccessor()).thenReturn(resourceAccessor);
+            when(resourceAccessor.get(FILE_PATH)).thenReturn(resource);
 
-            try (MockedStatic<Files> mockedStaticFiles = Mockito.mockStatic(Files.class)) {
-                mockedStaticFiles.when(() -> Files.lines(any())).thenReturn(expected.stream());
+            Resource result = file.getAsResource(null);
 
-                Stream<String> result = file.lines();
+            assertThat(result).isEqualTo(resource);
 
-                assertThat(result).isNotNull();
-
-                List<String> resultList = result.collect(toList());
-
-                assertThat(resultList).isEqualTo(expected);
-
-                mockedStaticFiles.verify(() -> Files.lines(eq(path)));
-            }
-            mockedStaticPaths.verify(() -> Paths.get(FILE_PATH));
+            verify(resourceAccessor).get(FILE_PATH);
         }
     }
 
     @Test
-    void Should_wrap_exception_on_invalid_file_on_lines() {
-        try (MockedStatic<Paths> mockedStaticPaths = Mockito.mockStatic(Paths.class)) {
-            mockedStaticPaths.when(() -> Paths.get(anyString())).thenReturn(path);
-            try (MockedStatic<Files> mockedStaticFiles = Mockito.mockStatic(Files.class)) {
-                mockedStaticFiles.when(() -> Files.lines(any())).thenThrow(new IOException("Mocked"));
+    @SneakyThrows
+    void Should_return_relative_resource_by_file_path() {
+        String changeSetPath = "C";
+        File relativeFile = File.builder()
+                .relative(true)
+                .filePath(FILE_PATH)
+                .build();
+        try (MockedStatic<Scope> mockedStaticScope = Mockito.mockStatic(Scope.class)) {
+            mockedStaticScope.when(Scope::getCurrentScope).thenReturn(scope);
 
-                assertThatExceptionOfType(IncorrectFileException.class)
-                        .isThrownBy(file::lines)
-                        .withMessage("File [%s] format incorrect", FILE_PATH);
-            }
+            when(scope.getResourceAccessor()).thenReturn(resourceAccessor);
+            when(resourceAccessor.get(changeSetPath)).thenReturn(resource);
+            when(resource.resolveSibling(FILE_PATH)).thenReturn(resource);
+
+            Resource result = relativeFile.getAsResource(changeSetPath);
+
+            assertThat(result).isEqualTo(resource);
+
+            verify(resourceAccessor).get(changeSetPath);
+            verify(resource).resolveSibling(FILE_PATH);
         }
     }
 
     @Test
-    void Should_return_expected_on_readJsonList() throws IOException {
-        java.io.File mockedFile = mock(java.io.File.class);
-        List<Map<String, Object>> expected = new ArrayList<>();
-        Map<String, Object> value = new HashMap<>();
-        value.put("test", 1L);
-        expected.add(value);
-        try (MockedStatic<Paths> mockedStaticPaths = Mockito.mockStatic(Paths.class)) {
-            mockedStaticPaths.when(() -> Paths.get(anyString())).thenReturn(path);
-            when(path.toFile()).thenReturn(mockedFile);
+    @SneakyThrows
+    void Should_catch_exception_if_file_missing() {
+        try (MockedStatic<Scope> mockedStaticScope = Mockito.mockStatic(Scope.class)) {
+            mockedStaticScope.when(Scope::getCurrentScope).thenReturn(scope);
 
-            ObjectReader reader = mock(ObjectReader.class);
-            when(reader.readValue(mockedFile)).thenReturn(expected);
+            when(scope.getResourceAccessor()).thenReturn(resourceAccessor);
+            when(resourceAccessor.get(FILE_PATH)).thenThrow(new IOException());
 
-            try (MockedConstruction<ObjectMapper> ignored = Mockito.mockConstruction(ObjectMapper.class,
-                    (mapper, context) -> when(mapper.readerForListOf(Map.class)).thenReturn(reader))) {
-                List<Map<String, Object>> result = file.readJsonList();
-                assertThat(result).isEqualTo(expected);
-            }
+            assertThatExceptionOfType(IncorrectFileException.class)
+                    .isThrownBy(() -> file.getAsResource(null))
+                    .withMessageContaining("File [%s] format incorrect", FILE_PATH);
+
+            verify(resourceAccessor).get(FILE_PATH);
         }
     }
 
-    @Test
-    void Should_wrap_exception_on_invalid_file_on_readJsonList() throws IOException {
-        java.io.File mockedFile = mock(java.io.File.class);
-        try (MockedStatic<Paths> mockedStaticPaths = Mockito.mockStatic(Paths.class)) {
-            mockedStaticPaths.when(() -> Paths.get(anyString())).thenReturn(path);
-            when(path.toFile()).thenReturn(mockedFile);
-
-            ObjectReader reader = mock(ObjectReader.class);
-            when(reader.readValue(mockedFile)).thenThrow(new IOException("Mocked"));
-
-            try (MockedConstruction<ObjectMapper> ignored = Mockito.mockConstruction(ObjectMapper.class,
-                    (mapper, context) -> when(mapper.readerForListOf(Map.class)).thenReturn(reader))) {
-
-                assertThatExceptionOfType(IncorrectFileException.class)
-                        .isThrownBy(file::readJsonList)
-                        .withMessage("File [%s] format incorrect", FILE_PATH);
-            }
-        }
-    }
 }

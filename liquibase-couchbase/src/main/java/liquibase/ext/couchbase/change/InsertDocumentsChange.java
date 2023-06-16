@@ -6,7 +6,7 @@ import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.InsertDocumentsStatement;
 import liquibase.ext.couchbase.statement.InsertFileContentStatement;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class InsertDocumentsChange extends DocumentsChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         SqlStatement statement = isFileChange()
-                ? new InsertFileContentStatement(keyspace, file)
+                ? new InsertFileContentStatement(keyspace, importFile)
                 : new InsertDocumentsStatement(keyspace, documents);
         return new SqlStatement[] {statement};
     }
@@ -50,8 +50,8 @@ public class InsertDocumentsChange extends DocumentsChange {
 
     @Builder
     public InsertDocumentsChange(String bucketName, String scopeName, String collectionName,
-                                 File file,
+                                 ImportFile importFile,
                                  List<Document> documents) {
-        super(bucketName, scopeName, collectionName, file, documents);
+        super(bucketName, scopeName, collectionName, importFile, documents);
     }
 }

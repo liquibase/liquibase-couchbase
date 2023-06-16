@@ -3,8 +3,8 @@ package liquibase.ext.couchbase.change;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CouchbaseSqlStatement;
+import liquibase.ext.couchbase.types.File;
 import liquibase.resource.Resource;
-import liquibase.resource.ResourceAccessor;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
-
-import static liquibase.Scope.getCurrentScope;
 
 /**
  * Part of change set package. Responsible for executing n1ql(sql++) queries from .sql file
@@ -33,7 +31,7 @@ public class SqlFileChange extends CouchbaseChange {
 
     private String path;
     private Boolean transactional;
-    private Boolean relative;
+    private File file;
 
     @Override
     public String getConfirmationMessage() {
@@ -48,12 +46,7 @@ public class SqlFileChange extends CouchbaseChange {
 
     @SneakyThrows
     private Resource evaluateResource() {
-        String changeSetPath = getChangeSet().getFilePath();
-        ResourceAccessor resourceAccessor = getCurrentScope().getResourceAccessor();
-        Resource resource = relative
-                ? resourceAccessor.get(changeSetPath).resolveSibling(path)
-                : resourceAccessor.get(path);
-        return resource;
+        return file.getAsResource(getChangeSet().getFilePath());
     }
 
 }
