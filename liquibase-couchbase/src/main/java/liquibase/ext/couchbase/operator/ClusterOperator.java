@@ -2,7 +2,6 @@ package liquibase.ext.couchbase.operator;
 
 import com.couchbase.client.core.error.BucketNotFoundException;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.manager.bucket.BucketSettings;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.UpdateBucketOptions;
@@ -20,10 +19,12 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * A part of a facade package for Couchbase Java SDK. Provides access to {@link Cluster} common operations and state checks.
@@ -90,12 +91,12 @@ public class ClusterOperator {
                 .collect(toList());
     }
 
-    public List<String> retrieveDocumentIdsBySqlPlusPlusQuery(String sqlPlusPlusQuery) {
-        QueryResult documentIdsResult = executeSingleSql(sqlPlusPlusQuery);
+    public Set<String> retrieveDocumentIdsBySqlPlusPlusQuery(String query) {
+        QueryResult documentIdsResult = executeSingleSql(query);
         return documentIdsResult.rowsAsObject()
                 .stream()
                 .map(jsonObject -> jsonObject.getString("id"))
-                .collect(toList());
+                .collect(toSet());
     }
 
     public boolean indexExists(String indexName, String bucketName) {

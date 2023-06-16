@@ -101,6 +101,18 @@ public class CollectionOperator {
     public boolean docExists(String id) {
         return collection.exists(id).exists();
     }
+    public boolean docExists(Document doc) {
+        return collection.exists(doc.getId()).exists();
+    }
+
+    public void removeDocIfExist(Document doc) {
+        if (docExists(doc)) {
+            collection.remove(doc.getId());
+        }
+    }
+    public void removeDocsIfExist(Document... docs) {
+        Arrays.stream(docs).forEach(this::removeDocIfExist);
+    }
 
     public void removeDoc(Document doc) {
         collection.remove(doc.getId());

@@ -40,6 +40,7 @@ public class ChangeLogSampleFilePaths {
     public static final String REMOVE_BY_QUERY_TEST_XML = rootPrefix + "/remove/changelog.remove-by-query.test.xml";
     public static final String REMOVE_ONE_DOCUMENT_TEST_XML = rootPrefix + "/remove/changelog.remove-one-document.test.xml";
     public static final String REMOVE_DOCUMENTS_TEST_XML = rootPrefix + "/remove/changelog.remove-documents.test.xml";
+    public static final String REMOVE_DOCUMENTS_SQL_PLUS_PLUS_TEST_XML = rootPrefix + "/remove/changelog.remove-documents-sql++.test.xml";
     public static final String REMOVE_NON_EXISTING_DOC_MARK_AS_READ_TEST_XML = rootPrefix + "/remove/changelog.remove-non-existing-doc-mark-as-run.test.xml";
     public static final String REMOVE_NON_EXISTING_DOC_ERROR_TEST_XML = rootPrefix + "/remove/changelog.remove-non-existing-doc-error.test.xml";
     public static final String REMOVE_MANY_TEST_XML = rootPrefix + "/remove/changelog.remove-many.test.xml";

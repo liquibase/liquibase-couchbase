@@ -4,6 +4,7 @@ package liquibase.ext.couchbase.change;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.RemoveDocumentsQueryStatement;
+import liquibase.ext.couchbase.statement.RemoveDocumentsSqlQueryStatement;
 import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
 import liquibase.ext.couchbase.types.Id;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -46,6 +47,7 @@ public class RemoveDocumentsChange extends CouchbaseChange {
     private String collectionName;
     private Set<Id> ids = new HashSet<>();
     private String whereCondition;
+    private String sqlPlusPlusQuery;
 
     @Override
     public String getConfirmationMessage() {
@@ -55,10 +57,17 @@ public class RemoveDocumentsChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[] {
-                isNotBlank(whereCondition) ? new RemoveDocumentsQueryStatement(keyspace, ids, whereCondition) :
-                        new RemoveDocumentsStatement(keyspace, ids)
-        };
+        return new SqlStatement[] {createStatement(keyspace)};
+    }
+
+    private SqlStatement createStatement(Keyspace keyspace) {
+        if (isNotBlank(sqlPlusPlusQuery)) {
+            return new RemoveDocumentsSqlQueryStatement(keyspace, ids, sqlPlusPlusQuery);
+        }
+        if (isNotBlank(whereCondition)) {
+            return new RemoveDocumentsQueryStatement(keyspace, ids, whereCondition);
+        }
+        return new RemoveDocumentsStatement(keyspace, ids);
     }
 
 }

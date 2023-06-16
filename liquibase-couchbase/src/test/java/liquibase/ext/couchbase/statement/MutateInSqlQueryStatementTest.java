@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static common.constants.TestConstants.TEST_KEYSPACE;
 import static org.mockito.Mockito.mock;
@@ -31,7 +32,7 @@ class MutateInSqlQueryStatementTest {
                 .specs(new ArrayList<>())
                 .build();
         String query = "query";
-        List<String> documentIds = Arrays.asList("docId1", "docId2");
+        Set<String> documentIds = new HashSet<>(Arrays.asList("docId1", "docId2"));
         MutateInSqlQueryStatement statement = new MutateInSqlQueryStatement(mutate, mutateInOptions, query);
 
         when(clusterOperator.getBucketOperator(TEST_KEYSPACE.getBucket())).thenReturn(bucketOperator);
@@ -39,8 +40,6 @@ class MutateInSqlQueryStatementTest {
                 collection);
         when(clusterOperator.retrieveDocumentIdsBySqlPlusPlusQuery(query)).thenReturn(documentIds);
         statement.execute(clusterOperator);
-
-        verify(collection).mutateIn(documentIds.get(0), mutate.getSpecs(), mutateInOptions);
-        verify(collection).mutateIn(documentIds.get(1), mutate.getSpecs(), mutateInOptions);
+        documentIds.stream().forEach(id -> verify(collection).mutateIn(id, mutate.getSpecs(), mutateInOptions));
     }
 }

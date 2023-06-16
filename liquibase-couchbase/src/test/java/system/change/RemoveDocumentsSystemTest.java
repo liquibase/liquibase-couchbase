@@ -19,6 +19,7 @@ import system.LiquibaseSystemTest;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static common.constants.ChangeLogSampleFilePaths.REMOVE_DOCUMENTS_SQL_PLUS_PLUS_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_DOCUMENTS_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_NON_EXISTING_DOC_ERROR_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_NON_EXISTING_DOC_MARK_AS_READ_TEST_XML;
@@ -97,9 +98,20 @@ public class RemoveDocumentsSystemTest extends LiquibaseSystemTest {
 
     @Test
     @SneakyThrows
-    void Documents_should_be_deleted() {
+    void Documents_should_be_deleted_wher_condition() {
         insertDocsUsingSpecificFields();
         Liquibase liquibase = liquibase(REMOVE_DOCUMENTS_TEST_XML);
+
+        liquibase.update();
+
+        assertThat(collection).doesNotContainIds(ids);
+    }
+
+    @Test
+    @SneakyThrows
+    void Documents_should_be_deleted_sql_plus_plus_query() {
+        insertDocsUsingSpecificFields();
+        Liquibase liquibase = liquibase(REMOVE_DOCUMENTS_SQL_PLUS_PLUS_TEST_XML);
 
         liquibase.update();
 

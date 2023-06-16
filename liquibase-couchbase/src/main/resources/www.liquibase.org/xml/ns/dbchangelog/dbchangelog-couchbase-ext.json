@@ -509,6 +509,9 @@
         },
         "whereCondition": {
           "type": "string"
+        },
+        "sqlPlusPlusQuery": {
+          "type": "string"
         }
       }
     },

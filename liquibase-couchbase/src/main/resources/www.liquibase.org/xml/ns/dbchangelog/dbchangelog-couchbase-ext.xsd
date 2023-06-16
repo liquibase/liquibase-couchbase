@@ -368,6 +368,7 @@
                 <xsd:choice>
                     <xsd:element name="id" maxOccurs="unbounded" type="xsd:string"/>
                     <xsd:element name="whereCondition" type="xsd:string"/>
+                    <xsd:element name="sqlPlusPlusQuery" type="xsd:string"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
