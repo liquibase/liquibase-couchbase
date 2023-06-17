@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SqlCheckPreconditionTest {
+class QueryCustomCheckPreconditionTest {
 
     private final Database database = mock(Database.class);
     private final CouchbaseConnection connection = mock(CouchbaseConnection.class);
@@ -34,7 +34,7 @@ class SqlCheckPreconditionTest {
     @SneakyThrows
     void Should_pass_when_result_is_expected() {
         String query = "\"a\"=\"b\"";
-        SqlCheckPrecondition precondition = new SqlCheckPrecondition();
+        QueryCustomCheckPrecondition precondition = new QueryCustomCheckPrecondition();
         precondition.setExpectedResultJson("[{\"abcd\":\"efgh\"}]");
         precondition.setQuery(query);
         CoreQueryResult queryResult = new ClassicCoreQueryResult(
@@ -50,7 +50,7 @@ class SqlCheckPreconditionTest {
     @SneakyThrows
     void Should_throw_exception_when_result_is_unexpected() {
         String query = "abcd";
-        SqlCheckPrecondition precondition = new SqlCheckPrecondition();
+        QueryCustomCheckPrecondition precondition = new QueryCustomCheckPrecondition();
         precondition.setExpectedResultJson("[{\"abcd\":\"efgh\"}]");
         precondition.setQuery(query);
         CoreQueryResult queryResult = new ClassicCoreQueryResult(

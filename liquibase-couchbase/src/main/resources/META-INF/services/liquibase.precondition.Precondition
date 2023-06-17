@@ -4,5 +4,5 @@ liquibase.ext.couchbase.precondition.CollectionExistsPrecondition
 liquibase.ext.couchbase.precondition.DocumentExistsByKeyPrecondition
 liquibase.ext.couchbase.precondition.IndexExistsPrecondition
 liquibase.ext.couchbase.precondition.PrimaryIndexExistsPrecondition
-liquibase.ext.couchbase.precondition.SqlCheckPrecondition
-liquibase.ext.couchbase.precondition.SqlCheckCountPrecondition
+liquibase.ext.couchbase.precondition.QueryCustomCheckPrecondition
+liquibase.ext.couchbase.precondition.QueryCountCheckPrecondition

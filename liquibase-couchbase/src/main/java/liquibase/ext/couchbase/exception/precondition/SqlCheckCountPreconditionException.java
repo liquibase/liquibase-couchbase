@@ -2,13 +2,14 @@ package liquibase.ext.couchbase.exception.precondition;
 
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.PreconditionFailedException;
+import liquibase.ext.couchbase.precondition.QueryCountCheckPrecondition;
 import liquibase.precondition.Precondition;
 import lombok.Getter;
 
 import static java.lang.String.format;
 
 /**
- * An exception thrown when scope does not exist. Thrown by {@link liquibase.ext.couchbase.precondition.SqlCheckCountPrecondition}
+ * An exception thrown when scope does not exist. Thrown by {@link QueryCountCheckPrecondition}
  * @see PreconditionFailedException
  */
 

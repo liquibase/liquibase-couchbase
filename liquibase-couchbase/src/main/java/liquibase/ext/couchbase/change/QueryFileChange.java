@@ -17,7 +17,7 @@ import lombok.SneakyThrows;
  * Part of change set package. Responsible for executing n1ql(sql++) queries from .sql file
  * @see CouchbaseSqlStatement
  */
-@DatabaseChange(name = "sqlFile",
+@DatabaseChange(name = "executeQueryFile",
                 description = "Executes sql++ couchbase query " + "https://docs.couchbase.com/server/current/getting-started/try-a-query" +
                         ".html",
                 priority = ChangeMetaData.PRIORITY_DEFAULT + 1,
@@ -27,7 +27,7 @@ import lombok.SneakyThrows;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SqlFileChange extends CouchbaseChange {
+public class QueryFileChange extends CouchbaseChange {
 
     private String path;
     private Boolean transactional;

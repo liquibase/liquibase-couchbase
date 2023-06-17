@@ -19,7 +19,7 @@ import java.util.List;
  * @see SqlCheckPreconditionException
  */
 @Data
-public class SqlCheckPrecondition extends AbstractCouchbasePrecondition {
+public class QueryCustomCheckPrecondition extends AbstractCouchbasePrecondition {
 
     private String expectedResultJson;
 
@@ -28,7 +28,7 @@ public class SqlCheckPrecondition extends AbstractCouchbasePrecondition {
 
     @Override
     public String getName() {
-        return "sqlPlusPlusCheck";
+        return "queryCustomCheck";
     }
 
     @Override

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class SqlCheckCountPreconditionTest {
+class QueryCountCheckPreconditionTest {
 
     private final Database database = mock(Database.class);
     private final CouchbaseConnection connection = mock(CouchbaseConnection.class);
@@ -34,7 +34,7 @@ class SqlCheckCountPreconditionTest {
     @SneakyThrows
     void Should_pass_when_count_is_expected() {
         String query = "\"a\"=\"b\"";
-        SqlCheckCountPrecondition precondition = new SqlCheckCountPrecondition(1, query);
+        QueryCountCheckPrecondition precondition = new QueryCountCheckPrecondition(1, query);
         CoreQueryResult queryResult = new ClassicCoreQueryResult(
                 null, Lists.newArrayList(new QueryChunkRow("{\"count\":1}".getBytes())),
                 null, null
@@ -48,7 +48,7 @@ class SqlCheckCountPreconditionTest {
     @SneakyThrows
     void Should_throw_exception_when_count_is_unexpected() {
         String query = "testQuery";
-        SqlCheckCountPrecondition precondition = new SqlCheckCountPrecondition();
+        QueryCountCheckPrecondition precondition = new QueryCountCheckPrecondition();
         precondition.setCount(5);
         precondition.setQuery(query);
         CoreQueryResult queryResult = new ClassicCoreQueryResult(

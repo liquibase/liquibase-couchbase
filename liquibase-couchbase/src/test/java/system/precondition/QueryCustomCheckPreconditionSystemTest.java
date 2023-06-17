@@ -18,7 +18,7 @@ import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class SqlCheckPreconditionSystemTest extends LiquibaseSystemTest {
+public class QueryCustomCheckPreconditionSystemTest extends LiquibaseSystemTest {
     private static final String COLLECTION_NAME = "SqlCheckPreconditionSystemTestCollection";
     private static final String DOCUMENT_ID = "sqlCheckIndexTestPreconditionId1";
     private static Collection collection;

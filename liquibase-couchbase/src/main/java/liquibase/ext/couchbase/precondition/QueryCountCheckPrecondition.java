@@ -24,7 +24,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SqlCheckCountPrecondition extends AbstractCouchbasePrecondition {
+public class QueryCountCheckPrecondition extends AbstractCouchbasePrecondition {
 
     private static final String QUERY_RESULT_COUNT_PARAMETER = "count";
 
@@ -35,7 +35,7 @@ public class SqlCheckCountPrecondition extends AbstractCouchbasePrecondition {
 
     @Override
     public String getName() {
-        return "sqlCheckCount";
+        return "queryCountCheck";
     }
 
     @Override
