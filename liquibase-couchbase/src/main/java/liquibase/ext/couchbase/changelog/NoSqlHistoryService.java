@@ -48,10 +48,6 @@ public abstract class NoSqlHistoryService extends AbstractChangeLogHistoryServic
     private boolean initialized;
     private final Logger log = Scope.getCurrentScope().getLog(getClass());
 
-    public int getPriority() {
-        return PRIORITY_SPECIALIZED;
-    }
-
     @Override
     public CouchbaseLiquibaseDatabase getDatabase() {
         return (CouchbaseLiquibaseDatabase) super.getDatabase();

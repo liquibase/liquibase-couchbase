@@ -32,16 +32,6 @@ public class Keyspace extends AbstractLiquibaseSerializable {
         return new Keyspace(bucket, DEFAULT_SCOPE, DEFAULT_COLLECTION);
     }
 
-    public static Keyspace defaultCollectionKeyspace(@NonNull String bucket,
-                                                     @NonNull String scope) {
-        return new Keyspace(bucket, scope, DEFAULT_COLLECTION);
-    }
-
-    public static Keyspace defaultScopeKeyspace(@NonNull String bucket,
-                                                @NonNull String collection) {
-        return new Keyspace(bucket, DEFAULT_SCOPE, collection);
-    }
-
 
     public String getFullPath() {
         return String.format("`%s`.`%s`.`%s`", bucket, scope, collection);

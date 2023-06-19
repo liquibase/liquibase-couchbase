@@ -1,6 +1,5 @@
 package liquibase.ext.couchbase.precondition;
 
-import com.couchbase.client.java.Collection;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.ext.couchbase.database.CouchbaseConnection;

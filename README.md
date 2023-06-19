@@ -1,3 +1,5 @@
+[![Java CI with Maven](https://github.com/wdt-dev/couchbase-liquibase/actions/workflows/actionsBuild.yml/badge.svg?branch=COS-260_github_actions)](https://github.com/wdt-dev/couchbase-liquibase/actions/workflows/actionsBuild.yml)
+
 # Couchbase Extension for Liquibase
 
 The Couchbase extension for Liquibase allows you to use migrate your database schema using Liquibase and store your changelogs in a
@@ -16,6 +18,10 @@ Couchbase bucket.
 **Minimum supported version is 7.0** <br/>
 As it uses latest Couchbase SDK, extension supports fully qualified keyspaces `Bucket.Scope.Collection ` <br/>
 Which are incompatible with < **7.0** Cluster version <br />
+
+#### Enterprise and Community versions
+
+We support both Enterprise and Community couchbase versions. The only difference in `createBucket` changeType - in community version we shouldn't pass `compressionMode`, `conflictResolutionType`, or `maxExpiryInHours` options.
 
 ## About Liquibase
 

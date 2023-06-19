@@ -4,7 +4,7 @@ import com.couchbase.client.java.json.JsonObject;
 import liquibase.ext.couchbase.provider.DocumentKeyProvider;
 import liquibase.ext.couchbase.provider.factory.DocumentKeyProviderFactory;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 
 import java.util.List;
 import java.util.Map;
@@ -31,9 +31,9 @@ public class ListMapper implements DocFileMapper {
     }
 
     @Override
-    public List<Document> map(File file) {
-        List<Map<String, Object>> jsonsFromFile = file.readJsonList();
-        DocumentKeyProvider keyProvider = keyProviderFactory.getKeyProvider(file);
+    public List<Document> map(ImportFile importFile) {
+        List<Map<String, Object>> jsonsFromFile = importFile.readJsonList();
+        DocumentKeyProvider keyProvider = keyProviderFactory.getKeyProvider(importFile);
         return extractDocuments(jsonsFromFile, keyProvider);
     }
 

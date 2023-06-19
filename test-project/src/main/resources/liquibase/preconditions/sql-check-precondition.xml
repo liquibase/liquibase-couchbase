@@ -7,7 +7,7 @@
 
     <changeSet id="1" author="dmitry.dashko">
         <preConditions onFail="HALT">
-            <ext:sqlPlusPlusCheck expectedResultJson='[{"count": 1}]'
+            <ext:queryCustomCheck expectedResultJson='[{"count": 1}]'
                                   query="SELECT COUNT(*) as count FROM bucketName.scopeName.collectionName WHERE field = 'value1'"/>
         </preConditions>
 

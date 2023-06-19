@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.operator;
 
+import com.couchbase.client.core.deps.com.google.common.annotations.VisibleForTesting;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
@@ -45,8 +46,13 @@ public class ChangeLogOperator {
     private final ServiceProvider serviceProvider;
 
     public ChangeLogOperator(CouchbaseLiquibaseDatabase database) {
+        this(database, new ContextServiceProvider(database));
+    }
+
+    @VisibleForTesting
+    ChangeLogOperator(CouchbaseLiquibaseDatabase database, ServiceProvider serviceProvider) {
         this.database = database;
-        this.serviceProvider = new ContextServiceProvider(database);
+        this.serviceProvider = serviceProvider;
     }
 
     public void createChangeLogCollection() {

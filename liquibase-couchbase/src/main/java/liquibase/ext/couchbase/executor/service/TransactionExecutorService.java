@@ -1,10 +1,9 @@
 package liquibase.ext.couchbase.executor.service;
 
 import com.couchbase.client.java.Cluster;
+import liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.statement.CouchbaseTransactionStatement;
-
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.IS_REACTIVE_TRANSACTIONS;
 
 /**
  * Parent class for transaction executors.
@@ -26,7 +25,7 @@ public abstract class TransactionExecutorService {
     public abstract void clearStatementsQueue();
 
     public static TransactionExecutorService getExecutor(Cluster cluster) {
-        return IS_REACTIVE_TRANSACTIONS.getCurrentValue() ? new ReactiveTransactionExecutorService(cluster)
+        return CouchbaseLiquibaseConfiguration.isReactiveTransactions() ? new ReactiveTransactionExecutorService(cluster)
                 : new PlainTransactionExecutorService(cluster);
     }
 
