@@ -1,0 +1,79 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="insert-one-document" author="dmitry.dashko">
+        <ext:insertDocuments>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:document>
+                <ext:id>newId1</ext:id>
+                <ext:value>
+                    <ext:data>{"field": "newName1"}</ext:data>
+                    <ext:type>Json</ext:type>
+                </ext:value>
+            </ext:document>
+        </ext:insertDocuments>
+    </changeSet>
+
+    <changeSet id="insert-documents" author="dmitry.dashko">
+        <ext:insertDocuments>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:documents>
+                <ext:document>
+                    <ext:id>newId2</ext:id>
+                    <ext:value>
+                        <ext:data>{"field": "newName2"}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+                <ext:document>
+                    <ext:id>newId3</ext:id>
+                    <ext:value>
+                        <ext:data>{"field": "newName3"}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                </ext:document>
+            </ext:documents>
+        </ext:insertDocuments>
+    </changeSet>
+
+    <changeSet id="insert-documents-from-file-lines" author="dmitry.dashko">
+        <ext:insertDocuments>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/main/resources/documents/documents-as-lines.json</ext:filePath>
+                </ext:file>
+                <ext:importType>LINES</ext:importType>
+                <ext:keyProviderType>DEFAULT</ext:keyProviderType>
+                <ext:keyProviderExpression>id</ext:keyProviderExpression>
+            </ext:importFile>
+        </ext:insertDocuments>
+    </changeSet>
+
+    <changeSet id="insert-documents-from-file-list" author="dmitry.dashko">
+        <ext:insertDocuments>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/main/resources/documents/documents-as-list.json</ext:filePath>
+                </ext:file>
+                <ext:importType>LIST</ext:importType>
+                <ext:keyProviderType>DEFAULT</ext:keyProviderType>
+                <ext:keyProviderExpression>id</ext:keyProviderExpression>
+            </ext:importFile>
+        </ext:insertDocuments>
+    </changeSet>
+
+</databaseChangeLog>

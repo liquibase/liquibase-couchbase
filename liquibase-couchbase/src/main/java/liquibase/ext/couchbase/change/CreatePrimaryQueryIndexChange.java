@@ -1,12 +1,14 @@
 package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
+import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
-import liquibase.database.Database;
 import liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement;
+import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @DatabaseChange(
         name = "createPrimaryQueryIndex",
@@ -42,7 +45,6 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     private String indexName;
     private Integer numReplicas;
     private String scopeName;
-    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -52,7 +54,8 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         if (isNotBlank(getBucketName())) {
-            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(getBucketName(), createPrimaryQueryIndexOptions())};
+            Keyspace keyspace = Keyspace.keyspace(bucketName, scopeName, collectionName);
+            return new SqlStatement[] {new CreatePrimaryQueryIndexStatement(keyspace, createPrimaryQueryIndexOptions())};
         }
         return SqlStatement.EMPTY_SQL_STATEMENT;
     }
@@ -61,10 +64,20 @@ public class CreatePrimaryQueryIndexChange extends CouchbaseChange {
         return CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(getIndexName())
-                .collectionName(getCollectionName())
-                .scopeName(getScopeName())
                 .deferred(getDeferred())
-                .numReplicas(getNumReplicas())
-                .ignoreIfExists(getIgnoreIfExists());
+                .numReplicas(getNumReplicas());
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropIndexChange inverse = DropIndexChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .collectionName(collectionName)
+                .indexName(indexName)
+                .isPrimary(true)
+                .build();
+
+        return new Change[] {inverse};
     }
 }

@@ -7,6 +7,7 @@ import com.couchbase.client.java.manager.bucket.CompressionMode;
 import com.couchbase.client.java.manager.bucket.ConflictResolutionType;
 import com.couchbase.client.java.manager.bucket.CreateBucketOptions;
 import com.couchbase.client.java.manager.bucket.EvictionPolicyType;
+import liquibase.change.Change;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.change.utils.BucketCreationMapper;
@@ -58,7 +59,6 @@ public class CreateBucketChange extends CouchbaseChange {
     private ConflictResolutionType conflictResolutionType;
     private EvictionPolicyType evictionPolicy;
     private DurabilityLevel minimumDurabilityLevel;
-    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -68,8 +68,17 @@ public class CreateBucketChange extends CouchbaseChange {
     @Override
     public SqlStatement[] generateStatements() {
         return new SqlStatement[] {
-                new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings(), ignoreIfExists)
+                new CreateBucketStatement(mapper.bucketOptions(), mapper.bucketSettings())
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropBucketChange inverse = DropBucketChange.builder()
+                .bucketName(bucketName)
+                .build();
+
+        return new Change[] {inverse};
     }
 
 }

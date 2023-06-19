@@ -66,7 +66,7 @@ public class BucketOperator {
     }
 
     public void dropCollection(String collectionName, String scopeName) {
-        getBucket().collections().dropCollection(create(collectionName, scopeName));
+        bucket.collections().dropCollection(create(collectionName, scopeName));
     }
 
     public void dropCollectionInDefaultScope(String name) {
@@ -74,7 +74,7 @@ public class BucketOperator {
     }
 
     public Collection getCollection(String collectionName, String scopeName) {
-        return getBucket().scope(scopeName).collection(collectionName);
+        return bucket.scope(scopeName).collection(collectionName);
     }
 
     public Collection getCollectionFromDefaultScope(String name) {

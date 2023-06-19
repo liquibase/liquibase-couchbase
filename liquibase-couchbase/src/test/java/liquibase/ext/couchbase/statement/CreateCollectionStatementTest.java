@@ -3,6 +3,7 @@ package liquibase.ext.couchbase.statement;
 import com.couchbase.client.core.error.CollectionExistsException;
 import liquibase.ext.couchbase.operator.BucketOperator;
 import liquibase.ext.couchbase.operator.ClusterOperator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static common.constants.TestConstants.TEST_BUCKET;
@@ -22,8 +23,9 @@ public class CreateCollectionStatementTest {
     private final ClusterOperator clusterOperator = mock(ClusterOperator.class);
 
     @Test
+    @Disabled("Not actual - disable from xml changeset via pre-condition")
     void Should_not_createCollection_if_collection_exists_and_skip_is_true() {
-        CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE, true);
+        CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE);
         when(clusterOperator.getBucketOperator(TEST_BUCKET)).thenReturn(bucketOperator);
         when(bucketOperator.hasCollectionInScope(TEST_COLLECTION, TEST_SCOPE)).thenReturn(true);
 
@@ -34,7 +36,7 @@ public class CreateCollectionStatementTest {
 
     @Test
     void Should_createCollection_if_it_not_exists_and_skip_is_false() {
-        CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE, false);
+        CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE);
         when(clusterOperator.getBucketOperator(TEST_BUCKET)).thenReturn(bucketOperator);
         when(bucketOperator.hasCollectionInScope(TEST_COLLECTION, TEST_SCOPE)).thenReturn(false);
 
@@ -45,7 +47,7 @@ public class CreateCollectionStatementTest {
 
     @Test
     void Should_fail_withException_if_collection_exists_and_skip_is_false() {
-        CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE, false);
+        CreateCollectionStatement statement = new CreateCollectionStatement(TEST_KEYSPACE);
         when(clusterOperator.getBucketOperator(TEST_BUCKET)).thenReturn(bucketOperator);
         when(bucketOperator.hasCollectionInScope(TEST_COLLECTION, TEST_SCOPE)).thenReturn(true);
         doThrow(CollectionExistsException.class).when(bucketOperator).createCollection(TEST_COLLECTION, TEST_SCOPE);

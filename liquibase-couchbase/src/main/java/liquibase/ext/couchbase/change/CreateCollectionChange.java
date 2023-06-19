@@ -1,5 +1,6 @@
 package liquibase.ext.couchbase.change;
 
+import liquibase.change.Change;
 import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreateCollectionStatement;
@@ -35,7 +36,6 @@ public class CreateCollectionChange extends CouchbaseChange {
     private String bucketName;
     private String scopeName;
     private String collectionName;
-    private Boolean skipIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -46,7 +46,18 @@ public class CreateCollectionChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
-                new CreateCollectionStatement(keyspace, skipIfExists)
+                new CreateCollectionStatement(keyspace)
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropCollectionChange inverse = DropCollectionChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .collectionName(collectionName)
+                .build();
+
+        return new Change[] {inverse};
     }
 }

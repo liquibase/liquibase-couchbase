@@ -1,0 +1,18 @@
+databaseChangeLog:
+    - changeSet:
+          id: '1'
+          author: tigran
+          createBucket:
+              bucketName: createBucketSystemTest
+              bucketType: COUCHBASE
+              compressionMode: 'OFF'
+              conflictResolutionType: TIMESTAMP
+              evictionPolicy: FULL
+              flushEnabled: true
+              minimumDurabilityLevel: NONE
+              numReplicas: 0
+              maxExpiryInHours: 1
+              ramQuotaMB: 128
+              replicaIndexes: false
+              storageBackend: couchstore
+              timeoutInSeconds: 10

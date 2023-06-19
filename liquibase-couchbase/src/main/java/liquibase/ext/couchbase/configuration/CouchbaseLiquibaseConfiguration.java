@@ -13,9 +13,6 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
 
     public static final ConfigurationDefinition<String> SERVICE_BUCKET_NAME;
     public static final ConfigurationDefinition<String> CHANGELOG_LOCK_COLLECTION_NAME;
-    public static final ConfigurationDefinition<String> COUCHBASE_URL;
-    public static final ConfigurationDefinition<String> COUCHBASE_USERNAME;
-    public static final ConfigurationDefinition<String> COUCHBASE_PASSWORD;
 
     public static final ConfigurationDefinition<Duration> CHANGELOG_WAIT_TIME;
     public static final ConfigurationDefinition<Duration> CHANGELOG_RECHECK_TIME;
@@ -23,6 +20,8 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
     public static final ConfigurationDefinition<Duration> LOCK_TTL_PROLONGATION;
     public static final ConfigurationDefinition<Duration> TRANSACTION_TIMEOUT;
     public static final ConfigurationDefinition<Duration> MUTATE_IN_TIMEOUT;
+    public static final ConfigurationDefinition<Boolean> IS_REACTIVE_TRANSACTIONS;
+    public static final ConfigurationDefinition<Integer> REACTIVE_TRANSACTION_PARALLEL_THREADS;
 
     static {
         ConfigurationDefinition.Builder builder = new ConfigurationDefinition.Builder("liquibase.couchbase");
@@ -67,7 +66,7 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
                 .build();
 
-        TRANSACTION_TIMEOUT = builder.define("lockservice.transaction.timeout", Duration.class)
+        TRANSACTION_TIMEOUT = builder.define("transaction.timeout", Duration.class)
                 .addAliasKey("transactionTimeout")
                 .setDescription("Transactions timeout")
                 .setDefaultValue(Duration.ofSeconds(15))
@@ -81,24 +80,29 @@ public class CouchbaseLiquibaseConfiguration implements AutoloadedConfigurations
                 .setValueHandler(CouchbaseLiquibaseConfiguration::durationExtract)
                 .build();
 
-        COUCHBASE_URL = builder.define("url", String.class)
-                .addAliasKey("url")
-                .setDescription("Liquibase url")
-                .setDefaultValue("couchbase://127.0.0.1")
+        IS_REACTIVE_TRANSACTIONS = builder.define("transaction.reactive.enabled", Boolean.class)
+                .addAliasKey("transactionReactiveEnabled")
+                .setDescription("Flag if transactions is reactive")
+                .setDefaultValue(false)
                 .build();
 
-        COUCHBASE_USERNAME = builder.define("username", String.class)
-                .addAliasKey("username")
-                .setDescription("Liquibase connection username")
-                .setDefaultValue("Administrator")
+        REACTIVE_TRANSACTION_PARALLEL_THREADS = builder.define("transaction.reactive.threads", Integer.class)
+                .addAliasKey("transactionReactiveThreads")
+                .setDescription("Number of parallel threads for executing statements in reactive transaction")
+                .setDefaultValue(16)
                 .build();
+    }
 
+    public static boolean isReactiveTransactions() {
+        return IS_REACTIVE_TRANSACTIONS.getCurrentValue();
+    }
 
-        COUCHBASE_PASSWORD = builder.define("password", String.class)
-                .addAliasKey("password")
-                .setDescription("Liquibase connection password")
-                .setDefaultValue("password")
-                .build();
+    public static Duration getChangelogWaitTime() {
+        return CHANGELOG_WAIT_TIME.getCurrentValue();
+    }
+
+    public static Duration getChangelogRecheckTime() {
+        return CHANGELOG_RECHECK_TIME.getCurrentValue();
     }
 
     private static Duration durationExtract(Object value) {

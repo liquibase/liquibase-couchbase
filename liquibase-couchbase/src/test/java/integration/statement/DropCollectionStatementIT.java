@@ -1,8 +1,8 @@
 package integration.statement;
 
 import com.couchbase.client.core.error.BucketNotFoundException;
+import com.couchbase.client.core.error.ScopeNotFoundException;
 import common.RandomizedScopeTestCase;
-import liquibase.ext.couchbase.exception.CollectionNotExistsException;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.statement.DropCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -23,7 +23,7 @@ class DropCollectionStatementIT extends RandomizedScopeTestCase {
         bucketOperator.createCollection(COLLECTION_TO_DROP, scopeName);
 
         Keyspace keyspace = keyspace(bucketName, scopeName, COLLECTION_TO_DROP);
-        DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
+        DropCollectionStatement statement = new DropCollectionStatement(keyspace);
 
         statement.execute(clusterOperator);
 
@@ -34,10 +34,10 @@ class DropCollectionStatementIT extends RandomizedScopeTestCase {
     void Should_throw_exception_if_bucket_not_exists() {
         String notCreatedBucket = "notCreatedBucket";
         Keyspace keyspace = keyspace(notCreatedBucket, scopeName, collectionName);
-        DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
+        DropCollectionStatement statement = new DropCollectionStatement(keyspace);
 
         assertThatExceptionOfType(BucketNotFoundException.class)
-                .isThrownBy(() -> statement.execute(new ClusterOperator(database.getConnection().getCluster())))
+                .isThrownBy(() -> statement.execute(new ClusterOperator(clusterOperator.getCluster())))
                 .withMessage("Bucket [%s] not found.", notCreatedBucket);
     }
 
@@ -46,11 +46,11 @@ class DropCollectionStatementIT extends RandomizedScopeTestCase {
         String notCreatedScope = "notCreatedScope";
         Keyspace keyspace = keyspace(bucketName, notCreatedScope, collectionName);
 
-        DropCollectionStatement statement = new DropCollectionStatement(keyspace, false);
+        DropCollectionStatement statement = new DropCollectionStatement(keyspace);
 
-        assertThatExceptionOfType(CollectionNotExistsException.class)
+        assertThatExceptionOfType(ScopeNotFoundException.class)
                 .isThrownBy(() -> statement.execute(clusterOperator))
-                .withMessage("Collection [%s] does not exist in scope [%s]", collectionName, notCreatedScope);
+                .withMessage("Scope [%s] not found.", notCreatedScope);
     }
 
 

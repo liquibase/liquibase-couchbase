@@ -6,10 +6,13 @@ import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.CreatePrimaryQueryIndexStatement;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static common.constants.TestConstants.DEFAULT_COLLECTION;
+import static common.constants.TestConstants.DEFAULT_SCOPE;
 import static common.constants.TestConstants.MANUALLY_CREATED_INDEX;
 import static common.matchers.CouchbaseClusterAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -26,19 +29,20 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
 
     @AfterEach
     void cleanUp() {
-        if (clusterOperator.indexExists(indexName, bucketName)) {
-            clusterOperator.dropIndex(indexName, bucketName);
+        TestCollectionOperator collectionOperatorDefault = getCollectionOperator(bucketName, null, null);
+        if (collectionOperatorDefault.collectionIndexExists(indexName)) {
+           getDefaultCollectionOperator().dropIndex(indexName);
         }
-        if (clusterOperator.indexExists(MANUALLY_CREATED_INDEX, bucketName)) {
-            clusterOperator.dropIndex(MANUALLY_CREATED_INDEX, bucketName);
+        if (collectionOperatorDefault.collectionIndexExists(MANUALLY_CREATED_INDEX)) {
+            getDefaultCollectionOperator().dropIndex(MANUALLY_CREATED_INDEX);
         }
     }
 
     @Test
     void Should_create_primary_index_when_primary_index_does_not_exist() {
         CreatePrimaryQueryIndexStatement statement =
-                new CreatePrimaryQueryIndexStatement(bucketName, createOptions());
-        statement.execute(database.getConnection());
+                new CreatePrimaryQueryIndexStatement(Keyspace.defaultKeyspace(bucketName), createOptions());
+        statement.execute(clusterOperator);
         assertThat(cluster).queryIndexes(bucketName).hasPrimaryIndexForName(indexName);
     }
 
@@ -46,8 +50,8 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     void Should_ignore_primary_index_creation_if_primary_index_exists() {
         createPrimaryIndexManually();
         CreatePrimaryQueryIndexStatement statement =
-                new CreatePrimaryQueryIndexStatement(bucketName, createOptions());
-        statement.execute(database.getConnection());
+                new CreatePrimaryQueryIndexStatement(Keyspace.defaultKeyspace(bucketName), createOptions());
+        statement.execute(clusterOperator);
         String indexFromClusterName = clusterOperator.getQueryIndexes().getAllIndexes(bucketName).get(0).name();
         assertEquals(MANUALLY_CREATED_INDEX, indexFromClusterName);
     }
@@ -55,11 +59,11 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_throw_an_exception_when_creating_second_primary_index_in_the_same_keyspace() {
         createPrimaryIndexManually();
-        CreatePrimaryQueryIndexStatement statement = new CreatePrimaryQueryIndexStatement(bucketName,
+        CreatePrimaryQueryIndexStatement statement = new CreatePrimaryQueryIndexStatement(Keyspace.defaultKeyspace(bucketName),
                 createOptions().indexName(MANUALLY_CREATED_INDEX).ignoreIfExists(false));
 
         assertThatExceptionOfType(IndexExistsException.class)
-                .isThrownBy(() -> statement.execute(database.getConnection()));
+                .isThrownBy(() -> statement.execute(clusterOperator));
     }
 
     private CreatePrimaryQueryIndexOptions createOptions() {
@@ -74,6 +78,7 @@ class CreatePrimaryQueryIndexStatementIT extends RandomizedScopeTestCase {
         CreatePrimaryQueryIndexOptions options = CreatePrimaryQueryIndexOptions
                 .createPrimaryQueryIndexOptions()
                 .indexName(MANUALLY_CREATED_INDEX);
-        clusterOperator.createPrimaryIndex(bucketName, options);
+        TestCollectionOperator collectionOperator = getCollectionOperator(bucketName, null, null);
+        collectionOperator.createPrimaryIndex(options);
     }
 }

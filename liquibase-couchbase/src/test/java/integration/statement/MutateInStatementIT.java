@@ -5,8 +5,8 @@ import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.kv.MutateInSpec;
 import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
-import liquibase.ext.couchbase.transformer.MutateInSpecTransformer;
 import liquibase.ext.couchbase.statement.MutateInStatement;
+import liquibase.ext.couchbase.transformer.MutateInSpecTransformer;
 import liquibase.ext.couchbase.types.DataType;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Keyspace;
@@ -26,7 +26,6 @@ import static com.couchbase.client.java.kv.MutateInOptions.mutateInOptions;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.assertj.core.api.InstanceOfAssertFactories.DURATION;
 
 class MutateInStatementIT extends RandomizedScopeTestCase {
     private final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(collectionName,
@@ -38,14 +37,13 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
 
     @BeforeEach
     void setUp() {
-        collectionOperator.insertDoc(doc1);
-        collectionOperator.insertDoc(doc2);
+        collectionOperator.insertDocs(doc1, doc2);
         keyspace = keyspace(bucketName, scopeName, collectionName);
     }
 
     @AfterEach
     void tearDown() {
-        collectionOperator.removeDocs(doc1.getId(), doc2.getId());
+        collectionOperator.removeDocs(doc1, doc2);
     }
 
     @Test
@@ -55,8 +53,8 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
 
         new MutateInStatement(mutate, mutateInOptions().timeout(Duration.ofSeconds(2))).execute(clusterOperator);
         Collection collection = collectionOperator.getCollection();
-        assertThat(collection).extractingDocument(doc2.getId()).hasNoField("age");
-        assertThat(collection).extractingDocument(doc1.getId()).hasField("age");
+        assertThat(collection).extractingDocument(doc2.getId()).isJson().hasNoField("age");
+        assertThat(collection).extractingDocument(doc1.getId()).isJson().hasField("age");
     }
 
     @Test
@@ -71,7 +69,7 @@ class MutateInStatementIT extends RandomizedScopeTestCase {
 
     private List<MutateInSpec> getInsertSpec(String path, String value) {
         return Arrays.asList(mutateInSpecTransformer.toSpec(
-                new LiquibaseMutateInSpec(path, new Value(value, DataType.STRING), MutateInType.INSERT)));
+                new LiquibaseMutateInSpec(path, Arrays.asList(new Value(value, DataType.STRING)), MutateInType.INSERT)));
     }
 
 }

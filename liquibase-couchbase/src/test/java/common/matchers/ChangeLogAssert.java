@@ -103,4 +103,12 @@ public class ChangeLogAssert extends AbstractAssert<ChangeLogAssert, Scope> {
         return this;
     }
 
+    public ChangeLogAssert withComments(@NonNull String comments) {
+        if (!changeLog.getComments().equals(comments)) {
+            failWithMessage("A changelog with key [%s] doesn't have comments [%s]", key, comments);
+        }
+
+        return this;
+    }
+
 }

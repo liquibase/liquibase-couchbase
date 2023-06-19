@@ -13,5 +13,6 @@ public class Constants {
     public static final String COUCHBASE_PREFIX = COUCHBASE_PRODUCT_SHORT_NAME + "://";
     public static final String COUCHBASE_SSL_PREFIX = COUCHBASE_PRODUCT_SHORT_NAME + "s://";
     public static final String BUCKET_PARAM = "bucket";
+    public static final String COUCHBASE_EXTENSION_JSON_SCHEMA = "www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.json";
 
 }

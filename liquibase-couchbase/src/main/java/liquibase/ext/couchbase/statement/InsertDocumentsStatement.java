@@ -1,16 +1,17 @@
 package liquibase.ext.couchbase.statement;
 
+import com.couchbase.client.java.transactions.ReactiveTransactionAttemptContext;
 import com.couchbase.client.java.transactions.TransactionAttemptContext;
-
-import java.util.List;
-import java.util.Map;
-
 import liquibase.ext.couchbase.operator.ClusterOperator;
+import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.types.Document;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.reactivestreams.Publisher;
+
+import java.util.List;
 
 /**
  * A statement to insert many instances of a {@link Document} inside one transaction into a keyspace
@@ -29,10 +30,18 @@ public class InsertDocumentsStatement extends CouchbaseTransactionStatement {
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {
-        Map<String, Object> contentList = clusterOperator.checkDocsAndTransformToObjects(documents);
         clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope())
-                .insertDocsTransactionally(transaction, contentList);
+                .insertDocsTransactionally(transaction, documents);
+    }
+
+    @Override
+    public Publisher<?> doInTransactionReactive(ReactiveTransactionAttemptContext transaction,
+                                                ClusterOperator clusterOperator) {
+        CollectionOperator collectionOperator = clusterOperator.getBucketOperator(keyspace.getBucket())
+                .getCollectionOperator(keyspace.getCollection(), keyspace.getScope());
+
+        return collectionOperator.insertDocsTransactionallyReactive(transaction, documents);
     }
 
 }

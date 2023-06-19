@@ -16,7 +16,7 @@ class ScopeExistsStatementIT extends RandomizedScopeTestCase {
 
     @Test
     void Should_return_false_when_scope_doesnt_exists() {
-        ScopeExistsStatement statement = new ScopeExistsStatement(bucketName, "notCreatedScope");
+        ScopeExistsStatement statement = new ScopeExistsStatement(bucketName, "scopeNotExistToCheck");
 
         assertThat(statement.isTrue(database.getConnection())).isFalse();
     }

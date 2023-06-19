@@ -1,0 +1,6 @@
+databaseChangeLog:
+    - changeSet:
+          id: '1'
+          author: tigran
+          dropBucket:
+              bucketName: newTestBucket

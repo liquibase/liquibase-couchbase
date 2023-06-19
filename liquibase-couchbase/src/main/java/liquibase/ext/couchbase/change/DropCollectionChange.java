@@ -6,6 +6,7 @@ import liquibase.ext.couchbase.statement.DropCollectionStatement;
 import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
         priority = ChangeMetaData.PRIORITY_DEFAULT,
         appliesTo = {"bucket"}
 )
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DropCollectionChange extends CouchbaseChange {
@@ -30,16 +32,14 @@ public class DropCollectionChange extends CouchbaseChange {
     private String scopeName;
     private String collectionName;
 
-    private Boolean skipIfNotExists;
-
     @Override
     public String getConfirmationMessage() {
-        return String.format("%s has been successfully dropped", collectionName);
+        return String.format("Collection %s has been successfully dropped", collectionName);
     }
 
     @Override
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
-        return new SqlStatement[] {new DropCollectionStatement(keyspace, skipIfNotExists)};
+        return new SqlStatement[] {new DropCollectionStatement(keyspace)};
     }
 }

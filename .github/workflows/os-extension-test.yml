@@ -1,0 +1,118 @@
+name: Build and Test Extension
+
+on:
+    workflow_dispatch:
+    pull_request:
+        types:
+            - opened
+            - reopened
+            - synchronize
+
+jobs:
+    build:
+        name: Build & Package
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up JDK 17
+              uses: actions/setup-java@v3
+              with:
+                  java-version: 17
+                  distribution: 'temurin'
+                  cache: 'maven'
+
+            - name: Build and Package
+              run: mvn --file liquibase-couchbase/pom.xml -B dependency:go-offline clean package -DskipTests=true
+
+            - name: Get Artifact ID
+              id: get-artifact-id
+              run: echo "::set-output name=artifact_id::$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
+
+            - name: Save Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
+                  path: liquibase-couchbase/target/*
+
+            - name: Save Event File
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Event File
+                  path: ${{ github.event_path }}
+
+        outputs:
+            artifact_id: ${{ steps.get-artifact-id.outputs.artifact_id }}
+
+    unit-and-it-test-ubuntu:
+        strategy:
+            fail-fast: false
+            matrix:
+                java: [ 8, 11, 17, 18 ]
+                os: [ ubuntu-latest ]
+        name: Test Java ${{ matrix.java }} - ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        needs: build
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up JDK ${{ matrix.java }}
+              uses: actions/setup-java@v3
+              with:
+                  java-version: ${{ matrix.java }}
+                  distribution: 'temurin'
+                  cache: 'maven'
+
+            - uses: actions/download-artifact@v3
+              with:
+                  name: ${{needs.build.outputs.artifact_id}}-artifacts
+                  path: liquibase-couchbase/target
+
+            - name: Run Tests
+              run: mvn --file liquibase-couchbase/pom.xml -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report "-Dskip.integration.tests=false"
+
+            - name: Archive Test Results - ${{ matrix.os }}
+              if: ${{ always() }}
+              uses: actions/upload-artifact@v3
+              with:
+                  name: test-reports-jdk-${{ matrix.java }}-${{ matrix.os }}
+                  path: |
+                      **/target/surefire-reports
+                      **/target/jacoco.exec
+                      
+                      
+    unit-test-windows:
+        strategy:
+            fail-fast: false
+            matrix:
+                java: [ 8, 11, 17, 18 ]
+                os: [ windows-latest ]
+        name: Test Java ${{ matrix.java }} - ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        needs: build
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up JDK ${{ matrix.java }}
+              uses: actions/setup-java@v3
+              with:
+                  java-version: ${{ matrix.java }}
+                  distribution: 'temurin'
+                  cache: 'maven'
+
+            - uses: actions/download-artifact@v3
+              with:
+                  name: ${{needs.build.outputs.artifact_id}}-artifacts
+                  path: liquibase-couchbase/target
+
+            - name: Run Tests
+              run: mvn --file liquibase-couchbase/pom.xml -B org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report "-Dskip.integration.tests=true"
+
+            - name: Archive Test Results - ${{ matrix.os }}
+              if: ${{ always() }}
+              uses: actions/upload-artifact@v3
+              with:
+                  name: test-reports-jdk-${{ matrix.java }}-${{ matrix.os }}
+                  path: |
+                      **/target/surefire-reports
+                      **/target/jacoco.exec

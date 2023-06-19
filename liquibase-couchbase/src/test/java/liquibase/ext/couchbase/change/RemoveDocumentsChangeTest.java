@@ -1,28 +1,38 @@
 package liquibase.ext.couchbase.change;
 
+import com.couchbase.client.core.deps.com.google.common.collect.Sets;
 import common.TestChangeLogProvider;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
-import liquibase.ext.couchbase.changelog.ChangeLogProvider;
-import liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase;
+import liquibase.ext.couchbase.statement.RemoveDocumentsQueryStatement;
+import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
 import liquibase.ext.couchbase.types.Id;
+import liquibase.statement.SqlStatement;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.List;
 
+import static common.constants.ChangeLogSampleFilePaths.REMOVE_BY_QUERY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_MANY_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.REMOVE_ONE_TEST_XML;
+import static common.constants.TestConstants.TEST_BUCKET;
+import static common.constants.TestConstants.TEST_COLLECTION;
+import static common.constants.TestConstants.TEST_SCOPE;
+import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 
+@MockitoSettings(strictness = Strictness.LENIENT)
 class RemoveDocumentsChangeTest {
     private final Id ID_1 = new Id("id1");
     private final Id ID_2 = new Id("id2");
 
-    private final CouchbaseLiquibaseDatabase database = mock(CouchbaseLiquibaseDatabase.class);
-    private final ChangeLogProvider changeLogProvider = new TestChangeLogProvider(database);
+    @InjectMocks
+    private TestChangeLogProvider changeLogProvider;
 
     @Test
     void Should_have_correct_change_type() {
@@ -65,5 +75,72 @@ class RemoveDocumentsChangeTest {
         assertThat(changes).hasSize(1);
         assertThat(((RemoveDocumentsChange) changes.get(0)).getIds()).hasSize(1);
     }
+
+    @Test
+    void Should_contain_where_clause() {
+        DatabaseChangeLog changeLog = changeLogProvider.load(REMOVE_BY_QUERY_TEST_XML);
+        ChangeSet changeSet = firstOf(changeLog.getChangeSets());
+        List<Change> changes = changeSet.getChanges();
+        assertThat(changes).hasSize(1);
+        RemoveDocumentsChange removeDocumentsChange = (RemoveDocumentsChange) changes.get(0);
+        assertThat(removeDocumentsChange.getIds()).hasSize(0);
+        assertThat(removeDocumentsChange.getWhereCondition()).isEqualTo("test=\"test\"");
+    }
+
+    @Test
+    void Expects_confirmation_message_is_created_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChange();
+
+        String msg = change.getConfirmationMessage();
+
+        assertThat(msg).isEqualTo("Documents removed from collection %s", change.getCollectionName());
+    }
+
+    @Test
+    void Should_generate_statement_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChange();
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(RemoveDocumentsStatement.class);
+
+        RemoveDocumentsStatement actualStatement = (RemoveDocumentsStatement) statements[0];
+        assertThat(actualStatement.getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
+        assertThat(actualStatement.getIds()).isEqualTo(change.getIds());
+
+    }
+
+    @Test
+    void Should_generate_statement_with_where_clause_correctly() {
+        RemoveDocumentsChange change = createRemoveDocumentChangeWithWhereClause();
+
+        SqlStatement[] statements = change.generateStatements();
+
+        assertThat(statements).hasSize(1);
+        assertThat(statements[0]).isInstanceOf(RemoveDocumentsQueryStatement.class);
+
+        RemoveDocumentsQueryStatement actualStatement = (RemoveDocumentsQueryStatement) statements[0];
+        assertThat(actualStatement.getKeyspace()).isEqualTo(
+                keyspace(change.getBucketName(), change.getScopeName(), change.getCollectionName()));
+        assertThat(actualStatement.getIds()).isEqualTo(change.getIds());
+        assertThat(actualStatement.getWhereCondition()).isEqualTo(change.getWhereCondition());
+    }
+
+    private RemoveDocumentsChange createRemoveDocumentChange() {
+        return RemoveDocumentsChange.builder().bucketName(TEST_BUCKET)
+                .scopeName(TEST_SCOPE).collectionName(TEST_COLLECTION)
+                .ids(Sets.newHashSet(ID_1, ID_2)).build();
+    }
+
+    private RemoveDocumentsChange createRemoveDocumentChangeWithWhereClause() {
+        return RemoveDocumentsChange.builder().bucketName(TEST_BUCKET)
+                .scopeName(TEST_SCOPE).collectionName(TEST_COLLECTION)
+                .ids(Sets.newHashSet(ID_1, ID_2))
+                .whereCondition("whereClause")
+                .build();
+    }
+
 }
 

@@ -20,6 +20,9 @@ public class CouchbaseLiquibaseAutoConfiguration {
     public CouchbaseLiquibase couchbaseLiquibase() {
         CouchbaseLiquibase couchbaseLiquibase = new CouchbaseLiquibase();
         couchbaseLiquibase.setChangeLog(properties.getChangeLog());
+        couchbaseLiquibase.setUserName(properties.getUsername());
+        couchbaseLiquibase.setPassword(properties.getPassword());
+        couchbaseLiquibase.setUrl(properties.getUrl());
         return couchbaseLiquibase;
     }
 }

@@ -7,8 +7,10 @@ import com.couchbase.client.java.query.QueryScanConsistency;
 import common.matchers.CouchbaseCollectionAssert;
 import common.operators.TestBucketOperator;
 import common.operators.TestClusterOperator;
+import liquibase.Contexts;
+import liquibase.LabelExpression;
 import liquibase.Liquibase;
-import liquibase.exception.ValidationFailedException;
+import liquibase.exception.CommandExecutionException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
 import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_CONTEXT_LABEL_COMMENT_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_DUPLICATE_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_ROLLBACK_BY_COUNT_TEST_XML;
 import static common.constants.ChangeLogSampleFilePaths.CHANGELOG_ROLLBACK_BY_TAG_TEST_XML;
@@ -98,8 +101,8 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
     void Should_throw_duplicate_error_when_changesets_are_equal_and_check_that_collection_exists() {
         Liquibase liquibase = liquibase(CHANGELOG_DUPLICATE_TEST_XML);
 
-        assertThatExceptionOfType(ValidationFailedException.class).isThrownBy(liquibase::update).withMessage(
-                "Validation Failed:%s" + "     1 changesets had duplicate identifiers%s" + "          " + "liquibase" + "/ext/couchbase" +
+        assertThatExceptionOfType(CommandExecutionException.class).isThrownBy(liquibase::update).withMessage(
+                "liquibase.exception.ValidationFailedException: Validation Failed:%s" + "     1 changesets had duplicate identifiers%s" + "          " + "liquibase" + "/ext/couchbase" +
                         "/changelog/changelog" + ".changelog-duplicate-test.xml::3::dmitry%s",
                 separator, separator, separator);
 
@@ -113,12 +116,12 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(serviceScope).documentsSizeEqualTo(3);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackCountId1", "rollbackCountId2", "rollbackCountId3");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackCountId1", "rollbackCountId2", "rollbackCountId3");
 
         liquibase.rollback(2, null);
 
         assertThat(serviceScope).documentsSizeEqualTo(1);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackCountId1");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackCountId1");
     }
 
     @Test
@@ -128,12 +131,12 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
         liquibase.update();
 
         assertThat(serviceScope).documentsSizeEqualTo(4);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackTagId1", "rollbackTagId2", "rollbackTagId3");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackTagId1", "rollbackTagId2", "rollbackTagId3");
 
         liquibase.rollback("lastTag1", (String) null);
 
         assertThat(serviceScope).documentsSizeEqualTo(1);
-        CouchbaseCollectionAssert.assertThat(testCollection).hasDocuments("rollbackTagId1");
+        CouchbaseCollectionAssert.assertThat(testCollection).containsIds("rollbackTagId1");
     }
 
     @Test
@@ -146,6 +149,21 @@ class HistoryServiceSystemTest extends LiquibaseSystemTest {
 
         assertThat(serviceScope).hasDocument("liquibase/ext/couchbase/changelog/changelog.tag-test.xml::tagId1::dmitry.dashko")
                 .withTag("lastTag");
+    }
+
+    @Test
+    @SneakyThrows
+    void Should_run_only_2_changesets_out_of_3_based_on_context_and_labels_and_check_existence_of_comments() {
+        Liquibase liquibase = liquibase(CHANGELOG_CONTEXT_LABEL_COMMENT_XML);
+
+        liquibase.update(new Contexts("dev"), new LabelExpression("label1 and label2"));
+
+        assertThat(serviceScope)
+                .documentsSizeEqualTo(2)
+                .hasDocument("liquibase/ext/couchbase/changelog/changelog.context-label-comment-test.xml::contextId1::dmitry.dashko")
+                .withComments("Some useful comment for context changeset")
+                .hasDocument("liquibase/ext/couchbase/changelog/changelog.context-label-comment-test.xml::labelId1::dmitry.dashko")
+                .withComments("Some useful comment for label changeset");
     }
 
 }

@@ -11,7 +11,6 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
-                <xsd:element name="skipIfExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -22,7 +21,6 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
-                <xsd:element name="skipIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -31,11 +29,11 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="isPrimary" type="xsd:boolean"/>
-                <xsd:element name="indexName" type="xsd:string"/>
+                <xsd:element name="indexName" type="xsd:string"
+                             minOccurs="0"/><!-- TODO temporary solution/hotfix to be able to remove primary index by name -->
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
-                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -49,7 +47,6 @@
                 <xsd:element minOccurs="0" name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element minOccurs="0" name="scopeName" type="xsd:string"/>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -62,7 +59,6 @@
                 <xsd:element name="deferred" type="xsd:boolean"/>
 
                 <xsd:element ref="fields"/>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
                 <xsd:element name="indexName" type="xsd:string"/>
                 <xsd:element name="numReplicas" type="xsd:int"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
@@ -87,7 +83,7 @@
                 <xsd:choice>
                     <xsd:element ref="document"/>
                     <xsd:element ref="documents"/>
-                    <xsd:element ref="file"/>
+                    <xsd:element ref="importFile"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
@@ -119,7 +115,7 @@
                 <xsd:choice>
                     <xsd:element ref="document"/>
                     <xsd:element ref="documents"/>
-                    <xsd:element ref="file"/>
+                    <xsd:element ref="importFile"/>
                 </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
@@ -129,6 +125,15 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="filePath" type="xsd:string"/>
+            </xsd:sequence>
+            <xsd:attribute name="relative" type="xsd:boolean" default="false"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="importFile">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="file"/>
                 <xsd:element name="importType">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
@@ -144,7 +149,8 @@
                         <xsd:restriction base="xsd:string">
                             <xsd:enumeration value="DEFAULT"/>
                             <xsd:enumeration value="UID"/>
-                            <xsd:enumeration value="RANDOM"/>
+                            <xsd:enumeration value="INCREMENT"/>
+                            <xsd:enumeration value="EXPRESSION"/>
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
@@ -218,7 +224,6 @@
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="ignoreIfExists" type="xsd:boolean"/>
             </xsd:all>
         </xsd:complexType>
     </xsd:element>
@@ -227,7 +232,24 @@
         <xsd:complexType>
             <xsd:all>
                 <xsd:element name="bucketName" type="xsd:string"/>
-                <xsd:element name="ignoreIfNotExists" type="xsd:boolean"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="createScope">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
+            </xsd:all>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="dropScope">
+        <xsd:complexType>
+            <xsd:all>
+                <xsd:element name="bucketName" type="xsd:string"/>
+                <xsd:element name="scopeName" type="xsd:string"/>
             </xsd:all>
         </xsd:complexType>
     </xsd:element>
@@ -272,7 +294,11 @@
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="id" type="xsd:string"/>
+                <xsd:choice>
+                    <xsd:element name="id" type="xsd:string"/>
+                    <xsd:element name="whereCondition" type="xsd:string"/>
+                    <xsd:element name="sqlPlusPlusQuery" type="xsd:string"/>
+                </xsd:choice>
                 <xsd:element ref="mutateInSpecs"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -291,8 +317,8 @@
             <xsd:sequence>
                 <xsd:element name="path"/>
                 <xsd:choice>
-                    <xsd:element ref="value" minOccurs="0" />
-                    <xsd:element ref="values" minOccurs="0" />
+                    <xsd:element ref="value" minOccurs="0"/>
+                    <xsd:element ref="values" minOccurs="0"/>
                 </xsd:choice>
                 <xsd:element name="mutateInType">
                     <xsd:simpleType>
@@ -318,7 +344,7 @@
     <xsd:element name="values">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="value" minOccurs="1" maxOccurs="unbounded"/>
+                <xsd:element ref="value" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -349,16 +375,98 @@
                 <xsd:element name="bucketName" type="xsd:string"/>
                 <xsd:element name="scopeName" type="xsd:string"/>
                 <xsd:element name="collectionName" type="xsd:string"/>
-                <xsd:element name="id" maxOccurs="unbounded" type="xsd:string"/>
+                <xsd:choice>
+                    <xsd:element name="id" maxOccurs="unbounded" type="xsd:string"/>
+                    <xsd:element name="whereCondition" type="xsd:string"/>
+                    <xsd:element name="sqlPlusPlusQuery" type="xsd:string"/>
+                </xsd:choice>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:element name="executeQuery">
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:element ref="query"/>
+                <xsd:element ref="params" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="query" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="params">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="query" type="xsd:string"/>
+                <xsd:element name="name" type="xsd:string"/>
+                <xsd:element name="value"/>
             </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="executeQueryFile">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="file"/>
+            </xsd:sequence>
+            <xsd:attribute name="transactional" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--    Pre-conditions-->
+    <xsd:element name="bucketExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="collectionExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="documentExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
+            <xsd:attribute name="key" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="scopeExists">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="doesIndexExist">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="indexName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="doesPrimaryIndexExist">
+        <xsd:complexType>
+            <xsd:attribute name="bucketName" type="xsd:string"/>
+            <xsd:attribute name="scopeName" type="xsd:string"/>
+            <xsd:attribute name="indexName" type="xsd:string"/>
+            <xsd:attribute name="collectionName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="queryCustomCheck">
+        <xsd:complexType>
+            <xsd:attribute name="expectedResultJson" type="xsd:string" use="required"/>
+            <xsd:attribute name="query" type="xsd:string" use="required"/>
         </xsd:complexType>
     </xsd:element>
 

@@ -1,8 +1,8 @@
 package integration.statement;
 
+import com.couchbase.client.core.deps.com.google.common.collect.Sets;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.transactions.error.TransactionFailedException;
-import com.google.common.collect.Lists;
 import common.TransactionStatementTest;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.RemoveDocumentsStatement;
@@ -12,7 +12,7 @@ import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.Set;
 
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
 import static liquibase.ext.couchbase.types.Keyspace.keyspace;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class RemoveDocumentsStatementIT extends TransactionStatementTest {
     private final TestCollectionOperator collectionOperator = bucketOperator.getCollectionOperator(collectionName, scopeName);
-    private List<Id> ids;
+    private Set<Id> ids;
     private Collection collection;
     private Keyspace keyspace;
 
@@ -30,9 +30,8 @@ class RemoveDocumentsStatementIT extends TransactionStatementTest {
         keyspace = keyspace(bucketName, scopeName, collectionName);
         Document doc1 = collectionOperator.generateTestDoc();
         Document doc2 = collectionOperator.generateTestDoc();
-        ids = Lists.newArrayList(new Id(doc1.getId()), new Id(doc2.getId()));
-        collectionOperator.insertDoc(doc1);
-        collectionOperator.insertDoc(doc2);
+        ids = Sets.newHashSet(new Id(doc1.getId()), new Id(doc2.getId()));
+        collectionOperator.insertDocs(doc1, doc2);
     }
 
     @Test
@@ -41,7 +40,7 @@ class RemoveDocumentsStatementIT extends TransactionStatementTest {
 
         doInTransaction(statement.asTransactionAction(clusterOperator));
 
-        assertThat(collection).hasNoDocumentsByIds(ids);
+        assertThat(collection).doesNotContainIds(ids);
     }
 
     @Test
@@ -51,7 +50,7 @@ class RemoveDocumentsStatementIT extends TransactionStatementTest {
         assertThatExceptionOfType(TransactionFailedException.class)
                 .isThrownBy(() -> doInFailingTransaction(statement.asTransactionAction(clusterOperator)));
 
-        assertThat(collection).hasAnyDocument(ids);
+        assertThat(collection).containsAnyId(ids);
     }
 
 }

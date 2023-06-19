@@ -1,0 +1,896 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema",
+  "$id": "http://www.liquibase.org/xml/ns/dbchangelog-ext#",
+  "additionalProperties": false,
+  "properties": {
+    "documents": {
+      "$ref": "#/$defs/documents"
+    },
+    "document": {
+      "$ref": "#/$defs/document"
+    },
+    "value": {
+      "$ref": "#/$defs/value"
+    },
+    "mutateInSpec": {
+      "$ref": "#/$defs/mutateInSpec"
+    },
+    "values": {
+      "$ref": "#/$defs/values"
+    },
+    "mutateInSpecs": {
+      "$ref": "#/$defs/mutateInSpecs"
+    },
+    "createBucket": {
+      "$ref": "#/$defs/createBucket"
+    },
+    "updateBucket": {
+      "$ref": "#/$defs/updateBucket"
+    },
+    "removeDocuments": {
+      "$ref": "#/$defs/removeDocuments"
+    },
+    "executeQuery": {
+      "$ref": "#/$defs/executeQuery"
+    },
+    "file": {
+      "$ref": "#/$defs/file"
+    },
+    "mutateIn": {
+      "$ref": "#/$defs/mutateIn"
+    },
+    "insertDocuments": {
+      "$ref": "#/$defs/insertDocuments"
+    },
+    "dropCollection": {
+      "$ref": "#/$defs/dropCollection"
+    },
+    "createQueryIndex": {
+      "$ref": "#/$defs/createQueryIndex"
+    },
+    "fields": {
+      "$ref": "#/$defs/fields"
+    },
+    "upsertDocuments": {
+      "$ref": "#/$defs/upsertDocuments"
+    },
+    "executeQueryFile": {
+      "$ref": "#/$defs/executeQueryFile"
+    },
+    "dropQueryIndex": {
+      "$ref": "#/$defs/dropQueryIndex"
+    },
+    "dropBucket": {
+      "$ref": "#/$defs/dropBucket"
+    },
+    "createScope": {
+      "$ref": "#/$defs/createScope"
+    },
+    "dropScope": {
+      "$ref": "#/$defs/dropScope"
+    },
+    "createPrimaryQueryIndex": {
+      "$ref": "#/$defs/createPrimaryQueryIndex"
+    },
+    "createCollection": {
+      "$ref": "#/$defs/createCollection"
+    },
+    "databaseChangeLog": {
+      "$ref": "#/$defs/databaseChangeLog"
+    }
+  },
+  "$defs": {
+    "value": {
+      "type": "object",
+      "required": [
+        "data",
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "Long",
+            "Double",
+            "Boolean",
+            "String",
+            "Json",
+            "JsonArray"
+          ]
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "required": [
+        "id",
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    },
+    "documents": {
+      "type": "object",
+      "required": [
+        "document"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "document": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "$ref": "#/$defs/document"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "values": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "$ref": "#/$defs/value"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "databaseChangeLog": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "changeSet": {
+            "type": "object",
+            "properties": {
+              "author": {
+                "type": "string"
+              },
+              "mutateInSpecs": {
+                "$ref": "#/$defs/mutateInSpecs"
+              },
+              "createBucket": {
+                "$ref": "#/$defs/createBucket"
+              },
+              "updateBucket": {
+                "$ref": "#/$defs/updateBucket"
+              },
+              "removeDocuments": {
+                "$ref": "#/$defs/removeDocuments"
+              },
+              "executeQuery": {
+                "$ref": "#/$defs/executeQuery"
+              },
+              "file": {
+                "$ref": "#/$defs/file"
+              },
+              "mutateIn": {
+                "$ref": "#/$defs/mutateIn"
+              },
+              "insertDocuments": {
+                "$ref": "#/$defs/insertDocuments"
+              },
+              "dropCollection": {
+                "$ref": "#/$defs/dropCollection"
+              },
+              "createQueryIndex": {
+                "$ref": "#/$defs/createQueryIndex"
+              },
+              "executeQueryFile": {
+                "$ref": "#/$defs/executeQueryFile"
+              },
+              "upsertDocuments": {
+                "$ref": "#/$defs/upsertDocuments"
+              },
+              "dropQueryIndex": {
+                "$ref": "#/$defs/dropQueryIndex"
+              },
+              "dropBucket": {
+                "$ref": "#/$defs/dropBucket"
+              },
+              "createScope": {
+                "$ref": "#/$defs/createScope"
+              },
+              "dropScope": {
+                "$ref": "#/$defs/dropScope"
+              },
+              "createPrimaryQueryIndex": {
+                "$ref": "#/$defs/createPrimaryQueryIndex"
+              },
+              "createCollection": {
+                "$ref": "#/$defs/createCollection"
+              }
+            },
+            "required": [
+              "author"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "mutateInSpecs"
+                ]
+              },
+              {
+                "required": [
+                  "createBucket"
+                ]
+              },
+              {
+                "required": [
+                  "updateBucket"
+                ]
+              },
+              {
+                "required": [
+                  "mutateIn"
+                ]
+              },
+              {
+                "required": [
+                  "insertDocuments"
+                ]
+              },
+              {
+                "required": [
+                  "dropCollection"
+                ]
+              },
+              {
+                "required": [
+                  "createQueryIndex"
+                ]
+              },
+              {
+                "required": [
+                  "upsertDocuments"
+                ]
+              },
+              {
+                "required": [
+                  "dropQueryIndex"
+                ]
+              },
+              {
+                "required": [
+                  "dropBucket"
+                ]
+              },
+              {
+                "required": [
+                  "createPrimaryQueryIndex"
+                ]
+              },
+              {
+                "required": [
+                  "createCollection"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "mutateInSpec": {
+      "type": "object",
+      "required": [
+        "path",
+        "mutateInType"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "null",
+            "object",
+            "array"
+          ],
+          "additionalProperties": false
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        },
+        "values": {
+          "$ref": "#/$defs/values"
+        },
+        "mutateInType": {
+          "type": "string",
+          "enum": [
+            "INSERT",
+            "ARRAY_PREPEND",
+            "ARRAY_APPEND",
+            "ARRAY_CREATE",
+            "ARRAY_INSERT",
+            "ARRAY_INSERT_UNIQUE",
+            "INCREMENT",
+            "DECREMENT",
+            "UPSERT",
+            "REPLACE",
+            "REMOVE"
+          ]
+        }
+      }
+    },
+    "mutateInSpecs": {
+      "type": "object",
+      "required": [
+        "mutateInSpec"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mutateInSpec": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "$ref": "#/$defs/mutateInSpec"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "createBucket": {
+      "type": "object",
+      "required": [
+        "flushEnabled",
+        "replicaIndexes",
+        "numReplicas",
+        "ramQuotaMB",
+        "maxExpiryInHours",
+        "timeoutInSeconds",
+        "bucketName",
+        "bucketType",
+        "compressionMode",
+        "conflictResolutionType",
+        "evictionPolicy",
+        "minimumDurabilityLevel",
+        "storageBackend"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "flushEnabled": {
+          "type": "boolean"
+        },
+        "replicaIndexes": {
+          "type": "boolean"
+        },
+        "numReplicas": {
+          "type": "integer"
+        },
+        "ramQuotaMB": {
+          "type": "integer"
+        },
+        "maxExpiryInHours": {
+          "type": "integer"
+        },
+        "timeoutInSeconds": {
+          "type": "integer"
+        },
+        "bucketName": {
+          "type": "string"
+        },
+        "bucketType": {
+          "type": "string",
+          "enum": [
+            "COUCHBASE",
+            "MEMCACHED",
+            "EPHEMERAL"
+          ]
+        },
+        "compressionMode": {
+          "type": "string",
+          "enum": [
+            "OFF",
+            "PASSIVE",
+            "ACTIVE"
+          ]
+        },
+        "conflictResolutionType": {
+          "type": "string",
+          "enum": [
+            "TIMESTAMP",
+            "SEQUENCE_NUMBER",
+            "CUSTOM"
+          ]
+        },
+        "evictionPolicy": {
+          "type": "string",
+          "enum": [
+            "FULL",
+            "VALUE_ONLY",
+            "NOT_RECENTLY_USED",
+            "NO_EVICTION"
+          ]
+        },
+        "minimumDurabilityLevel": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "MAJORITY",
+            "MAJORITY_AND_PERSIST_TO_ACTIVE",
+            "PERSIST_TO_MAJORITY"
+          ]
+        },
+        "storageBackend": {
+          "type": "string",
+          "enum": [
+            "couchstore",
+            "magma"
+          ]
+        }
+      }
+    },
+    "updateBucket": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "compressionMode",
+        "maxExpiryInHours",
+        "numReplicas",
+        "ramQuotaMB",
+        "flushEnabled",
+        "timeoutInSeconds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "compressionMode": {
+          "type": "string",
+          "enum": [
+            "OFF",
+            "PASSIVE",
+            "ACTIVE"
+          ]
+        },
+        "maxExpiryInHours": {
+          "type": "integer"
+        },
+        "numReplicas": {
+          "type": "integer"
+        },
+        "ramQuotaMB": {
+          "type": "integer"
+        },
+        "flushEnabled": {
+          "type": "boolean"
+        },
+        "timeoutInSeconds": {
+          "type": "integer"
+        }
+      }
+    },
+    "removeDocuments": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName",
+        "collectionName",
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "whereCondition": {
+          "type": "string"
+        },
+        "sqlPlusPlusQuery": {
+          "type": "string"
+        }
+      }
+    },
+    "executeQuery": {
+      "type": "object",
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "type": "string"
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "required": [
+        "filePath",
+        "importType",
+        "keyProviderType",
+        "keyProviderExpression"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "filePath": {
+          "type": "string"
+        },
+        "importType": {
+          "type": "string",
+          "enum": [
+            "LINES",
+            "LIST",
+            "SAMPLE",
+            "KEY_GENERATORS"
+          ]
+        },
+        "keyProviderType": {
+          "type": "string",
+          "enum": [
+            "DEFAULT",
+            "UID",
+            "INCREMENT",
+            "EXPRESSION"
+          ]
+        },
+        "keyProviderExpression": {
+          "type": "string"
+        }
+      }
+    },
+    "mutateIn": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName",
+        "collectionName",
+        "mutateInSpecs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "expiry": {
+          "type": "string"
+        },
+        "preserveExpiry": {
+          "type": "boolean"
+        },
+        "storeSemantics": {
+          "type": "string",
+          "enum": [
+            "REPLACE",
+            "UPSERT",
+            "INSERT",
+            "REVIVE"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "whereCondition": {
+          "type": "string"
+        },
+        "sqlPlusPlusQuery": {
+          "type": "string"
+        },
+        "mutateInSpecs": {
+          "$ref": "#/$defs/mutateInSpecs"
+        }
+      }
+    },
+    "insertDocuments": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName",
+        "collectionName",
+        "document",
+        "documents",
+        "file"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "document": {
+          "$ref": "#/$defs/document"
+        },
+        "documents": {
+          "$ref": "#/$defs/documents"
+        },
+        "file": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "dropCollection": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "collectionName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "type": "array",
+          "additionalItems": false,
+          "items": {
+            "type": [
+              "string",
+              "number",
+              "integer",
+              "boolean",
+              "null",
+              "object",
+              "array"
+            ]
+          },
+          "minItems": 0
+        }
+      }
+    },
+    "createQueryIndex": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "collectionName",
+        "deferred",
+        "fields",
+        "indexName",
+        "numReplicas",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "deferred": {
+          "type": "boolean"
+        },
+        "fields": {
+          "$ref": "#/$defs/fields"
+        },
+        "indexName": {
+          "type": "string"
+        },
+        "numReplicas": {
+          "type": "integer"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "upsertDocuments": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName",
+        "collectionName",
+        "document",
+        "documents",
+        "file"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "document": {
+          "$ref": "#/$defs/document"
+        },
+        "documents": {
+          "$ref": "#/$defs/documents"
+        },
+        "file": {
+          "$ref": "#/$defs/file"
+        }
+      }
+    },
+    "executeQueryFile": {
+      "type": "object",
+      "required": [
+        "path",
+        "relative"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "transactional": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string"
+        },
+        "relative": {
+          "type": "boolean"
+        }
+      }
+    },
+    "dropQueryIndex": {
+      "type": "object",
+      "required": [
+        "isPrimary",
+        "indexName",
+        "bucketName",
+        "scopeName",
+        "collectionName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "isPrimary": {
+          "type": "boolean"
+        },
+        "indexName": {
+          "type": "string"
+        },
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        }
+      }
+    },
+    "dropBucket": {
+      "type": "object",
+      "required": [
+        "bucketName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        }
+      }
+    },
+    "createScope": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "dropScope": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "createPrimaryQueryIndex": {
+      "type": "object",
+      "required": [
+        "deferred",
+        "numReplicas"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "deferred": {
+          "type": "boolean"
+        },
+        "indexName": {
+          "type": "string"
+        },
+        "numReplicas": {
+          "type": "integer"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    },
+    "createCollection": {
+      "type": "object",
+      "required": [
+        "bucketName",
+        "collectionName",
+        "scopeName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bucketName": {
+          "type": "string"
+        },
+        "collectionName": {
+          "type": "string"
+        },
+        "scopeName": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

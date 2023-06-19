@@ -1,8 +1,8 @@
 package liquibase.ext.couchbase.change;
 
+import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreateScopeStatement;
-import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 
 /**
  * Part of change set package. Responsible for create scope with specified name
@@ -43,6 +42,16 @@ public class CreateScopeChange extends CouchbaseChange {
         return new SqlStatement[] {
                 new CreateScopeStatement(scopeName, bucketName)
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropScopeChange inverse = DropScopeChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .build();
+
+        return new Change[] {inverse};
     }
 
 }

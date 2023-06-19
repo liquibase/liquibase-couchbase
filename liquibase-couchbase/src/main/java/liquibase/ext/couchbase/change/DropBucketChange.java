@@ -5,6 +5,7 @@ import liquibase.ext.couchbase.statement.DropBucketStatement;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
                         "-bucket.html#dropping-a-bucket",
                 priority = PrioritizedService.PRIORITY_DATABASE,
                 appliesTo = {"database"})
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,8 +29,6 @@ public class DropBucketChange extends CouchbaseChange {
 
     private String bucketName;
 
-    private Boolean ignoreIfNotExists;
-
     @Override
     public String getConfirmationMessage() {
         return String.format("The '%s' bucket has been dropped successfully", getBucketName());
@@ -36,7 +36,7 @@ public class DropBucketChange extends CouchbaseChange {
 
     @Override
     public SqlStatement[] generateStatements() {
-        return new SqlStatement[] {new DropBucketStatement(bucketName, ignoreIfNotExists)};
+        return new SqlStatement[] {new DropBucketStatement(bucketName)};
     }
 
 }

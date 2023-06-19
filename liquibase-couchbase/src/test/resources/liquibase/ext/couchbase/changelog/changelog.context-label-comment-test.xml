@@ -1,0 +1,72 @@
+<!--
+  #%L
+  Liquibase Couchbase Extension
+  %%
+  Copyright (C) 2023 Weigandt Consulting GmbH
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License").
+  You may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="contextId1" author="dmitry.dashko" context="dev or test">
+        <comment>Some useful comment for context changeset</comment>
+        <ext:insertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:document>
+                <ext:id>contextId1</ext:id>
+                <ext:value>
+                    <ext:data>newData</ext:data>
+                    <ext:type>String</ext:type>
+                </ext:value>
+            </ext:document>
+        </ext:insertDocuments>
+    </changeSet>
+    <changeSet id="labelId1" author="dmitry.dashko" labels="label1, label2">
+        <comment>Some useful comment for label changeset</comment>
+        <ext:insertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:document>
+                <ext:id>labelId1</ext:id>
+                <ext:value>
+                    <ext:data>newData</ext:data>
+                    <ext:type>String</ext:type>
+                </ext:value>
+            </ext:document>
+        </ext:insertDocuments>
+    </changeSet>
+    <changeSet id="notCreatedDocumentId1" author="dmitry.dashko" labels="notExistingLabel">
+        <ext:insertDocuments>
+            <ext:bucketName>testBucket</ext:bucketName>
+            <ext:scopeName>testScope</ext:scopeName>
+            <ext:collectionName>testCollection</ext:collectionName>
+            <ext:document>
+                <ext:id>notCreatedDocumentId1</ext:id>
+                <ext:value>
+                    <ext:data>newData</ext:data>
+                    <ext:type>String</ext:type>
+                </ext:value>
+            </ext:document>
+        </ext:insertDocuments>
+    </changeSet>
+
+</databaseChangeLog>

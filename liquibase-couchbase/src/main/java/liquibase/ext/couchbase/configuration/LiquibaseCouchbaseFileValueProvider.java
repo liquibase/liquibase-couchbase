@@ -6,16 +6,18 @@ import liquibase.logging.Logger;
 import liquibase.resource.Resource;
 import liquibase.resource.ResourceAccessor;
 import liquibase.servicelocator.LiquibaseService;
+import liquibase.util.FileUtil;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 /**
  * Custom properties provider for {@link CouchbaseLiquibaseConfiguration} Look up in classpath for file named
  * {@code liquibase-couchbase.properties}
- *
  * @see CouchbaseLiquibaseConfiguration
  */
 @LiquibaseService
@@ -31,11 +33,15 @@ public class LiquibaseCouchbaseFileValueProvider extends AbstractMapConfiguratio
     }
 
     private void loadProps(ResourceAccessor resourceAccessor) throws IOException {
-        Resource resource = resourceAccessor.getExisting(propsFileName);
+        // Get files in priority order(order based on the configured classloader)
+        List<Resource> resources = resourceAccessor.getAll(propsFileName);
+        if (resources == null || resources.isEmpty()) {
+            throw new FileNotFoundException(FileUtil.getFileNotFoundMessage(propsFileName));
+        }
         log.config("Loaded next properties from " + propsFileName + " " + properties.entrySet());
-        InputStream inputStream = resource.openInputStream();
-        properties.load(inputStream);
-        inputStream.close();
+        try (InputStream inputStream = resources.get(0).openInputStream()) {
+            properties.load(inputStream);
+        }
     }
 
     @Override

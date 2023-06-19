@@ -1,0 +1,169 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.19.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-couchbase-ext.xsd">
+
+    <changeSet id="insert/upsert-nested-field-as-json" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>newField1</ext:path>
+                    <ext:value>
+                        <ext:data>{"nestedFiled1": "value1", "nestedFiled2": "value2"}</ext:data>
+                        <ext:type>Json</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>INSERT</ext:mutateInType>
+                    <!--The same with UPSERT-->
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="insert-field-as-array" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>arrayField1</ext:path>
+                    <ext:value>
+                        <ext:data>valueInArray</ext:data>
+                        <ext:type>String</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>ARRAY_CREATE</ext:mutateInType>
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="prepend-value-in-array" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>arrayField1</ext:path>
+                    <ext:value>
+                        <ext:data>prependValue</ext:data>
+                        <ext:type>String</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>ARRAY_PREPEND</ext:mutateInType>
+                    <!-- The same with ARRAY_APPEND-->
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="insert-at-specific-position-value-in-array" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>arrayField1[1]</ext:path>
+                    <ext:value>
+                        <ext:data>123</ext:data>
+                        <ext:type>Long</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>ARRAY_INSERT</ext:mutateInType>
+                    <!-- The same with ARRAY_APPEND-->
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="insert-unique-element-in-array" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>arrayField1</ext:path>
+                    <ext:value>
+                        <ext:data>1234</ext:data>
+                        <ext:type>Long</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>ARRAY_INSERT_UNIQUE</ext:mutateInType>
+                    <!-- Will throw an error if this element already exists in the array-->
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="increment/decrement-field" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>longField</ext:path>
+                    <ext:value>
+                        <ext:data>2</ext:data>
+                        <ext:type>Long</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>INCREMENT</ext:mutateInType>
+                    <!-- The same with DECREMENT-->
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="remove-field-from-document" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>longField</ext:path>
+                    <ext:mutateInType>REMOVE</ext:mutateInType>
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+    <changeSet id="many-operations-on-document" author="dmitry.dashko">
+        <ext:mutateIn>
+            <ext:bucketName>bucketName</ext:bucketName>
+            <ext:scopeName>scopeName</ext:scopeName>
+            <ext:collectionName>collectionName</ext:collectionName>
+            <ext:id>id1</ext:id>
+            <ext:mutateInSpecs>
+                <ext:mutateInSpec>
+                    <ext:path>firstNewField1</ext:path>
+                    <ext:value>
+                        <ext:data>newData1</ext:data>
+                        <ext:type>String</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>UPSERT</ext:mutateInType>
+                </ext:mutateInSpec>
+                <ext:mutateInSpec>
+                    <ext:path>firstNewField2</ext:path>
+                    <ext:value>
+                        <ext:data>newData2</ext:data>
+                        <ext:type>String</ext:type>
+                    </ext:value>
+                    <ext:mutateInType>UPSERT</ext:mutateInType>
+                </ext:mutateInSpec>
+            </ext:mutateInSpecs>
+        </ext:mutateIn>
+    </changeSet>
+
+</databaseChangeLog>

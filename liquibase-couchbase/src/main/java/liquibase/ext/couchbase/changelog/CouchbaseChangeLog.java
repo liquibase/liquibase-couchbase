@@ -1,16 +1,14 @@
 package liquibase.ext.couchbase.changelog;
 
+import java.util.Set;
+
 import liquibase.changelog.ChangeSet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.Set;
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,8 +22,9 @@ public class CouchbaseChangeLog {
     private ChangeSet.ExecType execType;
     private String description;
     private String comments;
-    private int orderExecuted;
     private Set<String> labels;
+    private Context context;
+    private int orderExecuted;
     private String deploymentId;
     private String liquibaseVersion;
 }

@@ -17,6 +17,9 @@ import static com.couchbase.client.java.kv.InsertOptions.insertOptions;
 import static java.lang.String.format;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL;
 import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.LOCK_TTL_PROLONGATION;
+import static liquibase.ext.couchbase.lockservice.LockStatus.NOT_OWNER;
+import static liquibase.ext.couchbase.lockservice.LockStatus.OWNER;
+import static liquibase.ext.couchbase.lockservice.LockStatus.FREE;
 
 /**
  * Collection based locker for {@link com.couchbase.client.java.Bucket Bucket} Operates with documents in Liquibase service
@@ -60,11 +63,21 @@ public class CouchbaseChangelogLocker {
      * @throws LockException if it doesn't have ownership
      */
     public void release(String lockId, String owner) throws LockException {
-        if (!isHeldBy(lockId, owner)) {
-            throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
+        LockStatus lockStatus = getLockStatus(lockId, owner);
+        switch (lockStatus) {
+            case NOT_OWNER:
+                throw new LockException(format("Service [%s] is not an owner of this lock ([%s])", owner, lockId));
+            case OWNER:
+                collection.remove(lockId);
+                log.info(format("Lock on the bucket [%s] from the service [%s] has been released successfully", lockId, owner));
+                return;
+            case FREE:
+                log.info(format("Lock on the bucket [%s] is already released", lockId));
+                return;
+            default:
+                log.warning(format("Unknown status of lock [%s]", lockId));
         }
 
-        collection.remove(lockId);
     }
 
     /**
@@ -72,14 +85,15 @@ public class CouchbaseChangelogLocker {
      * @param lockId specific bucket name which we try to lock
      * @param owner  unique liquibase app service id
      */
-    public boolean isHeldBy(String lockId, String owner) {
+    public LockStatus getLockStatus(String lockId, String owner) {
         try {
             String currentOwner = collection.get(lockId)
                     .contentAs(CouchbaseLock.class)
                     .getOwner();
-            return currentOwner.equals(owner);
+
+            return currentOwner.equals(owner) ? OWNER : NOT_OWNER;
         } catch (CouchbaseException e) {
-            return false;
+            return FREE;
         }
     }
 

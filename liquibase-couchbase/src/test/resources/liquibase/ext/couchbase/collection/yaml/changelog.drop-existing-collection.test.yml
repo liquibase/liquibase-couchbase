@@ -1,0 +1,8 @@
+databaseChangeLog:
+    - changeSet:
+        author: tigran
+        id: 1
+        dropCollection:
+            bucketName: testBucket
+            collectionName: dropExistingCollection
+            scopeName: testScope

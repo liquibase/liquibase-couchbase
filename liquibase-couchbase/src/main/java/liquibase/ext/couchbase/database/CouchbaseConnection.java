@@ -24,14 +24,10 @@ import com.couchbase.client.core.util.ConnectionString;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.ClusterOptions;
-import com.couchbase.client.java.transactions.config.TransactionOptions;
-import com.couchbase.client.java.transactions.error.TransactionFailedException;
-import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
-import liquibase.ext.couchbase.exception.TransactionalStatementExecutionException;
-import liquibase.ext.couchbase.executor.TransactionalStatementQueue;
+import liquibase.ext.couchbase.executor.service.TransactionExecutorService;
 import liquibase.util.StringUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,12 +44,10 @@ import java.util.Properties;
 import static com.couchbase.client.core.util.Validators.notNull;
 import static com.couchbase.client.core.util.Validators.notNullOrEmpty;
 import static com.couchbase.client.java.ClusterOptions.clusterOptions;
-import static com.couchbase.client.java.transactions.config.TransactionOptions.transactionOptions;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.TRANSACTION_TIMEOUT;
 import static liquibase.ext.couchbase.database.Constants.BUCKET_PARAM;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRIORITY;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
@@ -69,9 +63,7 @@ import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT
 @NoArgsConstructor
 public class CouchbaseConnection implements DatabaseConnection {
 
-    private final TransactionalStatementQueue transactionalStatementQueue = Scope.getCurrentScope()
-            .getSingleton(TransactionalStatementQueue.class);
-    private final TransactionOptions transactionOptions = transactionOptions().timeout(TRANSACTION_TIMEOUT.getCurrentValue());
+    private TransactionExecutorService transactionExecutorService;
     private ConnectionString connectionString;
     private Cluster cluster;
     private Bucket database;
@@ -101,7 +93,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void rollback() {
-        transactionalStatementQueue.clear();
+        transactionExecutorService.clearStatementsQueue();
     }
 
     @Override
@@ -183,11 +175,10 @@ public class CouchbaseConnection implements DatabaseConnection {
             final String password = getAndTrimProperty(driverProperties, "password").orElse(null);
 
             cluster = connect(connectionString.original(), clusterOptions(connectionString.username(), password));
+            transactionExecutorService = TransactionExecutorService.getExecutor(cluster);
 
-            if (connectionString.params()
-                    .containsKey(BUCKET_PARAM)) {
-                final String dbName = connectionString.params()
-                        .get(BUCKET_PARAM);
+            if (connectionString.params().containsKey(BUCKET_PARAM)) {
+                final String dbName = connectionString.params().get(BUCKET_PARAM);
                 database = cluster.bucket(dbName);
             }
         } catch (final Exception e) {
@@ -209,18 +200,7 @@ public class CouchbaseConnection implements DatabaseConnection {
 
     @Override
     public void commit() {
-        if (transactionalStatementQueue.isEmpty()) {
-            return;
-        }
-
-        try {
-            cluster.transactions()
-                    .run(ctx -> transactionalStatementQueue.forEach(it -> it.accept(ctx)), transactionOptions);
-        } catch (TransactionFailedException e) {
-            throw new TransactionalStatementExecutionException(e);
-        } finally {
-            transactionalStatementQueue.clear();
-        }
+        transactionExecutorService.executeStatementsInTransaction();
     }
 
     @Override

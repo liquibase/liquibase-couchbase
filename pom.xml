@@ -11,10 +11,15 @@
     <description>Liquibase extension for Couchbase</description>
     <url>https://docs.liquibase.com</url>
 
+    <organization>
+        <name>Liquibase.org</name>
+        <url>http://www.liquibase.org</url>
+    </organization>
+
     <licenses>
         <license>
-            <name>Liquibase EULA</name>
-            <url>https://www.liquibase.com/eula</url>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <name>Apache License, Version 2.0</name>
         </license>
     </licenses>
 
@@ -61,6 +66,8 @@
         <module>liquibase-couchbase</module>
         <module>test-project</module>
         <module>spring-boot-starter-liquibase-couchbase</module>
+        <module>spring-boot-starter-liquibase-couchbase-test</module>
+        <module>cli-test</module>
     </modules>
 
     <scm>
@@ -74,8 +81,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <liquibase.core.version>4.19.1</liquibase.core.version>
+        <liquibase.core.version>4.22.0</liquibase.core.version>
+        <slf4j.version>2.0.7</slf4j.version>
     </properties>
-
 
 </project>

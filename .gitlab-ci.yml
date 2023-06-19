@@ -36,6 +36,16 @@ cache:
 stages:
   - build
   - test
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploy to staging server"
+  environment:
+    name: staging
+    url: https://staging.example.com
+
 
 build:
   stage: build
@@ -48,9 +58,12 @@ build:
 test:
   stage: test
   script:
-    - 'mvn $MAVEN_CLI_OPTS verify $INT_TEST_ENABLE'
+    - 'mvn $MAVEN_CLI_OPTS org.jacoco:jacoco-maven-plugin:0.8.8:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.8:report $INT_TEST_ENABLE'
+  needs: ["build"]
   artifacts:
     when: always
+    paths:
+        - liquibase-couchbase/target/site/jacoco/jacoco.xml
     reports:
       junit:
         - liquibase-couchbase/target/surefire-reports/TEST-*.xml

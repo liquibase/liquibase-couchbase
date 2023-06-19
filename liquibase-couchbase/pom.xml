@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>liquibase-couchbase</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -26,6 +26,7 @@
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
         <skip.integration.tests>true</skip.integration.tests>
+        <skip.harness.tests>harness.**</skip.harness.tests>
 
         <!-- dependency versions -->
         <junit.version>5.9.2</junit.version>
@@ -33,18 +34,23 @@
         <mockito.junit.version>4.11.0</mockito.junit.version>
         <assertj.version>3.24.2</assertj.version>
         <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
-        <slf4j.version>2.0.6</slf4j.version>
+        <slf4j.version>2.0.7</slf4j.version>
         <lombok.version>1.18.26</lombok.version>
-        <couchbase.java.client.version>3.4.3</couchbase.java.client.version>
-        <google.guava.version>31.1-jre</google.guava.version>
+        <couchbase.java.client.version>3.4.6</couchbase.java.client.version>
         <sonar.maven.plugin.version>3.9.1.2184</sonar.maven.plugin.version>
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
         <failsafe.maven.plugin.version>3.0.0-M9</failsafe.maven.plugin.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <commons-io.version>2.12.0</commons-io.version>
         <commons-lang-3.version>3.12.0</commons-lang-3.version>
         <liquibase-test-harness.version>1.0.9</liquibase-test-harness.version>
         <groovy-all.version>2.5.19</groovy-all.version>
-        <spock-core.version>1.3-groovy-2.5</spock-core.version>
+        <spock-core.version>2.0-M2-groovy-2.5</spock-core.version>
+        <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
+        <json-schema-validator-version>1.0.81</json-schema-validator-version>
+        <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
+        <junit-platform-reporting.version>1.9.1</junit-platform-reporting.version>
+        <reactor-test.version>3.5.6</reactor-test.version>
+        <gmavenplus-plugin.version>1.9.0</gmavenplus-plugin.version>
     </properties>
 
     <dependencies>
@@ -66,11 +72,6 @@
             <version>${couchbase.java.client.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${google.guava.version}</version>
-        </dependency>
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
@@ -81,6 +82,17 @@
             <version>${commons-lang-3.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${json-schema-validator-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>
@@ -96,8 +108,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-reporting</artifactId>
+            <version>${junit-platform-reporting.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <artifactId>mockito-inline</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
@@ -135,12 +153,20 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy-all.version}</version>
+            <scope>test</scope>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <version>${spock-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+            <version>${reactor-test.version}</version>
         </dependency>
 
 
@@ -166,6 +192,19 @@
                 <version>${sonar.maven.plugin.version}</version>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compileTests</goal>
+                            <goal>addTestSources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.maven.plugin.version}</version>
@@ -173,7 +212,11 @@
                     <goal>test</goal>
                     <includes>
                         <include>**/liquibase/ext/couchbase/**</include>
+                        <include>**/*Spec</include>
                     </includes>
+                    <excludes>
+                        <exclude>${skip.harness.tests}</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -196,7 +239,263 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <formats>
+                                <format>HTML</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-report-integration</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <configuration>
+                            <formats>
+                                <format>HTML</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                    <!--                    TODO Uncomment when code coverage will be improved to match threshold-->
+                    <!--                    <execution>-->
+                    <!--                        <id>default-check</id>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>check</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <rules>-->
+                    <!--                                <rule>-->
+                    <!--                                    <element>BUNDLE</element>-->
+                    <!--                                    <limits>-->
+                    <!--                                        <limit>-->
+                    <!--                                            <counter>COMPLEXITY</counter>-->
+                    <!--                                            <value>COVEREDRATIO</value>-->
+                    <!--                                            <minimum>0.60</minimum>-->
+                    <!--                                        </limit>-->
+                    <!--                                    </limits>-->
+                    <!--                                </rule>-->
+                    <!--                            </rules>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven-shade-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.basedir}/target/${project.artifactId}-${project.version}.jar</outputFile>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                </transformer>
+                            </transformers>
+                            <!-- Generate jar with all dependencies -> comment <artifactSet> and execute: mvn clean package shade:shade -->
+                            <artifactSet>
+                                <includes>
+                                    <include>commons-io:commons-io</include>
+                                    <include>org.apache.commons:commons-lang3</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Required for deployment to Sonatype -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <author>false</author>
+                    <doctitle>Liquibase couchbase ${project.version} API</doctitle>
+                    <quiet>true</quiet>
+                    <doclint>none</doclint>
+                    <encoding>UTF-8</encoding>
+                    <jarOutputDirectory>${project.basedir}/target</jarOutputDirectory>
+                    <sourcepath>${project.basedir}/delombok</sourcepath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jar-javadoc</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.20.0</version>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>${project.basedir}/delombok</outputDirectory>
+                    <addOutputDirectory>false</addOutputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <sourceFile>${project.basedir}/pom.xml</sourceFile>
+                                    <destinationFile>${project.basedir}/target/${project.artifactId}-${project.version}.pom</destinationFile>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <optimize>true</optimize>
+                    <debug>true</debug>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addSources</goal>
+                            <goal>addTestSources</goal>
+                            <goal>compile</goal>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.13</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                </configuration>
+            </plugin>
+
+            <!--> Currently not used in CI/CD. But we can use it later -->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-gpg-plugin</artifactId>-->
+<!--                <version>3.1.0</version>-->
+<!--                <configuration>-->
+<!--                    <passphrase>${env.GPG_PASSPHRASE}</passphrase>-->
+<!--                    <gpgArguments>-->
+<!--                        &lt;!&ndash; This is necessary for gpg to not try to use the pinentry programs &ndash;&gt;-->
+<!--                        <arg>&#45;&#45;batch</arg>-->
+<!--                        <arg>&#45;&#45;no-tty</arg>-->
+<!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
+<!--                        <arg>loopback</arg>-->
+<!--                    </gpgArguments>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>sign-artifacts</id>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>sign</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus-staging</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

@@ -1,6 +1,8 @@
 package liquibase.ext.couchbase.types;
 
 import liquibase.ext.couchbase.exception.IncorrectFileException;
+import liquibase.resource.Resource;
+import liquibase.resource.ResourceAccessor;
 import liquibase.serializer.AbstractLiquibaseSerializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +11,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+
+import static liquibase.Scope.getCurrentScope;
 
 /**
  * File to import
@@ -25,10 +26,8 @@ import java.util.stream.Stream;
 @EqualsAndHashCode(callSuper = false)
 public class File extends AbstractLiquibaseSerializable {
 
+    private Boolean relative;
     private String filePath;
-    private ImportType importType;
-    private KeyProviderType keyProviderType;
-    private String keyProviderExpression;
 
     @Override
     public String getSerializedObjectName() {
@@ -45,11 +44,14 @@ public class File extends AbstractLiquibaseSerializable {
         return SerializationType.DIRECT_VALUE;
     }
 
-    public Stream<String> lines() {
+    public Resource getAsResource(String changeSetPath) {
         try {
-            return Files.lines(Paths.get(filePath));
-        } catch (IOException e) {
-            throw new IncorrectFileException(filePath);
+            ResourceAccessor resourceAccessor = getCurrentScope().getResourceAccessor();
+            return (relative != null && relative)
+                    ? resourceAccessor.get(changeSetPath).resolveSibling(getFilePath())
+                    : resourceAccessor.get(getFilePath());
+        } catch (IOException ex) {
+            throw new IncorrectFileException(getFilePath());
         }
     }
 }

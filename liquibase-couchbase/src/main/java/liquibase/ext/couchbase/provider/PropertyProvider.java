@@ -28,12 +28,6 @@ public interface PropertyProvider {
      * @param name property name
      * @return non-null string value or default value
      */
-    @NonNull
-    static String getPropertyOrDefault(String name, String defaultValue, Properties properties) {
-        return ofNullable(findPropertyValue(name, properties))
-                .orElse(defaultValue);
-    }
-
     static String findPropertyValue(@NonNull String name, @NonNull Properties properties) {
         return ofNullable(System.getenv(name))
                 .orElse(properties.getProperty(name));

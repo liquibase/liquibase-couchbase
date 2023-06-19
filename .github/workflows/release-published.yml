@@ -1,0 +1,58 @@
+name: Release Extension to Sonatype
+
+on:
+    workflow_dispatch:
+    release:
+        types: [published]
+        secrets:
+            SONATYPE_USERNAME:
+                description: 'SONATYPE_USERNAME from the caller workflow'
+                required: true
+            SONATYPE_TOKEN:
+                description: 'SONATYPE_TOKEN from the caller workflow'
+                required: true
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Get Artifact ID
+              id: get-artifact-id
+              run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
+
+            - name: Download Release Artifacts
+              uses: robinraju/release-downloader@v1.6
+              with:
+                  tag: "${{ github.event.release.tag_name }}"
+                  filename: "${{ env.artifact_id }}-*"
+                  out-file-path: "."
+
+            - name: Set up Java for publishing to Maven Central Repository
+              uses: actions/setup-java@v3
+              with:
+                  java-version: '17'
+                  distribution: 'temurin'
+                  cache: 'maven'
+                  server-id: sonatype-nexus-staging
+                  server-username: MAVEN_USERNAME
+                  server-password: MAVEN_PASSWORD
+
+#            - name: Publish to Maven Central
+#              env:
+#                  MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+#                  MAVEN_PASSWORD: ${{ secrets.SONATYPE_TOKEN }}
+#              run: |
+#                  version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+#                  mvn -B org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1:deploy-file \
+#                              -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
+#                              -DrepositoryId=sonatype-nexus-staging \
+#                              -DpomFile=${{ env.artifact_id }}-${version}.pom \
+#                              -DgeneratePom=false \
+#                              -Dfile=${{ env.artifact_id }}-${version}.jar \
+#                              -Dsources=${{ env.artifact_id }}-${version}-sources.jar \
+#                              -Djavadoc=${{ env.artifact_id }}-${version}-javadoc.jar \
+#                              -Dfiles=${{ env.artifact_id }}-${version}.jar.asc,${{ env.artifact_id }}-${version}-sources.jar.asc,${{ env.artifact_id }}-${version}-javadoc.jar.asc,${{ env.artifact_id }}-${version}.pom.asc \
+#                              -Dtypes=jar.asc,jar.asc,jar.asc,pom.asc \
+#                              -Dclassifiers=,sources,javadoc,

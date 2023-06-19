@@ -28,8 +28,7 @@
         <ext:dropCollection>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:collectionName>dropExistingCollection</ext:collectionName>
-            <ext:scopeName>notCreatedScope</ext:scopeName>
-            <ext:skipIfNotExists>false</ext:skipIfNotExists>
+            <ext:scopeName>scopeNotExistForBucket</ext:scopeName>
         </ext:dropCollection>
     </changeSet>
 

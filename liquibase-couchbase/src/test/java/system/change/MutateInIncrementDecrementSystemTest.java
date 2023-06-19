@@ -2,9 +2,10 @@ package system.change;
 
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.json.JsonObject;
+import common.operators.TestCollectionOperator;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
-import liquibase.ext.couchbase.operator.CollectionOperator;
+import liquibase.ext.couchbase.types.Document;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
@@ -14,60 +15,58 @@ import static common.constants.ChangeLogSampleFilePaths.MUTATE_IN_INCREMENT_DECR
 import static common.constants.TestConstants.TEST_COLLECTION;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
+import static common.operators.TestCollectionOperator.createTestDocContent;
+import static liquibase.ext.couchbase.types.Document.document;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class MutateInIncrementDecrementSystemTest extends LiquibaseSystemTest {
 
-    private static final CollectionOperator testCollectionOperator = new CollectionOperator(
-            bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE));
-    private static final Collection collection = bucketOperator.getCollection(TEST_COLLECTION, TEST_SCOPE);
+    private static final TestCollectionOperator testCollectionOperator =
+            bucketOperator.getCollectionOperator(TEST_COLLECTION, TEST_SCOPE);
 
     @Test
     @SneakyThrows
     void Should_increment_and_decrement_existing_fields_and_increment_decrement_with_creating_new_fields() {
-        String id = "incrementDecrement";
-        JsonObject document = initDocument();
-        testCollectionOperator.insertDoc(id, document);
+        Document doc = document("incrementDecrement", initDocument());
+        testCollectionOperator.insertDoc(doc);
 
         Liquibase liquibase = liquibase(MUTATE_IN_INCREMENT_DECREMENT_TEST_XML);
         liquibase.update();
 
-        JsonObject expected = expectedWithIncrementDecrementAndCreated();
-        assertThat(collection).extractingDocument(id)
-                .itsContentEquals(expected);
+        Document expected = document(doc.getId(), expectedWithIncrementDecrementAndCreated());
+        assertThat(testCollectionOperator.getCollection()).contains(expected);
 
-        testCollectionOperator.removeDoc(id);
+        testCollectionOperator.removeDoc(doc);
     }
 
-    private static JsonObject expectedWithIncrementDecrementAndCreated() {
-        return JsonObject.create()
-                .put("key", "value")
-                .put("increment", 6)
-                .put("decrement", 4)
-                .put("newIncrement", 5)
-                .put("newDecrement", -5);
-    }
 
     @Test
     @SneakyThrows
     void Should_throw_error_and_do_nothing_when_decrement_with_invalid_data_type() {
-        String id = "incrementDecrementError";
-        JsonObject document = initDocument();
-        testCollectionOperator.insertDoc(id, document);
+        Document doc = document("incrementDecrementError", initDocument());
+
+        testCollectionOperator.insertDoc(doc);
 
         Liquibase liquibase = liquibase(MUTATE_IN_INCREMENT_DECREMENT_ERROR_TEST_XML);
         assertThatExceptionOfType(LiquibaseException.class).isThrownBy(liquibase::update);
 
-        assertThat(collection).extractingDocument(id)
-                .itsContentEquals(document);
+        assertThat(testCollectionOperator.getCollection()).contains(doc);
 
-        testCollectionOperator.removeDoc(id);
+        testCollectionOperator.removeDoc(doc);
     }
 
     private static JsonObject initDocument() {
-        return JsonObject.create()
-                .put("key", "value")
+        return createTestDocContent()
                 .put("increment", 5)
                 .put("decrement", 5);
+    }
+
+
+    private static JsonObject expectedWithIncrementDecrementAndCreated() {
+        return createTestDocContent()
+                .put("increment", 6)
+                .put("decrement", 4)
+                .put("newIncrement", 5)
+                .put("newDecrement", -5);
     }
 }

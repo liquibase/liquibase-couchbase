@@ -1,7 +1,7 @@
 package liquibase.ext.couchbase.change;
 
 import com.couchbase.client.java.manager.query.CreateQueryIndexOptions;
-
+import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
 import liquibase.ext.couchbase.statement.CreateQueryIndexStatement;
 import liquibase.ext.couchbase.types.Field;
@@ -9,6 +9,7 @@ import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ import static liquibase.ext.couchbase.types.Keyspace.keyspace;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @DatabaseChange(
         name = "createQueryIndex",
@@ -49,7 +51,6 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     private String scopeName;
     private Boolean deferred;
     private Integer numReplicas;
-    private Boolean ignoreIfExists;
 
     @Override
     public String getConfirmationMessage() {
@@ -60,7 +61,20 @@ public class CreateQueryIndexChange extends CouchbaseChange {
     public SqlStatement[] generateStatements() {
         Keyspace keyspace = keyspace(bucketName, scopeName, collectionName);
         return new SqlStatement[] {
-                new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, ignoreIfExists, numReplicas, fields)
+                new CreateQueryIndexStatement(getIndexName(), keyspace, deferred, numReplicas, fields)
         };
+    }
+
+    @Override
+    protected Change[] createInverses() {
+        DropIndexChange inverse = DropIndexChange.builder()
+                .bucketName(bucketName)
+                .scopeName(scopeName)
+                .collectionName(collectionName)
+                .indexName(indexName)
+                .isPrimary(false)
+                .build();
+
+        return new Change[] {inverse};
     }
 }

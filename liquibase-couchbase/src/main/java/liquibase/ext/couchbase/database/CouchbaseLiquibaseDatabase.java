@@ -3,16 +3,14 @@ package liquibase.ext.couchbase.database;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.util.Properties;
 
 import static java.util.Optional.ofNullable;
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.COUCHBASE_PASSWORD;
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.COUCHBASE_URL;
-import static liquibase.ext.couchbase.configuration.CouchbaseLiquibaseConfiguration.COUCHBASE_USERNAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PREFIX;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_NAME;
 import static liquibase.ext.couchbase.database.Constants.COUCHBASE_PRODUCT_SHORT_NAME;
@@ -22,20 +20,21 @@ import static liquibase.ext.couchbase.database.Constants.DEFAULT_PORT;
 /**
  * Represents instance of {@link com.couchbase.client.java.Cluster}.<br><br>
  */
-@RequiredArgsConstructor
+// TODO for tests, without default constructor unable to run system tests(investigate reason)
+// liquibase.exception.UnexpectedLiquibaseException: java.lang.ClassCastException:
+// liquibase.database.core.UnsupportedDatabase cannot be cast to liquibase.ext.couchbase.database.CouchbaseLiquibaseDatabase
+@NoArgsConstructor
 public class CouchbaseLiquibaseDatabase extends AbstractJdbcDatabase {
 
-    private final ConnectionData connectionData;
+    private ConnectionData connectionData;
 
     @Setter(onMethod = @__( {@Override}))
     private DatabaseConnection connection;
 
-    public CouchbaseLiquibaseDatabase() {
-        connectionData = new ConnectionData(
-                COUCHBASE_USERNAME.getCurrentValue(),
-                COUCHBASE_PASSWORD.getCurrentValue(),
-                COUCHBASE_URL.getCurrentValue()
-        );
+    public CouchbaseLiquibaseDatabase(@NonNull String userName,
+                                      @NonNull String password,
+                                      @NonNull String url) {
+        connectionData = new ConnectionData(userName, password, url);
     }
 
     @Override

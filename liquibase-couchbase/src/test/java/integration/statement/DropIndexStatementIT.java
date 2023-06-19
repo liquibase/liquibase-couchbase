@@ -4,6 +4,7 @@ import common.RandomizedScopeTestCase;
 import common.operators.TestCollectionOperator;
 import liquibase.ext.couchbase.statement.DropIndexStatement;
 import liquibase.ext.couchbase.types.Document;
+import liquibase.ext.couchbase.types.Field;
 import liquibase.ext.couchbase.types.Keyspace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,10 +32,13 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     @Test
     void Should_drop_existing_index_in_default_scope() {
         String randomIndexName = clusterOperator.getTestIndexId();
-        clusterOperator.createIndex(randomIndexName, keyspace, singletonList(getFirstField(doc)));
+        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(),
+                keyspace.getCollection());
 
-        DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
-        statement.execute(database.getConnection());
+        testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
+
+        DropIndexStatement statement = new DropIndexStatement(randomIndexName, keyspace);
+        statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).doesNotHave(randomIndexName);
     }
@@ -43,16 +47,19 @@ class DropIndexStatementIT extends RandomizedScopeTestCase {
     void Should_drop_index_for_specific_keyspace() {
         String randomIndexName = clusterOperator.getTestIndexId();
         Keyspace keyspace = keyspace(bucketName, DEFAULT_SCOPE, DEFAULT_COLLECTION);
-        clusterOperator.createIndex(randomIndexName, keyspace, singletonList(getFirstField(doc)));
+        TestCollectionOperator testCollectionOperator = getCollectionOperator(keyspace.getBucket(), keyspace.getScope(),
+                keyspace.getCollection());
 
-        DropIndexStatement statement = new DropIndexStatement(false, randomIndexName, keyspace);
-        statement.execute(database.getConnection());
+        testCollectionOperator.createQueryIndex(randomIndexName, singletonList(getFirstField(doc)), null);
+
+        DropIndexStatement statement = new DropIndexStatement(randomIndexName, keyspace);
+        statement.execute(clusterOperator);
 
         assertThat(cluster).queryIndexes(bucketName).doesNotHave(randomIndexName);
     }
 
-    private static String getFirstField(Document doc) {
-        return doc.getContentAsJson().getNames().stream().findFirst().get();
+    private static Field getFirstField(Document doc) {
+        return doc.getContentAsJson().getNames().stream().findFirst().map(Field::new).get();
     }
 
 }
