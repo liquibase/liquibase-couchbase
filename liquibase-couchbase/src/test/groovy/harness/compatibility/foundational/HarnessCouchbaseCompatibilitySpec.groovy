@@ -18,7 +18,7 @@ import static common.HarnessTestConstants.*
 import static liquibase.harness.util.FileUtils.getJSONFileContent
 
 @Unroll
-class HarnessCouchbaseCompatibility extends HarnessContainerizedSpecification {
+class HarnessCouchbaseCompatibilitySpec extends HarnessContainerizedSpecification {
 
     @Shared
     private RollbackStrategy strategy

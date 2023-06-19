@@ -1,0 +1,91 @@
+name: Attach Artifact to Release
+
+on:
+    workflow_dispatch:
+        secrets:
+            BOT_TOKEN:
+                description: 'BOT_TOKEN from the caller workflow'
+                required: true
+            GPG_SECRET:
+                description: 'GPG_SECRET from the caller workflow'
+                required: true
+            GPG_PASSPHRASE:
+                description: 'GPG_PASSPHRASE from the caller workflow'
+                required: true
+
+jobs:
+    attach-to-release:
+        name: Attach Artifact to Release
+        if: github.event.pull_request.merged == true
+        runs-on: ubuntu-latest
+        steps:
+            - run: sleep 30
+            - uses: actions/checkout@v3
+
+            - name: Get Reusable Script Files
+              run: |
+                  curl -o $PWD/.github/get_draft_release.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/get_draft_release.sh
+                  curl -o $PWD/.github/sign_artifact.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/sign_artifact.sh
+                  curl -o $PWD/.github/upload_asset.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/upload_asset.sh
+                  chmod +x $PWD/.github/get_draft_release.sh
+                  chmod +x $PWD/.github/sign_artifact.sh
+                  chmod +x $PWD/.github/upload_asset.sh
+
+            - name: Get Artifact ID
+              id: get-artifact-id
+              run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
+
+            - name: Download artifact
+              id: download-artifact
+              uses: dawidd6/action-download-artifact@v2
+              with:
+                  github_token: ${{secrets.BOT_TOKEN}}
+                  workflow: test.yml
+                  pr: ${{github.event.pull_request.number}}
+                  name: ${{ env.artifact_id }}-artifacts
+                  path: ./assets
+                  repo: ${{ github.repository }}
+                  check_artifacts: true
+                  skip_unpack: false
+                  if_no_artifact_found: fail
+                  workflow_conclusion: ""
+
+            - name: Get Release Tag
+              id: get-release-tag
+              run: echo "release_tag=$(./.github/get_draft_release.sh TAG)" >> $GITHUB_ENV
+              env:
+                  GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+            - name: Delete Outdated Files from Draft Release
+              id: delete-outdated-release-asset
+              uses: mknejp/delete-release-assets@v1
+              with:
+                  token: ${{ secrets.BOT_TOKEN }}
+                  tag: ${{ env.release_tag }}
+                  fail-if-no-assets: false
+                  fail-if-no-release: false
+                  assets: "${{ env.artifact_id }}-*"
+
+            - name: Import GPG key
+              id: import_gpg
+              uses: crazy-max/ghaction-import-gpg@v5
+              with:
+                  gpg_private_key: ${{ secrets.GPG_SECRET }}
+                  passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+            - name: Sign Files for Draft Release
+              run: |
+                  gpg -K
+                  version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}.jar
+                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}.pom
+                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}-javadoc.jar
+                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}-sources.jar
+
+            - name: Attach Files to Draft Release
+              id: upload-release-asset
+              run: ./.github/upload_asset.sh $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+              env:
+                  GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+                  ASSET_NAME_PREFIX: "${{ env.artifact_id }}-"
+                  ASSET_DIR: ./assets
