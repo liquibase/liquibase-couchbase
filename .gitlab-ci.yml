@@ -36,7 +36,16 @@ cache:
 stages:
   - build
   - test
-  - visualize
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploy to staging server"
+  environment:
+    name: staging
+    url: https://staging.example.com
+
 
 build:
   stage: build
@@ -62,16 +71,3 @@ test:
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-coverage-test:
-    stage: visualize
-    image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
-    script:
-        # convert report from jacoco to cobertura, using relative project path
-        - python /opt/cover2cover.py liquibase-couchbase/target/site/jacoco/jacoco.xml $CI_PROJECT_DIR/src/main/java/ > cobertura.xml
-    needs: ["test"]
-    artifacts:
-        reports:
-            coverage_report:
-                coverage_format: cobertura
-                path: cobertura.xml

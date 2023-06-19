@@ -29,23 +29,27 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testLines.json</ext:filePath>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testLines.json</ext:filePath>
+                </ext:file>
                 <ext:importType>LINES</ext:importType>
                 <ext:keyProviderType>DEFAULT</ext:keyProviderType>
                 <ext:keyProviderExpression>id</ext:keyProviderExpression>
-            </ext:file>
+            </ext:importFile>
         </ext:upsertDocuments>
         <ext:upsertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testList.json</ext:filePath>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testList.json</ext:filePath>
+                </ext:file>
                 <ext:importType>LIST</ext:importType>
                 <ext:keyProviderType>DEFAULT</ext:keyProviderType>
                 <ext:keyProviderExpression>id</ext:keyProviderExpression>
-            </ext:file>
+            </ext:importFile>
         </ext:upsertDocuments>
     </changeSet>
 </databaseChangeLog>

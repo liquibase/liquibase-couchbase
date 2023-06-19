@@ -54,8 +54,8 @@
     "upsertDocuments": {
       "$ref": "#/$defs/upsertDocuments"
     },
-    "sqlFile": {
-      "$ref": "#/$defs/sqlFile"
+    "executeQueryFile": {
+      "$ref": "#/$defs/executeQueryFile"
     },
     "dropQueryIndex": {
       "$ref": "#/$defs/dropQueryIndex"
@@ -194,8 +194,8 @@
               "createQueryIndex": {
                 "$ref": "#/$defs/createQueryIndex"
               },
-              "sqlFile": {
-                "$ref": "#/$defs/sqlFile"
+              "executeQueryFile": {
+                "$ref": "#/$defs/executeQueryFile"
               },
               "upsertDocuments": {
                 "$ref": "#/$defs/upsertDocuments"
@@ -509,6 +509,9 @@
         },
         "whereCondition": {
           "type": "string"
+        },
+        "sqlPlusPlusQuery": {
+          "type": "string"
         }
       }
     },
@@ -598,6 +601,9 @@
           "type": "string"
         },
         "whereCondition": {
+          "type": "string"
+        },
+        "sqlPlusPlusQuery": {
           "type": "string"
         },
         "mutateInSpecs": {
@@ -747,7 +753,7 @@
         }
       }
     },
-    "sqlFile": {
+    "executeQueryFile": {
       "type": "object",
       "required": [
         "path",

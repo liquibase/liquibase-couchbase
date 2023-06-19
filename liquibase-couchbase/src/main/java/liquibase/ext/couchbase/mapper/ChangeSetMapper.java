@@ -21,7 +21,7 @@ public class ChangeSetMapper {
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 
     @SneakyThrows
-    public static RanChangeSet mapToRanChangeSet(CouchbaseChangeLog changeLog) {
+    public RanChangeSet mapToRanChangeSet(CouchbaseChangeLog changeLog) {
         RanChangeSet ranChangeSet = new RanChangeSet(
                 changeLog.getFileName(),
                 changeLog.getId(),

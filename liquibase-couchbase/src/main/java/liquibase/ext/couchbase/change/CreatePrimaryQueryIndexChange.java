@@ -8,6 +8,7 @@ import liquibase.ext.couchbase.types.Keyspace;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @DatabaseChange(
         name = "createPrimaryQueryIndex",

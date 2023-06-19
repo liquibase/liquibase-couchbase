@@ -26,7 +26,7 @@
 
     <changeSet id="1" author="dmitry.dashko">
         <preConditions>
-            <ext:sqlPlusPlusCheck expectedResultJson='[{"count": 3}]' query="SELECT COUNT(*) as count FROM testBucket.testScope.SqlCheckPreconditionSystemTestCollection"/>
+            <ext:queryCustomCheck expectedResultJson='[{"count": 3}]' query="SELECT COUNT(*) as count FROM testBucket.testScope.SqlCheckPreconditionSystemTestCollection"/>
         </preConditions>
         <ext:insertDocuments>
             <ext:bucketName>testBucket</ext:bucketName>

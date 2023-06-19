@@ -35,7 +35,7 @@ public class LiquibaseCouchbaseFileValueProvider extends AbstractMapConfiguratio
     private void loadProps(ResourceAccessor resourceAccessor) throws IOException {
         // Get files in priority order(order based on the configured classloader)
         List<Resource> resources = resourceAccessor.getAll(propsFileName);
-        if (resources.isEmpty()) {
+        if (resources == null || resources.isEmpty()) {
             throw new FileNotFoundException(FileUtil.getFileNotFoundMessage(propsFileName));
         }
         log.config("Loaded next properties from " + propsFileName + " " + properties.entrySet());

@@ -61,7 +61,6 @@ public class CouchbaseHistoryService extends NoSqlHistoryService {
         changeLog.setOrderExecuted(nextSequenceValue);
         changeLog.setDeploymentId(deploymentId);
         changeLog.setExecType(execType);
-        changeLog.setTag(tag);
 
         getChangeLogOperator().insertChangeLog(changeLog);
     }

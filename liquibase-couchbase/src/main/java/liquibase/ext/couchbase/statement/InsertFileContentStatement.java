@@ -5,7 +5,7 @@ import com.couchbase.client.java.transactions.TransactionAttemptContext;
 import liquibase.ext.couchbase.operator.ClusterOperator;
 import liquibase.ext.couchbase.operator.CollectionOperator;
 import liquibase.ext.couchbase.types.Document;
-import liquibase.ext.couchbase.types.File;
+import liquibase.ext.couchbase.types.ImportFile;
 import liquibase.ext.couchbase.types.Keyspace;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,11 +26,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class InsertFileContentStatement extends CouchbaseFileContentStatement {
     private final Keyspace keyspace;
-    private final File file;
+    private final ImportFile importFile;
 
     @Override
     public void doInTransaction(TransactionAttemptContext transaction, ClusterOperator clusterOperator) {
-        List<Document> docs = getDocsFromFile(file);
+        List<Document> docs = getDocsFromFile(importFile);
         CollectionOperator collectionOperator = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope());
         collectionOperator.insertDocsTransactionally(transaction, docs);
@@ -38,7 +38,7 @@ public class InsertFileContentStatement extends CouchbaseFileContentStatement {
 
     @Override
     public Publisher<?> doInTransactionReactive(ReactiveTransactionAttemptContext transaction, ClusterOperator clusterOperator) {
-        List<Document> docs = getDocsFromFile(file);
+        List<Document> docs = getDocsFromFile(importFile);
         CollectionOperator collectionOperator = clusterOperator.getBucketOperator(keyspace.getBucket())
                 .getCollectionOperator(keyspace.getCollection(), keyspace.getScope());
         return collectionOperator.insertDocsTransactionallyReactive(transaction, docs);
