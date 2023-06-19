@@ -29,12 +29,14 @@
             <ext:bucketName>testBucket</ext:bucketName>
             <ext:scopeName>testScope</ext:scopeName>
             <ext:collectionName>testCollection</ext:collectionName>
-            <ext:file>
-                <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testUidKey.json</ext:filePath>
+            <ext:importFile>
+                <ext:file>
+                    <ext:filePath>src/test/resources/liquibase/ext/couchbase/insert/testUidKey.json</ext:filePath>
+                </ext:file>
                 <ext:importType>LINES</ext:importType>
                 <ext:keyProviderType>EXPRESSION</ext:keyProviderType>
                 <ext:keyProviderExpression>testKey::%value%::#MONO_INCR#</ext:keyProviderExpression>
-            </ext:file>
+            </ext:importFile>
         </ext:insertDocuments>
     </changeSet>
 </databaseChangeLog>

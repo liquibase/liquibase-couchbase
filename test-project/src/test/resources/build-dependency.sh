@@ -1,0 +1,2 @@
+mvn -f liquibase-couchbase-extension/pom.xml clean install:install-file -Dpackaging=pom -Dfile=pom.xml -DpomFile=pom.xml
+mvn -f liquibase-couchbase-extension/liquibase-couchbase/pom.xml clean install -Dmaven.test.skip

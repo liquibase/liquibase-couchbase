@@ -2,12 +2,15 @@ package liquibase.ext.couchbase.provider.generator;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class IncrementalKeyGenerator implements KeyGenerator {
 
     private final AtomicLong lastValue;
 
     public IncrementalKeyGenerator() {
-        this.lastValue = new AtomicLong();
+        this(new AtomicLong());
     }
 
     @Override

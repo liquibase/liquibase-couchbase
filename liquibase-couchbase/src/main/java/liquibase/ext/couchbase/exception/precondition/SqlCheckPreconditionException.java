@@ -2,13 +2,14 @@ package liquibase.ext.couchbase.exception.precondition;
 
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.PreconditionFailedException;
+import liquibase.ext.couchbase.precondition.QueryCustomCheckPrecondition;
 import liquibase.precondition.Precondition;
 import lombok.Getter;
 
 import static java.lang.String.format;
 
 /**
- * Exception thrown when bucket does not exist. Thrown by {@link liquibase.ext.couchbase.precondition.SqlCheckPrecondition}
+ * Exception thrown when bucket does not exist. Thrown by {@link QueryCustomCheckPrecondition}
  * @see PreconditionFailedException
  */
 

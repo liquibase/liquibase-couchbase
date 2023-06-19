@@ -177,10 +177,8 @@ public class CouchbaseConnection implements DatabaseConnection {
             cluster = connect(connectionString.original(), clusterOptions(connectionString.username(), password));
             transactionExecutorService = TransactionExecutorService.getExecutor(cluster);
 
-            if (connectionString.params()
-                    .containsKey(BUCKET_PARAM)) {
-                final String dbName = connectionString.params()
-                        .get(BUCKET_PARAM);
+            if (connectionString.params().containsKey(BUCKET_PARAM)) {
+                final String dbName = connectionString.params().get(BUCKET_PARAM);
                 database = cluster.bucket(dbName);
             }
         } catch (final Exception e) {

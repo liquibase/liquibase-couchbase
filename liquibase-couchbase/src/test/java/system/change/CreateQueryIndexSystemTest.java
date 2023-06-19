@@ -7,6 +7,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import system.LiquibaseSystemTest;
 
+import java.util.concurrent.TimeUnit;
+
 import static common.constants.ChangeLogSampleFilePaths.CREATE_QUERY_INDEX_TEST_XML;
 import static common.constants.TestConstants.TEST_SCOPE;
 import static common.matchers.CouchbaseCollectionAssert.assertThat;
@@ -27,6 +29,8 @@ public class CreateQueryIndexSystemTest extends LiquibaseSystemTest {
     @Test
     @SneakyThrows
     void Query_index_should_be_created_and_rolled_back() {
+        TimeUnit.SECONDS.sleep(1L);
+
         Liquibase liquibase = liquibase(CREATE_QUERY_INDEX_TEST_XML);
 
         liquibase.update();

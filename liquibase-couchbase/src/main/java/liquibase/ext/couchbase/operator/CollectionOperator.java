@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -103,6 +104,18 @@ public class CollectionOperator {
     public boolean docExists(String id) {
         return collection.exists(id).exists();
     }
+    public boolean docExists(Document doc) {
+        return collection.exists(doc.getId()).exists();
+    }
+
+    public void removeDocIfExist(Document doc) {
+        if (docExists(doc)) {
+            collection.remove(doc.getId());
+        }
+    }
+    public void removeDocsIfExist(Document... docs) {
+        Arrays.stream(docs).forEach(this::removeDocIfExist);
+    }
 
     public void removeDoc(Document doc) {
         collection.remove(doc.getId());
@@ -123,7 +136,7 @@ public class CollectionOperator {
     }
 
     public void upsertDocsTransactionally(TransactionAttemptContext transaction, List<Document> docs) {
-        docs.forEach(doc -> upsertDocInTransaction(transaction,doc));
+        docs.forEach(doc -> upsertDocInTransaction(transaction, doc));
     }
 
     public Flux<TransactionGetResult> upsertDocsTransactionallyReactive(ReactiveTransactionAttemptContext transaction,

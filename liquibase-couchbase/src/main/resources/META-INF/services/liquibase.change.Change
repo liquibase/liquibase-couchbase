@@ -13,4 +13,4 @@ liquibase.ext.couchbase.change.DropScopeChange
 liquibase.ext.couchbase.change.UpdateBucketChange
 liquibase.ext.couchbase.change.RemoveDocumentsChange
 liquibase.ext.couchbase.change.ExecuteQueryChange
-liquibase.ext.couchbase.change.SqlFileChange
+liquibase.ext.couchbase.change.QueryFileChange
