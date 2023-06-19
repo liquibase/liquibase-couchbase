@@ -4,7 +4,7 @@ context: testContext
 databasesUnderTest:
     - name: couchbase
       prefix: local
-      version: 7.1.3
+      version: 7.0.0
       url: couchbase://localhost is not working with test container if there is already database on localhost. So this url is replaced in FoundationalTestDataProvider
       username: Administrator
       password: password
