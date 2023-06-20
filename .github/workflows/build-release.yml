@@ -8,11 +8,11 @@ jobs:
         name: Create Release
         runs-on: ubuntu-latest
         steps:
-            -   name: Build with Maven
-                run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
+            - name: Build with Maven
+              run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
 
-            -   name: Publish Artifacts
-                uses: actions/upload-artifact@v3
-                with:
-                    name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
-                    path: liquibase-couchbase/target/*
+            - name: Publish Artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
+                  path: liquibase-couchbase/target/*
