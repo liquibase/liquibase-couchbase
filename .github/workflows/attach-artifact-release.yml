@@ -16,7 +16,7 @@ on:
 jobs:
     attach-to-release:
         name: Attach Artifact to Release
-        #if: github.event.pull_request.merged == true
+        if: github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         steps:
             - run: sleep 30
