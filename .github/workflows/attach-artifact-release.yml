@@ -12,6 +12,7 @@ on:
             GPG_PASSPHRASE:
                 description: 'GPG_PASSPHRASE from the caller workflow'
                 required: true
+        inputs:
 
 jobs:
     attach-to-release:
