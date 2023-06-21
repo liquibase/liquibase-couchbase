@@ -33,7 +33,7 @@ jobs:
             - name: Publish Artifacts
               uses: actions/upload-artifact@v2
               with:
-                name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
+                name: liquibase-couchbase
                 path: liquibase-couchbase/target/*
 
             - run: sleep 30
@@ -55,9 +55,7 @@ jobs:
             - name: Download Artifacts
               uses: actions/download-artifact@v2
               with:
-                  name: ${{ env.artifact_id }}-artifacts
-                  check_artifacts: true
-                  if_no_artifact_found: fail
+                  name: liquibase-couchbase
 
             - name: Get Release Tag
               id: get-release-tag
