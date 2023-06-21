@@ -31,7 +31,7 @@ jobs:
               run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
 
             - name: Publish Artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v2
               with:
                 name: ${{ steps.get-artifact-id.outputs.artifact_id }}-artifacts
                 path: liquibase-couchbase/target/*
@@ -52,20 +52,12 @@ jobs:
               id: get-artifact-id
               run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
 
-            - name: Download artifact
-              id: download-artifact
-              uses: dawidd6/action-download-artifact@v2
+            - name: Download Artifacts
+              uses: actions/download-artifact@v2
               with:
-                  github_token: ${{secrets.BOT_TOKEN}}
-                  workflow: test.yml
-                  pr: ${{github.event.pull_request.number}}
                   name: ${{ env.artifact_id }}-artifacts
-                  path: ./assets
-                  repo: ${{ github.repository }}
                   check_artifacts: true
-                  skip_unpack: false
                   if_no_artifact_found: fail
-                  workflow_conclusion: ""
 
             - name: Get Release Tag
               id: get-release-tag
