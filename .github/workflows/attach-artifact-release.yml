@@ -97,10 +97,12 @@ jobs:
             -   name: Sign Files for Draft Release
                 run: |
                     gpg -K
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar
+                    passphrase="${{ secrets.GPG_PASSPHRASE }}"
+                    export GPG_TTY=$(tty)
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar
 
             -   name: Attach Files to Draft Release
                 id: upload-release-asset
