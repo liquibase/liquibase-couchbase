@@ -2,6 +2,10 @@ name: Release Extension to Sonatype
 
 on:
     workflow_dispatch:
+        inputs:
+            tagVersion:
+                description: 'Release Version'
+                required: true
     release:
         types: [ published ]
         secrets:
@@ -10,10 +14,6 @@ on:
                 required: true
             SONATYPE_TOKEN:
                 description: 'SONATYPE_TOKEN from the caller workflow'
-                required: true
-        inputs:
-            tagVersion:
-                description: 'Release Version'
                 required: true
 
 jobs:
