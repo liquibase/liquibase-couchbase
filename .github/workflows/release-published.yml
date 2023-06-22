@@ -55,6 +55,7 @@ jobs:
             -   name: Download Release Artifacts
                 uses: robinraju/release-downloader@v1.6
                 with:
+                    tag: "0.1.0-ER"
                     filename: "${{ env.artifact_id }}-*"
                     out-file-path: "."
 
