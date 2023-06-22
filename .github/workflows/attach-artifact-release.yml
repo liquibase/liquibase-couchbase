@@ -97,15 +97,14 @@ jobs:
             -   name: Sign Files for Draft Release
                 run: |
                     gpg -K
-                    version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}.jar
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}.pom
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}-javadoc.jar
-                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}-sources.jar
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar
 
             -   name: Attach Files to Draft Release
                 id: upload-release-asset
-                run: ./.github/upload_asset.sh $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                run: ./.github/upload_asset.sh ${{ env.artifact_version }}
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
                     ASSET_NAME_PREFIX: "${{ env.artifact_id }}-"
