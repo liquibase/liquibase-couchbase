@@ -62,7 +62,7 @@ jobs:
             -   name: Download Release Artifacts
                 uses: robinraju/release-downloader@v1.6
                 with:
-                    tag: "${{ context.payload.inputs.tagVersion }}"
+                    tag: context.payload.inputs.tagVersion
                     filename: "${{ env.artifact_id }}-*"
                     out-file-path: "."
 
