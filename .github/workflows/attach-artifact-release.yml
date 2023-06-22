@@ -97,10 +97,16 @@ jobs:
             -   name: Generate MD5 checksum
                 run: |
                     md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.md5
+                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom > ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom.md5
+                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar.md5
+                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar.md5
 
             -   name: Generate SHA-1 checksum
                 run: |
                     sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.sha1
+                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom > ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom.md5
+                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar.md5
+                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar.md5
 
             -   name: Sign Files for Draft Release
                 run: |
