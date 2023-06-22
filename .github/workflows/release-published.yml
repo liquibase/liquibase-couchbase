@@ -60,21 +60,21 @@ jobs:
 
 
             -   name: Download Release Artifacts
-                    uses: robinraju/release-downloader@v1.6
-                    with:
-                        tag: "${{ context.payload.inputs.tagVersion }}"
-                        filename: "${{ env.artifact_id }}-*"
-                        out-file-path: "."
+                uses: robinraju/release-downloader@v1.6
+                with:
+                    tag: "${{ context.payload.inputs.tagVersion }}"
+                    filename: "${{ env.artifact_id }}-*"
+                    out-file-path: "."
 
             -   name: Set up Java for publishing to Maven Central Repository
-                    uses: actions/setup-java@v3
-                    with:
-                        java-version: '17'
-                        distribution: 'temurin'
-                        cache: 'maven'
-                        server-id: sonatype-nexus-staging
-                        server-username: MAVEN_USERNAME
-                        server-password: MAVEN_PASSWORD
+                uses: actions/setup-java@v3
+                with:
+                    java-version: '17'
+                    distribution: 'temurin'
+                    cache: 'maven'
+                    server-id: sonatype-nexus-staging
+                    server-username: MAVEN_USERNAME
+                    server-password: MAVEN_PASSWORD
 
 #            - name: Publish to Maven Central
 #              env:
