@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>liquibase-couchbase</artifactId>
-    <version>1.0.0</version>
+    <version>${build.version}</version>
     <packaging>jar</packaging>
 
     <properties>

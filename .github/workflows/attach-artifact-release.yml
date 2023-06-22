@@ -1,4 +1,4 @@
-name: Attach Artifact to Release
+name: Build and Attach Artifacts to Release
 
 on:
     workflow_dispatch:
@@ -14,85 +14,99 @@ on:
                 required: true
 
 jobs:
-    attach-to-release:
-        name: Attach Artifact to Release
-        #if: github.event.pull_request.merged == true
+    build-and-attach-artifacts:
+        name: Build and attach maven artifacts
         runs-on: ubuntu-latest
+        outputs:
+            extensionVersion: ${{ steps.collect-data.outputs.extensionVersion }}
         steps:
-            - uses: actions/checkout@v3
-            - name: Set up JDK 8
-              uses: actions/setup-java@v3
-              with:
-                java-version: '8'
-                distribution: 'temurin'
-                cache: maven
+            -   uses: actions/checkout@v3
+            -   name: Set up JDK 8
+                uses: actions/setup-java@v3
+                with:
+                    java-version: 8
+                    distribution: 'temurin'
+                    cache: 'maven'
 
-            - name: Build with Maven
-              run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
+            -   name: Build with Maven
+                run: mvn package --file liquibase-couchbase/pom.xml -DskipTests
 
-            - name: Publish Artifacts
-              uses: actions/upload-artifact@v2
-              with:
-                name: liquibase-couchbase
-                path: liquibase-couchbase/target/*
+            -   name: Get Artifact ID
+                id: get-artifact-id
+                run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
 
-            - run: sleep 30
-            - uses: actions/checkout@v3
+            -   name: Get Artifact Version
+                id: get-artifact-version
+                run: echo "artifact_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-            - name: Get Reusable Script Files
-              run: |
-                  curl -o $PWD/.github/get_draft_release.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/get_draft_release.sh
-                  curl -o $PWD/.github/sign_artifact.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/sign_artifact.sh
-                  curl -o $PWD/.github/upload_asset.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/upload_asset.sh
-                  chmod +x $PWD/.github/get_draft_release.sh
-                  chmod +x $PWD/.github/sign_artifact.sh
-                  chmod +x $PWD/.github/upload_asset.sh
+            -   name: Collect Data
+                id: collect-data
+                uses: actions/github-script@v4
+                with:
+                    script: |
+                        core.setOutput("extensionVersion", '${{ env.artifact_version }}');
 
-            - name: Get Artifact ID
-              id: get-artifact-id
-              run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
+            -   name: Echo Build Info
+                id: echo-version
+                run: |
+                    echo "Get Extension artifacts ${{ env.artifact_id }}-${{ env.artifact_version }}"
 
-            - name: Download Artifacts
-              uses: actions/download-artifact@v2
-              with:
-                  name: liquibase-couchbase
+            -   name: Publish Artifacts
+                uses: actions/upload-artifact@v2
+                with:
+                    name: liquibase-couchbase
+                    path: liquibase-couchbase/target/*
 
-            - name: Get Release Tag
-              id: get-release-tag
-              run: echo "release_tag=$(./.github/get_draft_release.sh TAG)" >> $GITHUB_ENV
-              env:
-                  GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+            -   name: Get Reusable Script Files
+                run: |
+                    curl -o $PWD/.github/get_draft_release.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/get_draft_release.sh
+                    curl -o $PWD/.github/sign_artifact.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/sign_artifact.sh
+                    curl -o $PWD/.github/upload_asset.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/upload_asset.sh
+                    chmod +x $PWD/.github/get_draft_release.sh
+                    chmod +x $PWD/.github/sign_artifact.sh
+                    chmod +x $PWD/.github/upload_asset.sh
 
-            - name: Delete Outdated Files from Draft Release
-              id: delete-outdated-release-asset
-              uses: mknejp/delete-release-assets@v1
-              with:
-                  token: ${{ secrets.BOT_TOKEN }}
-                  tag: ${{ env.release_tag }}
-                  fail-if-no-assets: false
-                  fail-if-no-release: false
-                  assets: "${{ env.artifact_id }}-*"
+            -   name: Download Artifacts
+                uses: actions/download-artifact@v2
+                with:
+                    name: liquibase-couchbase
 
-            - name: Import GPG key
-              id: import_gpg
-              uses: crazy-max/ghaction-import-gpg@v5
-              with:
-                  gpg_private_key: ${{ secrets.GPG_SECRET }}
-                  passphrase: ${{ secrets.GPG_PASSPHRASE }}
+            -   name: Get Release Tag
+                id: get-release-tag
+                run: echo "release_tag=$(./.github/get_draft_release.sh TAG)" >> $GITHUB_ENV
+                env:
+                    GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
-            - name: Sign Files for Draft Release
-              run: |
-                  gpg -K
-                  version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}.jar
-                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}.pom
-                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}-javadoc.jar
-                  ./.github/sign_artifact.sh ./assets/${{ env.artifact_id }}-${version}-sources.jar
+            -   name: Delete Outdated Files from Draft Release
+                id: delete-outdated-release-asset
+                uses: mknejp/delete-release-assets@v1
+                with:
+                    token: ${{ secrets.BOT_TOKEN }}
+                    tag: ${{ env.release_tag }}
+                    fail-if-no-assets: false
+                    fail-if-no-release: false
+                    assets: "${{ env.artifact_id }}-*"
 
-            - name: Attach Files to Draft Release
-              id: upload-release-asset
-              run: ./.github/upload_asset.sh $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-              env:
-                  GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-                  ASSET_NAME_PREFIX: "${{ env.artifact_id }}-"
-                  ASSET_DIR: ./assets
+            -   name: Import GPG key
+                id: import_gpg
+                uses: crazy-max/ghaction-import-gpg@v5
+                with:
+                    gpg_private_key: ${{ secrets.GPG_SECRET }}
+                    passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+            -   name: Sign Files for Draft Release
+                run: |
+                    gpg -K
+                    version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}.jar
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}.pom
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}-javadoc.jar
+                    ./.github/sign_artifact.sh ./${{ env.artifact_id }}-${version}-sources.jar
+
+            -   name: Attach Files to Draft Release
+                id: upload-release-asset
+                run: ./.github/upload_asset.sh $(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+                env:
+                    GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+                    ASSET_NAME_PREFIX: "${{ env.artifact_id }}-"
+                    ASSET_DIR: .
