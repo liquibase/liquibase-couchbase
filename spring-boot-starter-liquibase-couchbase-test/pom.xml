@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>spring-boot-starter-liquibase-couchbase-test</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>${build.version}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.liquibase.ext</groupId>
             <artifactId>spring-boot-starter-liquibase-couchbase</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>${build.version}</version>
         </dependency>
         <dependency>
             <groupId>com.couchbase.client</groupId>
