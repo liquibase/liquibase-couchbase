@@ -30,13 +30,6 @@ jobs:
                 id: get-artifact-version
                 run: echo "artifact_version=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-            -   name: Collect Data
-                id: collect-data
-                uses: actions/github-script@v4
-                with:
-                    script: |
-                        core.setOutput("extensionVersion", '${{ env.artifact_version }}');
-
             -   name: Echo Build Info
                 id: echo-version
                 run: |
@@ -62,7 +55,6 @@ jobs:
             -   name: Download Release Artifacts
                 uses: robinraju/release-downloader@v1.6
                 with:
-                    tag: context.payload.inputs.tagVersion
                     filename: "${{ env.artifact_id }}-*"
                     out-file-path: "."
 
