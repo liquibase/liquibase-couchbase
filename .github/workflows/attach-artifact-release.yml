@@ -37,7 +37,7 @@ jobs:
 
             -   name: Get Artifact Version
                 id: get-artifact-version
-                run: echo "artifact_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+                run: echo "artifact_version=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
             -   name: Collect Data
                 id: collect-data
