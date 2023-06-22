@@ -3,7 +3,7 @@ name: Release Extension to Sonatype
 on:
     workflow_dispatch:
     release:
-        types: [published]
+        types: [ published ]
         secrets:
             SONATYPE_USERNAME:
                 description: 'SONATYPE_USERNAME from the caller workflow'
@@ -11,33 +11,70 @@ on:
             SONATYPE_TOKEN:
                 description: 'SONATYPE_TOKEN from the caller workflow'
                 required: true
+        inputs:
+            tagVersion:
+                description: 'Release Version'
+                required: true
 
 jobs:
     release:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            -   uses: actions/checkout@v3
 
-            - name: Get Artifact ID
-              id: get-artifact-id
-              run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
+            -   name: Get Artifact ID
+                id: get-artifact-id
+                run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
 
-            - name: Download Release Artifacts
-              uses: robinraju/release-downloader@v1.6
-              with:
-                  tag: "${{ github.event.release.tag_name }}"
-                  filename: "${{ env.artifact_id }}-*"
-                  out-file-path: "."
+            -   name: Get Artifact Version
+                id: get-artifact-version
+                run: echo "artifact_version=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
-            - name: Set up Java for publishing to Maven Central Repository
-              uses: actions/setup-java@v3
-              with:
-                  java-version: '17'
-                  distribution: 'temurin'
-                  cache: 'maven'
-                  server-id: sonatype-nexus-staging
-                  server-username: MAVEN_USERNAME
-                  server-password: MAVEN_PASSWORD
+            -   name: Collect Data
+                id: collect-data
+                uses: actions/github-script@v4
+                with:
+                    script: |
+                        core.setOutput("extensionVersion", '${{ env.artifact_version }}');
+
+            -   name: Echo Build Info
+                id: echo-version
+                run: |
+                    echo "Get Extension artifacts ${{ env.artifact_id }}-${{ env.artifact_version }}"
+
+            #            -   name: Get Tag Value
+            #                    uses: actions/github-script@v4
+            #                    with:
+            #                        script: |
+            #                            if (context.payload.inputs && context.payload.inputs.tagVersion) {
+            #                             process.env.tagValue = context.payload.inputs.tagVersion;
+            #                                github.exportVariable('tagValue', process.env.tagValue);
+            #                            } else {
+            #
+            #                            }
+            #                            process.env.tagValue = context.payload.inputs.tagVersion;
+            #                            github.exportVariable('tagValue', process.env.tagValue);
+            #                           const tagValue = 'my-variable-value';
+            #                            process.env.MY_VARIABLE = myValue;
+            #                            github.exportVariable('MY_VARIABLE', myValue);
+
+
+            -   name: Download Release Artifacts
+                    uses: robinraju/release-downloader@v1.6
+                    with:
+                        tag: "${{ context.payload.inputs.tagVersion }}"
+                        filename: "${{ env.artifact_id }}-*"
+                        out-file-path: "."
+
+            -   name: Set up Java for publishing to Maven Central Repository
+                    uses: actions/setup-java@v3
+                    with:
+                        java-version: '17'
+                        distribution: 'temurin'
+                        cache: 'maven'
+                        server-id: sonatype-nexus-staging
+                        server-username: MAVEN_USERNAME
+                        server-password: MAVEN_PASSWORD
 
 #            - name: Publish to Maven Central
 #              env:
