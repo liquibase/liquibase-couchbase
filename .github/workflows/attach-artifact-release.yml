@@ -98,6 +98,10 @@ jobs:
                 run: |
                     md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.md5
 
+            -   name: Generate SHA-1 checksum
+                run: |
+                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.sha1
+
             -   name: Sign Files for Draft Release
                 run: |
                     gpg -K
