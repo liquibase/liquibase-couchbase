@@ -28,12 +28,18 @@ jobs:
                     echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
                     echo "artifact_version=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
                     echo "tag_name=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
+                    echo "artifact_name=${{ env.artifact_id }}-${{ env.artifact_version }}" >> $GITHUB_ENV
+
+            -   name: Collect Artifact Name
+                id: get-artifact-name
+                run: echo "artifact_name=${{ env.artifact_id }}-${{ env.artifact_version }}" >> $GITHUB_ENV
 
             -   name: Echo Build Info
                 id: echo-info
                 run: |
                     echo "Artifact Id: ${{ env.artifact_id }}"
                     echo "Artifact Version: ${{ env.artifact_version }}"
+                    echo "Artifact Full Name: ${{ env.artifact_name }}"
                     echo "Tag Name: ${{ env.tag_name }}"
 
             -   name: Download Release Artifacts
@@ -53,20 +59,19 @@ jobs:
                     server-username: MAVEN_USERNAME
                     server-password: MAVEN_PASSWORD
 
-#            - name: Publish to Maven Central
-#              env:
-#                  MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-#                  MAVEN_PASSWORD: ${{ secrets.SONATYPE_TOKEN }}
-#              run: |
-#                  version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-#                  mvn -B org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1:deploy-file \
-#                              -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
-#                              -DrepositoryId=sonatype-nexus-staging \
-#                              -DpomFile=${{ env.artifact_id }}-${version}.pom \
-#                              -DgeneratePom=false \
-#                              -Dfile=${{ env.artifact_id }}-${version}.jar \
-#                              -Dsources=${{ env.artifact_id }}-${version}-sources.jar \
-#                              -Djavadoc=${{ env.artifact_id }}-${version}-javadoc.jar \
-#                              -Dfiles=${{ env.artifact_id }}-${version}.jar.asc,${{ env.artifact_id }}-${version}-sources.jar.asc,${{ env.artifact_id }}-${version}-javadoc.jar.asc,${{ env.artifact_id }}-${version}.pom.asc \
-#                              -Dtypes=jar.asc,jar.asc,jar.asc,pom.asc \
-#                              -Dclassifiers=,sources,javadoc,
+            -   name: Publish to Maven Central
+                env:
+                    MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+                    MAVEN_PASSWORD: ${{ secrets.SONATYPE_TOKEN }}
+                run: |
+                    mvn -B org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1:deploy-file \
+                                -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
+                                -DrepositoryId=sonatype-nexus-staging \
+                                -DpomFile=${{ env.artifact_name }}.pom \
+                                -DgeneratePom=false \
+                                -Dfile=${{ env.artifact_name }}.jar \
+                                -Dsources=${{ env.artifact_name }}-sources.jar \
+                                -Djavadoc=${{ env.artifact_name }}-javadoc.jar \
+                                -Dfiles=${{ env.artifact_name }}.jar.asc,${{ env.artifact_name }}-sources.jar.asc,${{ env.artifact_name }}-javadoc.jar.asc,${{ env.artifact_name }}.pom.asc \
+                                -Dtypes=jar.asc,jar.asc,jar.asc,pom.asc \
+                                -Dclassifiers=,sources,javadoc,
