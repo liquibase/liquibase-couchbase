@@ -75,7 +75,7 @@ jobs:
                 with:
                     name: liquibase-couchbase
 
-            -   name: Release
+            -   name: Create Draft Release
                 uses: softprops/action-gh-release@v1
                 with:
                     target_commitish: ${{ needs.build.outputs.releaseSha }}
@@ -84,12 +84,6 @@ jobs:
                     draft: true
                     body: Liquibase Couchbase extension
                     files: liquibase-couchbase
-                env:
-                    GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-
-            -   name: Get Release Tag
-                id: get-release-tag
-                run: echo "release_tag=$(./.github/get_draft_release.sh TAG)" >> $GITHUB_ENV
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
