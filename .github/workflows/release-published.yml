@@ -3,9 +3,6 @@ name: Release Extension to Sonatype
 on:
     workflow_dispatch:
         inputs:
-            tagName:
-                description: 'Release Tag Name'
-                required: true
             releaseVersion:
                 description: 'Release Version'
                 required: true
@@ -30,7 +27,7 @@ jobs:
                 run: |
                     echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
                     echo "artifact_version=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
-                    echo "tag_name=${{ inputs.tagName }}" >> $GITHUB_ENV
+                    echo "tag_name=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
 
             -   name: Echo Build Info
                 id: echo-info
