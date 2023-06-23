@@ -3,7 +3,10 @@ name: Release Extension to Sonatype
 on:
     workflow_dispatch:
         inputs:
-            tagVersion:
+            tagName:
+                description: 'Release Tag Name'
+                required: true
+            releaseVersion:
                 description: 'Release Version'
                 required: true
     release:
@@ -22,40 +25,24 @@ jobs:
         steps:
             -   uses: actions/checkout@v3
 
-            -   name: Get Artifact ID
-                id: get-artifact-id
-                run: echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
-
-            -   name: Get Artifact Version
-                id: get-artifact-version
-                run: echo "artifact_version=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+            -   name: Collect Env Data
+                id: get-release-sha
+                run: |
+                    echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
+                    echo "artifact_version=${{ context.payload.inputs.releaseVersion }}" >> $GITHUB_ENV
+                    echo "tag_name=${{ context.payload.inputs.tagName }}" >> $GITHUB_ENV
 
             -   name: Echo Build Info
                 id: echo-version
                 run: |
-                    echo "Get Extension artifacts ${{ env.artifact_id }}-${{ env.artifact_version }}"
-
-            #            -   name: Get Tag Value
-            #                    uses: actions/github-script@v4
-            #                    with:
-            #                        script: |
-            #                            if (context.payload.inputs && context.payload.inputs.tagVersion) {
-            #                             process.env.tagValue = context.payload.inputs.tagVersion;
-            #                                github.exportVariable('tagValue', process.env.tagValue);
-            #                            } else {
-            #
-            #                            }
-            #                            process.env.tagValue = context.payload.inputs.tagVersion;
-            #                            github.exportVariable('tagValue', process.env.tagValue);
-            #                           const tagValue = 'my-variable-value';
-            #                            process.env.MY_VARIABLE = myValue;
-            #                            github.exportVariable('MY_VARIABLE', myValue);
-
+                    echo "Artifact Id: ${{ env.artifact_id }}"
+                    echo "Artifact Version: ${{ env.artifact_version }}"
+                    echo "Tag Name: ${{ env.tag_name }}"
 
             -   name: Download Release Artifacts
                 uses: robinraju/release-downloader@v1.6
                 with:
-                    tag: "0.1.0-ER"
+                    tag: "${{ env.tag_name }}"
                     filename: "${{ env.artifact_id }}-*"
                     out-file-path: "."
 
