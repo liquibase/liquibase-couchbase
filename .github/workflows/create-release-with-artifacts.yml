@@ -1,4 +1,4 @@
-name: Build and Attach Artifacts to Release
+name: Create Draft Release with Artifacts
 
 on:
     workflow_dispatch:
@@ -14,11 +14,13 @@ on:
                 required: true
 
 jobs:
-    build-and-attach-artifacts:
-        name: Build and attach maven artifacts
+    build:
+        name: Build Maven Artifacts
         runs-on: ubuntu-latest
         outputs:
-            extensionVersion: ${{ steps.collect-data.outputs.extensionVersion }}
+            artifactId: ${{ steps.collect-data.outputs.artifactId }}
+            artifactVersion: ${{ steps.collect-data.outputs.artifactVersion }}
+            releaseSha: ${{ steps.collect-data.outputs.releaseSha }}
         steps:
             -   uses: actions/checkout@v3
             -   name: Set up JDK 8
@@ -39,12 +41,18 @@ jobs:
                 id: get-artifact-version
                 run: echo "artifact_version=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+            -   name: Get release SHA
+                id: get-release-sha
+                run: echo "releaseSha=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
             -   name: Collect Data
                 id: collect-data
                 uses: actions/github-script@v4
                 with:
                     script: |
-                        core.setOutput("extensionVersion", '${{ env.artifact_version }}');
+                        core.setOutput("artifactId", '${{ env.artifact_id }}');
+                        core.setOutput("artifactVersion", '${{ env.artifact_version }}');
+                        core.setOutput("releaseSha", '${{ env.releaseSha }}');
 
             -   name: Echo Build Info
                 id: echo-version
@@ -56,6 +64,13 @@ jobs:
                 with:
                     name: liquibase-couchbase
                     path: liquibase-couchbase/target/*
+
+    release:
+        name: Create Release with Artifacts
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            -   uses: actions/checkout@v3
 
             -   name: Get Reusable Script Files
                 run: |
@@ -71,9 +86,29 @@ jobs:
                 with:
                     name: liquibase-couchbase
 
-            -   name: Get Release Tag
-                id: get-release-tag
-                run: echo "release_tag=$(./.github/get_draft_release.sh TAG)" >> $GITHUB_ENV
+            -   name: Prepare Artifact Name
+                id: artifact-name
+                run: echo "artifactName=${{ needs.build.outputs.artifactId }}-${{ needs.build.outputs.artifactVersion }}" >> $GITHUB_ENV
+
+            -   name: Create Tag Name
+                id: tag-name
+                run: echo "tagName=${{ needs.build.outputs.artifactVersion }}" >> $GITHUB_ENV
+
+            -   name: Echo Info
+                id: echo-version
+                run: |
+                    echo "Artifacts: ${{ env.artifactName }}"
+                    echo "Tag Name: ${{ env.tagName }}"
+
+            -   name: Create Draft Release
+                uses: softprops/action-gh-release@v1
+                with:
+                    target_commitish: ${{ needs.build.outputs.releaseSha }}
+                    name: v${{ needs.build.outputs.artifactVersion }}
+                    tag_name: ${{ env.tagName }}
+                    draft: true
+                    body: Liquibase Couchbase extension v${{ needs.build.outputs.artifactVersion }}
+                    files: liquibase-couchbase
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
@@ -82,10 +117,10 @@ jobs:
                 uses: mknejp/delete-release-assets@v1
                 with:
                     token: ${{ secrets.BOT_TOKEN }}
-                    tag: ${{ env.release_tag }}
+                    tag: ${{ env.tagName }}
                     fail-if-no-assets: false
                     fail-if-no-release: false
-                    assets: "${{ env.artifact_id }}-*"
+                    assets: "${{ needs.build.outputs.artifactId }}-*"
 
             -   name: Import GPG key
                 id: import_gpg
@@ -96,32 +131,32 @@ jobs:
 
             -   name: Generate MD5 checksum
                 run: |
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.md5
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom > ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom.md5
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar.md5
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar.md5
+                    md5sum ./${{ env.artifactName }}.jar > ./${{ env.artifactName }}.jar.md5
+                    md5sum ./${{ env.artifactName }}.pom > ./${{ env.artifactName }}.pom.md5
+                    md5sum ./${{ env.artifactName }}-javadoc.jar > ./${{ env.artifactName }}-javadoc.jar.md5
+                    md5sum ./${{ env.artifactName }}-sources.jar > ./${{ env.artifactName }}-sources.jar.md5
 
             -   name: Generate SHA-1 checksum
                 run: |
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.sha1
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom > ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom.sha1
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar.sha1
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar.sha1
+                    sha1sum ./${{ env.artifactName }}.jar > ./${{ env.artifactName }}.jar.sha1
+                    sha1sum ./${{ env.artifactName }}.pom > ./${{ env.artifactName }}.pom.sha1
+                    sha1sum ./${{ env.artifactName }}-javadoc.jar > ./${{ env.artifactName }}-javadoc.jar.sha1
+                    sha1sum ./${{ env.artifactName }}-sources.jar > ./${{ env.artifactName }}-sources.jar.sha1
 
             -   name: Sign Files for Draft Release
                 run: |
                     gpg -K
                     passphrase="${{ secrets.GPG_PASSPHRASE }}"
                     export GPG_TTY=$(tty)
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}.pom
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}-javadoc.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}-sources.jar
 
             -   name: Attach Files to Draft Release
                 id: upload-release-asset
-                run: ./.github/upload_asset.sh ${{ env.artifact_version }}
+                run: ./.github/upload_asset.sh ${{ needs.build.outputs.artifactVersion }}
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-                    ASSET_NAME_PREFIX: "${{ env.artifact_id }}-"
+                    ASSET_NAME_PREFIX: "${{ needs.build.outputs.artifactId }}-"
                     ASSET_DIR: .
