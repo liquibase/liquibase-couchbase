@@ -107,7 +107,7 @@ jobs:
                     name: v${{ needs.build.outputs.artifactVersion }}
                     tag_name: ${{ env.tagName }}
                     draft: true
-                    body: Liquibase Couchbase extension
+                    body: Liquibase Couchbase extension v${{ needs.build.outputs.artifactVersion }}
                     files: liquibase-couchbase
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
