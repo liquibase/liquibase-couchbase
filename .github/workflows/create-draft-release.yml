@@ -1,4 +1,4 @@
-name: Build and Attach Artifacts to Release
+name: Create Draft Release with Artifacts
 
 on:
     workflow_dispatch:
@@ -14,11 +14,13 @@ on:
                 required: true
 
 jobs:
-    build-and-attach-artifacts:
-        name: Build and attach maven artifacts
+    build:
+        name: Build Maven Artifacts
         runs-on: ubuntu-latest
         outputs:
-            extensionVersion: ${{ steps.collect-data.outputs.extensionVersion }}
+            artifactId: ${{ steps.collect-data.outputs.artifactId }}
+            artifactVersion: ${{ steps.collect-data.outputs.artifactVersion }}
+            releaseSha: ${{ steps.collect-data.outputs.releaseSha }}
         steps:
             -   uses: actions/checkout@v3
             -   name: Set up JDK 8
@@ -39,21 +41,23 @@ jobs:
                 id: get-artifact-version
                 run: echo "artifact_version=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+            -   name: Get release SHA
+                id: get-release-sha
+                run: echo "releaseSha=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
             -   name: Collect Data
                 id: collect-data
                 uses: actions/github-script@v4
                 with:
                     script: |
-                        core.setOutput("extensionVersion", '${{ env.artifact_version }}');
+                        core.setOutput("artifactId", '${{ env.artifact_id }}');
+                        core.setOutput("artifactVersion", '${{ env.artifact_version }}');
+                        core.setOutput("releaseSha", '${{ env.releaseSha }}');
 
             -   name: Echo Build Info
                 id: echo-version
                 run: |
                     echo "Get Extension artifacts ${{ env.artifact_id }}-${{ env.artifact_version }}"
-
-            -   name: Get release SHA
-                id: get-release-sha
-                run: echo ::set-output name=releaseSha::$(git rev-parse HEAD)
 
             -   name: Publish Artifacts
                 uses: actions/upload-artifact@v2
@@ -61,6 +65,11 @@ jobs:
                     name: liquibase-couchbase
                     path: liquibase-couchbase/target/*
 
+    release:
+        name: Create Release
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
             -   name: Get Reusable Script Files
                 run: |
                     curl -o $PWD/.github/get_draft_release.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/get_draft_release.sh
