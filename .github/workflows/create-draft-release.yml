@@ -94,6 +94,12 @@ jobs:
                 id: tag-name
                 run: echo "tagName=${{ needs.build.outputs.artifact_version }}" >> $GITHUB_ENV
 
+            -   name: Echo Info
+                id: echo-version
+                run: |
+                    echo "Artifacts: ${{ env.artifactName }}"
+                    echo "Tag Name: ${{ env.tagName }}"
+
             -   name: Create Draft Release
                 uses: softprops/action-gh-release@v1
                 with:
