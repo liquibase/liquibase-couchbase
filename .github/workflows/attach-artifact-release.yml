@@ -51,6 +51,10 @@ jobs:
                 run: |
                     echo "Get Extension artifacts ${{ env.artifact_id }}-${{ env.artifact_version }}"
 
+            -   name: Get release SHA
+                id: get-release-sha
+                run: echo ::set-output name=releaseSha::$(git rev-parse HEAD)
+
             -   name: Publish Artifacts
                 uses: actions/upload-artifact@v2
                 with:
@@ -70,6 +74,18 @@ jobs:
                 uses: actions/download-artifact@v2
                 with:
                     name: liquibase-couchbase
+
+            -   name: Release
+                uses: softprops/action-gh-release@v1
+                with:
+                    target_commitish: ${{ needs.build.outputs.releaseSha }}
+                    name: v${{ env.artifact_version }}
+                    tag_name: ${{ env.artifact_id }}-${{ env.artifact_version }}
+                    draft: true
+                    body: Liquibase Couchbase extension
+                    files: liquibase-couchbase
+                env:
+                    GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
             -   name: Get Release Tag
                 id: get-release-tag
