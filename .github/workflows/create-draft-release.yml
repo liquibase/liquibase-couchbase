@@ -84,12 +84,20 @@ jobs:
                 with:
                     name: liquibase-couchbase
 
+            -   name: Prepare Artifact Name
+                id: tag-name
+                run: echo "artifactName=${{ needs.build.outputs.artifact_id }}-${{ needs.build.outputs.artifact_version }}" >> $GITHUB_ENV
+
+            -   name: Create Tag Name
+                id: tag-name
+                run: echo "tagName=${{ needs.build.outputs.artifact_version }}" >> $GITHUB_ENV
+
             -   name: Create Draft Release
                 uses: softprops/action-gh-release@v1
                 with:
                     target_commitish: ${{ needs.build.outputs.releaseSha }}
-                    name: v${{ env.artifact_version }}
-                    tag_name: ${{ env.artifact_id }}-${{ env.artifact_version }}
+                    name: v${{ needs.build.outputs.artifact_version }}
+                    tag_name: ${{ env.tagName }}
                     draft: true
                     body: Liquibase Couchbase extension
                     files: liquibase-couchbase
@@ -101,10 +109,10 @@ jobs:
                 uses: mknejp/delete-release-assets@v1
                 with:
                     token: ${{ secrets.BOT_TOKEN }}
-                    tag: ${{ env.release_tag }}
+                    tag: ${{ env.tagName }}
                     fail-if-no-assets: false
                     fail-if-no-release: false
-                    assets: "${{ env.artifact_id }}-*"
+                    assets: "${{ needs.build.outputs.artifact_id }}-*"
 
             -   name: Import GPG key
                 id: import_gpg
@@ -115,32 +123,32 @@ jobs:
 
             -   name: Generate MD5 checksum
                 run: |
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.md5
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom > ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom.md5
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar.md5
-                    md5sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar.md5
+                    md5sum ./${{ env.artifactName }}.jar > ./${{ env.artifactName }}.jar.md5
+                    md5sum ./${{ env.artifactName }}.pom > ./${{ env.artifactName }}.pom.md5
+                    md5sum ./${{ env.artifactName }}-javadoc.jar > ./${{ env.artifactName }}-javadoc.jar.md5
+                    md5sum ./${{ env.artifactName }}-sources.jar > ./${{ env.artifactName }}-sources.jar.md5
 
             -   name: Generate SHA-1 checksum
                 run: |
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar.sha1
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom > ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom.sha1
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar.sha1
-                    sha1sum ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar > ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar.sha1
+                    sha1sum ./${{ env.artifactName }}.jar > ./${{ env.artifactName }}.jar.sha1
+                    sha1sum ./${{ env.artifactName }}.pom > ./${{ env.artifactName }}.pom.sha1
+                    sha1sum ./${{ env.artifactName }}-javadoc.jar > ./${{ env.artifactName }}-javadoc.jar.sha1
+                    sha1sum ./${{ env.artifactName }}-sources.jar > ./${{ env.artifactName }}-sources.jar.sha1
 
             -   name: Sign Files for Draft Release
                 run: |
                     gpg -K
                     passphrase="${{ secrets.GPG_PASSPHRASE }}"
                     export GPG_TTY=$(tty)
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}.jar
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}.pom
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}-javadoc.jar
-                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifact_id }}-${{ env.artifact_version }}-sources.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}.pom
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}-javadoc.jar
+                    echo "$passphrase" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --sign --armor --detach-sign ./${{ env.artifactName }}-sources.jar
 
             -   name: Attach Files to Draft Release
                 id: upload-release-asset
-                run: ./.github/upload_asset.sh ${{ env.artifact_version }}
+                run: ./.github/upload_asset.sh ${{ needs.build.outputs.artifact_version }}
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-                    ASSET_NAME_PREFIX: "${{ env.artifact_id }}-"
+                    ASSET_NAME_PREFIX: "${{ needs.build.outputs.artifact_id }}-"
                     ASSET_DIR: .
