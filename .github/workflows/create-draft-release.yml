@@ -85,7 +85,7 @@ jobs:
                     name: liquibase-couchbase
 
             -   name: Prepare Artifact Name
-                id: tag-name
+                id: artifact-name
                 run: echo "artifactName=${{ needs.build.outputs.artifact_id }}-${{ needs.build.outputs.artifact_version }}" >> $GITHUB_ENV
 
             -   name: Create Tag Name
