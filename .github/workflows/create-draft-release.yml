@@ -88,11 +88,11 @@ jobs:
 
             -   name: Prepare Artifact Name
                 id: artifact-name
-                run: echo "artifactName=${{ needs.build.outputs.artifact_id }}-${{ needs.build.outputs.artifact_version }}" >> $GITHUB_ENV
+                run: echo "artifactName=${{ needs.build.outputs.artifactId }}-${{ needs.build.outputs.artifactVersion }}" >> $GITHUB_ENV
 
             -   name: Create Tag Name
                 id: tag-name
-                run: echo "tagName=${{ needs.build.outputs.artifact_version }}" >> $GITHUB_ENV
+                run: echo "tagName=${{ needs.build.outputs.artifactVersion }}" >> $GITHUB_ENV
 
             -   name: Echo Info
                 id: echo-version
@@ -104,7 +104,7 @@ jobs:
                 uses: softprops/action-gh-release@v1
                 with:
                     target_commitish: ${{ needs.build.outputs.releaseSha }}
-                    name: v${{ needs.build.outputs.artifact_version }}
+                    name: v${{ needs.build.outputs.artifactVersion }}
                     tag_name: ${{ env.tagName }}
                     draft: true
                     body: Liquibase Couchbase extension
@@ -120,7 +120,7 @@ jobs:
                     tag: ${{ env.tagName }}
                     fail-if-no-assets: false
                     fail-if-no-release: false
-                    assets: "${{ needs.build.outputs.artifact_id }}-*"
+                    assets: "${{ needs.build.outputs.artifactId }}-*"
 
             -   name: Import GPG key
                 id: import_gpg
@@ -155,8 +155,8 @@ jobs:
 
             -   name: Attach Files to Draft Release
                 id: upload-release-asset
-                run: ./.github/upload_asset.sh ${{ needs.build.outputs.artifact_version }}
+                run: ./.github/upload_asset.sh ${{ needs.build.outputs.artifactVersion }}
                 env:
                     GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-                    ASSET_NAME_PREFIX: "${{ needs.build.outputs.artifact_id }}-"
+                    ASSET_NAME_PREFIX: "${{ needs.build.outputs.artifactId }}-"
                     ASSET_DIR: .
