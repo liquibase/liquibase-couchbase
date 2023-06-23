@@ -70,6 +70,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: build
         steps:
+            -   uses: actions/checkout@v3
+
             -   name: Get Reusable Script Files
                 run: |
                     curl -o $PWD/.github/get_draft_release.sh https://raw.githubusercontent.com/liquibase/build-logic/v0.3.1/.github/get_draft_release.sh
