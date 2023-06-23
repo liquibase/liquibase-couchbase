@@ -31,7 +31,7 @@ jobs:
                     echo "artifact_name=${{ env.artifact_id }}-${{ env.artifact_version }}" >> $GITHUB_ENV
 
             -   name: Collect Artifact Name
-                id: get-env-data
+                id: get-artifact-name
                 run: echo "artifact_name=${{ env.artifact_id }}-${{ env.artifact_version }}" >> $GITHUB_ENV
 
             -   name: Echo Build Info
