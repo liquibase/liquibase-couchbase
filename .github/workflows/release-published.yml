@@ -26,14 +26,14 @@ jobs:
             -   uses: actions/checkout@v3
 
             -   name: Collect Env Data
-                id: get-release-sha
+                id: get-env-data
                 run: |
                     echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
-                    echo "artifact_version=${{ context.payload.inputs.releaseVersion }}" >> $GITHUB_ENV
-                    echo "tag_name=${{ context.payload.inputs.tagName }}" >> $GITHUB_ENV
+                    echo "artifact_version=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
+                    echo "tag_name=${{ inputs.tagName }}" >> $GITHUB_ENV
 
             -   name: Echo Build Info
-                id: echo-version
+                id: echo-info
                 run: |
                     echo "Artifact Id: ${{ env.artifact_id }}"
                     echo "Artifact Version: ${{ env.artifact_version }}"
