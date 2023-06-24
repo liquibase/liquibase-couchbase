@@ -69,6 +69,7 @@ jobs:
                                 -DrepositoryId=sonatype-nexus-staging \
                                 -DpomFile=${{ env.artifact_name }}.pom \
                                 -DgeneratePom=false \
+                                -Dbuild.version=${{ env.artifact_version }} \
                                 -Dfile=${{ env.artifact_name }}.jar \
                                 -Dsources=${{ env.artifact_name }}-sources.jar \
                                 -Djavadoc=${{ env.artifact_name }}-javadoc.jar \
