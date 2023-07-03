@@ -453,7 +453,7 @@
                 <version>1.5.0</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}</outputDirectory>
-                    <flattenedPomFilename>${project.artifactId}-${project.version}.pom.xml</flattenedPomFilename>
+                    <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
                 </configuration>
                 <executions>
                     <execution>
