@@ -14,6 +14,7 @@
     <version>${build.version}</version>
     <packaging>jar</packaging>
     <url>https://docs.liquibase.com</url>
+    <name>Liquibase Couchbase</name>
 
     <properties>
         <build.version>0.1.2-ER</build.version>
