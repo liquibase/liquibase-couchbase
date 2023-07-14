@@ -6,7 +6,7 @@ The test-project module contains **Maven plugin** to run changelog files.
 
 1) In the root of **test-project** you can find `pom.xml` file where Maven plugin is located. This plugin requires an extension dependency. You need to set required dependency.
     ### If you are a user and want to test ready-made dependency:
-   - Get desired version of extension from ... and set it in `pom.xml` of **test-project** to the `liquibase-maven-plugin`
+   - Get desired version (better latest) of extension from https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-couchbase and set it in `pom.xml` of **test-project** to the `liquibase-maven-plugin`
     ### If you are a developer and want to test specific feature on some branch: 
    - At first, you need to choose branch from which you want to create dependency and put to local repository for test purpose. When you chose the branch create jar (dependency) of it <br/>
    To do this, **execute** `mvn clean install` command in the root of the **liquibase-couchbase** module through CLI or using IDE.

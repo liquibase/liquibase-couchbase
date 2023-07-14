@@ -52,7 +52,7 @@ Liquibase can be run in the next ways:
 ### Command-line interface (CLI)
 
 - Install liquibase 4.21.1 version from https://github.com/liquibase/liquibase/releases/
-- Download jar file from ... and put it into a `lib` directory in the Liquibase install location.
+- Download jar file of desired version (better latest) from https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-couchbase and put it into a `lib` directory in the Liquibase install location.
 - Create folder and put the necessary files there:
 
 ```
