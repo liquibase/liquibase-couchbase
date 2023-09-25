@@ -13,8 +13,16 @@
     <artifactId>liquibase-couchbase</artifactId>
     <version>${build.version}</version>
     <packaging>jar</packaging>
+    <url>https://docs.liquibase.com</url>
+    <name>Liquibase Couchbase</name>
 
     <properties>
+        <build.version>0.1.2-ER</build.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <liquibase.core.version>4.22.0</liquibase.core.version>
+        <slf4j.version>2.0.7</slf4j.version>
+
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <sonar.organization>liquibase</sonar.organization>
@@ -52,6 +60,12 @@
         <reactor-test.version>3.5.6</reactor-test.version>
         <gmavenplus-plugin.version>1.9.0</gmavenplus-plugin.version>
     </properties>
+
+    <scm>
+        <connection>scm:https://github.com/liquibase/liquibase-couchbase.git</connection>
+        <developerConnection>scm:git:git@github.com:liquibase/liquibase-couchbase.git</developerConnection>
+        <url>https://github.com/liquibase/liquibase-couchbase.git</url>
+    </scm>
 
     <dependencies>
         <!-- compile dependencies -->
@@ -397,29 +411,6 @@
             </plugin>
 
             <plugin>
-                <groupId>com.coderplus.maven.plugins</groupId>
-                <artifactId>copy-rename-maven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <sourceFile>${project.basedir}/pom.xml</sourceFile>
-                                    <destinationFile>${project.basedir}/target/${project.artifactId}-${project.version}.pom</destinationFile>
-                                </fileSet>
-                            </fileSets>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.8</source>
@@ -457,31 +448,50 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--> Currently not used in CI/CD. But we can use it later -->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-gpg-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <configuration>-->
-<!--                    <passphrase>${env.GPG_PASSPHRASE}</passphrase>-->
-<!--                    <gpgArguments>-->
-<!--                        &lt;!&ndash; This is necessary for gpg to not try to use the pinentry programs &ndash;&gt;-->
-<!--                        <arg>&#45;&#45;batch</arg>-->
-<!--                        <arg>&#45;&#45;no-tty</arg>-->
-<!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
-<!--                        <arg>loopback</arg>-->
-<!--                    </gpgArguments>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>sign-artifacts</id>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>sign</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
+            <!--                <version>3.1.0</version>-->
+            <!--                <configuration>-->
+            <!--                    <passphrase>${env.GPG_PASSPHRASE}</passphrase>-->
+            <!--                    <gpgArguments>-->
+            <!--                        &lt;!&ndash; This is necessary for gpg to not try to use the pinentry programs &ndash;&gt;-->
+            <!--                        <arg>&#45;&#45;batch</arg>-->
+            <!--                        <arg>&#45;&#45;no-tty</arg>-->
+            <!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
+            <!--                        <arg>loopback</arg>-->
+            <!--                    </gpgArguments>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>sign-artifacts</id>-->
+            <!--                        <phase>verify</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>sign</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

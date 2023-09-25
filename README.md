@@ -58,8 +58,6 @@ Liquibase can be run in the next ways:
     - [java-client/3.4.6](https://mvnrepository.com/artifact/com.couchbase.client/java-client/3.4.6)
     - [reactive-streams/1.0.4](https://mvnrepository.com/artifact/org.reactivestreams/reactive-streams/1.0.4)
     - [reactor-core/3.5.6](https://mvnrepository.com/artifact/io.projectreactor/reactor-core/3.5.6)
-  
-
 - Create folder and put the necessary files there:
 
 ```
@@ -96,7 +94,7 @@ serviceBucketName=<bucketName>
 The guide how you can run liquibase using maven plugin you can see in the [test-project](test-project) directory. This directory contains
 all necessary files and plugins to run.
 
-### Spring Boot application
+### Spring Boot application (Spring boot starter not released yet)
 
 The guide how you can run liquibase using spring boot starter you can see in the [spring-boot-test-project](spring-boot-starter-liquibase-couchbase-test) directory. This project contains all necessary files to run.
 
