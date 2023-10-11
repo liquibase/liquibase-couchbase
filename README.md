@@ -52,7 +52,12 @@ Liquibase can be run in the next ways:
 ### Command-line interface (CLI)
 
 - Install liquibase 4.21.1 version from https://github.com/liquibase/liquibase/releases/
-- Download jar file of desired version (better latest) from https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-couchbase and put it into a `lib` directory in the Liquibase install location.
+- In order to run liquibase-couchbase extension you need to download jar files of certain version and put it into a lib directory in the Liquibase install location (default path: `/usr/local/opt/liquibase/lib`).
+    - [liquibase-couchbase/0.1.2-ER](https://mvnrepository.com/artifact/org.liquibase.ext/liquibase-couchbase/0.1.2-ER)
+    - [core-io/2.4.6](https://mvnrepository.com/artifact/com.couchbase.client/core-io/2.4.6)
+    - [java-client/3.4.6](https://mvnrepository.com/artifact/com.couchbase.client/java-client/3.4.6)
+    - [reactive-streams/1.0.4](https://mvnrepository.com/artifact/org.reactivestreams/reactive-streams/1.0.4)
+    - [reactor-core/3.5.6](https://mvnrepository.com/artifact/io.projectreactor/reactor-core/3.5.6)
 - Create folder and put the necessary files there:
 
 ```
