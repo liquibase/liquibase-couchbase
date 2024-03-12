@@ -19,7 +19,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.2</junit.version>
-        <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
+        <testcontainers.couchbase.version>1.19.7</testcontainers.couchbase.version>
         <org.projectlombok.version>1.18.26</org.projectlombok.version>
     </properties>
 
