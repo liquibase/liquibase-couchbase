@@ -58,7 +58,7 @@
         <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
         <junit-platform-reporting.version>1.9.1</junit-platform-reporting.version>
         <reactor-test.version>3.5.6</reactor-test.version>
-        <gmavenplus-plugin.version>1.9.0</gmavenplus-plugin.version>
+        <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
     </properties>
 
     <scm>
@@ -424,7 +424,7 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <goals>
