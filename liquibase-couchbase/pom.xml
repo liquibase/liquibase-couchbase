@@ -53,7 +53,7 @@
         <liquibase-test-harness.version>1.0.9</liquibase-test-harness.version>
         <groovy-all.version>2.5.19</groovy-all.version>
         <spock-core.version>2.0-M2-groovy-2.5</spock-core.version>
-        <jacoco.plugin.version>0.8.8</jacoco.plugin.version>
+        <jacoco.plugin.version>0.8.11</jacoco.plugin.version>
         <json-schema-validator-version>1.0.81</json-schema-validator-version>
         <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
         <junit-platform-reporting.version>1.9.1</junit-platform-reporting.version>
