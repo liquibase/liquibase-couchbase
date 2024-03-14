@@ -45,7 +45,7 @@
         <slf4j.version>2.0.7</slf4j.version>
         <lombok.version>1.18.26</lombok.version>
         <couchbase.java.client.version>3.4.6</couchbase.java.client.version>
-        <sonar.maven.plugin.version>3.9.1.2184</sonar.maven.plugin.version>
+        <sonar.maven.plugin.version>3.11.0.3922</sonar.maven.plugin.version>
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
         <failsafe.maven.plugin.version>3.0.0-M9</failsafe.maven.plugin.version>
         <commons-io.version>2.12.0</commons-io.version>
