@@ -48,7 +48,7 @@
         <sonar.maven.plugin.version>3.9.1.2184</sonar.maven.plugin.version>
         <surefire.maven.plugin.version>3.0.0-M9</surefire.maven.plugin.version>
         <failsafe.maven.plugin.version>3.0.0-M9</failsafe.maven.plugin.version>
-        <commons-io.version>2.12.0</commons-io.version>
+        <commons-io.version>2.16.0</commons-io.version>
         <commons-lang-3.version>3.12.0</commons-lang-3.version>
         <liquibase-test-harness.version>1.0.9</liquibase-test-harness.version>
         <groovy-all.version>2.5.19</groovy-all.version>
