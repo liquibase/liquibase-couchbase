@@ -20,7 +20,7 @@
         <build.version>0.1.2-ER</build.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <liquibase.core.version>4.22.0</liquibase.core.version>
+        <liquibase.core.version>4.29.2</liquibase.core.version>
         <slf4j.version>2.0.7</slf4j.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
