@@ -37,7 +37,7 @@
         <skip.harness.tests>harness.**</skip.harness.tests>
 
         <!-- dependency versions -->
-        <junit.version>5.9.2</junit.version>
+        <junit.version>5.11.2</junit.version>
         <mockito.version>4.11.0</mockito.version>
         <mockito.junit.version>4.11.0</mockito.junit.version>
         <assertj.version>3.24.2</assertj.version>
