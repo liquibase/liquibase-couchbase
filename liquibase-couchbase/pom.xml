@@ -39,7 +39,7 @@
         <!-- dependency versions -->
         <junit.version>5.9.2</junit.version>
         <mockito.version>4.11.0</mockito.version>
-        <mockito.junit.version>4.11.0</mockito.junit.version>
+        <mockito.junit.version>5.14.2</mockito.junit.version>
         <assertj.version>3.24.2</assertj.version>
         <testcontainers.couchbase.version>1.17.6</testcontainers.couchbase.version>
         <slf4j.version>2.0.7</slf4j.version>
