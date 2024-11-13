@@ -57,7 +57,7 @@
         <json-schema-validator-version>1.0.81</json-schema-validator-version>
         <maven-shade-plugin-version>3.4.1</maven-shade-plugin-version>
         <junit-platform-reporting.version>1.9.1</junit-platform-reporting.version>
-        <reactor-test.version>3.5.6</reactor-test.version>
+        <reactor-test.version>3.7.0</reactor-test.version>
         <gmavenplus-plugin.version>1.9.0</gmavenplus-plugin.version>
     </properties>
 
