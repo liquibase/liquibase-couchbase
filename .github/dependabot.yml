@@ -1,9 +1,12 @@
 version: 2
 updates:
-    - package-ecosystem: maven
-      directory: "/"
-      schedule:
-          interval: daily
-      open-pull-requests-limit: 50
-      labels:
-          - "sdou"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "daily"
