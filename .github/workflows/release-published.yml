@@ -2,77 +2,10 @@ name: Release Extension to Sonatype
 
 on:
     workflow_dispatch:
-        inputs:
-            releaseVersion:
-                description: 'Release Version'
-                required: true
     release:
-        types: [ published ]
-        secrets:
-            SONATYPE_USERNAME:
-                description: 'SONATYPE_USERNAME from the caller workflow'
-                required: true
-            SONATYPE_TOKEN:
-                description: 'SONATYPE_TOKEN from the caller workflow'
-                required: true
+        types: [published]
 
 jobs:
     release:
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v3
-
-            -   name: Collect Env Data
-                id: get-env-data
-                run: |
-                    echo "artifact_id=$(mvn --file liquibase-couchbase/pom.xml help:evaluate -Dexpression=project.artifactId -q -DforceStdout)" >> $GITHUB_ENV
-                    echo "artifact_version=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
-                    echo "tag_name=${{ inputs.releaseVersion }}" >> $GITHUB_ENV
-                    echo "artifact_name=${{ env.artifact_id }}-${{ env.artifact_version }}" >> $GITHUB_ENV
-
-            -   name: Collect Artifact Name
-                id: get-artifact-name
-                run: echo "artifact_name=${{ env.artifact_id }}-${{ env.artifact_version }}" >> $GITHUB_ENV
-
-            -   name: Echo Build Info
-                id: echo-info
-                run: |
-                    echo "Artifact Id: ${{ env.artifact_id }}"
-                    echo "Artifact Version: ${{ env.artifact_version }}"
-                    echo "Artifact Full Name: ${{ env.artifact_name }}"
-                    echo "Tag Name: ${{ env.tag_name }}"
-
-            -   name: Download Release Artifacts
-                uses: robinraju/release-downloader@v1.6
-                with:
-                    tag: "${{ env.tag_name }}"
-                    filename: "${{ env.artifact_id }}-*"
-                    out-file-path: "."
-
-            -   name: Set up Java for publishing to Maven Central Repository
-                uses: actions/setup-java@v3
-                with:
-                    java-version: '17'
-                    distribution: 'temurin'
-                    cache: 'maven'
-                    server-id: sonatype-nexus-staging
-                    server-username: MAVEN_USERNAME
-                    server-password: MAVEN_PASSWORD
-
-            -   name: Publish to Maven Central
-                env:
-                    MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-                    MAVEN_PASSWORD: ${{ secrets.SONATYPE_TOKEN }}
-                run: |
-                    mvn -B org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1:deploy-file \
-                                -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
-                                -DrepositoryId=sonatype-nexus-staging \
-                                -DpomFile=${{ env.artifact_name }}.pom \
-                                -DgeneratePom=false \
-                                -Dbuild.version=${{ env.artifact_version }} \
-                                -Dfile=${{ env.artifact_name }}.jar \
-                                -Dsources=${{ env.artifact_name }}-sources.jar \
-                                -Djavadoc=${{ env.artifact_name }}-javadoc.jar \
-                                -Dfiles=${{ env.artifact_name }}.jar.asc,${{ env.artifact_name }}-sources.jar.asc,${{ env.artifact_name }}-javadoc.jar.asc,${{ env.artifact_name }}.pom.asc \
-                                -Dtypes=jar.asc,jar.asc,jar.asc,pom.asc \
-                                -Dclassifiers=,sources,javadoc,
+        uses: liquibase/build-logic/.github/workflows/extension-release-published.yml@main
+        secrets: inherit
