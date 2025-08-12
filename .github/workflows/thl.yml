@@ -20,7 +20,7 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v5
 
             - name: Setup Temurin Java 17 # Set up Java 17 with Temurin distribution and cache the Maven packages
               uses: actions/setup-java@v3
