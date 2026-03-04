@@ -1,127 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.liquibase.ext</groupId>
-    <artifactId>liquibase-couchbase-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
-    <description>Liquibase extension for Couchbase</description>
-    <url>https://docs.liquibase.com</url>
-
-    <organization>
-        <name>Liquibase.org</name>
-        <url>http://www.liquibase.org</url>
-    </organization>
-
-    <licenses>
-        <license>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-            <name>Apache License, Version 2.0</name>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Andrey Zakharov</name>
-            <email>andrey.zakharov@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting GmbH</organization>
-            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Viktor Ignatev</name>
-            <email>viktor.ignatev@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting GmbH</organization>
-            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Konstantin Umanets</name>
-            <email>konstantin.umanets@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting GmbH</organization>
-            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Roman Oborin</name>
-            <email>roman.oborin@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting GmbH</organization>
-            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Dmitry Dashko</name>
-            <email>dmitry.dashko@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting GmbH</organization>
-            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Evgenii Anishchenko</name>
-            <email>evgenii.anishchenko@weigandt-consulting.com</email>
-            <organization>Weigandt Consulting GmbH</organization>
-            <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
-        </developer>
-    </developers>
-
-    <modules>
-        <module>liquibase-couchbase</module>
-        <module>test-project</module>
-        <module>spring-boot-starter-liquibase-couchbase</module>
-        <module>spring-boot-starter-liquibase-couchbase-test</module>
-        <module>cli-test</module>
-    </modules>
-
-    <scm>
-        <connection>scm:https://gitlab.weigandt-consulting.com/viktor.ignatev/couchbase-liquibase.git</connection>
-        <developerConnection>scm:git:ssh://gitlabssh.weigandt-consulting.com:viktor.ignatev/couchbase-liquibase.git</developerConnection>
-        <url>https://gitlab.weigandt-consulting.com/viktor.ignatev/couchbase-liquibase</url>
-    </scm>
-
-    <properties>
-        <build.version>0.1.2-ER</build.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-
-        <liquibase.core.version>4.22.0</liquibase.core.version>
-        <slf4j.version>2.0.7</slf4j.version>
-    </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.5.0</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <outputDirectory>${project.build.directory}/flattened-pom</outputDirectory>
-                    <flattenedPomFilename>release.pom.xml</flattenedPomFilename>
-                    <pomElements>
-                        <profiles>remove</profiles>
-                        <organization/>
-                        <issueManagement/>
-                    </pomElements>
-                    <flattenMode>ossrh</flattenMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.liquibase.ext</groupId>
+  <artifactId>liquibase-couchbase-parent</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <description>Liquibase extension for Couchbase</description>
+  <url>https://docs.liquibase.com</url>
+  <organization>
+    <name>Liquibase.org</name>
+    <url>http://www.liquibase.org</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>FSL-1.1-ALv2</name>
+      <url>https://fsl.software/FSL-1.1-ALv2.template.md</url>
+      <comments>Functional Source License, Version 1.1, ALv2 Future License</comments>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Andrey Zakharov</name>
+      <email>andrey.zakharov@weigandt-consulting.com</email>
+      <organization>Weigandt Consulting GmbH</organization>
+      <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Viktor Ignatev</name>
+      <email>viktor.ignatev@weigandt-consulting.com</email>
+      <organization>Weigandt Consulting GmbH</organization>
+      <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Konstantin Umanets</name>
+      <email>konstantin.umanets@weigandt-consulting.com</email>
+      <organization>Weigandt Consulting GmbH</organization>
+      <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Roman Oborin</name>
+      <email>roman.oborin@weigandt-consulting.com</email>
+      <organization>Weigandt Consulting GmbH</organization>
+      <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Dmitry Dashko</name>
+      <email>dmitry.dashko@weigandt-consulting.com</email>
+      <organization>Weigandt Consulting GmbH</organization>
+      <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Evgenii Anishchenko</name>
+      <email>evgenii.anishchenko@weigandt-consulting.com</email>
+      <organization>Weigandt Consulting GmbH</organization>
+      <organizationUrl>https://www.weigandt-consulting.com/</organizationUrl>
+    </developer>
+  </developers>
+  <modules>
+    <module>liquibase-couchbase</module>
+    <module>test-project</module>
+    <module>spring-boot-starter-liquibase-couchbase</module>
+    <module>spring-boot-starter-liquibase-couchbase-test</module>
+    <module>cli-test</module>
+  </modules>
+  <scm>
+    <connection>scm:https://gitlab.weigandt-consulting.com/viktor.ignatev/couchbase-liquibase.git</connection>
+    <developerConnection>scm:git:ssh://gitlabssh.weigandt-consulting.com:viktor.ignatev/couchbase-liquibase.git</developerConnection>
+    <url>https://gitlab.weigandt-consulting.com/viktor.ignatev/couchbase-liquibase</url>
+  </scm>
+  <properties>
+    <build.version>0.1.2-ER</build.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <liquibase.core.version>4.22.0</liquibase.core.version>
+    <slf4j.version>2.0.7</slf4j.version>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <configuration>
+          <updatePomFile>true</updatePomFile>
+          <outputDirectory>${project.build.directory}/flattened-pom</outputDirectory>
+          <flattenedPomFilename>release.pom.xml</flattenedPomFilename>
+          <pomElements>
+            <profiles>remove</profiles>
+            <organization/>
+            <issueManagement/>
+          </pomElements>
+          <flattenMode>ossrh</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

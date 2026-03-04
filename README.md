@@ -194,5 +194,5 @@ If you would like to contribute to the Couchbase extension for Liquibase, please
 
 ## License
 
-The Couchbase extension for Liquibase is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) and [NOTICE](NOTICE)
+The Couchbase extension for Liquibase is licensed under the Functional Source License, Version 1.1, ALv2 Future License (FSL-1.1-ALv2). See the [LICENSE](LICENSE) and [NOTICE](NOTICE)
 files for details.
