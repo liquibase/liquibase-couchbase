@@ -43,7 +43,7 @@ jobs:
                     echo "Tag Name: ${{ env.tag_name }}"
 
             -   name: Download Release Artifacts
-                uses: robinraju/release-downloader@d6de084c58345d09b017e22701dbcf26977cfd14 # v1.6
+                uses: robinraju/release-downloader@daf26c55d821e836577a15f77d86ddc078948b05 # v1.12
                 with:
                     tag: "${{ env.tag_name }}"
                     filename: "${{ env.artifact_id }}-*"
