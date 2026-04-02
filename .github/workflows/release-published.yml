@@ -20,7 +20,7 @@ jobs:
     release:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
             -   name: Collect Env Data
                 id: get-env-data
@@ -43,14 +43,14 @@ jobs:
                     echo "Tag Name: ${{ env.tag_name }}"
 
             -   name: Download Release Artifacts
-                uses: robinraju/release-downloader@v1.6
+                uses: robinraju/release-downloader@d6de084c58345d09b017e22701dbcf26977cfd14 # v1.6
                 with:
                     tag: "${{ env.tag_name }}"
                     filename: "${{ env.artifact_id }}-*"
                     out-file-path: "."
 
             -   name: Set up Java for publishing to Maven Central Repository
-                uses: actions/setup-java@v3
+                uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
                 with:
                     java-version: '17'
                     distribution: 'temurin'
